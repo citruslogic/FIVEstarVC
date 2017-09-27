@@ -1,0 +1,32 @@
+﻿{
+  "version": "1.0.0",
+  "restore": {
+    "projectUniqueName": "/home/frank/RiderProjects/FIVEstarVC/FIVEstarVC/FIVEstarVC.csproj",
+    "projectName": "FIVEstarVC",
+    "projectPath": "/home/frank/RiderProjects/FIVEstarVC/FIVEstarVC/FIVEstarVC.csproj",
+    "outputPath": "/home/frank/RiderProjects/FIVEstarVC/FIVEstarVC/obj/",
+    "projectStyle": "PackageReference",
+    "originalTargetFrameworks": [
+      "netcoreapp2.0"
+    ],
+    "frameworks": {
+      "netcoreapp2.0": {
+        "projectReferences": {}
+      }
+    }
+  },
+  "frameworks": {
+    "netcoreapp2.0": {
+      "dependencies": {
+        "Microsoft.NETCore.App": {
+          "target": "Package",
+          "version": "2.0.0"
+        },
+        "Microsoft.AspNetCore.All": {
+          "target": "Package",
+          "version": "2.0.0"
+        }
+      }
+    }
+  }
+}
