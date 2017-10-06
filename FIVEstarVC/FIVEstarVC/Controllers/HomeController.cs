@@ -26,5 +26,12 @@ namespace FIVEstarVC.Controllers
 
             return View();
         }
+
+        public ActionResult Reports()
+        {
+            ViewBag.Message = "Your reports page.";
+
+            return View();
+        }
     }
 }
