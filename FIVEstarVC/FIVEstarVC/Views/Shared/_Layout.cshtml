@@ -3,7 +3,23 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewBag.Title - My ASP.NET Application</title>
+    <title>@ViewBag.Title</title>
+    <!-- 1. Load libraries -->
+    <!-- Polyfill(s) for older browsers -->
+
+    <script src="~/libs/core-js/client/shim.min.js"></script>
+    <script src="~/libs/zone.js/dist/zone.js"></script>
+    <script src="~/libs/systemjs/dist/system.src.js"></script>
+
+    <!-- 2. Configure SystemJS -->
+    <script src="~/Scripts/systemjs.config.js"></script>
+    <script>
+        System.import('../Scripts/main').catch(function (err)
+        {
+            console.error(err);
+        });
+    </script>
+
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
 </head>
@@ -22,7 +38,7 @@
                 <ul class="nav navbar-nav">
                     <li>@Html.ActionLink("Home", "Index", "Home")</li>
                     <li>@Html.ActionLink("About", "About", "Home")</li>
-                    <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
+                    <li>@Html.ActionLink("Resident", "Resident", "Home")</li>
                     <li>@Html.ActionLink("Reports", "Reports", "Home")</li>
                 </ul>
             </div>
@@ -32,7 +48,7 @@
         @RenderBody()
         <hr />
         <footer>
-            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
+            <p>&copy; @DateTime.Now.Year - FIVE STAR Veterans Center</p>
         </footer>
     </div>
 
