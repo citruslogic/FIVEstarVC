@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using FIVEstarVC.Models;
 
 namespace FIVEstarVC.Controllers
 {
@@ -31,6 +32,11 @@ namespace FIVEstarVC.Controllers
         {
             ViewBag.Message = "Your reports page.";
 
+            return View();
+        }
+
+        public ActionResult GroupReports()
+        {
             return View();
         }
     }

@@ -1,10 +1,10 @@
 ﻿@model FIVEstarVC.Models.Report
 
 @{
-    ViewBag.Title = "Reports";
+    ViewBag.Title = "Group Reports";
 }
 
-<h2>Single User Report</h2>
+<h2>Demographic Report</h2>
 
 <!DOCTYPE html>
 
@@ -17,7 +17,9 @@
     @using (Html.BeginForm())
     {
         <p>Report on current residents? @Html.CheckBoxFor(x => x.currentResident)</p>
-       /* <p>
+        <p>Campaign served in: @Html.TextBoxFor(x => x.campaign)</p>
+        <p>Days in residence: @Html.TextBoxFor(x => x.residenceDays)</p>
+        <p>
             Branch of Service
             @Html.DropDownListFor(x => x.serviceBranch, new[] {
                 new SelectListItem() {Text = "Air Force", Value = "airForce" },
@@ -26,10 +28,18 @@
                 new SelectListItem() {Text = "Marines", Value = "marines" },
                 new SelectListItem() {Text = "Coast Guard", Value = "coastGuard" } },
                 "Choose an option")
-        </p> */
-        <p>Resident's First Name: @Html.TextBoxFor(x => x.firstName)</p>
-        <p>Resident's Last Name: @Html.TextBoxFor(x => x.lastName)</p>
-        
+        </p>
+        <p>
+            Discharge
+            @Html.DropDownListFor(x => x.serviceBranch, new[] {
+                new SelectListItem() {Text = "General/Honorable", Value = "genHon" },
+                new SelectListItem() {Text = "Disability", Value = "dis" },
+                new SelectListItem() {Text = "Other", Value = "other" } },
+                "Choose an option")
+        </p>
+        <p>Residents with the first name: @Html.TextBoxFor(x => x.firstName)</p>
+        <p>Resident with the last name: @Html.TextBoxFor(x => x.lastName)</p>
+
         <input type="submit" value="Generate Report" />
     }
     <br>
