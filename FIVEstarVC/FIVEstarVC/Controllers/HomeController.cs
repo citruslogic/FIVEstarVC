@@ -39,5 +39,10 @@ namespace FIVEstarVC.Controllers
         {
             return View();
         }
+
+        public ActionResult Resident()
+        {
+            return View();
+        }
     }
 }
