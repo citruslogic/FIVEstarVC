@@ -5,25 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title</title>
 
-    <!-- 1. Load libraries -->
-    <!-- Polyfill(s) for older browsers -->
-
-    <script src="~/libs/core-js/client/shim.min.js"></script>
-    <script src="~/libs/zone.js/dist/zone.js"></script>
-    <script src="~/libs/systemjs/dist/system.src.js"></script>
-
-    <!-- 2. Configure SystemJS -->
-    <script src="~/Scripts/systemjs.config.js"></script>
-    <script>
-        System.import('../Scripts/main').catch(function (err)
-        {
-            console.error(err);
-        });
-    </script>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
 </head>
-<body>
+<body ng-app="fivestarApp" ng-controller="LandingPageController">
     <div class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
             <div class="navbar-header">
@@ -53,15 +38,22 @@
         </div>
     </div>
     <div class="container body-content">
+        <div>
+
+            <h1>Welcome to {{models.appname}} Resident Tracking System</h1>
+        </div>
         @RenderBody()
+        <br />
+  
         <hr />
         <footer>
-            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
+            <p>&copy; @DateTime.Now.Year - FIVE STAR </p>
         </footer>
     </div>
-
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/angular")
+    @Scripts.Render("~/bundles/fivestarApp")
     @RenderSection("scripts", required: false)
 </body>
 </html>
