@@ -3175,6 +3175,27 @@ fieldset[disabled] .btn-primary.focus {
   background-color: #5cb85c;
   border-color: #4cae4c;
 }
+
+.btn-resident {
+    color: #fff;
+    background-color: #040085;
+    border-color: #000a85;
+}
+
+.btn-resident:focus, 
+.btn-resident.focus {
+    color: #fff;
+    background-color: #0054b2;
+    border-color: #255625;
+}
+
+.btn-resident:hover {
+    color: #fff;
+    background-color: #000868;
+    border-color: #000133;
+}
+ 
+
 .btn-success:focus,
 .btn-success.focus {
   color: #fff;
@@ -6753,5 +6774,13 @@ button.close {
   .hidden-print {
     display: none !important;
   }
+}
+
+.btn-margin-left {
+    margin-left: 10px;
+}
+
+.btn-margin-right {
+    margin-right: 10px;
 }
 /*# sourceMappingURL=bootstrap.css.map */
