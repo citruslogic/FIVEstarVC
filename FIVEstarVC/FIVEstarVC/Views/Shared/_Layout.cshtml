@@ -20,17 +20,16 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Home", "Index", "Home")</li>
-                    <li>@Html.ActionLink("Resident", "Resident", "Home")</li>
-                    <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
+                    <li><button class="btn navbar-btn" type="button"onclick="window.location.href='@Url.Action("Home")'">Home</button><span class="caret"></span></li>
+                    <li><button class="btn navbar-btn" type="button" onclick="window.location.href='@Url.Action("Resident")'">Resident</button><span class="caret"></span></li>
                     <li class="dropdown">
-                        <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">
+                        <button class="btn navbar-btn dropdown-toggle" type="button" data-toggle="dropdown">
                             Resident Reports
                             <span class="caret"></span>
                         </button>
                         <ul class="dropdown-menu">
                             <li>@Html.ActionLink("Single User Report", "Reports", "Home")</li>
-                            <li>@Html.ActionLink("Demographic Report", "GroupReports", "Home")</a></li>
+                            <li>@Html.ActionLink("Demographic Report", "GroupReports", "Home")</li>
                         </ul>
                     </li>
                 </ul>
