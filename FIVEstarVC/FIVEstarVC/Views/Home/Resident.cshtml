@@ -6,10 +6,12 @@
     <title></title>
 </head>
 <body ng-controller="ResidentController">
-    <div id="content" >
-        <p>
+    <div id="content" ng-app="FiveStarApp" ng-controller="ResidentController">
+        <div class="col-md-push-9">
+            <p>
             Add a new resident below.
-        </p>
+            </p>
+        </div>
         <form ng-submit="submitForm()" name="frmResident">
             <div>
                 <label for="resident">First Name: </label>
@@ -39,7 +41,8 @@
             </div>
         </form>
     </div>
-
+    @Scripts.Render("~/Scripts/angular.js")
+    @Scripts.Render("~/Scripts/app/resident-controller.js")
 
 
 </body>
