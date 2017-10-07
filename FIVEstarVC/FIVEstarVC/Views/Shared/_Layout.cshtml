@@ -24,7 +24,7 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li><button class="btn navbar-btn btn-margin-right" type="button"onclick="window.location.href='@Url.Action("Index")'"><span class="glyphicon glyphicon-home"></span> Home</button></li>
+                    <li><button class="btn navbar-btn btn-margin-right" type="button" onclick="window.location.href='@Url.Action("Index")'"><span class="glyphicon glyphicon-home"></span> Home</button></li>
                     <li><button class="btn navbar-btn btn-margin-right" type="button" onclick="window.location.href='@Url.Action("Resident")'">Resident</button></li>
                     <li class="dropdown">
                         <button class="btn navbar-btn dropdown-toggle" type="button" data-toggle="dropdown">
@@ -43,15 +43,17 @@
     <div class="container body-content">
        
         @RenderBody()
-        <br />
-  
-        <hr />
+
         <footer>
             <p>&copy; @DateTime.Now.Year - FIVE STAR </p>
         </footer>
     </div>
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
+    <script type="text/javascript">
+            window.FiveStar = {};
+            FiveStar.rootPath = '@Url.Content("~")';
+    </script>
 
     @RenderSection("scripts", required: false)
 </body>

@@ -1,0 +1,51 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title></title>
+</head>
+<body ng-controller="ResidentController">
+    <div id="content" ng-app="FiveStarApp" ng-controller="ResidentController">
+        <div class="col-md-push-9">
+
+        </div>
+        <form ng-submit="submitForm()" name="frmResident">
+            <div>
+                <label for="resident">First Name: </label>
+                <input type="text" ng-model="resident.FirstName" name="firstname" placeholder="Enter first name" requiredng-minlength="2" ng-maxlength="20" />
+                <span class="error" ng-show="(frmResident.$dirty || submitted) && frmResident.firstname.$error.required">First name is required.</span>
+
+                <span class="error" ng-show="frmResident.$dirty && frmResident.firstname.$error.minlength">Minimum length required is 2.</span>
+                <span class="error" ng-show="frmResident.$dirty && frmResident.firstname.$error.maxlength">Maximum length allowed is 20.</span>
+
+            </div>
+            <div>
+                <label for="resident">Last Name: </label>
+                <input type="text" ng-model="resident.LastName" name="lastname" placeholder="Enter last name" requiredng-minlength="2" ng-maxlength="20" />
+                <span class="error" ng-show="(frmResident.$dirty || submitted) && frmResident.lastname.$error.required">Last name is required.</span>
+
+                <span class="error" ng-show="frmResident.$dirty && frmResident.lastname.$error.minlength">Minimum length required is 2.</span>
+                <span class="error" ng-show="frmResident.$dirty && frmResident.lastname.$error.maxlength">Maximum length allowed is 20.</span>
+            </div>
+
+            <div>
+                <label for="resident">Arrival: </label>
+                <input type="date" name="arrivaldate" ng-model="resident.arrivaldate" value="{{ date | date: 'yyyy/MM/dd' }}" />
+                <br />
+            </div>
+            <div>
+                <input type="submit" value="Add" ng-disabled="residentForm.$invalid">
+            </div>
+        </form>
+    </div>
+    @Scripts.Render("~/Scripts/angular.js")
+    @Scripts.Render("~/Scripts/app/app.js")
+
+
+</body>
+</html>
