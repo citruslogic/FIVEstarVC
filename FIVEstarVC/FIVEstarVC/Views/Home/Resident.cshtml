@@ -28,6 +28,12 @@
                 <span class="error" ng-show="frmResident.$dirty && frmResident.lastname.$error.minlength">Minimum length required is 2.</span>
                 <span class="error" ng-show="frmResident.$dirty && frmResident.lastname.$error.maxlength">Maximum length allowed is 20.</span>
             </div>
+
+            <div>
+                <label for="resident">Arrival: </label>
+                <input type="date" name="arrivaldate" ng-model="resident.arrivaldate" value="{{ date | date: 'yyyy/MM/dd' }}" />
+                <br />
+            </div>
             <div>
                 <input type="submit" value="Add" ng-disabled="residentForm.$invalid">
             </div>
