@@ -6,20 +6,21 @@ namespace FIVEstarVC.Models
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.Spatial;
 
-    [Table("ProgramType")]
-    public partial class ProgramType
+    [Table("ReasonType")]
+    public partial class ReasonType
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public ProgramType()
+        public ReasonType()
         {
             Resident_ProgramEvent = new HashSet<Resident_ProgramEvent>();
         }
 
+        [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
-        public int ProgramTypeID { get; set; }
+        public int ReasonID { get; set; }
 
-        [StringLength(120)]
-        public string ProgramDescription { get; set; }
+        [StringLength(50)]
+        public string DischargeReason { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Resident_ProgramEvent> Resident_ProgramEvent { get; set; }

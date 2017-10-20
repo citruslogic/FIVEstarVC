@@ -1,4 +1,4 @@
-namespace FIVEstarVC
+namespace FIVEstarVC.Models
 {
     using System;
     using System.Collections.Generic;
@@ -8,6 +8,12 @@ namespace FIVEstarVC
 
     public partial class Resident_ProgramEvent
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public Resident_ProgramEvent()
+        {
+            ReasonTypes = new HashSet<ReasonType>();
+        }
+
         public DateTime? StartDate { get; set; }
 
         public DateTime? EndDate { get; set; }
@@ -39,8 +45,13 @@ namespace FIVEstarVC
 
         public int? ModifiedID { get; set; }
 
+        public int? DischargeEventID { get; set; }
+
         public virtual ProgramType ProgramType { get; set; }
 
         public virtual Resident Resident { get; set; }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ReasonType> ReasonTypes { get; set; }
     }
 }

@@ -1,4 +1,4 @@
-namespace FIVEstarVC
+namespace FIVEstarVC.Models
 {
     using System;
     using System.Collections.Generic;
