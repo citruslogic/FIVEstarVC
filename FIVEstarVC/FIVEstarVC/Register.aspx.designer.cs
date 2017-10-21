@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace WebFormsIdentity {
+namespace FIVEstarVC {
     
     
     public partial class Register {
