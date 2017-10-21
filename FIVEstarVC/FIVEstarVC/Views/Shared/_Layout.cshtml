@@ -7,11 +7,19 @@
 
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
+
 </head>
 <body>
     <div class="col-lg-offset-2">
-        
-        <h1>Welcome to FIVE STAR Resident Tracking System</h1>
+
+        <h1>
+            
+            @if (User.Identity.IsAuthenticated)
+            {
+                <text>Welcome to FIVE STAR Resident Management System, </text>
+                @User.Identity.Name
+            }
+        </h1>
     </div>
     <div class="navbar navbar-nav" style="background-color: #010039">
         <div class="container">
@@ -36,12 +44,22 @@
                             <li>@Html.ActionLink("Demographic Report", "GroupReports", "Home")</li>
                         </ul>
                     </li>
-                </ul>
+                    </ul>
+                <ul class="nav navbar-nav">
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <li><button class="btn navbar-btn btn-margin-right" type="button" onclick="document.location.href='Logout.aspx'">Sign out </button> </li>
+                        }
+                        else
+                        {
+                            <li><button class="btn navbar-btn btn-margin-right btn-success" type="button" onclick="document.location.href='Login.aspx'">Sign in</button></li>
+                        }
+               </ul>
             </div>
         </div>
     </div>
     <div class="container body-content">
-       
+
         @RenderBody()
 
         <footer>
