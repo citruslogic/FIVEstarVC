@@ -44,17 +44,9 @@
                             <li>@Html.ActionLink("Demographic Report", "GroupReports", "Home")</li>
                         </ul>
                     </li>
+                    @Html.Partial("_LoginPartial")
                     </ul>
-                <ul class="nav navbar-nav">
-                        @if (User.Identity.IsAuthenticated)
-                        {
-                            <li><button class="btn navbar-btn btn-margin-right" type="button" onclick="document.location.href='Logout.aspx'">Sign out </button> </li>
-                        }
-                        else
-                        {
-                            <li><button class="btn navbar-btn btn-margin-right btn-success" type="button" onclick="document.location.href='Login.aspx'">Sign in</button></li>
-                        }
-               </ul>
+                
             </div>
         </div>
     </div>
