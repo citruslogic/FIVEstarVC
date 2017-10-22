@@ -32,8 +32,8 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li><button class="btn navbar-btn btn-margin-right" type="button" onclick="window.location.href='@Url.Action("Index")'"><span class="glyphicon glyphicon-home"></span> Home</button></li>
-                    <li><button class="btn navbar-btn btn-margin-right" type="button" onclick="window.location.href='@Url.Action("Resident")'">Resident</button></li>
+                    <li>@Html.ActionLink("Home", "Index", "Home")<span class="glyphicon glyphicon-home"></span></li>
+                    <li>@Html.ActionLink("Manage Residents", "Index", "Residents")</li>
                     <li class="dropdown">
                         <button class="btn navbar-btn dropdown-toggle" type="button" data-toggle="dropdown">
                             Resident Reports
