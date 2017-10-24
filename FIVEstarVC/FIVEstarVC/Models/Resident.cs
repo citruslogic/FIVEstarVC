@@ -22,6 +22,7 @@ namespace FIVEstarVC.Models
         public int ResidentID { get; set; }
 
         [StringLength(38)]
+        
         public string LastName { get; set; }
 
         [StringLength(50)]
