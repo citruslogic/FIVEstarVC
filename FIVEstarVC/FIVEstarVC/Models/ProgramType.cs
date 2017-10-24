@@ -15,7 +15,7 @@ namespace FIVEstarVC.Models
             Resident_ProgramEvent = new HashSet<Resident_ProgramEvent>();
         }
 
-        [DatabaseGenerated(DatabaseGeneratedOption.None)]
+        [Key]
         public int ProgramTypeID { get; set; }
 
         [StringLength(120)]

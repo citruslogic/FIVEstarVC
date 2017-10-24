@@ -20,7 +20,6 @@ namespace FIVEstarVC.Models
 
         [Key]
         [Column(Order = 2)]
-        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int ResidentID { get; set; }
 
         public virtual MilitaryService MilitaryService { get; set; }

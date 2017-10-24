@@ -18,7 +18,7 @@ namespace FIVEstarVC.Models
             MilitaryCampaigns = new HashSet<MilitaryCampaign>();
         }
 
-        [DatabaseGenerated(DatabaseGeneratedOption.None)]
+        [Key]
         public int ResidentID { get; set; }
 
         [StringLength(38)]

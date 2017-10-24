@@ -15,7 +15,7 @@ namespace FIVEstarVC.Models
             Residents = new HashSet<Resident>();
         }
 
-        [DatabaseGenerated(DatabaseGeneratedOption.None)]
+        [Key]
         public int MilitaryCampaignID { get; set; }
 
         [StringLength(100)]

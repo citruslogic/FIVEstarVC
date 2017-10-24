@@ -16,7 +16,6 @@ namespace FIVEstarVC.Models
         }
 
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int ReasonID { get; set; }
 
         [StringLength(50)]
