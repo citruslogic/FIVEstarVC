@@ -262,8 +262,8 @@
     <Content Include="Views\Account\_ExternalLoginsListPartial.cshtml" />
     <Content Include="Views\Account\_RemoveAccountPartial.cshtml" />
     <Content Include="Views\Account\_SetPasswordPartial.cshtml" />
-    <None Include="Properties\PublishProfiles\FiveStarVC - Web Deploy.pubxml" />
     <Content Include="Scripts\angular.min.js.map" />
+    <None Include="Properties\PublishProfiles\FiveStarVC - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <None Include="Scripts\jquery-3.2.1-vsdoc.js" />
     <Content Include="Scripts\i18n\defaults-ar_AR.js" />
@@ -365,6 +365,9 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Home\Reports.cshtml" />
     <Content Include="Views\Home\GroupReports.cshtml" />
+    <Content Include="Views\Web.config" />
+    <None Include="Views\Web.Debug.config" />
+    <None Include="Views\Web.Release.config" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
