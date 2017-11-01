@@ -13,8 +13,8 @@ namespace FIVEstarVC.Models
         {
             var residents = new List<Resident>
             {
-                new Resident{LastName="Dunham", FirstName="Chris", RoomNumber=10},
-                new Resident{LastName="Fernandez", FirstName="Therese", RoomNumber=15}
+                new Resident{ ResidentID = 0, LastName="Dunham", FirstName="Chris", RoomNumber=10},
+                new Resident{ ResidentID = 1, LastName="Fernandez", FirstName="Therese", RoomNumber=15}
 
             };
 
@@ -58,8 +58,8 @@ namespace FIVEstarVC.Models
 
             var resident_disabilities = new List<Resident_Disability>
             {
-                new Resident_Disability{ ResidentID=0, DisabilityRating=30, DisabilityID = disabilities.Single(s => s.DisabilityID == 0).DisabilityID},
-                new Resident_Disability{ ResidentID=1, DisabilityRating=20, DisabilityID = disabilities.Single(s => s.DisabilityID == 1).DisabilityID}
+                new Resident_Disability{ DisabilityRating=30, DisabilityID = disabilities.Single(s => s.DisabilityID == 0).DisabilityID},
+                new Resident_Disability{ DisabilityRating=20, DisabilityID = disabilities.Single(s => s.DisabilityID == 1).DisabilityID}
             };
 
             resident_disabilities.ForEach(rd => context.Resident_Disability.Add(rd));
