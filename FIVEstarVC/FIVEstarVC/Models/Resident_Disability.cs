@@ -8,7 +8,7 @@ namespace FIVEstarVC.Models
 
     public partial class Resident_Disability
     {
-        [Key]
+        
         [Column(Order = 0)]
         public int ResidentID { get; set; }
 

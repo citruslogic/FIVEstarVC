@@ -50,21 +50,6 @@ namespace FIVEstarVC.Models
             militaryservices.ForEach(ms => context.MilitaryServices.Add(ms));
             context.SaveChanges();
 
-            var disabilities = new List<Disability>
-            {
-                new Disability{ DisabilityID=0, Condition="Head Trauma", BenefitAmount=(decimal) 1325.00},
-                new Disability{ DisabilityID=1, Condition="PTSD", BenefitAmount=(decimal) 1200.00}
-            };
-
-            var resident_disabilities = new List<Resident_Disability>
-            {
-                new Resident_Disability{ DisabilityRating=30, DisabilityID = disabilities.Single(s => s.DisabilityID == 0).DisabilityID},
-                new Resident_Disability{ DisabilityRating=20, DisabilityID = disabilities.Single(s => s.DisabilityID == 1).DisabilityID}
-            };
-
-            resident_disabilities.ForEach(rd => context.Resident_Disability.Add(rd));
-            context.SaveChanges();
-
             var resident_militaryservices = new List<Resident_MilitaryService>
             {
                 new Resident_MilitaryService{ ResidentID=0, MilitaryServiceID = militaryservices.Single(s => s.MilitaryServiceID == 0).MilitaryServiceID },
