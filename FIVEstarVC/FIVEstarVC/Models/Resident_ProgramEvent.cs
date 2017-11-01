@@ -42,7 +42,7 @@ namespace FIVEstarVC.Models
 
         public int? ModifiedID { get; set; }
 
-        public int? DischargeEventID { get; set; }
+        public int? ReasonID { get; set; }
 
         public virtual ProgramType ProgramType { get; set; }
 

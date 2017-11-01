@@ -2,9 +2,24 @@ namespace FIVEstarVC.Models
 {
     using System;
     using System.Collections.Generic;
+    using System.ComponentModel;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.Spatial;
+
+    public enum ProgramNames
+    {
+        [Description("P2I")]
+        P2I,
+        [Description("Mental Wellness")]
+        MENTALWELLNESS,
+        [Description("Work Track")]
+        WORKTRACK,
+        [Description("School Track")]
+        SCHOOLTRACK,
+        [Description("Housing Only")]
+        HOUSINGONLY
+    }
 
     [Table("ProgramType")]
     public partial class ProgramType

@@ -19,6 +19,7 @@ namespace FIVEstarVC.Models
         }
 
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int ResidentID { get; set; }
 
         [StringLength(38)]
