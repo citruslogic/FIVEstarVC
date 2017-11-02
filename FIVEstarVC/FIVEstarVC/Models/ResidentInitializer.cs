@@ -52,8 +52,8 @@ namespace FIVEstarVC.Models
 
             var resident_militaryservices = new List<Resident_MilitaryService>
             {
-                new Resident_MilitaryService{ ResidentID=0, MilitaryServiceID = militaryservices.Single(s => s.MilitaryServiceID == 0).MilitaryServiceID },
-                new Resident_MilitaryService{ ResidentID=1, MilitaryServiceID = militaryservices.Single(s => s.MilitaryServiceID == 1).MilitaryServiceID }
+                new Resident_MilitaryService{ MilitaryServiceID = militaryservices.Single(s => s.MilitaryServiceID == 0).MilitaryServiceID },
+                new Resident_MilitaryService{ MilitaryServiceID = militaryservices.Single(s => s.MilitaryServiceID == 1).MilitaryServiceID }
             };
 
             resident_militaryservices.ForEach(rm => context.Resident_MilitaryService.Add(rm));

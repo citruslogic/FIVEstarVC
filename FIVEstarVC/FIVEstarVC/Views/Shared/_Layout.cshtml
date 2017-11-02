@@ -11,7 +11,7 @@
 </head>
 <body>
     <div class="col-lg-offset-2">
-
+        <img src="~/Content/fivestar_logo.JPG" />
         <h1>
             
             @if (User.Identity.IsAuthenticated)
@@ -21,7 +21,8 @@
             }
         </h1>
     </div>
-    <div class="navbar navbar-nav" style="background-color: #010039">
+    <br />
+    <div class="navbar navbar-nav">
         <div class="container">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -32,7 +33,7 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Home", "Index", "Home")<span class="glyphicon glyphicon-home"></span></li>
+                    <li>@Html.ActionLink("Home", "Index", "Home")</li>
                     <li>@Html.ActionLink("Manage Residents", "Index", "Residents")</li>
                     <li class="dropdown">
                         <button class="btn navbar-btn dropdown-toggle" type="button" data-toggle="dropdown">
@@ -50,6 +51,7 @@
             </div>
         </div>
     </div>
+    <br />
     <div class="container body-content">
 
         @RenderBody()
