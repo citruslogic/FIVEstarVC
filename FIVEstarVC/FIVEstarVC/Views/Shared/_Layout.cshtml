@@ -13,7 +13,7 @@
     <div class="col-lg-offset-2">
         <img src="~/Content/fivestar_logo.JPG" />
         <h1>
-            
+
             @if (User.Identity.IsAuthenticated)
             {
                 <text>Welcome to FIVE STAR Resident Management System, </text>
@@ -46,12 +46,13 @@
                         </ul>
                     </li>
                     @Html.Partial("_LoginPartial")
-                    </ul>
-                
+
+
+                </ul>
+
             </div>
         </div>
     </div>
-    <br />
     <div class="container body-content">
 
         @RenderBody()
