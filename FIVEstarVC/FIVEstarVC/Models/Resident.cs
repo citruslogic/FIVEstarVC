@@ -27,7 +27,7 @@ namespace FIVEstarVC.Models
 
         [StringLength(50)]
         public string FirstName { get; set; }
-
+        
         public int? RoomNumber { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

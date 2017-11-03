@@ -49,16 +49,16 @@ namespace FIVEstarVC.Models
 
             militaryservices.ForEach(ms => context.MilitaryServices.Add(ms));
             context.SaveChanges();
-
+            /*
             var resident_militaryservices = new List<Resident_MilitaryService>
             {
                 new Resident_MilitaryService{ MilitaryServiceID = militaryservices.Single(s => s.MilitaryServiceID == 0).MilitaryServiceID },
                 new Resident_MilitaryService{ MilitaryServiceID = militaryservices.Single(s => s.MilitaryServiceID == 1).MilitaryServiceID }
             };
-
+            
             resident_militaryservices.ForEach(rm => context.Resident_MilitaryService.Add(rm));
             context.SaveChanges();
-
+            */
             var programs = new List<ProgramType>
             {
                 new ProgramType{ ProgramDescription = "P2I" },

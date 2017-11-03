@@ -198,6 +198,7 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\ReportController.cs" />
     <Compile Include="Controllers\ResidentsController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -210,7 +211,6 @@
     <Compile Include="Models\FiveStarModel.cs" />
     <Compile Include="Models\ProgramType.cs" />
     <Compile Include="Models\ReasonType.cs" />
-    <Compile Include="Models\Report.cs" />
     <Compile Include="Models\Resident.cs" />
     <Compile Include="Models\ResidentInitializer.cs" />
     <Compile Include="Models\Resident_Disability.cs" />
@@ -361,9 +361,9 @@
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Home\About.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
-    <Content Include="Views\Home\Reports.cshtml" />
-    <Content Include="Views\Home\GroupReports.cshtml" />
     <Content Include="Views\Web.config" />
+    <Content Include="Views\Report\Details.cshtml" />
+    <Content Include="Views\Report\Index.cshtml" />
     <None Include="Views\Web.Debug.config" />
     <None Include="Views\Web.Release.config" />
   </ItemGroup>
