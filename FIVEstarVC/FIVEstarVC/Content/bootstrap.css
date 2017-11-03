@@ -6777,12 +6777,13 @@ button.close {
   }
 }
 
-.btn-margin-left {
-    margin-left: 10px;
+.navbar-nav > li {
+    margin-left: 30px;
+    margin-right: 30px;
 }
 
 .btn-margin-right {
-    margin-right: 10px;
+    margin-right: 0.5em;
 }
 
 .margin-bottom-xs {

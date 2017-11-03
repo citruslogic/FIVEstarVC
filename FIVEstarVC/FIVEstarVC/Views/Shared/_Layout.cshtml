@@ -10,7 +10,7 @@
 
 </head>
 <body>
-    <div class="col-lg-offset-2">
+    <div class="col-md-3">
         <img src="~/Content/fivestar_logo.JPG" />
         <h1>
 
@@ -21,7 +21,7 @@
             }
         </h1>
     </div>
-    <br />
+    
     <div class="navbar navbar-nav">
         <div class="container">
             <div class="navbar-header">
@@ -33,9 +33,20 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Home", "Index", "Home")</li>
-                    <li>@Html.ActionLink("Manage Residents", "Index", "Residents")</li>
-                    <li>@Html.ActionLink("Reports", "Index", "Report")</li>
+                    <li><input type="button" class="btn btn-info" value="Home"
+                               title="Dashboard" onclick="location.href='@Url.Action("Index", "Home")'" /></li>       
+                    <li><input type="button" class="btn btn-default" value="Residents" 
+                               title="Manage Residents" onclick="location.href='@Url.Action("Index", "Residents")'" /></li>
+                    <li class="dropdown">
+                        <button class="btn navbar-btn dropdown-toggle" type="button" data-toggle="dropdown">
+                            Resident Reports
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li>@Html.ActionLink("Single User Report", "Reports", "Home")</li>
+                            <li>@Html.ActionLink("Demographic Report", "GroupReports", "Home")</li>
+                        </ul>
+                    </li>
                     @Html.Partial("_LoginPartial")
 
 
