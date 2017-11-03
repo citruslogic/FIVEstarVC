@@ -212,7 +212,6 @@
     <Compile Include="Models\ReasonType.cs" />
     <Compile Include="Models\Report.cs" />
     <Compile Include="Models\Resident.cs" />
-    <Compile Include="Models\ResidentInitializer.cs" />
     <Compile Include="Models\Resident_Disability.cs" />
     <Compile Include="Models\Resident_MilitaryService.cs" />
     <Compile Include="Models\Resident_ProgramEvent.cs" />
