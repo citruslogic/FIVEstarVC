@@ -1,16 +1,19 @@
 ﻿@model IEnumerable<FIVEstarVC.Models.Resident>
 
 @{
-    ViewBag.Title = "Resident Manager";
+    ViewBag.Title = "Index";
 }
 
+<h2>Reports</h2>
 
-    <h2>Manage Residents</h2>
+@using (Html.BeginForm())
+{
+    <p>
+        Find by name: @Html.TextBox("SearchString")
+        <input type="submit" value="Search" />
+    </p>
+}
 
-
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
 <table class="table">
     <tr>
         <th>
@@ -36,12 +39,7 @@
         <td>
             @Html.DisplayFor(modelItem => item.RoomNumber)
         </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.ResidentID }) |
-            @Html.ActionLink("Details", "Details", new { id=item.ResidentID }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.ResidentID })
-        </td>
     </tr>
-}
+    }    
 
 </table>

@@ -10,17 +10,14 @@ namespace FIVEstarVC.Models
     {
         [Key]
         [Column(Order = 0)]
-        [StringLength(60)]
-        public string ResidentMilitaryServiceID { get; set; }
+        public int ResidentMilitaryServiceID { get; set; }
 
         [Key]
         [Column(Order = 1)]
-        [StringLength(18)]
-        public string MilitaryServiceID { get; set; }
+        public int MilitaryServiceID { get; set; }
 
         [Key]
         [Column(Order = 2)]
-        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int ResidentID { get; set; }
 
         public virtual MilitaryService MilitaryService { get; set; }

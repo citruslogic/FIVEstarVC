@@ -15,7 +15,7 @@ namespace FIVEstarVC.Models
             Resident_Disability = new HashSet<Resident_Disability>();
         }
 
-        [DatabaseGenerated(DatabaseGeneratedOption.None)]
+        [Key]
         public int DisabilityID { get; set; }
 
         [StringLength(50)]

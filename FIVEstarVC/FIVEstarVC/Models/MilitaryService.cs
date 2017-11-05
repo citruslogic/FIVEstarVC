@@ -18,8 +18,8 @@ namespace FIVEstarVC.Models
         [StringLength(120)]
         public string ServiceName { get; set; }
 
-        [StringLength(18)]
-        public string MilitaryServiceID { get; set; }
+        [Key]
+        public int MilitaryServiceID { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Resident_MilitaryService> Resident_MilitaryService { get; set; }

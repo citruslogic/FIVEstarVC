@@ -66,7 +66,10 @@ namespace FIVEstarVC.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Resident resident = await db.Residents.FindAsync(id);
+
+            Resident resident = await db.Residents.Include(i => i.Resident_ProgramEvent)
+                                                  .Include(i => i.Resident_MilitaryService)
+                                                  .Where(i => i.ResidentID == id).SingleAsync();
             if (resident == null)
             {
                 return HttpNotFound();

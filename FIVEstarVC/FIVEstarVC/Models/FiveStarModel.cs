@@ -46,9 +46,7 @@ namespace FIVEstarVC.Models
                 .IsUnicode(false);
 
             modelBuilder.Entity<MilitaryService>()
-                .Property(e => e.MilitaryServiceID)
-                .IsFixedLength()
-                .IsUnicode(false);
+                .Property(e => e.MilitaryServiceID);
 
             modelBuilder.Entity<MilitaryService>()
                 .HasMany(e => e.Resident_MilitaryService)
@@ -97,13 +95,11 @@ namespace FIVEstarVC.Models
                 .Map(m => m.ToTable("Resident_MilitaryCampaign").MapLeftKey("ResidentID").MapRightKey("MilitaryCampaignID"));
 
             modelBuilder.Entity<Resident_MilitaryService>()
-                .Property(e => e.ResidentMilitaryServiceID)
-                .IsUnicode(false);
+                .Property(e => e.ResidentMilitaryServiceID);
 
             modelBuilder.Entity<Resident_MilitaryService>()
-                .Property(e => e.MilitaryServiceID)
-                .IsFixedLength()
-                .IsUnicode(false);
+                .Property(e => e.MilitaryServiceID);
+                
 
             modelBuilder.Entity<Resident_ProgramEvent>()
                 .Property(e => e.Notes)

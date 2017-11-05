@@ -20,17 +20,14 @@ namespace FIVEstarVC.Models
 
         [Key]
         [Column(Order = 0)]
-        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int ProgramEventID { get; set; }
 
         [Key]
         [Column(Order = 1)]
-        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int ProgramTypeID { get; set; }
 
         [Key]
         [Column(Order = 2)]
-        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int ResidentID { get; set; }
 
         public string Notes { get; set; }
@@ -45,7 +42,7 @@ namespace FIVEstarVC.Models
 
         public int? ModifiedID { get; set; }
 
-        public int? DischargeEventID { get; set; }
+        public int? ReasonID { get; set; }
 
         public virtual ProgramType ProgramType { get; set; }
 

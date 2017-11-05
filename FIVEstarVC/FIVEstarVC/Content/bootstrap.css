@@ -4515,7 +4515,7 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
   }
 }
 .navbar-default {
-  background-color: #f8f8f8;
+  background-color: #ddd;
   border-color: #e7e7e7;
 }
 .navbar-default .navbar-brand {
@@ -6777,12 +6777,13 @@ button.close {
   }
 }
 
-.btn-margin-left {
-    margin-left: 10px;
+.navbar-nav > li {
+    margin-left: 30px;
+    margin-right: 30px;
 }
 
 .btn-margin-right {
-    margin-right: 10px;
+    margin-right: 0.5em;
 }
 
 .margin-bottom-xs {

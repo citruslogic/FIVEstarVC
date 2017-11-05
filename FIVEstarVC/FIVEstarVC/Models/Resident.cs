@@ -18,16 +18,20 @@ namespace FIVEstarVC.Models
             MilitaryCampaigns = new HashSet<MilitaryCampaign>();
         }
 
-        [DatabaseGenerated(DatabaseGeneratedOption.None)]
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int ResidentID { get; set; }
 
+        [Display(Name ="Last Name")]
         [StringLength(38)]
         
         public string LastName { get; set; }
 
+        [Display(Name = "First Name")]
         [StringLength(50)]
         public string FirstName { get; set; }
 
+        [Display(Name = "Room Number")]
         public int? RoomNumber { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

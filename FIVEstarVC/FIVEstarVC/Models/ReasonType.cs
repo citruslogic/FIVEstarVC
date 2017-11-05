@@ -2,9 +2,21 @@ namespace FIVEstarVC.Models
 {
     using System;
     using System.Collections.Generic;
+    using System.ComponentModel;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.Spatial;
+
+    public enum DischargeReason
+    {
+
+        [Description("Graduated")]
+        GRADUATED,
+        [Description("Dismissed for Cause")]
+        DISMISSED,
+        [Description("Self Discharged")]
+        SELFDISCHARGED
+    }
 
     [Table("ReasonType")]
     public partial class ReasonType
@@ -16,7 +28,6 @@ namespace FIVEstarVC.Models
         }
 
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int ReasonID { get; set; }
 
         [StringLength(50)]
