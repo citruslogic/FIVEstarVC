@@ -31,7 +31,7 @@ namespace FIVEstarVC.Models
         public string FirstName { get; set; }
 
         [Display(Name = "Room Number")]
-        public int? RoomNumber { get; set; }
+        public int RoomNumber { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Resident_Disability> Resident_Disability { get; set; }
