@@ -24,6 +24,15 @@ namespace FIVEstarVC.Models
         [Column(TypeName = "money")]
         public decimal? BenefitAmount { get; set; }
 
+        [Column(TypeName = "money")]
+        public decimal? SSI { get; set; }
+
+        [Column(TypeName = "money")]
+        public decimal? SSDI { get; set; }
+
+        [Column(TypeName = "money")]
+        public decimal? FoodStamps { get; set; }
+
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Resident_Disability> Resident_Disability { get; set; }
     }
