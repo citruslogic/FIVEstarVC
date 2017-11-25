@@ -161,7 +161,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Helpers\EnumHelper.cs" />
+    <Compile Include="Models\FSEnumHelper.cs" />
     <Compile Include="Models\MilitaryCampaign.cs" />
     <Compile Include="Models\Program.cs" />
     <Compile Include="Models\ResidentCampaign.cs" />

@@ -16,13 +16,14 @@ namespace FIVESTARVC.Controllers
     {
         private ResidentContext db = new ResidentContext();
 
+
         // GET: Residents
         public ActionResult Index(string sortOrder, string currentFilter, string searchString, int? page)
         {
             ViewBag.CurrentSort = sortOrder;
             ViewBag.NameSortParm = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
             ViewBag.BranchSortParm = sortOrder == "ServiceBranch" ? "ServiceBranch_desc" : "ServiceBranch";
-            
+
             if (searchString != null)
             {
                 page = 1;
@@ -35,7 +36,7 @@ namespace FIVESTARVC.Controllers
             ViewBag.CurrentFilter = searchString;
 
             var residents = from s in db.Residents
-                           select s;
+                            select s;
 
 
             if (!String.IsNullOrEmpty(searchString))
@@ -84,6 +85,7 @@ namespace FIVESTARVC.Controllers
         // GET: Residents/Create
         public ActionResult Create()
         {
+
             return View();
         }
 
@@ -109,6 +111,7 @@ namespace FIVESTARVC.Controllers
                 ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists see your system administrator.");
             }
 
+
             return View(resident);
         }
 
@@ -124,6 +127,8 @@ namespace FIVESTARVC.Controllers
             {
                 return HttpNotFound();
             }
+
+
             return View(resident);
         }
 
@@ -157,24 +162,44 @@ namespace FIVESTARVC.Controllers
             return View(residentToUpdate);
         }
 
-        // POST: Residents/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
+        // GET: Residents/Delete/5
+        [HttpGet]
+        public ActionResult Delete(int? id, bool? saveChangesError = false)
         {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            if (saveChangesError.GetValueOrDefault())
+            {
+                ViewBag.ErrorMessage = "Delete failed. Try again, and if the problem persists see your system administrator.";
+            }
             Resident resident = db.Residents.Find(id);
-            db.Residents.Remove(resident);
-            db.SaveChanges();
-            return RedirectToAction("Index");
+
+            if (resident == null)
+            {
+                return HttpNotFound();
+            }
+            return View(resident);
         }
 
-        protected override void Dispose(bool disposing)
+        // POST: Residents/Delete/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Delete(int id)
         {
-            if (disposing)
+            try
             {
-                db.Dispose();
+                Resident resident = db.Residents.Find(id);
+                db.Residents.Remove(resident);
+                db.SaveChanges();
             }
-            base.Dispose(disposing);
+            catch (DataException/* dex */)
+            {
+                //Log the error (uncomment dex variable name and add a line here to write a log.
+                return RedirectToAction("Delete", new { id = id, saveChangesError = true });
+            }
+            return RedirectToAction("Index");
         }
     }
 }
