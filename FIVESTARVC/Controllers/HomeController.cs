@@ -13,7 +13,7 @@ namespace FIVESTARVC.Controllers
             return View();
         }
 
-        public ActionResult About()
+        public ActionResult Reports()
         {
             ViewBag.Message = "Your application description page.";
 

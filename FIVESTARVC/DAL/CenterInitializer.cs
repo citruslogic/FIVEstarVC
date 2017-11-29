@@ -23,9 +23,9 @@ namespace FIVESTARVC.DAL
 
             var events = new List<Event>
             {
-                new Event { ResidentID=0, AdmitDate=DateTime.Parse("2005-09-01"), LeaveDate=DateTime.Parse("2005-09-25")},
-                new Event { ResidentID=1, AdmitDate=DateTime.Parse("2005-10-05"), LeaveDate=DateTime.Parse("2005-10-15")},
-                new Event { ResidentID=2, AdmitDate=DateTime.Parse("2005-11-19"), LeaveDate = null}
+                new Event { ResidentID=1, AdmitDate=DateTime.Parse("2005-09-01"), LeaveDate=DateTime.Parse("2005-09-25")},
+                new Event { ResidentID=2, AdmitDate=DateTime.Parse("2005-10-05"), LeaveDate=DateTime.Parse("2005-10-15")},
+                new Event { ResidentID=3, AdmitDate=DateTime.Parse("2005-11-19"), LeaveDate = null}
             };
 
             events.ForEach(e => context.Events.Add(e));
