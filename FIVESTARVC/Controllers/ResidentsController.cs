@@ -9,6 +9,7 @@ using System.Web.Mvc;
 using FIVESTARVC.DAL;
 using FIVESTARVC.Models;
 using PagedList;
+using FIVESTARVC.ViewModels;
 
 namespace FIVESTARVC.Controllers
 {
@@ -75,6 +76,7 @@ namespace FIVESTARVC.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             Resident resident = db.Residents.Find(id);
+
             if (resident == null)
             {
                 return HttpNotFound();
@@ -118,11 +120,19 @@ namespace FIVESTARVC.Controllers
         // GET: Residents/Edit/5
         public ActionResult Edit(int? id)
         {
+
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Resident resident = db.Residents.Find(id);
+
+            Resident resident = db.Residents
+            .Include(c => c.MilitaryCampaigns)
+            .Where(c => c.ID == id)
+            .Single();
+
+            PopulateAssignedCampaignData(resident);
+
             if (resident == null)
             {
                 return HttpNotFound();
@@ -132,25 +142,32 @@ namespace FIVESTARVC.Controllers
             return View(resident);
         }
 
+       
+
         // POST: Residents/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost, ActionName("Edit")]
         [ValidateAntiForgeryToken]
-        public ActionResult EditPost(int? id)
+        public ActionResult EditPost(int? id, string[] selectedCampaigns)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var residentToUpdate = db.Residents.Find(id);
+            var residentToUpdate = db.Residents
+            .Include(c => c.MilitaryCampaigns)
+            .Where(c => c.ID == id)
+            .Single();
+
             if (TryUpdateModel(residentToUpdate, "",
-               new string[] { "LastName", "FirstMidName", "RoomNumber", "ServiceBranch" }))
+               new string[] { "LastName", "FirstMidName", "RoomNumber", "ServiceBranch", "MilitaryCampaigns" }))
             {
                 try
                 {
                     db.SaveChanges();
 
+                    UpdateResidentCampaigns(selectedCampaigns, residentToUpdate);
                     return RedirectToAction("Index");
                 }
                 catch (DataException /* dex */)
@@ -159,8 +176,60 @@ namespace FIVESTARVC.Controllers
                     ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
                 }
             }
+
+            PopulateAssignedCampaignData(residentToUpdate);
             return View(residentToUpdate);
         }
+
+        private void PopulateAssignedCampaignData(Resident resident)
+        {
+            var allMilitaryCampaigns = db.MilitaryCampaigns;
+            var residentCampaigns = new HashSet<int>(resident.MilitaryCampaigns.Select(c => c.MilitaryCampaignID));
+            var viewModel = new List<AssignedCampaignData>();
+            foreach (var militaryCampaign in allMilitaryCampaigns)
+            {
+                viewModel.Add(new AssignedCampaignData
+                {
+                    MilitaryCampaignID = militaryCampaign.MilitaryCampaignID,
+                    MilitaryCampaign = militaryCampaign.CampaignName,
+                    Assigned = residentCampaigns.Contains(militaryCampaign.MilitaryCampaignID)
+                });
+            }
+            ViewBag.Campaigns = viewModel;
+        }
+
+        private void UpdateResidentCampaigns(string[] selectedCampaigns, Resident residentToUpdate)
+        {
+            if (selectedCampaigns == null)
+            {
+                residentToUpdate.MilitaryCampaigns = new List<MilitaryCampaign>();
+                return;
+            }
+
+            var selectedCampaignsHS = new HashSet<string>(selectedCampaigns);
+            var residentCampaigns = new HashSet<int>
+                (residentToUpdate.MilitaryCampaigns.Select(c => c.MilitaryCampaignID));
+
+            foreach (var campaign in db.MilitaryCampaigns)
+            {
+                if (selectedCampaignsHS.Contains(campaign.MilitaryCampaignID.ToString()))
+                {
+                    if (!residentCampaigns.Contains(campaign.MilitaryCampaignID))
+                    {
+                        residentToUpdate.MilitaryCampaigns.Add(campaign);
+                    }
+                }
+                else
+                {
+                    if (residentCampaigns.Contains(campaign.MilitaryCampaignID))
+                    {
+                        residentToUpdate.MilitaryCampaigns.Remove(campaign);
+                    }
+                }
+            }
+        }
+
+       
 
         // GET: Residents/Delete/5
         [HttpGet]

@@ -30,6 +30,16 @@ namespace FIVESTARVC.DAL
 
             events.ForEach(e => context.Events.Add(e));
             context.SaveChanges();
+
+            var militaryCampaigns = new List<MilitaryCampaign>
+            {
+                new MilitaryCampaign { CampaignName="Gulf War", Residents = new List<Resident>() },
+                new MilitaryCampaign { CampaignName="Afghanistan War", Residents = new List<Resident>() },
+                new MilitaryCampaign { CampaignName="Vietnam War", Residents = new List<Resident>() }
+            };
+
+            militaryCampaigns.ForEach(m => context.MilitaryCampaigns.Add(m));
+            context.SaveChanges();
         }
     }
 }
