@@ -162,13 +162,13 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Helpers\EnumHelper.cs" />
+    <Compile Include="Models\FSEnumHelper.cs" />
     <Compile Include="Models\MilitaryCampaign.cs" />
     <Compile Include="Models\Program.cs" />
-    <Compile Include="Models\ResidentCampaign.cs" />
     <Compile Include="Models\Event.cs" />
     <Compile Include="Models\Resident.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ViewModels\AssignedCampaignData.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap.css" />

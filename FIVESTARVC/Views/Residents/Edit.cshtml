@@ -51,6 +51,35 @@
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
+                <table>
+                    <tr>
+                        @{
+                            int cnt = 0;
+                            List<FIVESTARVC.ViewModels.AssignedCampaignData> campaigns = ViewBag.Campaigns;
+
+                            foreach (var campaign in campaigns)
+                            {
+                                if (cnt++ % 3 == 0)
+                                {
+                                    @:</tr><tr>
+                        }
+                                @:<td>
+                                    <input type="checkbox"
+                                           name="selectedCampaigns"
+                                           value="campaign.MilitaryCampaignID"
+                                           @(Html.Raw(campaign.Assigned ? "checked=\"checked\"" : "")) />
+                                    @:  @campaign.MilitaryCampaign
+                                    @:</td>
+                    }
+                            @:</tr>
+                        }
+                    </table>
+                </div>
+            </div>
+
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
                 <input type="submit" value="Save" class="btn btn-default" />
             </div>
         </div>

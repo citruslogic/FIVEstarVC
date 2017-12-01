@@ -1,5 +1,9 @@
 ﻿@model PagedList.IPagedList<FIVESTARVC.Models.Resident>
 @using PagedList.Mvc;
+@using FIVESTARVC.Models;
+
+
+
 <link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
 
 @{
@@ -11,11 +15,12 @@
 <p>
     @Html.ActionLink("Create New", "Create")
 </p>
-@using (Html.BeginForm("Index", "Resident", FormMethod.Get))
+@using (Html.BeginForm("Index", "Residents", FormMethod.Get))
 {
     <p>
-        Find by name: @Html.TextBox("SearchString", ViewBag.CurrentFilter as string)
+        Find by name: <div class="form-group">@Html.TextBox("searchString", ViewBag.CurrentFilter as string)
         <input type="submit" value="Search" />
+        </div>
     </p>
 }<table class="table">
     <tr>
@@ -43,7 +48,13 @@
             @Html.DisplayFor(modelItem => item.FirstMidName)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.ServiceBranch)
+            @{
+                var serviceDescription = FSEnumHelper.GetDescription(item.ServiceBranch);
+
+
+                @Html.DisplayFor(modelItem => serviceDescription)
+            }
+           
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.RoomNumber)

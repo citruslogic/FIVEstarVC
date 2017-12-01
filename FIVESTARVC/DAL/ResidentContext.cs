@@ -17,13 +17,18 @@ namespace FIVESTARVC.DAL
 
         public DbSet<Resident> Residents { get; set; }
         public DbSet<Event> Events { get; set; }
-        public DbSet<ResidentCampaign> ResidentCampaigns { get; set; }
         public DbSet<MilitaryCampaign> MilitaryCampaigns { get; set; }
         public DbSet<Program> Programs { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
+
+            modelBuilder.Entity<MilitaryCampaign>()
+            .HasMany(r => r.Residents).WithMany(m => m.MilitaryCampaigns)
+            .Map(t => t.MapLeftKey("MilitaryCampaignID")
+            .MapRightKey("ResidentID")
+            .ToTable("CampaignAssignment"));
         }
     }
 }
