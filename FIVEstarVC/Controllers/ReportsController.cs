@@ -26,7 +26,7 @@ namespace FIVESTARVC.Controllers
 
             ViewBag.Graduated = DB.Events.Count(x => x.LeaveDate.HasValue);
 
-            return View();
+            return View(); //please work
         }
     }
 }
