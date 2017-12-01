@@ -21,8 +21,11 @@ namespace FIVESTARVC.Controllers
             ViewBag.ArmyCount = DB.Residents.Count(x => x.ServiceBranch == ServiceType.ARMY);
             ViewBag.AirForceCount = DB.Residents.Count(x => x.ServiceBranch == ServiceType.AIRFORCE);
             ViewBag.CoastGuardCount = DB.Residents.Count(x => x.ServiceBranch == ServiceType.COASTGUARD);
-
+   
             ViewBag.TotalCount = DB.Residents.Count();
+
+            ViewBag.Graduated = DB.Events.Count(x => x.LeaveDate.HasValue);
+
             return View();
         }
     }

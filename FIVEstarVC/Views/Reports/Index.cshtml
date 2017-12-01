@@ -8,17 +8,19 @@
 }
 
 <h2>Center Summary</h2>
-<h3>Total Residents: @Html.Raw(ViewBag.TotalCount)</h3>
+<hr />
+<h4>Total Residents: @Html.Raw(ViewBag.TotalCount)</h4>
+<h4>Total Graduated: @Html.Raw(ViewBag.Graduated)</h4>
 <br>
 
-<h4>Military Service Statistics</h4>
+<h3>Military Service Statistics</h3>
 <table class="table">
     <tr>
-        <th>
-            @Html.ActionLink("Service Branch", "Index", new { sortOrder = ViewBag.NameSortParm, currentFilter = ViewBag.CurrentFilter })
+        <th style="font-weight: bold; color:dodgerblue; font-size: 110%">
+            Service Branch
         </th>
-        <th>
-            @Html.ActionLink("Total Count", "Index", new { sortOrder = ViewBag.NameSortParm, currentFilter = ViewBag.CurrentFilter })
+        <th style="font-weight: bold; color:dodgerblue; font-size: 110%">
+            Total Count
         </th>
     </tr>
     <tr>
@@ -29,6 +31,7 @@
             @Html.Raw(ViewBag.NavyCount)
         </td>
     </tr>
+    <tr>
         <td>
             Army
         </td>
@@ -36,6 +39,7 @@
             @Html.Raw(ViewBag.ArmyCount)
         </td>
     </tr>
+    <tr>
         <td>
             Marines
         </td>
@@ -43,6 +47,7 @@
             @Html.Raw(ViewBag.MarineCount)
         </td>
     </tr>
+    <tr>
         <td>
             Air Force
         </td>
@@ -50,6 +55,7 @@
             @Html.Raw(ViewBag.AirForceCount)
         </td>
     </tr>
+    <tr>
         <td>
             Coast Guard
         </td>
