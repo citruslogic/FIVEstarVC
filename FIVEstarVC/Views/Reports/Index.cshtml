@@ -1,8 +1,66 @@
 ﻿@model FIVESTARVC.Models.Resident
+@using PagedList.Mvc;
+
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
 
 @{
     ViewBag.Title = "Reports";
 }
 
-<h2>Reports</h2>
+<h2>Center Summary</h2>
+<hr />
+<h4>Total Residents: @Html.Raw(ViewBag.TotalCount)</h4>
+<h4>Total Graduated: @Html.Raw(ViewBag.Graduated)</h4>
+<br>
 
+<h3>Military Service Statistics</h3>
+<table class="table">
+    <tr>
+        <th style="font-weight: bold; color:dodgerblue; font-size: 110%">
+            Service Branch
+        </th>
+        <th style="font-weight: bold; color:dodgerblue; font-size: 110%">
+            Total Count
+        </th>
+    </tr>
+    <tr>
+        <td>
+            Navy
+        </td>
+        <td>
+            @Html.Raw(ViewBag.NavyCount)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            Army
+        </td>
+        <td>
+            @Html.Raw(ViewBag.ArmyCount)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            Marines
+        </td>
+        <td>
+            @Html.Raw(ViewBag.MarineCount)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            Air Force
+        </td>
+        <td>
+            @Html.Raw(ViewBag.AirForceCount)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            Coast Guard
+        </td>
+        <td>
+            @Html.Raw(ViewBag.CoastGuardCount)
+        </td>
+    </tr>
+</table>
