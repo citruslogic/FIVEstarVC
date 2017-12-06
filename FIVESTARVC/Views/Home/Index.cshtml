@@ -1,5 +1,7 @@
-﻿@{
-    ViewBag.Title = "Home Page";
+﻿@model FIVESTARVC.Models.Resident
+
+@{
+    ViewBag.Title = "Dashboard";
 }
 
 @*<div class="jumbotron">
@@ -7,7 +9,20 @@
     <p class="lead">ASP.NET is a free web framework for building great Web sites and Web applications using HTML, CSS and JavaScript.</p>
     <p><a href="https://asp.net" class="btn btn-primary btn-lg">Learn more &raquo;</a></p>
 </div>*@
-
-<div class="row">
+<h2> Dashboard </h2>
+<div class="col-md-offset-1">
+    <p>Residents recently admitted into your center.</p>
+    <table class="table">
+        <tr>
+        @foreach (var item in ViewBag.lastFiveResidents) {
+        
+            <td class="well" style="margin-left: 4px;">@item.FirstMidName @item.LastName <br />
+                Room: @item.RoomNumber<br />
+                <input type="button" class="btn-default" value="See more" onclick="location.href='/Residents/Details/@item.ID/';" />
+                </td>
+        
+        }
+        </tr>
+    </table>
 
 </div>

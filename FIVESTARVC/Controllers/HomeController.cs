@@ -3,13 +3,20 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using FIVESTARVC.Models;
+using FIVESTARVC.DAL;
 
 namespace FIVESTARVC.Controllers
 {
+
     public class HomeController : Controller
     {
+        private ResidentContext db = new ResidentContext();
+
         public ActionResult Index()
         {
+            ViewBag.lastFiveResidents = db.Residents.OrderByDescending(r => r.LastName).Take(5);
+
             return View();
         }
 
