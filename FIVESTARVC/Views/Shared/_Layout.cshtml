@@ -8,26 +8,28 @@
     @Scripts.Render("~/bundles/modernizr")
 </head>
 <body>
-    <div class="navbar navbar-inverse navbar-fixed-top">
+   
+    <div class="navbar navbar navbar-fixed-top">
         <div class="container">
+            <img class="img-rounded" src="~/Content/fivestar_logo.jpg" /><br />
             <div class="navbar-header">
+                
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
                 </button>
-                @Html.ActionLink("FIVE STAR", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+               
+                <input type="button" class="btn-default" value="Dashboard" onclick="location.href = '/Home';" />
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Home", "Index", "Residents")</li>
-                    <li>@Html.ActionLink("Residents", "Index", "Residents")</li>
-                    <li>@Html.ActionLink("Reports", "Index", "Reports")</li>
+                    <li><input type="button" class="btn-success" value="Residents" onclick="location.href='/Residents';" /> </li>
+                    <li><input type="button" class="btn-default" value="Reports" onclick="location.href='/Reports';" /></li>
                 </ul>
             </div>
         </div>
     </div>
-    <div class="container body-content">
+    <div class="container body-content col-md-offset-4">
         @RenderBody()
         <hr />
         <footer>
