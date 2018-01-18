@@ -24,7 +24,7 @@ namespace FIVESTARVC.Controllers
    
             ViewBag.TotalCount = DB.Residents.Count();
 
-            ViewBag.Graduated = DB.Events.Count(x => x.LeaveDate.HasValue);
+            //ViewBag.Graduated = DB.Events.Count(x => x.LeaveDate.HasValue);
 
             return View(); //please work v2
         }

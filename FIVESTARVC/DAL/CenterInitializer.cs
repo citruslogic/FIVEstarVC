@@ -21,7 +21,7 @@ namespace FIVESTARVC.DAL
             residents.ForEach(r => context.Residents.Add(r));
             context.SaveChanges();
 
-            var events = new List<Event>
+ /*           var events = new List<Event>
             {
                 new Event { ResidentID=1, AdmitDate=DateTime.Parse("2005-09-01"), LeaveDate=DateTime.Parse("2005-09-25")},
                 new Event { ResidentID=2, AdmitDate=DateTime.Parse("2005-10-05"), LeaveDate=DateTime.Parse("2005-10-15")},
@@ -29,7 +29,7 @@ namespace FIVESTARVC.DAL
             };
 
             events.ForEach(e => context.Events.Add(e));
-            context.SaveChanges();
+            context.SaveChanges();*/
 
             var militaryCampaigns = new List<MilitaryCampaign>
             {
