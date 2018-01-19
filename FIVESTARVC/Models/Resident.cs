@@ -41,6 +41,6 @@ namespace FIVESTARVC.Models
         public int RoomNumber { get; set; }
 
         public virtual ICollection<MilitaryCampaign> MilitaryCampaigns { get; set; }
-        public virtual ICollection<Event> Events { get; set; }
+        public virtual ICollection<ProgramEvent> ProgramEvents { get; set; }
     }
 }
