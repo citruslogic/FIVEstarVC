@@ -16,6 +16,8 @@ namespace FIVESTARVC.Models
         public MilitaryCampaign MilitaryCampaign { get; set; }
 
         public Event Event { get; set; }
+        
+        public Room Room { get; set; }
 
 
     }
