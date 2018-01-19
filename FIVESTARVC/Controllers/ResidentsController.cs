@@ -87,6 +87,7 @@ namespace FIVESTARVC.Controllers
         // GET: Residents/Create
         public ActionResult Create()
         {
+            //ViewBag.AvailRoom = db.Rooms.Contains;
 
             return View();
         }
