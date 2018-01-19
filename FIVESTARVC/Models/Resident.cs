@@ -38,7 +38,7 @@ namespace FIVESTARVC.Models
         [Display(Name = "Service Branch")]
         public ServiceType ServiceBranch { get; set; }
         [Display(Name = "Room Number")]
-        public int RoomNumber { get; set; }
+        public virtual Room RoomNum { get; set; }
 
         public virtual ICollection<MilitaryCampaign> MilitaryCampaigns { get; set; }
         public virtual ICollection<Event> Events { get; set; }
