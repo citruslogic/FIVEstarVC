@@ -19,6 +19,7 @@ namespace FIVESTARVC.DAL
         public DbSet<MilitaryCampaign> MilitaryCampaigns { get; set; }
         public DbSet<ProgramEvent> ProgramEvents { get; set; }
         public DbSet<ProgramType> ProgramTypes { get; set; }
+        public DbSet<Benefit> Benefits { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

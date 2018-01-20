@@ -96,13 +96,14 @@ namespace FIVESTARVC.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "LastName,FirstMidName,ServiceBranch,RoomNumber")] Resident resident)
+        public ActionResult Create([Bind(Include = "LastName,FirstMidName,ServiceBranch,Rank,RoomNumber")] Resident resident)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
                     db.Residents.Add(resident);
+                    
                     db.SaveChanges();
                     return RedirectToAction("Index");
                 }
@@ -165,9 +166,10 @@ namespace FIVESTARVC.Controllers
             {
                 try
                 {
-                    db.SaveChanges();
 
                     UpdateResidentCampaigns(selectedCampaigns, residentToUpdate);
+                    db.SaveChanges();
+
                     return RedirectToAction("Index");
                 }
                 catch (DataException /* dex */)

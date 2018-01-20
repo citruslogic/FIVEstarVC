@@ -19,6 +19,7 @@ namespace FIVESTARVC.Models
         public Boolean Completed { get; set; }
 
         public virtual Resident Resident { get; set; }
+        public virtual ProgramType ProgramType { get; set; }
 
     }
 }
