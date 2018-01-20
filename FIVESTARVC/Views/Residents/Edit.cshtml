@@ -1,7 +1,7 @@
 ﻿@model FIVESTARVC.Models.Resident
 
 @{
-    ViewBag.Title = "Edit";
+    ViewBag.Title = "Edit Resident";
 }
 
 <h2>Edit</h2>
@@ -48,8 +48,9 @@
                 @Html.ValidationMessageFor(model => model.RoomNumber, "", new { @class = "text-danger" })
             </div>
         </div>
-
+        
         <div class="form-group">
+            @Html.Label("Military Campaigns", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-offset-2 col-md-10">
                 <table>
                     <tr>
@@ -69,7 +70,7 @@
                                            value="@campaign.MilitaryCampaignID"
                                            @(Html.Raw(campaign.Assigned ? "checked=\"checked\"" : "")) />
                                     @:  @campaign.MilitaryCampaign
-                                    @:</td>
+                                    @: </td>
                     }
                             @:</tr>
                          }

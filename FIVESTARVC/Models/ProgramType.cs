@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace FIVESTARVC.Models
 {
@@ -36,6 +37,5 @@ namespace FIVESTARVC.Models
         public ResidentProgramType ResidentProgramType { get; set; }
         public String ProgramDescription { get; set; }
 
-        public virtual ProgramEvent ProgramEvent { get; set; }
     }
 }

@@ -25,10 +25,6 @@ namespace FIVESTARVC.DAL
         {
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
 
-            modelBuilder.Entity<ProgramEvent>()
-            .HasOptional(p => p.ProgramType)
-            .WithRequired(r => r.ProgramEvent);
-
             modelBuilder.Entity<MilitaryCampaign>()
             .HasMany(r => r.Residents).WithMany(m => m.MilitaryCampaigns)
             .Map(t => t.MapLeftKey("MilitaryCampaignID")
