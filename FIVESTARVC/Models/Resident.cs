@@ -26,6 +26,7 @@ namespace FIVESTARVC.Models
         [Display(Name = "Navy")]
         NAVY
     }
+
     public class Resident
     {
 

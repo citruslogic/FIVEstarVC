@@ -157,9 +157,10 @@ namespace FIVESTARVC.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             var residentToUpdate = db.Residents
-            .Include(c => c.MilitaryCampaigns)
-            .Where(c => c.ResidentID == id)
-            .Single();
+                .Include(p => p.ProgramEvents)
+                .Include(c => c.MilitaryCampaigns)
+                .Where(c => c.ResidentID == id)
+                .Single();
 
             if (TryUpdateModel(residentToUpdate, "",
                new string[] { "LastName", "FirstMidName", "RoomNumber", "ServiceBranch", "MilitaryCampaigns" }))
