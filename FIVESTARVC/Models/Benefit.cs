@@ -10,7 +10,7 @@ namespace FIVESTARVC.Models
     public class Benefit
     {
 
-        public int DisabilityID { get; set; }
+        public int BenefitID { get; set; }
 
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:P2}")]
         public double Percentage { get; set; }

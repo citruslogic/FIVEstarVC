@@ -4,14 +4,14 @@ using System.Linq;
 using System.Web;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace FIVESTARVC.Models
 {
     public class ProgramEvent
     {
+        
         public int ProgramEventID { get; set; }
-        public int ResidentID { get; set; }
-        public int ProgramTypeID { get; set; }
 
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:MM-dd-yyyy}", ApplyFormatInEditMode = true)]

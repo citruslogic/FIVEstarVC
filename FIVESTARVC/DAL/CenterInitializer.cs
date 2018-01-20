@@ -21,23 +21,23 @@ namespace FIVESTARVC.DAL
             residents.ForEach(r => context.Residents.Add(r));
             context.SaveChanges();
 
-            var events = new List<ProgramEvent>
-            {
-                new ProgramEvent { ResidentID=1, StartDate=DateTime.Parse("2005-09-01"), EndDate=DateTime.Parse("2005-09-25")},
-                new ProgramEvent { ResidentID=2, StartDate=DateTime.Parse("2005-10-05"), EndDate=DateTime.Parse("2005-10-15")},
-                new ProgramEvent { ResidentID=3, StartDate=DateTime.Parse("2005-11-19"), EndDate = null}
-            };
+            //var events = new List<ProgramEvent>
+            //{
+            //    new ProgramEvent { StartDate=DateTime.Parse("2005-09-01"), EndDate=DateTime.Parse("2005-09-25")},
+            //    new ProgramEvent { StartDate=DateTime.Parse("2005-10-05"), EndDate=DateTime.Parse("2005-10-15")},
+            //    new ProgramEvent { StartDate=DateTime.Parse("2005-11-19"), EndDate = null}
+            //};
 
-            events.ForEach(e => context.ProgramEvents.Add(e));
-            context.SaveChanges();
+            //events.ForEach(e => context.ProgramEvents.Add(e));
+            //context.SaveChanges();
 
-            var programs = new List<ProgramType>
-            {
-                new ProgramType { ProgramEventID=1, ResidentProgramType=ResidentProgramType.WORK_PROGRAM, ProgramDescription="Home construction project" }
-            };
+            //var programs = new List<ProgramType>
+            //{
+            //    new ProgramType { ResidentProgramType=ResidentProgramType.WORK_PROGRAM, ProgramDescription="Home construction project" }
+            //};
 
-            programs.ForEach(p => context.ProgramTypes.Add(p));
-            context.SaveChanges();
+            //programs.ForEach(p => context.ProgramTypes.Add(p));
+            //context.SaveChanges();
 
             var militaryCampaigns = new List<MilitaryCampaign>
             {

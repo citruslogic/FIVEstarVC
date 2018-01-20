@@ -32,7 +32,6 @@ namespace FIVESTARVC.Models
     public class ProgramType
     {
         public int ProgramTypeID { get; set; }
-        public int ProgramEventID { get; set; }
 
         public ResidentProgramType ResidentProgramType { get; set; }
         public String ProgramDescription { get; set; }
