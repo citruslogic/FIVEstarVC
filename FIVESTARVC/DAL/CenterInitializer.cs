@@ -21,21 +21,31 @@ namespace FIVESTARVC.DAL
             residents.ForEach(r => context.Residents.Add(r));
             context.SaveChanges();
 
- /*           var events = new List<Event>
+            var events = new List<ProgramEvent>
             {
-                new Event { ResidentID=1, AdmitDate=DateTime.Parse("2005-09-01"), LeaveDate=DateTime.Parse("2005-09-25")},
-                new Event { ResidentID=2, AdmitDate=DateTime.Parse("2005-10-05"), LeaveDate=DateTime.Parse("2005-10-15")},
-                new Event { ResidentID=3, AdmitDate=DateTime.Parse("2005-11-19"), LeaveDate = null}
+                new ProgramEvent { ResidentID=1, StartDate=DateTime.Parse("2005-09-01"), EndDate=DateTime.Parse("2005-09-25")},
+                new ProgramEvent { ResidentID=2, StartDate=DateTime.Parse("2005-10-05"), EndDate=DateTime.Parse("2005-10-15")},
+                new ProgramEvent { ResidentID=3, StartDate=DateTime.Parse("2005-11-19"), EndDate = null}
             };
 
-            events.ForEach(e => context.Events.Add(e));
-            context.SaveChanges();*/
+            events.ForEach(e => context.ProgramEvents.Add(e));
+            context.SaveChanges();
+
+            var programs = new List<ProgramType>
+            {
+                new ProgramType { ProgramEventID=1, ResidentProgramType=ResidentProgramType.WORK_PROGRAM, ProgramDescription="Home construction project" }
+            };
+
+            programs.ForEach(p => context.ProgramTypes.Add(p));
+            context.SaveChanges();
 
             var militaryCampaigns = new List<MilitaryCampaign>
             {
-                new MilitaryCampaign { CampaignName="Gulf War", Residents = new List<Resident>() },
-                new MilitaryCampaign { CampaignName="Afghanistan War", Residents = new List<Resident>() },
-                new MilitaryCampaign { CampaignName="Vietnam War", Residents = new List<Resident>() }
+                new MilitaryCampaign { CampaignName="Persian Gulf", Residents = new List<Resident>() },
+                new MilitaryCampaign { CampaignName="Afghanistan", Residents = new List<Resident>() },
+                new MilitaryCampaign { CampaignName="Vietnam", Residents = new List<Resident>() },
+                new MilitaryCampaign { CampaignName="Iraq", Residents = new List<Resident>() },
+                new MilitaryCampaign { CampaignName="Bosnia", Residents = new List<Resident>() }
             };
 
             militaryCampaigns.ForEach(m => context.MilitaryCampaigns.Add(m));

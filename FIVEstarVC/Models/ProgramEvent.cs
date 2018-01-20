@@ -12,9 +12,14 @@ namespace FIVESTARVC.Models
         public int ProgramEventID { get; set; }
         public int ResidentID { get; set; }
         public int ProgramTypeID { get; set; }
-        
-        public DateTime StartDate { get; set; }
-        public DateTime EndDate { get; set; }
+
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:MM-dd-yyyy}", ApplyFormatInEditMode = true)]
+        public DateTime? StartDate { get; set; }
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:MM-dd-yyyy}", ApplyFormatInEditMode = true)]
+        public DateTime? EndDate { get; set; }
+
         public String Notes { get; set; }
         public Boolean Completed { get; set; }
 
