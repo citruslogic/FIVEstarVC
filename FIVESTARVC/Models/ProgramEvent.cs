@@ -12,6 +12,10 @@ namespace FIVESTARVC.Models
     {
         
         public int ProgramEventID { get; set; }
+        [ForeignKey("Resident")]
+        public int ResidentID { get; set; }
+        [ForeignKey("ProgramType")]
+        public int? ProgramTypeID { get; set; }
 
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:MM-dd-yyyy}", ApplyFormatInEditMode = true)]

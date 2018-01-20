@@ -29,7 +29,7 @@ namespace FIVESTARVC.Models
     public class Resident
     {
 
-        public int ID { get; set; }
+        public int ResidentID { get; set; }
         [Required]
         [Display(Name = "Last Name")]
         public string LastName { get; set; }

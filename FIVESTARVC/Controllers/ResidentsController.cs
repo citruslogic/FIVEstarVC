@@ -129,7 +129,7 @@ namespace FIVESTARVC.Controllers
 
             Resident resident = db.Residents
             .Include(c => c.MilitaryCampaigns)
-            .Where(c => c.ID == id)
+            .Where(c => c.ResidentID == id)
             .Single();
 
             PopulateAssignedCampaignData(resident);
@@ -158,7 +158,7 @@ namespace FIVESTARVC.Controllers
             }
             var residentToUpdate = db.Residents
             .Include(c => c.MilitaryCampaigns)
-            .Where(c => c.ID == id)
+            .Where(c => c.ResidentID == id)
             .Single();
 
             if (TryUpdateModel(residentToUpdate, "",
