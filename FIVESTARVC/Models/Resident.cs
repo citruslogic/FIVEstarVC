@@ -30,7 +30,7 @@ namespace FIVESTARVC.Models
     public class Resident
     {
         [Key]
-        public int ID { get; set; }
+        public int ResidentID { get; set; }
         [ForeignKey ("Room")]
         public int RoomID { get; set; }
         [Required]
