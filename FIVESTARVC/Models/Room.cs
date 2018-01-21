@@ -12,8 +12,11 @@ namespace FIVESTARVC.Models
     {
         //internal int ResidentID;
 
-        [Key, ForeignKey("Resident")]
+        [Key]
         public int RoomID { get; set; }
+
+        [ForeignKey ("ID")]
+        public int ID { get; set; }
 
         [Display(Name = "Room Number")]
         public int RoomNum { get; set; }

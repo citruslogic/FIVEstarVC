@@ -29,8 +29,10 @@ namespace FIVESTARVC.Models
     }
     public class Resident
     {
-        [Key, ForeignKey("Room")]
+        [Key]
         public int ID { get; set; }
+        [ForeignKey ("Room")]
+        public int RoomID { get; set; }
         [Required]
         [Display(Name = "Last Name")]
         public string LastName { get; set; }
