@@ -232,7 +232,21 @@ namespace FIVESTARVC.Controllers
             }
         }
 
-       
+        ///* Create new program event JSON action handler */
+        //public JsonResult SaveNewEvent(ProgramEvent ev, Resident resident)
+        //{
+        //    ctx.Orders.Add(order);
+        //    foreach (var item in orditemdetails)
+        //    {
+        //        item.OrderId = order.OrderId;
+        //        ctx.OrderItemDetails.Add(item);
+        //    }
+        //    ctx.SaveChanges();
+
+        //    return Json(true, JsonRequestBehavior.AllowGet);
+        //}
+
+
 
         // GET: Residents/Delete/5
         [HttpGet]
