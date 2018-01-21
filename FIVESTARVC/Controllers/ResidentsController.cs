@@ -94,12 +94,7 @@ namespace FIVESTARVC.Controllers
         // GET: Residents/Create
         public ActionResult Create()
         {
-            //ViewBag.AvailRoom = db.Rooms.Contains;
-
-            //Call Get Assigned Room to get available rooms//
-
-            GetAssignedRoom();
-      
+            ViewBag.AvailRoom = db.Rooms.Contains<Room();
             return View();
         }
 
@@ -168,8 +163,7 @@ namespace FIVESTARVC.Controllers
 
             Resident resident = db.Residents
             .Include(c => c.MilitaryCampaigns)
-            .Include(b => b.Benefits)
-            .Where(c => c.ResidentID == id)
+            .Where(c => c.ID == id)
             .Single();
 
             PopulateAssignedCampaignData(resident);
@@ -197,10 +191,8 @@ namespace FIVESTARVC.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             var residentToUpdate = db.Residents
-                .Include(p => p.ProgramEvents)
                 .Include(c => c.MilitaryCampaigns)
-                .Include(b => b.Benefits)
-                .Where(c => c.ResidentID == id)
+                .Where(c => c.ID == id)
                 .Single();
 
             if (TryUpdateModel(residentToUpdate, "",
