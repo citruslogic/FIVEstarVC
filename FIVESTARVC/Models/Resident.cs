@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Web;
 
@@ -28,7 +29,7 @@ namespace FIVESTARVC.Models
     }
     public class Resident
     {
-
+        [Key, ForeignKey("Room")]
         public int ID { get; set; }
         [Required]
         [Display(Name = "Last Name")]

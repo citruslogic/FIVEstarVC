@@ -10,7 +10,7 @@ namespace FIVESTARVC.Models
 {
     public class Room
     {
-        internal int ResidentID;
+        //internal int ResidentID;
 
         [Key, ForeignKey("Resident")]
         public int RoomID { get; set; }
