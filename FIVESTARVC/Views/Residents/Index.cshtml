@@ -13,7 +13,8 @@
 <h2>Residents Listing</h2>
 
 <p>
-    @Html.ActionLink("Create New", "Create")
+    <input type="button" class="btn-success" value="Create New" onclick="location.href='/Residents/Create';" /> 
+    @*@Html.ActionLink("Create New", "Create")*@
 </p>
 @using (Html.BeginForm("Index", "Residents", FormMethod.Get))
 {
