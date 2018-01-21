@@ -42,8 +42,9 @@
         <div class="form-group">
             @Html.LabelFor(model => model.Resident.Room, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.CheckBoxFor(m => m.Resident.Room.IsOccupied)
-                @Html.DisplayFor(modelItem => Model.Room.GetRoom)
+                @*@Html.CheckBoxFor(m => m.Room.IsSelected)*@
+                @Html.DisplayFor(modelItem => Model.Room.RoomNum)
+                @*@Html.(modelItem => Model.Room.RoomNum)*@
                 @Html.ValidationMessageFor(model => model.Resident.Room, "", new { @class = "text-danger" })
             </div>
 
