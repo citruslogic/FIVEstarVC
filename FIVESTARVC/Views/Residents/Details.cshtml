@@ -51,18 +51,18 @@
         <dd>
             <table class="table">
                 <tr>
-                    <th>Date Admitted</th>
-                    <th>Date Discharged</th>
+                    <th>Start Date</th>
+                    <th>End Date</th>
                     <th>Notes</th>
                 </tr>
-                @foreach (var item in Model.Events)
+                @foreach (var item in Model.ProgramEvents)
                 {
                     <tr>
                         <td>
-                            @Html.DisplayFor(modelItem => item.AdmitDate)
+                            @Html.DisplayFor(modelItem => item.StartDate)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.LeaveDate)
+                            @Html.DisplayFor(modelItem => item.EndDate)
                         </td>
                         <td>
                             @Html.DisplayFor(modelItem => item.Notes)
@@ -75,6 +75,6 @@
     </dl>
 </div>
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.ID }) |
+    @Html.ActionLink("Edit", "Edit", new { id = Model.ResidentID }) |
     @Html.ActionLink("Back to List", "Index")
 </p>

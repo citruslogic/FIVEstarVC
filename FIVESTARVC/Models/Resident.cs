@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Web;
 
@@ -27,12 +26,11 @@ namespace FIVESTARVC.Models
         [Display(Name = "Navy")]
         NAVY
     }
+
     public class Resident
     {
-        [Key]
-        public int ID { get; set; }
-        [ForeignKey ("Room")]
-        public int RoomID { get; set; }
+
+        public int ResidentID { get; set; }
         [Required]
         [Display(Name = "Last Name")]
         public string LastName { get; set; }
@@ -40,10 +38,15 @@ namespace FIVESTARVC.Models
         public string FirstMidName { get; set; }
         [Display(Name = "Service Branch")]
         public ServiceType ServiceBranch { get; set; }
+        [Display(Name = "Rank")]
+        public string Rank { get; set; }
         [Display(Name = "Room Number")]
-        public virtual Room Room { get; set; }
+        public int RoomNumber { get; set; }
 
         public virtual ICollection<MilitaryCampaign> MilitaryCampaigns { get; set; }
-        public virtual ICollection<Event> Events { get; set; }
+        public virtual ICollection<ProgramEvent> ProgramEvents { get; set; }
+
+        public int? BenefitID { get; set; }
+        public virtual ICollection<Benefit> Benefits { get; set; }
     }
 }

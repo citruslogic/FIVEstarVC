@@ -1,10 +1,14 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace FIVESTARVC.Models
 {
-    public enum ProgramType
+    public enum ResidentProgramType
     {
         [Description("Veterans Court")]
         [Display(Name = "Veterans Court")]
@@ -26,16 +30,12 @@ namespace FIVESTARVC.Models
         EM_SHELTER
     }
 
-    public class Program
+    public class ProgramType
     {
-        public int ID { get; set; }
-        public int EventID { get; set; }
-        [Display(Name = "Program Completed?")]
-        public Boolean HasCompleted { get; set; }
+        public int ProgramTypeID { get; set; }
 
-        [Display(Name = "Program")]
-        public ProgramType? ResidentProgram { get; set; }
+        public ResidentProgramType ResidentProgramType { get; set; }
+        public String ProgramDescription { get; set; }
 
-        public Event Event { get; set; }
     }
 }

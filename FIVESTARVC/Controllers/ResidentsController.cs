@@ -96,13 +96,14 @@ namespace FIVESTARVC.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "LastName,FirstMidName,ServiceBranch,RoomNumber")] Resident resident)
+        public ActionResult Create([Bind(Include = "LastName,FirstMidName,ServiceBranch,Rank,RoomNumber")] Resident resident)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
                     db.Residents.Add(resident);
+                    
                     db.SaveChanges();
                     return RedirectToAction("Index");
                 }
@@ -128,7 +129,7 @@ namespace FIVESTARVC.Controllers
 
             Resident resident = db.Residents
             .Include(c => c.MilitaryCampaigns)
-            .Where(c => c.ID == id)
+            .Where(c => c.ResidentID == id)
             .Single();
 
             PopulateAssignedCampaignData(resident);
@@ -156,18 +157,20 @@ namespace FIVESTARVC.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             var residentToUpdate = db.Residents
-            .Include(c => c.MilitaryCampaigns)
-            .Where(c => c.ID == id)
-            .Single();
+                .Include(p => p.ProgramEvents)
+                .Include(c => c.MilitaryCampaigns)
+                .Where(c => c.ResidentID == id)
+                .Single();
 
             if (TryUpdateModel(residentToUpdate, "",
                new string[] { "LastName", "FirstMidName", "RoomNumber", "ServiceBranch", "MilitaryCampaigns" }))
             {
                 try
                 {
-                    db.SaveChanges();
 
                     UpdateResidentCampaigns(selectedCampaigns, residentToUpdate);
+                    db.SaveChanges();
+
                     return RedirectToAction("Index");
                 }
                 catch (DataException /* dex */)
