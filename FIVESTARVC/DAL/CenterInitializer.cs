@@ -59,9 +59,9 @@ namespace FIVESTARVC.DAL
             {
                 //Rooms on the E/S Wing//
 
-               new Room { RoomNum=102, ResidentID = 1},
-               new Room { RoomNum=103, ResidentID = 2},
-               new Room { RoomNum=105, ResidentID = 3},
+               new Room { RoomNum=102},
+               new Room { RoomNum=103},
+               new Room { RoomNum=105},
                new Room { RoomNum=106},
                new Room { RoomNum=107},
                new Room { RoomNum=108},
