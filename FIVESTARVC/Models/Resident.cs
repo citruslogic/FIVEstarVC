@@ -40,13 +40,15 @@ namespace FIVESTARVC.Models
         public ServiceType ServiceBranch { get; set; }
         [Display(Name = "Rank")]
         public string Rank { get; set; }
-        [Display(Name = "Room Number")]
-        public int RoomNumber { get; set; }
+        
+    
 
         public virtual ICollection<MilitaryCampaign> MilitaryCampaigns { get; set; }
         public virtual ICollection<ProgramEvent> ProgramEvents { get; set; }
 
         public int? BenefitID { get; set; }
         public virtual ICollection<Benefit> Benefits { get; set; }
+
+        public virtual Room Room { get; set; }
     }
 }

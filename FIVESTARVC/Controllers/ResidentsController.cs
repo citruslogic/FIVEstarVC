@@ -85,10 +85,22 @@ namespace FIVESTARVC.Controllers
         }
 
         // GET: Residents/Create
-        public ActionResult Create()
+        //Passing in the Room context to get to Room
+        public ActionResult Create(Room Rooms)
         {
+            List<Room> AvailRooms = new List<Room>();
 
-            return View();
+            ViewBag.AvailRoom = "";
+            
+            foreach (var item in AvailRooms)
+            {
+                if (Rooms.IsOccupied)
+                {
+                    ViewBag.AvailRoom = Rooms.RoomNum;
+                }
+            }
+
+            return View(ViewBag.AvailRoom);
         }
 
         // POST: Residents/Create
@@ -100,6 +112,8 @@ namespace FIVESTARVC.Controllers
         {
             try
             {
+               
+
                 if (ModelState.IsValid)
                 {
                     db.Residents.Add(resident);

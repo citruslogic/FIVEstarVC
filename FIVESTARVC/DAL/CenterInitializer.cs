@@ -13,9 +13,9 @@ namespace FIVESTARVC.DAL
         {
             var residents = new List<Resident>
             {
-                new Resident { FirstMidName="Carson", LastName="Steven", ServiceBranch=ServiceType.ARMY, RoomNumber=100 },
-                new Resident { FirstMidName="Naomi", LastName="Wildman", ServiceBranch=ServiceType.AIRFORCE, RoomNumber=200 },
-                new Resident { FirstMidName="Gary", LastName="Noonan", ServiceBranch=ServiceType.NAVY, RoomNumber=110 }
+                new Resident { FirstMidName="Carson", LastName="Steven", ServiceBranch=ServiceType.ARMY},
+                new Resident { FirstMidName="Naomi", LastName="Wildman", ServiceBranch=ServiceType.AIRFORCE},
+                new Resident { FirstMidName="Gary", LastName="Noonan", ServiceBranch=ServiceType.NAVY}
             };
 
             residents.ForEach(r => context.Residents.Add(r));
@@ -54,6 +54,24 @@ namespace FIVESTARVC.DAL
 
             militaryCampaigns.ForEach(m => context.MilitaryCampaigns.Add(m));
             context.SaveChanges();
+
+            var Rooms = new List<Room>
+            {
+                new Room {RoomNum = 102, IsOccupied = true, ResidentID = 1},
+                new Room {RoomNum = 103, IsOccupied = true, ResidentID = 2},
+                new Room {RoomNum = 105, IsOccupied = true, ResidentID = 3},
+                new Room {RoomNum = 106, IsOccupied = false},
+                new Room {RoomNum = 107, IsOccupied = false},
+                new Room {RoomNum = 108, IsOccupied = false},
+                new Room {RoomNum = 109, IsOccupied = false},
+                new Room {RoomNum = 110, IsOccupied = false},
+                new Room {RoomNum = 112, IsOccupied = false},
+
+            };
+
+            Rooms.ForEach(m => context.Rooms.Add(m));
+            context.SaveChanges();
         }
+
     }
 }
