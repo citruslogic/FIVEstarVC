@@ -2,25 +2,35 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Web;
 
 namespace FIVESTARVC.Models
 {
-    public class Room : IEnumerable
+    public class Room
     {
+        //internal int ResidentID;
 
+        [Key]
         public int RoomID { get; set; }
-        public int? ResidentID { get; set; }
+
+        [ForeignKey ("ID")]
+        public int ID { get; set; }
+
+        [Display(Name = "Room Number")]
         public int RoomNum { get; set; }
+
+        [Display(Name = "Is Occupied")]
         public bool IsOccupied { get; set; }
+        public bool IsSelected { get; set;
+        }
+        public virtual Resident Resident { get; set; }
 
 
-        public virtual ICollection<Room> Rooms { get; set; }
-
-        public IEnumerator GetEnumerator()
+        public static implicit operator Room(int v)
         {
-            return ((IEnumerable)Rooms).GetEnumerator();
+            throw new NotImplementedException();
         }
     }
 }

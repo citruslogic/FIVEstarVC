@@ -16,7 +16,7 @@
     <input type="button" class="btn-success" value="Create New" onclick="location.href='/Residents/Create';" /> 
     @*@Html.ActionLink("Create New", "Create")*@
 </p>
-@using (Html.BeginForm("Index", "Residents", FormMethod.Post))
+@using (Html.BeginForm("Index", "Residents", FormMethod.Get))
 {
     <p>
         Find by name: <div class="form-group">@Html.TextBox("searchString", ViewBag.CurrentFilter as string)
@@ -37,9 +37,7 @@
         <th>
             Room Number
         </th>
-        <th>
-          
-        </th>
+        <th></th>
     </tr>
 
 @foreach (var item in Model) {
@@ -60,7 +58,7 @@
            
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.Room.RoomNum)
+            @Html.DisplayFor(modelItem => item.Room)
         </td>
         <td>
             @Html.ActionLink("Edit", "Edit", new { id=item.ResidentID }) |
