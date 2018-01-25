@@ -7,13 +7,13 @@
 <link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
 
 @{
-    ViewBag.Title = "Residents";
+    ViewBag.Title = "Center Residents";
 }
 
 <h2>Residents Listing</h2>
 
 <p>
-    <input type="button" class="btn-success" value="Create New" onclick="location.href='/Residents/Create';" /> 
+    <input type="button" class="btn btn-sm btn-success" value="Create New" onclick="location.href='/Residents/Create';" /> 
     @*@Html.ActionLink("Create New", "Create")*@
 </p>
 @using (Html.BeginForm("Index", "Residents", FormMethod.Get))
@@ -58,12 +58,12 @@
            
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.Room)
+           @*Proper room information goes here*@
         </td>
         <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.ResidentID }) |
-            @Html.ActionLink("Details", "Details", new { id=item.ResidentID }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.ResidentID })
+            @Html.ActionLink("Edit", "Edit", new { id=item.ResidentID }, htmlAttributes: new { @class = "btn btn-sm btn-outline-dark" }) 
+            @Html.ActionLink("Details", "Details", new { id=item.ResidentID }, htmlAttributes: new { @class = "btn btn-sm btn-outline-dark" }) 
+            @Html.ActionLink("Delete", "Delete", new { id=item.ResidentID }, htmlAttributes: new { @class = "btn btn-sm btn-outline-danger" })
         </td>
     </tr>
 }

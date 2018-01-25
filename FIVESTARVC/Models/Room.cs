@@ -10,16 +10,18 @@ namespace FIVESTARVC.Models
 {
     public class Room
     {
-               
+
         public int RoomID { get; set; }
 
-       public int? ResidentID { get; set; }
+        [ForeignKey("Resident")]
+        public int? ResidentID { get; set; }
 
         [Display(Name = "Room Number")]
         public int RoomNum { get; set; }
 
         [Display(Name = "Is Occupied")]
         public bool IsOccupied { get; set; }
-                
+
+        public virtual Resident Resident { get; set; }
     }
 }
