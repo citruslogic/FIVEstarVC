@@ -87,7 +87,11 @@ namespace FIVESTARVC.Controllers
         // GET: Residents/Create
         public ActionResult Create()
         {
-            ViewBag.AvailRoom = db.Rooms.Contains<Room();
+
+            //Call Get Assigned Room to get available rooms//
+
+            GetAssignedRoom();
+      
             return View();
         }
 
@@ -103,7 +107,7 @@ namespace FIVESTARVC.Controllers
                 if (ModelState.IsValid)
                 {
                     db.Residents.Add(resident);
-
+                    
                     db.SaveChanges();
                     return RedirectToAction("Index");
                 }
@@ -232,21 +236,7 @@ namespace FIVESTARVC.Controllers
             }
         }
 
-        ///* Create new program event JSON action handler */
-        //public JsonResult SaveNewEvent(ProgramEvent ev, Resident resident)
-        //{
-        //    ctx.Orders.Add(order);
-        //    foreach (var item in orditemdetails)
-        //    {
-        //        item.OrderId = order.OrderId;
-        //        ctx.OrderItemDetails.Add(item);
-        //    }
-        //    ctx.SaveChanges();
-
-        //    return Json(true, JsonRequestBehavior.AllowGet);
-        //}
-
-
+       
 
         // GET: Residents/Delete/5
         [HttpGet]
@@ -286,6 +276,29 @@ namespace FIVESTARVC.Controllers
                 return RedirectToAction("Delete", new { id = id, saveChangesError = true });
             }
             return RedirectToAction("Index");
+        }
+
+       private void GetAssignedRoom ()
+        {
+            //Initialize the AssignedRoom ViewModel//
+            var AvailRoom = db.Rooms;
+            
+            var viewModel = new List<AssignedRoom>();
+
+            //Loop through the rooms and check to see if IsOccupied is checked or not//
+            //if not checked, add it to the viewmodel//
+            foreach (var Rooms in AvailRoom)
+            {
+                if (Rooms.IsOccupied == false)
+                { 
+                    viewModel.Add(new AssignedRoom
+                    {
+                        RoomNum = Rooms.RoomNum,
+                        IsOccupied = Rooms.IsOccupied
+                    });
+                }
+            }
+            ViewBag.AssignRoom = viewModel;
         }
     }
 }
