@@ -45,20 +45,48 @@
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.Room.RoomNum, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-               
-                @Html.Raw(ViewBag.AvailRoom)
-                @Html.ValidationMessageFor(model => model.Room.RoomNum, "", new { @class = "text-danger" })
+           
+            <div class="control-label col-md-2">
+                @Html.Label("Available Rooms")
+            </div>
+            <div class="col-md-offset-2 col-md-10">
+                <table>
+                    <tr>
+                        @{
+                            int cnt = 0;
+                            List<FIVESTARVC.ViewModels.AssignedRoom> rooms = ViewBag.AssignRoom;
+
+                            foreach (var room in rooms)
+                            {
+                                 if (cnt++ % 10 == 0)
+
+                                    {
+                                    @: </tr><tr>
+                                    }
+
+                                @:<td>
+
+                                    <input type="checkbox"
+                                    name="Room"
+                                    value="@room.RoomNum"
+                                    @(Html.Raw(room.IsOccupied == true)) />
+                                @: @room.RoomNum
+                                @: </td>
+                                
+                            }
+                            @: </tr>
+                        }
+                </table>
             </div>
         </div>
-
+        <br />
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
                 <input type="submit" value="Create" class="btn btn-default" />
             </div>
         </div>
     </div>
+
 }
 
 <div>

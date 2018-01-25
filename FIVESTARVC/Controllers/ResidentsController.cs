@@ -87,7 +87,11 @@ namespace FIVESTARVC.Controllers
         // GET: Residents/Create
         public ActionResult Create()
         {
-            //ViewBag.AvailRoom = db.Rooms.Contains<Room();
+
+            //Call Get Assigned Room to get available rooms//
+
+            GetAssignedRoom();
+      
             return View();
         }
 
@@ -272,6 +276,29 @@ namespace FIVESTARVC.Controllers
                 return RedirectToAction("Delete", new { id = id, saveChangesError = true });
             }
             return RedirectToAction("Index");
+        }
+
+       private void GetAssignedRoom ()
+        {
+            //Initialize the AssignedRoom ViewModel//
+            var AvailRoom = db.Rooms;
+            
+            var viewModel = new List<AssignedRoom>();
+
+            //Loop through the rooms and check to see if IsOccupied is checked or not//
+            //if not checked, add it to the viewmodel//
+            foreach (var Rooms in AvailRoom)
+            {
+                if (Rooms.IsOccupied == false)
+                { 
+                    viewModel.Add(new AssignedRoom
+                    {
+                        RoomNum = Rooms.RoomNum,
+                        IsOccupied = Rooms.IsOccupied
+                    });
+                }
+            }
+            ViewBag.AssignRoom = viewModel;
         }
     }
 }
