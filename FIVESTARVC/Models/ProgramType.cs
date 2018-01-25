@@ -25,6 +25,9 @@ namespace FIVESTARVC.Models
         [Description("School Program")]
         [Display(Name = "School Program")]
         SCHOOL_PROGRAM,
+        [Description("Graduation")]
+        [Display(Name = "Graduation")]
+        GRADUATED,
         [Description("Emergency Shelter")]
         [Display(Name = "Emergency Shelter")]
         EM_SHELTER
