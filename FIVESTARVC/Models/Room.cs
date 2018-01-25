@@ -7,20 +7,18 @@ using System.Web;
 
 namespace FIVESTARVC.Models
 {
-    public class Room : IEnumerable
+    public class Room
     {
 
         public int RoomID { get; set; }
+
         public int? ResidentID { get; set; }
+
+        [Display(Name = "Room Number")]
         public int RoomNum { get; set; }
+
+        [Display(Name = "Is Occupied")]
         public bool IsOccupied { get; set; }
 
-
-        public virtual ICollection<Room> Rooms { get; set; }
-
-        public IEnumerator GetEnumerator()
-        {
-            return ((IEnumerable)Rooms).GetEnumerator();
-        }
     }
 }
