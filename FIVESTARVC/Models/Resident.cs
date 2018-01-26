@@ -36,12 +36,18 @@ namespace FIVESTARVC.Models
         public string LastName { get; set; }
         [Display(Name = "First Name")]
         public string FirstMidName { get; set; }
+        [Display(Name = "Birthdate")]
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:MM-dd-yyyy}", ApplyFormatInEditMode = true)]
+        public DateTime Birthdate { get; set; }
         [Display(Name = "Service Branch")]
         public ServiceType ServiceBranch { get; set; }
         [Display(Name = "Rank")]
         public string Rank { get; set; }
         [Display(Name = "Room Number")]
         public int RoomNumber { get; set; }
+        [Display(Name = "In Veterans Court")]
+        public Boolean InVetCourt { get; set; }
 
         public virtual ICollection<MilitaryCampaign> MilitaryCampaigns { get; set; }
         public virtual ICollection<ProgramEvent> ProgramEvents { get; set; }

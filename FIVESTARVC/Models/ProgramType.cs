@@ -10,9 +10,7 @@ namespace FIVESTARVC.Models
 {
     public enum ResidentProgramType
     {
-        [Description("Veterans Court")]
-        [Display(Name = "Veterans Court")]
-        VETCOURT,
+
         [Description("Financial Education")]
         [Display(Name = "Finance Education")]
         FINANCIAL,

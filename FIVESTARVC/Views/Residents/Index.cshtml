@@ -12,15 +12,15 @@
 
 <h2>Residents Listing</h2>
 
-<p>
-    <input type="button" class="btn-success" value="Create New" onclick="location.href='/Residents/Create';" /> 
+<p style="padding-top: 1em;">
+    <input type="button" class="btn btn-success" value="Create New" onclick="location.href='/Residents/Create';" /> 
     @*@Html.ActionLink("Create New", "Create")*@
 </p>
 @using (Html.BeginForm("Index", "Residents", FormMethod.Get))
 {
     <p>
         Find by name: <div class="form-group">@Html.TextBox("searchString", ViewBag.CurrentFilter as string)
-        <input type="submit" value="Search" />
+        <input class="btn btn-outline-secondary" type="submit" value="Search" />
         </div>
     </p>
 }<table class="table">
@@ -58,12 +58,12 @@
            
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.RoomNumber)
+            
         </td>
         <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.ResidentID }) |
-            @Html.ActionLink("Details", "Details", new { id=item.ResidentID }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.ResidentID })
+            @Html.ActionLink("Edit", "Edit", new { id=item.ResidentID }, htmlAttributes: new { @class = "btn btn-sm btn-outline-secondary btn-light" }) &nbsp;
+            @Html.ActionLink("Details", "Details", new { id=item.ResidentID }, htmlAttributes: new { @class = "btn btn-sm btn-outline-secondary btn-light" }) &nbsp;
+            @Html.ActionLink("Delete", "Delete", new { id = item.ResidentID }, htmlAttributes: new { @class = "btn btn-sm btn-outline-danger" })
         </td>
     </tr>
 }
