@@ -17,8 +17,7 @@
         @foreach (var item in ViewBag.lastFiveResidents) {
         
             <td class="well" style="margin-left: 4px;">@item.FirstMidName @item.LastName <br />
-                Room: @item.RoomNumber<br />
-                <input type="button" class="btn btn-default" value="See more" onclick="location.href='/Residents/Details/@item.ResidentID/';" />
+               <input type="button" class="btn-default" value="See more" onclick="location.href='/Residents/Details/@item.ResidentID/';" />
                 </td>
         
         }

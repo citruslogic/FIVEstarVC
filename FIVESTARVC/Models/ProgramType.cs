@@ -25,7 +25,10 @@ namespace FIVESTARVC.Models
         SCHOOL_PROGRAM,
         [Description("Emergency Shelter")]
         [Display(Name = "Emergency Shelter")]
-        EM_SHELTER
+        EM_SHELTER,
+        [Description("Graduation")]
+        [Display(Name = "Graduation")]
+        GRADUATED
     }
 
     public class ProgramType
