@@ -163,6 +163,7 @@
     <Compile Include="App_Start\FontAwesomeBundleConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\ProgramEventsController.cs" />
     <Compile Include="Controllers\ReportsController.cs" />
     <Compile Include="Controllers\ResidentsController.cs" />
     <Compile Include="DAL\CenterInitializer.cs" />
@@ -285,6 +286,11 @@
     <Content Include="Scripts\popper.js.map" />
     <Content Include="Scripts\popper-utils.min.js.map" />
     <Content Include="Scripts\popper-utils.js.map" />
+    <Content Include="Views\ProgramEvents\Create.cshtml" />
+    <Content Include="Views\ProgramEvents\Delete.cshtml" />
+    <Content Include="Views\ProgramEvents\Details.cshtml" />
+    <Content Include="Views\ProgramEvents\Edit.cshtml" />
+    <Content Include="Views\ProgramEvents\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

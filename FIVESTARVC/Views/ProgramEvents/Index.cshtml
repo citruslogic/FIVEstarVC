@@ -1,0 +1,63 @@
+﻿@model IEnumerable<FIVESTARVC.Models.ProgramEvent>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.ProgramType.ProgramDescription)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Resident.LastName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.StartDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.EndDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Notes)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Completed)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.ProgramType.ProgramDescription)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Resident.LastName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.StartDate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.EndDate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Notes)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Completed)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.ProgramEventID }) |
+            @Html.ActionLink("Details", "Details", new { id=item.ProgramEventID }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.ProgramEventID })
+        </td>
+    </tr>
+}
+
+</table>
