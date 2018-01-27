@@ -18,6 +18,7 @@ namespace FIVESTARVC.Controllers
         // GET: ProgramEvents
         public ActionResult Index()
         {
+
             var programEvents = db.ProgramEvents.Include(p => p.ProgramType).Include(p => p.Resident);
             return View(programEvents.ToList());
         }

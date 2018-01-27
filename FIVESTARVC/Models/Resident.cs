@@ -8,6 +8,10 @@ using System.Web;
 
 namespace FIVESTARVC.Models
 {
+    /* May be removed in the future in favor of a separate entity. 
+     * The entity name could be ServiceType with ServiceTypeID as 
+     * a property to this entity, Resident. 
+     * - Frank Butler (1/27/2018) */
     public enum ServiceType
     {
         [Description("Air Force")]
