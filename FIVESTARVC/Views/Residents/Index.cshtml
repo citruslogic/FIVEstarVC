@@ -13,16 +13,17 @@
 <h2>Residents Listing</h2>
 
 <p style="padding-top: 1em;">
-    <input type="button" class="btn btn-success" value="Create New" onclick="location.href='/Residents/Create';" /> 
+    <input type="button" class="btn btn-success" value="Create New" onclick="location.href='/Residents/Create';" />
     @*@Html.ActionLink("Create New", "Create")*@
 </p>
 @using (Html.BeginForm("Index", "Residents", FormMethod.Get))
 {
     <p>
-        Find by name: <div class="form-group">@Html.TextBox("searchString", ViewBag.CurrentFilter as string)
+        Find by name: <div class="form-group">
+            @Html.TextBox("searchString", ViewBag.CurrentFilter as string)
         <input class="btn btn-outline-secondary" type="submit" value="Search" />
-        </div>
-    </p>
+    </div>
+</p>
 }<table class="table">
     <tr>
         <th>
@@ -42,38 +43,67 @@
         </th>
     </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.LastName)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.FirstMidName)
-        </td>
-        <td>
-            @{
-                var serviceDescription = FSEnumHelper.GetDescription(item.ServiceBranch);
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.LastName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FirstMidName)
+            </td>
+            <td>
+                @{
+                    var serviceDescription = FSEnumHelper.GetDescription(item.ServiceBranch);
 
 
-                @Html.DisplayFor(modelItem => serviceDescription)
-            }
-           
-        </td>
-        <td>
-            @* Room number goes here *@
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.CurrentResident)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.ResidentID }, htmlAttributes: new { @class = "btn btn-sm btn-outline-secondary btn-light" }) &nbsp;
-            @Html.ActionLink("Details", "Details", new { id=item.ResidentID }, htmlAttributes: new { @class = "btn btn-sm btn-outline-secondary btn-light" }) &nbsp;
-            @Html.ActionLink("Delete", "Delete", new { id = item.ResidentID }, htmlAttributes: new { @class = "btn btn-sm btn-outline-danger" })
-        </td>
-    </tr>
-}
+                    @Html.DisplayFor(modelItem => serviceDescription)
+                }
+
+            </td>
+            <td>
+                @* Room number goes here *@
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CurrentResident)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.ResidentID }, htmlAttributes: new { @class = "btn btn-sm btn-outline-secondary btn-light" }) &nbsp;
+                <!-- Trigger the modal with a button -->
+                <button type="button" class="btn btn-sm btn-outline-info btn-light" data-toggle="modal" data-target="#eventModal">New Event</button>
+                <!-- Modal -->
+                <div id="eventModal" class="modal fade" role="dialog">
+                    <div class="modal-dialog">
+
+                        <!-- Modal content-->
+                        <div class="modal-content">
+                            <div class="modal-header">
+
+                                <h4 class="modal-title">New Event for @Html.Raw(item.LastName)</h4>
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            </div>
+                            <div class="modal-body">
+                                <p>Enter new program or event affecting the resident below.</p>
+                                @Html.Partial("_modalNewEvent", new FIVESTARVC.Models.ProgramEvent())
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                @Html.ActionLink("Details", "Details", new { id = item.ResidentID }, htmlAttributes: new { @class = "btn btn-sm btn-outline-secondary btn-light" }) &nbsp;
+                @Html.ActionLink("Delete", "Delete", new { id = item.ResidentID }, htmlAttributes: new { @class = "btn btn-sm btn-outline-danger" })
+            </td>
+        </tr>
+    }
 
 </table>
+
+
+
+
 <br />
 Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
 
