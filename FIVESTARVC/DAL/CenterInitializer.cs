@@ -28,8 +28,12 @@ namespace FIVESTARVC.DAL
 
             var programs = new List<ProgramType>
             {
-                new ProgramType { ResidentProgramType=ResidentProgramType.WORK_PROGRAM, ProgramDescription="Home construction project" },
-                new ProgramType { ResidentProgramType=ResidentProgramType.GRADUATED, ProgramDescription="Resident Graduation"}
+                new ProgramType { ProgramDescription="Work Program" },
+                new ProgramType { ProgramDescription="Resident Graduation" },
+                new ProgramType { ProgramDescription="Mental Wellness" },
+                new ProgramType { ProgramDescription="P2I: Financial Program" },
+                new ProgramType { ProgramDescription="Emergency Shelter" },
+                new ProgramType { ProgramDescription="School Program" }
             };
 
             programs.ForEach(p => context.ProgramTypes.Add(p));
