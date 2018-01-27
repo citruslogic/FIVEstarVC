@@ -24,6 +24,8 @@ namespace FIVESTARVC.Controllers
             ViewBag.CurrentSort = sortOrder;
             ViewBag.NameSortParm = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
             ViewBag.BranchSortParm = sortOrder == "ServiceBranch" ? "ServiceBranch_desc" : "ServiceBranch";
+            ViewBag.ProgramTypeID = new SelectList(db.ProgramTypes, "ProgramTypeID", "ProgramDescription");
+           
 
             if (searchString != null)
             {
@@ -278,6 +280,24 @@ namespace FIVESTARVC.Controllers
             return RedirectToAction("Index");
         }
 
+
+        public PartialViewResult NewCenterEvent(int id, int program, DateTime startDate, DateTime? endDate, Boolean completed)
+        {
+            ProgramEvent programEvent = new ProgramEvent()
+            {
+                ResidentID = id,
+                ProgramTypeID = program,
+                StartDate = startDate,
+                EndDate = endDate,
+                Completed = completed
+                            
+            };
+
+            db.ProgramEvents.Add(programEvent);
+
+            return PartialView(programEvent);
+        }
+
        private void GetAssignedRoom ()
         {
             //Initialize the AssignedRoom ViewModel//
@@ -300,5 +320,7 @@ namespace FIVESTARVC.Controllers
             }
             ViewBag.AssignRoom = viewModel;
         }
+
+
     }
 }
