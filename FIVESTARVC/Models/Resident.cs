@@ -48,8 +48,8 @@ namespace FIVESTARVC.Models
         public ServiceType ServiceBranch { get; set; }
         [Display(Name = "Rank")]
         public string Rank { get; set; }
-        [Display(Name = "Room Number")]
-        public int RoomNumber { get; set; }
+        [Display(Name = "Current")]
+        public Boolean CurrentResident { get; set; }
         [Display(Name = "In Veterans Court")]
         public Boolean InVetCourt { get; set; }
 
