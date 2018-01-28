@@ -21,9 +21,9 @@
     <p>
         Find by name: <div class="form-group">
             @Html.TextBox("searchString", ViewBag.CurrentFilter as string)
-        <input class="btn btn-outline-secondary" type="submit" value="Search" />
-    </div>
-</p>
+            <input class="btn btn-outline-secondary" type="submit" value="Search" />
+        </div>
+    </p>
 }<table class="table">
     <tr>
         <th>
@@ -69,43 +69,56 @@
             </td>
             <td>
                 @Html.ActionLink("Edit", "Edit", new { id = item.ResidentID }, htmlAttributes: new { @class = "btn btn-sm btn-outline-secondary btn-light" }) &nbsp;
-                <!-- Trigger the modal with a button -->
-                <button type="button" class="btn btn-sm btn-outline-info btn-light" data-toggle="modal" data-target="#eventModal">New Event</button>
-                <!-- Modal -->
-                <div id="eventModal" class="modal fade" role="dialog">
-                    <div class="modal-dialog">
 
-                        <!-- Modal content-->
-                        <div class="modal-content">
-                            <div class="modal-header">
+                @*Trigger the modal with a button*@
 
-                                <h4 class="modal-title">New Event for @Html.Raw(item.LastName)</h4>
-                                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                            </div>
-                            <div class="modal-body">
-                                <p>Enter new program or event affecting the resident below.</p>
-                                @Html.Partial("_modalNewEvent", new FIVESTARVC.Models.ProgramEvent())
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                            </div>
-                        </div>
 
-                    </div>
-                </div>
+                <button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-resident-name="@item.FirstMidName @item.LastName" data-target="#newEventModal">
+                    Quick Event
+                </button>
                 @Html.ActionLink("Details", "Details", new { id = item.ResidentID }, htmlAttributes: new { @class = "btn btn-sm btn-outline-secondary btn-light" }) &nbsp;
-                @Html.ActionLink("Delete", "Delete", new { id = item.ResidentID }, htmlAttributes: new { @class = "btn btn-sm btn-outline-danger" })
+                @Html.ActionLink("Delete", "Delete", new { id = item.ResidentID }, htmlAttributes: new { @class = "btn btn-sm btn-danger" })
             </td>
         </tr>
+
+
+
+
     }
 
 </table>
+<!-- Modal -->
+<div class="modal fade" id="newEventModal" tabindex="-1" role="dialog" aria-labelledby="newEventModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="newEventModal">New Event for</h5> &nbsp;<h5 class="modal-title" name="residentName"></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                @Html.Partial("_modalNewEvent", new ProgramEvent())
+            </div>
 
-
-
-
+        </div>
+    </div>
+</div>
 <br />
-Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+             Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
 
-@Html.PagedListPager(Model, page => Url.Action("Index",
-    new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
+            @Html.PagedListPager(Model, page => Url.Action("Index",
+                                                                 new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
+
+
+
+            @section scripts {
+
+                <script type="text/javascript">
+                    $('#newEventModal').on('show.bs.modal', function (e) {
+                        var residentName = $(e.relatedTarget).data('resident-name');
+                        $(e.currentTarget).find('h5[name="residentName"]').text(residentName);
+                    });
+
+                </script>
+            }
