@@ -17,9 +17,11 @@ namespace FIVESTARVC.Models
         [ForeignKey("ProgramType")]
         public int? ProgramTypeID { get; set; }
 
+        [Display(Name = "Start Date")]
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:MM-dd-yyyy}", ApplyFormatInEditMode = true)]
         public DateTime? StartDate { get; set; }
+        [Display(Name = "End Date")]
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:MM-dd-yyyy}", ApplyFormatInEditMode = true)]
         public DateTime? EndDate { get; set; }
