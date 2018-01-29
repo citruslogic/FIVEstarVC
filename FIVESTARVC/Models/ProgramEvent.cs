@@ -26,7 +26,6 @@ namespace FIVESTARVC.Models
         [DisplayFormat(DataFormatString = "{0:MM-dd-yyyy}", ApplyFormatInEditMode = true)]
         public DateTime? EndDate { get; set; }
 
-        public String Notes { get; set; }
         public Boolean Completed { get; set; }
 
         public virtual Resident Resident { get; set; }
