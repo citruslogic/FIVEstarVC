@@ -51,7 +51,7 @@ namespace FIVESTARVC.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ProgramEventID,ResidentID,ProgramTypeID,StartDate,EndDate,Notes,Completed")] ProgramEvent programEvent)
+        public ActionResult Create([Bind(Include = "ProgramEventID,ResidentID,ProgramTypeID,StartDate,EndDate,Completed")] ProgramEvent programEvent)
         {
             if (ModelState.IsValid)
             {
@@ -87,7 +87,7 @@ namespace FIVESTARVC.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ProgramEventID,ResidentID,ProgramTypeID,StartDate,EndDate,Notes,Completed")] ProgramEvent programEvent)
+        public ActionResult Edit([Bind(Include = "ProgramEventID,ResidentID,ProgramTypeID,StartDate,EndDate,Completed")] ProgramEvent programEvent)
         {
             if (ModelState.IsValid)
             {

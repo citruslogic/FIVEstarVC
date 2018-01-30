@@ -47,25 +47,55 @@
         <dd>
             @*@Html.DisplayFor(model => model.Room.RoomNum)*@
         </dd>
+        </dl>
+        <div class="form-group">
+            <b>@Html.Label("Campaigns", htmlAttributes: new { @class = "control-label col-md-0" })</b>
+            <div class="col-md-offset-2 col-md-10">
+                <table>
+                    <tr>
+                        @{
+                            int cnt = 0;
+                            List<FIVESTARVC.ViewModels.AssignedCampaignData> campaigns = ViewBag.Campaigns;
 
+                            foreach (var campaign in campaigns)
+                            {
+                                if (cnt++ % 4 == 0)
+                                {
+                                    @:</tr><tr>
+                                }
+                                @:<td>
+                                    <input type="checkbox"
+                                           name="selectedCampaigns"
+                                           disabled
+                                           value="@campaign.MilitaryCampaignID"
+                                           @(Html.Raw(campaign.Assigned ? "checked=\"checked\"" : "")) />
+                                        @:  @campaign.MilitaryCampaign
+                                        @:</td>&nbsp;
+                            }
+                            @:</tr>
+                        }
+                    </table>
+                </div>
+            </div>
+    <dl>
         <dd>
             <table class="table">
                 <tr>
+                    <th>Program Name</th>
                     <th>Start Date</th>
                     <th>End Date</th>
-                    <th>Notes</th>
                 </tr>
                 @foreach (var item in Model.ProgramEvents)
                 {
                     <tr>
                         <td>
+                            @Html.DisplayFor(modelItem => item.ProgramType.ProgramDescription)
+                        </td>
+                        <td>
                             @Html.DisplayFor(modelItem => item.StartDate)
                         </td>
                         <td>
                             @Html.DisplayFor(modelItem => item.EndDate)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Notes)
                         </td>
                     </tr>
                 }
