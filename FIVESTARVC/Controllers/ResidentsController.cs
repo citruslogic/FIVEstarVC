@@ -295,7 +295,6 @@ namespace FIVESTARVC.Controllers
                 ProgramTypeID = program,
                 StartDate = startDate,
                 EndDate = endDate,
-                Notes = notes,
                 Completed = completed
                             
             };
@@ -327,7 +326,6 @@ namespace FIVESTARVC.Controllers
             }
             ViewBag.AssignRoom = viewModel;
         }
-
 
     }
 }

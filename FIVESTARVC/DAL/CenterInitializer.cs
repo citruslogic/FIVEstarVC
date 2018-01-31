@@ -13,12 +13,12 @@ namespace FIVESTARVC.DAL
         {
             var residents = new List<Resident>
             {
-                new Resident { FirstMidName="Carson", LastName="Steven", ServiceBranch=ServiceType.ARMY, CurrentResident = true},
-                new Resident { FirstMidName="Naomi", LastName="Wildman", ServiceBranch=ServiceType.AIRFORCE, CurrentResident = true},
-                new Resident { FirstMidName="Gary", LastName="Noonan", ServiceBranch=ServiceType.NAVY, CurrentResident = true},
-                new Resident { FirstMidName="Jim", LastName="Jones", ServiceBranch=ServiceType.ARMY, CurrentResident = false},
-                new Resident { FirstMidName="Steve", LastName="Nash", ServiceBranch=ServiceType.AIRFORCE, CurrentResident = false},
-                new Resident { FirstMidName="Kobe", LastName="Bryant", ServiceBranch=ServiceType.NAVY, CurrentResident = false}
+                new Resident { FirstMidName="Carson", LastName="Steven", ServiceBranch=ServiceType.ARMY},
+                new Resident { FirstMidName="Naomi", LastName="Wildman", ServiceBranch=ServiceType.AIRFORCE},
+                new Resident { FirstMidName="Gary", LastName="Noonan", ServiceBranch=ServiceType.NAVY},
+                new Resident { FirstMidName="Jim", LastName="Jones", ServiceBranch=ServiceType.ARMY},
+                new Resident { FirstMidName="Steve", LastName="Nash", ServiceBranch=ServiceType.AIRFORCE},
+                new Resident { FirstMidName="Kobe", LastName="Bryant", ServiceBranch=ServiceType.NAVY}
             };
 
             residents.ForEach(r => context.Residents.Add(r));
@@ -31,9 +31,18 @@ namespace FIVESTARVC.DAL
                 new ProgramType { ProgramDescription="Work Program" },
                 new ProgramType { ProgramDescription="Resident Graduation" },
                 new ProgramType { ProgramDescription="Mental Wellness" },
-                new ProgramType { ProgramDescription="P2I: Financial Program" },
+                new ProgramType { ProgramDescription="P2I" },
                 new ProgramType { ProgramDescription="Emergency Shelter" },
-                new ProgramType { ProgramDescription="School Program" }
+                new ProgramType { ProgramDescription="School Program" },
+                new ProgramType { ProgramDescription="Resident Admission"},
+                new ProgramType { ProgramDescription="Veterans Court"},
+                new ProgramType { ProgramDescription="Re-admit"},
+                new ProgramType { ProgramDescription="Financial Program"},
+                new ProgramType { ProgramDescription="Depression / Behavioral Program"},
+                new ProgramType { ProgramDescription="Substance Abuse Program"},
+                new ProgramType { ProgramDescription="Discharge for Cause"},
+                new ProgramType { ProgramDescription="Self Discharge"},
+                new ProgramType { ProgramDescription="Higher Level of Care"}
             };
 
             programs.ForEach(p => context.ProgramTypes.Add(p));
@@ -42,10 +51,20 @@ namespace FIVESTARVC.DAL
 
             var events = new List<ProgramEvent>
             {
+                //adding admission event for all residents
+                new ProgramEvent { StartDate=DateTime.Today, EndDate=DateTime.Today, Completed=true, ResidentID=1, ProgramTypeID=7},
+                new ProgramEvent { StartDate=DateTime.Today, EndDate=DateTime.Today, Completed=true, ResidentID=2, ProgramTypeID=7},
+                new ProgramEvent { StartDate=DateTime.Today, EndDate=DateTime.Today, Completed=true, ResidentID=3, ProgramTypeID=7},
+                new ProgramEvent { StartDate=DateTime.Today, EndDate=DateTime.Today, Completed=true, ResidentID=4, ProgramTypeID=7},
+                new ProgramEvent { StartDate=DateTime.Today, EndDate=DateTime.Today, Completed=true, ResidentID=5, ProgramTypeID=7},
+                new ProgramEvent { StartDate=DateTime.Today, EndDate=DateTime.Today, Completed=true, ResidentID=6, ProgramTypeID=7},
+                //Other events
                 new ProgramEvent { StartDate=DateTime.Parse("2005-09-01"), EndDate=DateTime.Parse("2005-09-25"), Completed=true, ResidentID=1, ProgramTypeID=1},
                 new ProgramEvent { StartDate=DateTime.Parse("2005-04-02"), EndDate=DateTime.Parse("2006-06-05"), Completed=true, ResidentID=4, ProgramTypeID=2},
                 new ProgramEvent { StartDate=DateTime.Parse("2004-05-05"), EndDate=DateTime.Parse("2007-06-20"), Completed=true, ResidentID=5, ProgramTypeID=2},
                 new ProgramEvent { StartDate=DateTime.Parse("2003-03-02"), EndDate=DateTime.Parse("2007-07-12"), Completed=true, ResidentID=6, ProgramTypeID=2},
+                new ProgramEvent { StartDate=DateTime.Parse("2006-03-22"), EndDate=DateTime.Parse("2008-07-12"), Completed=true, ResidentID=1, ProgramTypeID=13},
+                new ProgramEvent { StartDate=DateTime.Parse("2006-03-22"), EndDate=DateTime.Parse("2008-07-12"), Completed=true, ResidentID=2, ProgramTypeID=14},
                 new ProgramEvent { StartDate=DateTime.Parse("2005-10-05"), EndDate=DateTime.Parse("2005-10-15"), ResidentID=2},
                 new ProgramEvent { StartDate=DateTime.Parse("2005-11-19"), EndDate = null, ResidentID=3}
             };

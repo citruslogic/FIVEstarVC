@@ -65,7 +65,12 @@
                 @* Room number goes here *@
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.CurrentResident)
+                @{ 
+                    if(item.isCurrent(item) == true)
+                    {
+                        @Html.Raw("yes")
+                    }
+                }
             </td>
             <td>
                 @Html.ActionLink("Edit", "Edit", new { id = item.ResidentID }, htmlAttributes: new { @class = "btn btn-sm btn-outline-secondary btn-light" }) &nbsp;
