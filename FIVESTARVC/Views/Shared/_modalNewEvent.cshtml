@@ -3,8 +3,7 @@
 
 
 
-
-@using (Html.BeginForm("AddNewEvent", "Residents", FormMethod.Post))
+@using (Html.BeginForm("SaveEvent", "Residents", FormMethod.Post))
 {
     <div class="form-group">
         @Html.LabelFor(model => model.ProgramTypeID, "Program name", htmlAttributes: new { @class = "control-label col-md-2" })
@@ -29,14 +28,8 @@
             @Html.ValidationMessageFor(model => model.EndDate, "", new { @class = "text-danger" })
         </div>
     </div>
-    //notes removed
-    @*<div class="form-group">
-        @Html.LabelFor(model => model.Notes, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.Notes, new { htmlAttributes = new { @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.Notes, "", new { @class = "text-danger" })
-        </div>
-    </div>*@
+
+
 
     <div class="form-group">
         @Html.LabelFor(model => model.Completed, htmlAttributes: new { @class = "control-label col-md-2" })
@@ -47,11 +40,38 @@
             </div>
         </div>
     </div>
-}
+
 
 <div class="modal-footer">
     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-    <button type="button" class="btn btn-primary">Save Event</button>
+    <button type="submit" class="btn btn-primary">Save Event</button>
 </div>
 
+}
+@*@section scripts {
+     $(document).ready(function () {
+        $("#btnSave").on('click', function () {
+            var url = '@Url.Action("SaveEvent", "Residents")';
+            
+            $.ajax({
+                url:url,
+                type:"POST",
+                data:{
+                    ev:{
+                        
+                    },
+                   
+                datatype:'json',
+                ContentType:'application/json;utf-8'
+                }).done(function(resp){
+                    alert('Success ' +resp);
+                    }).error(function(err){
+                    alert("Error " + err.status);
+                    });
+
+                });
+
+            });
+    
+    }*@
 

@@ -83,6 +83,9 @@ namespace FIVESTARVC.Controllers
             {
                 return HttpNotFound();
             }
+
+            PopulateAssignedCampaignData(resident);
+
             return View(resident);
         }
 
@@ -286,22 +289,16 @@ namespace FIVESTARVC.Controllers
             return PartialView("_modalNewEvent");
         }
 
+        /*
+         * Save the Quick Event triggered on /Residents/Index
+         */
         [HttpPost]
-        public ActionResult AddNewEvent(int id, int program, DateTime startDate, DateTime? endDate, string notes, Boolean completed)
+        public JsonResult SaveEvent(ProgramEvent ev)
         {
-            ProgramEvent programEvent = new ProgramEvent()
-            {
-                ResidentID = id,
-                ProgramTypeID = program,
-                StartDate = startDate,
-                EndDate = endDate,
-                Completed = completed
-                            
-            };
-
-            db.ProgramEvents.Add(programEvent);
+            db.ProgramEvents.Add(ev);
             db.SaveChanges();
-            return RedirectToAction("Index");
+
+            return Json(true, JsonRequestBehavior.AllowGet);
         }
 
         private void GetAssignedRoom ()
@@ -326,6 +323,7 @@ namespace FIVESTARVC.Controllers
             }
             ViewBag.AssignRoom = viewModel;
         }
+
 
     }
 }
