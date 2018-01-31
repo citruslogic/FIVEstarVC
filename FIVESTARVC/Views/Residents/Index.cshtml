@@ -13,16 +13,17 @@
 <h2>Residents Listing</h2>
 
 <p>
-    <input type="button" class="btn btn-sm btn-success" value="Create New" onclick="location.href='/Residents/Create';" /> 
+    <input type="button" class="btn btn-sm btn-success" value="Create New" onclick="location.href='/Residents/Create';" />
     @*@Html.ActionLink("Create New", "Create")*@
 </p>
 @using (Html.BeginForm("Index", "Residents", FormMethod.Get))
 {
     <p>
-        Find by name: <div class="form-group">@Html.TextBox("searchString", ViewBag.CurrentFilter as string)
+        Find by name: <div class="form-group">
+            @Html.TextBox("searchString", ViewBag.CurrentFilter as string)
         <input type="submit" value="Search" />
-        </div>
-    </p>
+    </div>
+</p>
 }<table class="table">
     <tr>
         <th>
@@ -40,37 +41,47 @@
         <th></th>
     </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.LastName)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.FirstMidName)
-        </td>
-        <td>
-            @{
-                var serviceDescription = FSEnumHelper.GetDescription(item.ServiceBranch);
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.LastName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FirstMidName)
+            </td>
+            <td>
+                @{
+                    var serviceDescription = FSEnumHelper.GetDescription(item.ServiceBranch);
 
 
-                @Html.DisplayFor(modelItem => serviceDescription)
+                    @Html.DisplayFor(modelItem => serviceDescription)
+                }
+
+            </td>
+          </tr>
+          <tr>
+              @{ 
+                  List<FIVESTARVC.ViewModels.AssignRoom> rooms = ViewBag.AssignRoom;
+
+                  foreach (var room in rooms)
+                  {
+                      @room.RoomNum;
+                  }
+              }
+               
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.ResidentID }, htmlAttributes: new { @class = "btn btn-sm btn-outline-dark" })
+                @Html.ActionLink("Details", "Details", new { id = item.ResidentID }, htmlAttributes: new { @class = "btn btn-sm btn-outline-dark" })
+                @Html.ActionLink("Delete", "Delete", new { id = item.ResidentID }, htmlAttributes: new { @class = "btn btn-sm btn-outline-danger" })
+            </td>
+
+            </tr>
             }
-           
-        </td>
-        <td>
-           @*Proper room information goes here*@
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.ResidentID }, htmlAttributes: new { @class = "btn btn-sm btn-outline-dark" }) 
-            @Html.ActionLink("Details", "Details", new { id=item.ResidentID }, htmlAttributes: new { @class = "btn btn-sm btn-outline-dark" }) 
-            @Html.ActionLink("Delete", "Delete", new { id=item.ResidentID }, htmlAttributes: new { @class = "btn btn-sm btn-outline-danger" })
-        </td>
-    </tr>
-}
+            }
+        </table>
+    <br />
+    Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
 
-</table>
-<br />
-Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
-
-@Html.PagedListPager(Model, page => Url.Action("Index",
-    new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
+    @Html.PagedListPager(Model, page => Url.Action("Index",
+        new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))

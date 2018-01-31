@@ -14,7 +14,7 @@ namespace FIVESTARVC.Models
         public int RoomID { get; set; }
 
         [ForeignKey("Resident")]
-        public int? ResidentID { get; set; }
+        public int ResidentID { get; set; }
 
         [Display(Name = "Room Number")]
         public int RoomNum { get; set; }

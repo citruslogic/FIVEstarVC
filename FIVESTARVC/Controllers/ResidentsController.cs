@@ -21,6 +21,11 @@ namespace FIVESTARVC.Controllers
         // GET: Residents
         public ActionResult Index(string sortOrder, string currentFilter, string searchString, int? page)
         {
+
+
+
+
+
             ViewBag.CurrentSort = sortOrder;
             ViewBag.NameSortParm = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
             ViewBag.BranchSortParm = sortOrder == "ServiceBranch" ? "ServiceBranch_desc" : "ServiceBranch";
@@ -38,6 +43,21 @@ namespace FIVESTARVC.Controllers
 
             var residents = from s in db.Residents
                             select s;
+
+            foreach (var personID in residents)
+            {
+                int ResidentToAdd = personID.ResidentID;
+
+                AssignRoom(ResidentToAdd);
+
+            }
+
+            //Resident resident = db.Residents
+            //.Include(c => c.ResidentID)
+            //.Single();
+
+
+
 
 
             if (!String.IsNullOrEmpty(searchString))
@@ -87,11 +107,13 @@ namespace FIVESTARVC.Controllers
         // GET: Residents/Create
         public ActionResult Create()
         {
+            //Passing known bogus residentID//
+            //int ResidentToAdd = 0;
 
             //Call Get Assigned Room to get available rooms//
 
-            GetAssignedRoom();
-      
+            GetAssignedRoom(/*ResidentToAdd*/);
+
             return View();
         }
 
@@ -100,14 +122,14 @@ namespace FIVESTARVC.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "LastName,FirstMidName,ServiceBranch,Rank,RoomNumber")] Resident resident)
+        public ActionResult Create([Bind(Include = "LastName,FirstMidName,ServiceBranch,Rank, Room")] Resident resident, Room room)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
                     db.Residents.Add(resident);
-                    
+
                     db.SaveChanges();
                     return RedirectToAction("Index");
                 }
@@ -147,7 +169,7 @@ namespace FIVESTARVC.Controllers
             return View(resident);
         }
 
-       
+
 
         // POST: Residents/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
@@ -236,7 +258,7 @@ namespace FIVESTARVC.Controllers
             }
         }
 
-       
+
 
         // GET: Residents/Delete/5
         [HttpGet]
@@ -278,27 +300,66 @@ namespace FIVESTARVC.Controllers
             return RedirectToAction("Index");
         }
 
-       private void GetAssignedRoom ()
+        private void GetAssignedRoom(/*int ResidentToAdd*/)
         {
             //Initialize the AssignedRoom ViewModel//
             var AvailRoom = db.Rooms;
-            
+
             var viewModel = new List<AssignedRoom>();
 
-            //Loop through the rooms and check to see if IsOccupied is checked or not//
-            //if not checked, add it to the viewmodel//
+            //if (ResidentToAdd != 0)
+            //    {
             foreach (var Rooms in AvailRoom)
-            {
+                //            {
+                //                if (Rooms.ResidentID == ResidentToAdd)
+                //                    viewModel.Add(new AssignedRoom
+                //                 {
+                //                     RoomNum = Rooms.RoomNum,
+
+                //                  });
+
+                //            }
+
+                //    ViewBag.AssignRoom = viewModel.ToList();
+                //}
+
+                //else
+                //{                               
                 if (Rooms.IsOccupied == false)
-                { 
+                {
                     viewModel.Add(new AssignedRoom
                     {
                         RoomNum = Rooms.RoomNum,
                         IsOccupied = Rooms.IsOccupied
                     });
                 }
+            //}
+            //}
+
+
+            ViewBag.AssignedRoom = viewModel.ToList();
+        }
+
+        private void AssignRoom(int ResidentToAdd)
+        {
+            //Initialize the AssignRoom ViewModel//
+            var Assign = db.Rooms;
+
+
+            var viewModel = new List<AssignRoom>();
+
+            foreach (var Rooms in Assign)
+            {
+                if (Rooms.ResidentID == ResidentToAdd)
+                    viewModel.Add(new AssignRoom
+                    {
+                        RoomNum = Rooms.RoomNum,
+
+                    });
+
             }
-            ViewBag.AssignRoom = viewModel;
+            ViewBag.AssignRoom = viewModel.ToList();
+
         }
     }
 }
