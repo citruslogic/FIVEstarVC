@@ -66,6 +66,36 @@ namespace FIVESTARVC.Models
 
         public virtual ICollection<Benefit> Benefits { get; set; }
 
+        public Boolean isCurrent(Resident resident)
+        {
+            var current = db.ProgramEvents;
+
+            int ID = resident.ResidentID;
+
+            Boolean internalBool = false;
+
+            foreach (var ProgramEvent in current)
+            {
+                if (ID == ProgramEvent.ResidentID)
+                {
+                    if (ProgramEvent.ProgramTypeID == 7 //admission
+                    || ProgramEvent.ProgramTypeID == 9 //re-admit
+                    || ProgramEvent.ProgramTypeID == 5)
+                    {
+                        internalBool = true;
+                    }
+
+                    if (ProgramEvent.ProgramTypeID == 2 //graduation
+                    || ProgramEvent.ProgramTypeID == 13 //discharge
+                    || ProgramEvent.ProgramTypeID == 14 //discharge
+                    || ProgramEvent.ProgramTypeID == 15)
+                    {
+                        internalBool = false;
+                    }
+                }
+            }
+            return internalBool;
+        }
         public virtual Room Room { get; set; }
     }
 }

@@ -63,6 +63,18 @@
                 @* Room number goes here *@
             </td>
             <td>
+                @{ 
+                    if(item.isCurrent(item) == true)
+                    {
+                        @Html.Raw("Yes")
+                    }
+                    else
+                    {
+                        @Html.Raw("No")
+                    }
+                }
+            </td>
+            <td>
                 @Html.ActionLink("Edit", "Edit", new { id = item.ResidentID }, htmlAttributes: new { @class = "btn btn-sm btn-outline-secondary btn-light" }) &nbsp;
 
                 @*Trigger the modal with a button*@
