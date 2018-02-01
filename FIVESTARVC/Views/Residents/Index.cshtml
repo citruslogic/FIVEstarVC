@@ -67,10 +67,11 @@
 
                 @*Trigger the modal with a button*@
 
-
-                <button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-resident-name="@item.FirstMidName @item.LastName" data-target="#newEventModal">
+                @Html.ActionLink("Quick Event", "ViewQuickEvent", new { id = item.ResidentID, lastname = item.LastName}
+                    , htmlAttributes: new {  @class = "btn btn-sm btn-outline-primary btn-light"}) &nbsp;
+                @*<button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-resident-name="@item.FirstMidName @item.LastName" data-target="#newEventModal">
                     Quick Event
-                </button>
+                </button>*@
                 @Html.ActionLink("Details", "Details", new { id = item.ResidentID }, htmlAttributes: new { @class = "btn btn-sm btn-outline-secondary btn-light" }) &nbsp;
                 @Html.ActionLink("Delete", "Delete", new { id = item.ResidentID }, htmlAttributes: new { @class = "btn btn-sm btn-danger" })
             </td>
@@ -79,40 +80,11 @@
 
 
 
-    }
+     }
 
 </table>
-<!-- Modal -->
-<div class="modal fade" id="newEventModal" tabindex="-1" role="dialog" aria-labelledby="newEventModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="newEventModal">New Event for</h5> &nbsp;<h5 class="modal-title" name="residentName"></h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                @Html.Partial("_modalNewEvent", new ProgramEvent())
-            </div>
 
-        </div>
-    </div>
-</div>
 <br />
-             Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
 
-            @Html.PagedListPager(Model, page => Url.Action("Index", new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
-
-
-
-            @section scripts {
-
-                <script type="text/javascript">
-                    $('#newEventModal').on('show.bs.modal', function (e) {
-                        var residentName = $(e.relatedTarget).data('resident-name');
-                        $(e.currentTarget).find('h5[name="residentName"]').text(residentName);
-                    });
-
-                </script>
-            }
+@Html.PagedListPager(Model, page => Url.Action("Index", new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))

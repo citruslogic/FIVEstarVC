@@ -283,25 +283,36 @@ namespace FIVESTARVC.Controllers
             return RedirectToAction("Index");
         }
 
-
-        public ActionResult ViewQuickEvent()
+        // GET
+        public ActionResult ViewQuickEvent(int id, string lastname)
         {
-            return PartialView("_modalNewEvent");
+            ViewBag.ResidentID = id;
+            ViewBag.Lastname = lastname;
+            ViewBag.ProgramTypeID = new SelectList(db.ProgramTypes, "ProgramTypeID", "ProgramDescription");
+
+            return View("_modalNewEvent");
         }
 
         /*
          * Save the Quick Event triggered on /Residents/Index
          */
         [HttpPost]
-        public JsonResult SaveEvent(ProgramEvent ev)
+        [ValidateAntiForgeryToken]
+        public ActionResult ViewQuickEvent([Bind(Include = "ProgramEventID,ResidentID,ProgramTypeID,StartDate,EndDate,Completed")] int id, ProgramEvent programEvent)
         {
-            db.ProgramEvents.Add(ev);
-            db.SaveChanges();
+            if (ModelState.IsValid)
+            {
+                db.ProgramEvents.Add(programEvent);
+                db.SaveChanges();
+                return RedirectToAction("Index");
+            }
 
-            return Json(true, JsonRequestBehavior.AllowGet);
+            ViewBag.ProgramTypeID = new SelectList(db.ProgramTypes, "ProgramTypeID", "ProgramDescription", programEvent.ProgramTypeID);
+            ViewBag.ResidentID = id;
+            return View(programEvent);
         }
 
-        private void GetAssignedRoom ()
+            private void GetAssignedRoom ()
         {
             //Initialize the AssignedRoom ViewModel//
             var AvailRoom = db.Rooms;

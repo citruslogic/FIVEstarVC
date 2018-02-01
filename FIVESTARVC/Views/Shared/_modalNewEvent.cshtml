@@ -3,8 +3,11 @@
 
 
 
-@using (Html.BeginForm("SaveEvent", "Residents", FormMethod.Post))
+@using (Html.BeginForm("ViewQuickEvent", "Residents", FormMethod.Post))
 {
+    @Html.AntiForgeryToken()
+
+    <input type="hidden" name="ResidentID" value="@ViewBag.ResidentID" />
     <div class="form-group">
         @Html.LabelFor(model => model.ProgramTypeID, "Program name", htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-10">
@@ -44,7 +47,7 @@
 
 <div class="modal-footer">
     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-    <button type="submit" class="btn btn-primary">Save Event</button>
+    <button type="submit" value="ViewQuickEvent">Save Event</button>
 </div>
 
 }
