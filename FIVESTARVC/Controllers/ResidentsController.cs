@@ -284,6 +284,7 @@ namespace FIVESTARVC.Controllers
         }
 
         // GET
+        // Quick Event form (soon to be part of a modal dialog)
         public ActionResult ViewQuickEvent(int id, string lastname)
         {
             ViewBag.ResidentID = id;
