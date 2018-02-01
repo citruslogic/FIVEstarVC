@@ -50,7 +50,30 @@ namespace FIVESTARVC.Controllers
 
             ViewBag.Graduated = DB.ProgramEvents.Count(x => x.ProgramTypeID == 2);
 
+            ViewBag.WorkProgram = DB.ProgramEvents.Count(x => x.ProgramTypeID == 1);
+
+            ViewBag.MentalWellness = DB.ProgramEvents.Count(x => x.ProgramTypeID == 3);
+
+            ViewBag.P2I = DB.ProgramEvents.Count(x => x.ProgramTypeID == 4);
+
+            ViewBag.EmergencyShelter = DB.ProgramEvents.Count(x => x.ProgramTypeID == 5);
+
+            ViewBag.SchoolProgram = DB.ProgramEvents.Count(x => x.ProgramTypeID == 6);
+
+            //ViewBag.VeteransCourt = DB.Residents.Count(x => x.ve == 8);
+
+            ViewBag.FinancialProgram = DB.ProgramEvents.Count(x => x.ProgramTypeID == 10);
+
+            ViewBag.DepressionBehavioralProgram = DB.ProgramEvents.Count(x => x.ProgramTypeID == 11);
+
+            ViewBag.SubstanceAbuseProgram = DB.ProgramEvents.Count(x => x.ProgramTypeID == 12);
+
             return View(); 
+        }
+
+        public ActionResult Historic()
+        {
+            return View();
         }
     }
 }

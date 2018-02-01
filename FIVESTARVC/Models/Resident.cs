@@ -52,6 +52,8 @@ namespace FIVESTARVC.Models
         public ServiceType ServiceBranch { get; set; }
         [Display(Name = "Notes")]
         public ServiceType Notes { get; set; }
+        [Display(Name = "In Veterans Court")]
+        public Boolean InVetCourt { get; set; }
 
         public virtual ICollection<MilitaryCampaign> MilitaryCampaigns { get; set; }
         public virtual ICollection<ProgramEvent> ProgramEvents { get; set; }

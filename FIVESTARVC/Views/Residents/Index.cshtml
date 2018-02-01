@@ -68,7 +68,11 @@
                 @{ 
                     if(item.isCurrent(item) == true)
                     {
-                        @Html.Raw("yes")
+                        @Html.Raw("Yes")
+                    }
+                    else
+                    {
+                        @Html.Raw("No")
                     }
                 }
             </td>
