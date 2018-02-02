@@ -77,6 +77,25 @@
                     </table>
                 </div>
             </div>
+    </div>
+    <dt>
+    @Html.DisplayName("Resident has PTSD?")
+    </dt>
+    <dd>
+        @if (Model.HasPTSD == true)
+        {
+            @:Yes
+
+        }
+        else
+        {
+            @:No
+            }
+    </dd>
+
+    <br />    
+     
+    
     <dl>
         <dd>
             <table class="table">
