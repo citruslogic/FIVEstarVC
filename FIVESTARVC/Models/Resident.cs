@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Web;
-using FIVESTARVC.DAL;
 
 
 namespace FIVESTARVC.Models
@@ -13,7 +13,6 @@ namespace FIVESTARVC.Models
      * The entity name could be ServiceType with ServiceTypeID as 
      * a property to this entity, Resident. 
      * - Frank Butler (1/27/2018) */
-
     public enum ServiceType
     {
         [Description("Air Force")]
@@ -36,8 +35,6 @@ namespace FIVESTARVC.Models
     public class Resident
     {
 
-        private ResidentContext db = new ResidentContext();
-
         public int ResidentID { get; set; }
         [Required]
         [Display(Name = "Last Name")]
@@ -50,8 +47,13 @@ namespace FIVESTARVC.Models
         public DateTime? Birthdate { get; set; }
         [Display(Name = "Service Branch")]
         public ServiceType ServiceBranch { get; set; }
-        [Display(Name = "Notes")]
-        public ServiceType Notes { get; set; }
+        [Display(Name = "PTSD")]
+        public Boolean HasPTSD { get; set; }
+        [Display(Name = "In Veterans Court")]
+        public Boolean InVetCourt { get; set; }
+        [Display(Name = "Room Number")]
+        [ForeignKey("Room")]
+        public int? RoomID { get; set; }
 
         public virtual ICollection<MilitaryCampaign> MilitaryCampaigns { get; set; }
         public virtual ICollection<ProgramEvent> ProgramEvents { get; set; }
@@ -59,35 +61,6 @@ namespace FIVESTARVC.Models
         public int? BenefitID { get; set; }
         public virtual ICollection<Benefit> Benefits { get; set; }
 
-        public Boolean isCurrent(Resident resident)
-        {
-            var current = db.ProgramEvents;
-
-            int ID = resident.ResidentID;
-
-            Boolean internalBool = false;
-
-            foreach (var ProgramEvent in current)
-            {
-                if (ID == ProgramEvent.ResidentID)
-                {
-                    if (ProgramEvent.ProgramTypeID == 7 //admission
-                    || ProgramEvent.ProgramTypeID == 9 //re-admit
-                    || ProgramEvent.ProgramTypeID == 5)
-                    {
-                        internalBool = true;
-                    }
-
-                    if (ProgramEvent.ProgramTypeID == 2 //graduation
-                    || ProgramEvent.ProgramTypeID == 13 //discharge
-                    || ProgramEvent.ProgramTypeID == 14 //discharge
-                    || ProgramEvent.ProgramTypeID == 15)
-                    {
-                        internalBool = false;
-                    }
-                }
-            }
-            return internalBool;
-        }
+        public virtual Room Room { get; set; }
     }
 }
