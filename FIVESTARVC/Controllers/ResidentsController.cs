@@ -44,17 +44,7 @@ namespace FIVESTARVC.Controllers
             var residents = from s in db.Residents
                             select s;
 
-            foreach (var personID in residents)
-            {
-                int ResidentToAdd = personID.ResidentID;
-
-                AssignRoom(ResidentToAdd);
-
-            }
-
-            //Resident resident = db.Residents
-            //.Include(c => c.ResidentID)
-            //.Single();
+           
 
 
 
@@ -340,26 +330,26 @@ namespace FIVESTARVC.Controllers
             ViewBag.AssignedRoom = viewModel.ToList();
         }
 
-        private void AssignRoom(int ResidentToAdd)
-        {
-            //Initialize the AssignRoom ViewModel//
-            var Assign = db.Rooms;
+        //private void AssignRoom(int ResidentToAdd)
+        //{
+        //    //Initialize the AssignRoom ViewModel//
+        //    var Assign = db.Rooms;
 
 
-            var viewModel = new List<AssignRoom>();
+        //    var viewModel = new List<AssignRoom>();
 
-            foreach (var Rooms in Assign)
-            {
-                if (Rooms.ResidentID == ResidentToAdd)
-                    viewModel.Add(new AssignRoom
-                    {
-                        RoomNum = Rooms.RoomNum,
+        //    foreach (var Rooms in Assign)
+        //    {
+        //        if (Rooms.ResidentID == ResidentToAdd)
+        //            viewModel.Add(new AssignRoom
+        //            {
+        //                RoomNum = Rooms.RoomNum,
 
-                    });
+        //            });
 
-            }
-            ViewBag.AssignRoom = viewModel.ToList();
+        //    }
+        //    ViewBag.AssignRoom = viewModel.ToList();
 
-        }
+        //}
     }
 }
