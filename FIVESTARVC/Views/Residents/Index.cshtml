@@ -14,7 +14,6 @@
 
 <p style="padding-top: 1em;">
     <input type="button" class="btn btn-success" value="Create New" onclick="location.href='/Residents/Create';" />
-    @*@Html.ActionLink("Create New", "Create")*@
 </p>
 @using (Html.BeginForm("Index", "Residents", FormMethod.Get))
 {
@@ -25,24 +24,24 @@
         </div>
     </p>
 }
-<table class="table">
-    <tr>
-        <th>
-            @Html.ActionLink("Last Name", "Index", new { sortOrder = ViewBag.NameSortParm, currentFilter = ViewBag.CurrentFilter })
-        </th>
-        <th>
-            First Name
-        </th>
-        <th>
-            @Html.ActionLink("Service Branch", "Index", new { sortOrder = ViewBag.BranchSortParm, currentFilter = ViewBag.CurrentFilter })
-        </th>
-        <th>
-            Room Number
-        </th>
-    </tr>
+    <table class="table">
+        <tr>
+            <th>
+                @Html.ActionLink("Last Name", "Index", new { sortOrder = ViewBag.NameSortParm, currentFilter = ViewBag.CurrentFilter })
+            </th>
+            <th>
+                First Name
+            </th>
+            <th>
+                @Html.ActionLink("Service Branch", "Index", new { sortOrder = ViewBag.BranchSortParm, currentFilter = ViewBag.CurrentFilter })
+            </th>
+            <th>
+                Room Number
+            </th>
+        </tr>
 
-    @foreach (var item in Model)
-    {
+        @foreach (var item in Model)
+        {
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.LastName)
@@ -52,37 +51,31 @@
             </td>
             <td>
                 @{
-                    var serviceDescription = FSEnumHelper.GetDescription(item.ServiceBranch);
+                var serviceDescription = FSEnumHelper.GetDescription(item.ServiceBranch);
 
 
-                    @Html.DisplayFor(modelItem => serviceDescription)
+                @Html.DisplayFor(modelItem => serviceDescription)
                 }
 
             </td>
             <td>
                 @* Room number goes here *@
-            </td>>
+            </td>
             <td>
                 @Html.ActionLink("Edit", "Edit", new { id = item.ResidentID }, htmlAttributes: new { @class = "btn btn-sm btn-outline-secondary btn-light" }) &nbsp;
 
                 @*Trigger the modal with a button*@
 
-                @Html.ActionLink("Quick Event", "ViewQuickEvent", new { id = item.ResidentID, lastname = item.LastName}
-                    , htmlAttributes: new {  @class = "btn btn-sm btn-outline-primary btn-light"}) &nbsp;
-                @*<button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-resident-name="@item.FirstMidName @item.LastName" data-target="#newEventModal">
-                    Quick Event
-                </button>*@
+                @Html.ActionLink("Quick Event", "ViewQuickEvent", new { id = item.ResidentID, lastname = item.LastName }, htmlAttributes: new { @class = "btn btn-sm btn-outline-primary btn-light" }) &nbsp;
+
                 @Html.ActionLink("Details", "Details", new { id = item.ResidentID }, htmlAttributes: new { @class = "btn btn-sm btn-outline-secondary btn-light" }) &nbsp;
                 @Html.ActionLink("Delete", "Delete", new { id = item.ResidentID }, htmlAttributes: new { @class = "btn btn-sm btn-danger" })
             </td>
         </tr>
 
+}
 
-
-
-     }
-
-</table>
+    </table>
 
 <br />
 Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
