@@ -13,11 +13,11 @@ namespace FIVESTARVC.Models
         public int BenefitID { get; set; }
 
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:P2}")]
-        public double Percentage { get; set; }
+        public double DisabilityPercentage { get; set; }
 
         [DisplayFormat(DataFormatString = "{0:C0}")]
         [Display(Name = "Total Benefit Amount")]
-        public decimal BenefitAmount { get; set; }
+        public decimal TotalBenefitAmount { get; set; }
 
         [DisplayFormat(DataFormatString = "{0:C0}")]
         public decimal SSI { get; set; }

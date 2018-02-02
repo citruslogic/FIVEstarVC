@@ -21,10 +21,34 @@ namespace FIVESTARVC.Controllers
             ViewBag.ArmyCount = DB.Residents.Count(x => x.ServiceBranch == ServiceType.ARMY);
             ViewBag.AirForceCount = DB.Residents.Count(x => x.ServiceBranch == ServiceType.AIRFORCE);
             ViewBag.CoastGuardCount = DB.Residents.Count(x => x.ServiceBranch == ServiceType.COASTGUARD);
-   
-            ViewBag.TotalCount = DB.Residents.Count();
 
-            ViewBag.Graduated = DB.ProgramEvents.Count(x => x.Completed.Equals(true));
+            //Counts number of current residents, based on events
+            var CurrentRes = DB.ProgramEvents;
+            int count = 0;
+
+
+            foreach (var ProgramEvents in CurrentRes)
+            {
+                if (ProgramEvents.ProgramTypeID == 7 //admission
+                    || ProgramEvents.ProgramTypeID == 9 //re-admit
+                    || ProgramEvents.ProgramTypeID == 5) //emergency shelter
+                {
+                    count++;
+                    continue;
+                }
+                else if (ProgramEvents.ProgramTypeID == 2 //graduation
+                    || ProgramEvents.ProgramTypeID == 13 //discharge
+                    || ProgramEvents.ProgramTypeID == 14 //discharge
+                    || ProgramEvents.ProgramTypeID == 15)//discharge
+                {
+                    count--;
+                }
+            }
+            ViewBag.TotalCount = count;
+
+            //ViewBag.TotalCount = DB.ProgramEvents.Count(x => x.ProgramTypeID == 7 && x.EndDate == null);
+
+            ViewBag.Graduated = DB.ProgramEvents.Count(x => x.ProgramTypeID == 2);
 
             return View(); 
         }

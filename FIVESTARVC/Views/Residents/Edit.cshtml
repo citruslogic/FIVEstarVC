@@ -77,6 +77,14 @@
                     </table>
                 </div>
             </div>
+        
+        <div class="form-group">
+            @Html.LabelFor(model => model.HasPTSD, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10"> 
+                @Html.EditorFor(model => model.HasPTSD, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.HasPTSD, "", new { @class = "text-danger" })
+            </div>
+        </div>
 
 
         <div class="form-group">
