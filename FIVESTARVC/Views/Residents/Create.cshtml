@@ -7,94 +7,60 @@
 <h2>Create</h2>
 
 
-@using (Html.BeginForm()) 
+@using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-    
-<div class="form-horizontal">
-    <h4>Resident</h4>
-    <hr />
-    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
-    <div class="form-group">
-        @Html.LabelFor(model => model.LastName, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.LastName, new { htmlAttributes = new { @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.LastName, "", new { @class = "text-danger" })
-        </div>
-    </div>
+    <div class="form-horizontal">
+        <table>
+            <tr>
+                <td>
+                    <h4>Resident</h4>
+                    <hr />
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
-    <div class="form-group">
-        @Html.LabelFor(model => model.FirstMidName, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.FirstMidName, new { htmlAttributes = new { @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.FirstMidName, "", new { @class = "text-danger" })
-        </div>
-    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.LastName, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.LastName, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.LastName, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
 
-    <div class="form-group">
-        @Html.LabelFor(model => model.ServiceBranch, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.EnumDropDownListFor(model => model.ServiceBranch, htmlAttributes: new { @class = "form-control" })
-            @Html.ValidationMessageFor(model => model.ServiceBranch, "", new { @class = "text-danger" })
-        </div>
-    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.FirstMidName, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.FirstMidName, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.FirstMidName, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
 
-    <div class="form-group">
-
-        <div class="control-label col-md-2">
-            @Html.Label("Available Rooms")
-        </div>
-        <div class="col-md-offset-2 col-md-10">
-            <table>
-                <tr>
-                    @{
-                        int cnt = 0;
-                        List<FIVESTARVC.ViewModels.AssignedRoom> rooms = ViewBag.AssignRoom;
-
-                        foreach (var room in rooms)
-                        {
-                            if (cnt++ % 10 == 0)
-
-                            {
-                                @:</tr><tr>
-                            }
-
-                            @:<td>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.ServiceBranch, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EnumDropDownListFor(model => model.ServiceBranch, htmlAttributes: new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.ServiceBranch, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
 
 
-                                <input type="radio"
-                                       name="Room"
-                                       value="@room.RoomNum"
-                                       @(Html.Raw(room.IsOccupied == true)) />
-                                    @: @room.RoomNum
-                                    @:</td>
+                    <div class="form-group">
+                        <div class="control-label col-md-2">
+                            @Html.Label("Resident has PTSD?")
+                            <div class="col-md-10">
+                                @Html.EditorFor(model => model.HasPTSD)
+                                @Html.ValidationMessageFor(model => model.HasPTSD, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+                </td> @*end left side of form*@
+                <td>
+                    @Html.Partial("BenefitPartialView")
+                </td>
+            </tr>
+        </table>
 
 
-                        }
-                        @:</tr>
-                    }
-                </table>
-            </div>
-        </div>
-
-    <div class="form-group">
-        <div class="control-label col-md-2">
-            @Html.Label("Resident has PTSD?")
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.HasPTSD)
-                @Html.ValidationMessageFor(model => model.HasPTSD, "", new { @class = "text-danger" })
-            </div>
-        </div>
-    </div>
-
-    
-
-
-
-
-
-    
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
@@ -110,4 +76,18 @@
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
+
+    <script type="text/javascript">
+        
+            $('.income').on("keyup", function () {
+                var total = 0;
+                $('.income').each(function () {
+                    total += parseFloat($(this).val()) || 0;
+                });
+
+                $('.total').val(total);
+            });
+
+       
+    </script>
 }

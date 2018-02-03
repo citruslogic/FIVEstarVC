@@ -105,7 +105,7 @@ namespace FIVESTARVC.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "LastName,FirstMidName,ServiceBranch,Rank")] Resident resident)
+        public ActionResult Create([Bind(Include = "LastName,FirstMidName,ServiceBranch,HasPTSD,InVetCourt")] Resident resident)
         {
             try
             {
