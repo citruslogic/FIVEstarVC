@@ -16,39 +16,39 @@
                 <tbody>
                     <tr>
                         <td class="col-form-label"> 
-                            @Html.LabelFor(model => model.DisabilityPercentage, htmlAttributes: new { @class = "control-label col-md-offset-3" })
+                            @Html.LabelFor(model => model.DisabilityPercentage, htmlAttributes: new { @class = "control-label col-md-offset-1" })
                         </td>
-                        <td class="col-auto">
+                        <td>
                             @Html.EditorFor(model => model.DisabilityPercentage, new { htmlAttributes = new { @class = "form-control" } })
                             @Html.ValidationMessageFor(model => model.DisabilityPercentage, "", new { @class = "text-danger" })
                         </td>
 
                     </tr>
                     <tr>
-                        <td class="col-form-label">@Html.LabelFor(model => model.SSI, htmlAttributes: new { @class = "control-label col-md-offset-3" })</td>
-                        <td class="col-auto">
-                            @Html.EditorFor(model => model.SSI, new { htmlAttributes = new { @class = "form-control income" } })
+                        <td class="col-form-label">@Html.LabelFor(model => model.SSI, htmlAttributes: new { @class = "control-label col-md-offset-1" })</td>
+                        <td>
+                            @Html.EditorFor(model => model.SSI, new { htmlAttributes = new { @class = "form-control income money-wide" } })
                             @Html.ValidationMessageFor(model => model.SSI, "", new { @class = "text-danger" })
                         </td>
 
                     </tr>
                     <tr>
                         <td class="col-form-label">
-                            @Html.LabelFor(model => model.SSDI, htmlAttributes: new { @class = "control-label col-md-offset-3" })
+                            @Html.LabelFor(model => model.SSDI, htmlAttributes: new { @class = "control-label col-md-offset-1" })
                            
                         </td>
-                        <td class="col-auto">
-                            @Html.EditorFor(model => model.SSDI, new { htmlAttributes = new { @class = "form-control  income" } })
+                        <td>
+                            @Html.EditorFor(model => model.SSDI, new { htmlAttributes = new { @class = "form-control  income money-wide" } })
                             @Html.ValidationMessageFor(model => model.SSDI, "", new { @class = "text-danger" })
                         </td>
 
                     </tr>
                     <tr>
                         <td class="col-form-label">
-                            @Html.LabelFor(model => model.FoodStamp, htmlAttributes: new { @class = "control-label col-md-offset-3" })
+                            @Html.LabelFor(model => model.FoodStamp, htmlAttributes: new { @class = "control-label col-md-offset-1" })
                         </td>
-                        <td class="col-auto">
-                            @Html.EditorFor(model => model.FoodStamp, new { htmlAttributes = new { @class = "form-control income" } })
+                        <td>
+                            @Html.EditorFor(model => model.FoodStamp, new { htmlAttributes = new { @class = "form-control income money-wide" } })
                             @Html.ValidationMessageFor(model => model.FoodStamp, "", new { @class = "text-danger" })
                         </td>
                     </tr>
@@ -56,26 +56,26 @@
                         <td class="col-form-label">
                             @Html.LabelFor(model => model.OtherDescription, htmlAttributes: new { @class = "control-label" })
                         </td>
-                        <td class="col-auto">
-                            @Html.EditorFor(model => model.OtherDescription, new { htmlAttributes = new { @class = "form-control" } })
+                        <td>
+                            @Html.EditorFor(model => model.OtherDescription, new { htmlAttributes = new { @class = "form-control money-wide" } })
                             @Html.ValidationMessageFor(model => model.OtherDescription, "", new { @class = "text-danger" })
                         </td>
                     </tr>
                     <tr>
                         <td class="col-form-label">
-                            @Html.LabelFor(model => model.Other, htmlAttributes: new { @class = "control-label col-md-offset-3" })
+                            @Html.LabelFor(model => model.Other, htmlAttributes: new { @class = "control-label col-md-offset-1" })
                         </td>
-                        <td class="col-auto">
-                            @Html.EditorFor(model => model.Other, new { htmlAttributes = new { @class = "form-control income" } })
+                        <td >
+                            @Html.EditorFor(model => model.Other, new { htmlAttributes = new { @class = "form-control income money-wide" } })
                             @Html.ValidationMessageFor(model => model.Other, "", new { @class = "text-danger" })
                         </td>
                     </tr>
                     <tr>
                         <td class="col-form-label alert-dark">
-                            @Html.LabelFor(model => model.TotalBenefitAmount, htmlAttributes: new { @class = "control-label col-md-offset-3" })
+                            @Html.LabelFor(model => model.TotalBenefitAmount, htmlAttributes: new { @class = "control-label col-md-offset-1" })
                         </td>
-                        <td class="col-auto alert-dark">
-                            @Html.EditorFor(model => model.TotalBenefitAmount, new { htmlAttributes = new { @class = "form-control total", @disabled = "disabled", @readonly = "readonly" } })
+                        <td class="alert-dark">
+                            @Html.EditorFor(model => model.TotalBenefitAmount, new { htmlAttributes = new { @class = "form-control total money-wide", @disabled = "disabled", @readonly = "readonly" } })
                             @Html.ValidationMessageFor(model => model.TotalBenefitAmount, "", new { @class = "text-danger" })
                         </td>
                     </tr>
