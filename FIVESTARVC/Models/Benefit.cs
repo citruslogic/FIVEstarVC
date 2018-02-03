@@ -12,6 +12,7 @@ namespace FIVESTARVC.Models
 
         public int BenefitID { get; set; }
 
+        [Display(Name = "Disability Rating (%)")]
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:P2}")]
         public double DisabilityPercentage { get; set; }
 
