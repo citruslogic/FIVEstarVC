@@ -15,10 +15,10 @@
 
             <div class="navbar navbar-expand">
                 <ul class="nav navbar-nav">
-                    <li class="btn nav-item">@Html.ActionLink(" ", "Index", new { controller = "Home" }, htmlAttributes: new { @class = "btn btn-lg fa fa-home fa-ul" })</li>
-                    <li class="nav-item">@Html.ActionLink("Residents", "Index", new { controller = "Residents" }, htmlAttributes: new { @class = "btn btn-lg" })</li>
-                    <li class="nav-item">@Html.ActionLink("Event Log", "Index", new { controller = "ProgramEvents" }, htmlAttributes: new { @class = "btn btn-lg" })</li>
-                    <li class="nav-item">@Html.ActionLink("Reports", "Index",  new { controller = "Reports" }, htmlAttributes: new { @class = "btn btn-lg" })</li>
+                    <li class="nav-item" style="padding-right: 1em"><a href="/Home/Index" class="btn btn-lg btn-primary"><span class="fa fa-home fa-fw"></span></a></li>
+                    <li class="nav-item" style="padding-right: 1em">@Html.ActionLink("Residents", "Index", new { controller = "Residents" }, htmlAttributes: new { @class = "btn btn-lg btn-info" })</li>
+                    <li class="nav-item" style="padding-right: 1em">@Html.ActionLink("Event Log", "Index", new { controller = "ProgramEvents" }, htmlAttributes: new { @class = "btn btn-lg btn-primary" })</li>
+                    <li class="nav-item" style="padding-right: 1em">@Html.ActionLink("Reports", "Index",  new { controller = "Reports" }, htmlAttributes: new { @class = "btn btn-lg btn-primary" })</li>
                 </ul>
             </div>
         </div>
