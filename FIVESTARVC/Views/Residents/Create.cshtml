@@ -15,7 +15,7 @@
         <div class="col-sm-5 table-responsive">
             <h2> New Resident </h2>
 
-            <table class="table table-striped">
+            <table class="table table-active">
 
 
                 <tbody>
@@ -89,7 +89,7 @@
     <script type="text/javascript">
 
         $('.income').on("keyup", function () {
-            var total = 0;
+            var total = parseFloat(0.0);
             $('.income').each(function () {
                 total += parseFloat($(this).val()) || 0;
             });
