@@ -5,6 +5,7 @@
     ViewBag.Title = "Details";
 }
 
+
 <h2>Details</h2>
 
 <div>
@@ -82,15 +83,7 @@
     @Html.DisplayName("Resident has PTSD?")
     </dt>
     <dd>
-        @if (Model.HasPTSD == true)
-        {
-            @:Yes
-
-        }
-        else
-        {
-            @:No
-            }
+     @(Model.HasPTSD?"Yes":"No")
     </dd>
 
     <br />    
