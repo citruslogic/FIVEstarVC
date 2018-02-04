@@ -10,19 +10,19 @@
 </head>
 <body>
     <img src="~/Content/fivestar_logo.jpg" />
-    <div class="navbar navbar navbar-default">
+    <nav class="navbar navbar-dark justify-content-lg-start" style="background-color: navy">
         <div class="container">
 
             <div class="navbar navbar-expand">
-                <ul class="nav navbar">
-                    <li><button class="btn btn-lg btn-default" onclick="location.href = '/Home';"> <span class="fa fa-home fa-fw" aria-hidden="true"></span></button></li>
-                    <li><button class="btn btn-lg btn-primary" onclick="location.href='/Residents';"> Residents </button></li>
-                    <li><button class="btn btn-lg btn-default" onclick="location.href = '/ProgramEvents';"> Event Log</button></li>
-                    <li><button class="btn btn-lg btn-default" onclick="location.href='/Reports';"> Reports </button></li>
+                <ul class="nav navbar-nav">
+                    <li class="btn nav-item">@Html.ActionLink(" ", "Index", new { controller = "Home" }, htmlAttributes: new { @class = "btn btn-lg fa fa-home fa-ul" })</li>
+                    <li class="nav-item">@Html.ActionLink("Residents", "Index", new { controller = "Residents" }, htmlAttributes: new { @class = "btn btn-lg" })</li>
+                    <li class="nav-item">@Html.ActionLink("Event Log", "Index", new { controller = "ProgramEvents" }, htmlAttributes: new { @class = "btn btn-lg" })</li>
+                    <li class="nav-item">@Html.ActionLink("Reports", "Index",  new { controller = "Reports" }, htmlAttributes: new { @class = "btn btn-lg" })</li>
                 </ul>
             </div>
         </div>
-    </div>
+    </nav>
     <div class="container body-content">
         @RenderBody()
         <hr />
