@@ -36,6 +36,7 @@ namespace FIVESTARVC.Models
         public int ProgramTypeID { get; set; }
 
         public ResidentProgramType ResidentProgramType { get; set; }
+        [Display(Name = "Description")]
         public String ProgramDescription { get; set; }
 
     }

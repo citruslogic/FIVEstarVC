@@ -8,23 +8,23 @@
     @Scripts.Render("~/bundles/modernizr")
     @Styles.Render("~/Content/fontawesome")
 </head>
-<body>
-    <img src="~/Content/fivestar_logo.jpg" />
-    <div class="navbar navbar navbar-default">
+<body style="background-color: whitesmoke">
+    <img class="border-dark" src="~/Content/fivestar_logo.jpg" />
+    <nav class="navbar navbar-dark justify-content-lg-start" style="background-color: navy">
         <div class="container">
 
             <div class="navbar navbar-expand">
                 <ul class="nav navbar-nav">
-                    <li><button class="btn btn-lg btn-default" onclick="location.href = '/Home';"> <span class="fa fa-home fa-fw" aria-hidden="true"></span></button></li>
-                    <li><button class="btn btn-lg btn-primary" onclick="location.href='/Residents';"> Residents </button></li>
-                    <li><button class="btn btn-lg btn-default" onclick="location.href = '/ProgramEvents';"> Event Log</button></li>
-                    <li><button class="btn btn-lg btn-default" onclick="location.href='/Reports';"> Reports </button></li>
+                    <li class="nav-item" style="padding-right: 1em"><a href="/Home/Index" class="btn btn-lg btn-primary"><span class="fa fa-home fa-fw"></span></a></li>
+                    <li class="nav-item" style="padding-right: 1em">@Html.ActionLink("Residents", "Index", new { controller = "Residents" }, htmlAttributes: new { @class = "btn btn-lg btn-primary" })</li>
+                    <li class="nav-item" style="padding-right: 1em">@Html.ActionLink("Event Log", "Index", new { controller = "ProgramEvents" }, htmlAttributes: new { @class = "btn btn-lg btn-primary" })</li>
+                    <li class="nav-item" style="padding-right: 1em">@Html.ActionLink("Reports", "Index",  new { controller = "Reports" }, htmlAttributes: new { @class = "btn btn-lg btn-primary" })</li>
                 </ul>
             </div>
         </div>
-    </div>
+    </nav>
     <div class="container body-content">
-        <span style="padding-bottom: 2em;">&nbsp;</span>
+        <br />
         @RenderBody()
         <hr />
         <footer>

@@ -1,59 +1,75 @@
-﻿@model IEnumerable<FIVESTARVC.Models.ProgramEvent>
-@using FIVESTARVC.Models
+﻿@using PagedList;
+@using PagedList.Mvc;
+@model PagedList.IPagedList<FIVESTARVC.Models.ProgramEvent>
+@using FIVESTARVC.Models;
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Event Log";
 }
 
-<h2>Index</h2>
+<h2>Event Log</h2>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
+<p style="padding-top: 1em;">
+    <input type="button" class="btn btn-success" value="New Event Entry" onclick="location.href='/ProgramEvents/Create';" />
 </p>
-<table class="table">
+@using (Html.BeginForm("Index", "ProgramEvents", FormMethod.Get))
+{
+    <p>
+        Find by name: <div class="form-group">
+            @Html.TextBox("searchString", ViewBag.CurrentFilter as string)
+            <input class="btn btn-sm btn-outline-dark" type="submit" value="Search" />
+        </div>
+    </p>
+}
+<table class="table table-striped">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.ProgramType.ProgramDescription)
+            @Html.ActionLink("Description", "Index", new { sortOrder = ViewBag.ProgramSortParm, currentFilter = ViewBag.CurrentFilter })
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Resident.LastName)
+            @Html.ActionLink("Last Name", "Index", new { sortOrder = ViewBag.NameSortParm, currentFilter = ViewBag.CurrentFilter })
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.StartDate)
+            Start Date
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.EndDate)
+            End Date
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Completed)
+            Completed?
         </th>
         <th></th>
     </tr>
 
-@foreach (var item in Model) {
-    <tr>
+    @foreach (var item in Model)
+    {
+        <tr>
 
-        <td>
-            @Html.DisplayFor(modelItem => item.ProgramType.ProgramDescription)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Resident.LastName)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.StartDate)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.EndDate)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Completed)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.ProgramEventID }) |
-            @Html.ActionLink("Details", "Details", new { id=item.ProgramEventID }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.ProgramEventID })
-        </td>
-    </tr>
-}
+            <td>
+                @Html.DisplayFor(modelItem => item.ProgramType.ProgramDescription)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Resident.LastName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.StartDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EndDate)
+            </td>
+            <td>
+                @(item.Completed ? "Yes" : "No")
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.ProgramEventID }, htmlAttributes: new { @class = "btn btn-sm btn-outline-secondary btn-light" }) &nbsp;
+                @Html.ActionLink("Details", "Details", new { id = item.ProgramEventID }, htmlAttributes: new { @class = "btn btn-sm btn-outline-secondary btn-light" }) &nbsp;
+                @Html.ActionLink("Delete", "Delete", new { id = item.ProgramEventID }, htmlAttributes: new { @class = "btn btn-sm btn-danger" })
+            </td>
+        </tr>
+    }
 
 </table>
+<br />
+Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+@Html.PagedListPager(Model, page => Url.Action("Index", new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))

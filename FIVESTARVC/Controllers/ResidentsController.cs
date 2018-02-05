@@ -105,7 +105,7 @@ namespace FIVESTARVC.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "LastName,FirstMidName,ServiceBranch,Rank")] Resident resident)
+        public ActionResult Create([Bind(Include = "LastName,FirstMidName,Birthdate,ServiceBranch,HasPTSD,Note,InVetCourt")] Resident resident)
         {
             try
             {
@@ -138,6 +138,7 @@ namespace FIVESTARVC.Controllers
 
             Resident resident = db.Residents
             .Include(c => c.MilitaryCampaigns)
+            .Include(b => b.Benefits)
             .Where(c => c.ResidentID == id)
             .Single();
 
@@ -168,11 +169,12 @@ namespace FIVESTARVC.Controllers
             var residentToUpdate = db.Residents
                 .Include(p => p.ProgramEvents)
                 .Include(c => c.MilitaryCampaigns)
+                .Include(b => b.Benefits)
                 .Where(c => c.ResidentID == id)
                 .Single();
 
             if (TryUpdateModel(residentToUpdate, "",
-               new string[] { "LastName", "FirstMidName", "ServiceBranch", "MilitaryCampaigns" }))
+               new string[] { "LastName", "FirstMidName", "Birthdate", "ServiceBranch", "Note", "HasPTSD", "InVetCourt", "Benefits", "MilitaryCampaigns" }))
             {
                 try
                 {
@@ -283,25 +285,37 @@ namespace FIVESTARVC.Controllers
             return RedirectToAction("Index");
         }
 
-
-        public ActionResult ViewQuickEvent()
+        // GET
+        // Quick Event form (soon to be part of a modal dialog)
+        public ActionResult ViewQuickEvent(int id, string lastname)
         {
-            return PartialView("_modalNewEvent");
+            ViewBag.ResidentID = id;
+            ViewBag.Lastname = lastname;
+            ViewBag.ProgramTypeID = new SelectList(db.ProgramTypes, "ProgramTypeID", "ProgramDescription");
+
+            return View("_modalNewEvent");
         }
 
         /*
          * Save the Quick Event triggered on /Residents/Index
          */
         [HttpPost]
-        public JsonResult SaveEvent(ProgramEvent ev)
+        [ValidateAntiForgeryToken]
+        public ActionResult ViewQuickEvent([Bind(Include = "ProgramEventID,ResidentID,ProgramTypeID,StartDate,EndDate,Completed")] int id, ProgramEvent programEvent)
         {
-            db.ProgramEvents.Add(ev);
-            db.SaveChanges();
+            if (ModelState.IsValid)
+            {
+                db.ProgramEvents.Add(programEvent);
+                db.SaveChanges();
+                return RedirectToAction("Index");
+            }
 
-            return Json(true, JsonRequestBehavior.AllowGet);
+            ViewBag.ProgramTypeID = new SelectList(db.ProgramTypes, "ProgramTypeID", "ProgramDescription", programEvent.ProgramTypeID);
+            ViewBag.ResidentID = id;
+            return View(programEvent);
         }
 
-        private void GetAssignedRoom ()
+            private void GetAssignedRoom ()
         {
             //Initialize the AssignedRoom ViewModel//
             var AvailRoom = db.Rooms;

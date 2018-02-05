@@ -5,6 +5,7 @@
     ViewBag.Title = "Details";
 }
 
+
 <h2>Details</h2>
 
 <div>
@@ -77,6 +78,17 @@
                     </table>
                 </div>
             </div>
+    </div>
+    <dt>
+    @Html.DisplayName("Resident has PTSD?")
+    </dt>
+    <dd>
+     @(Model.HasPTSD?"Yes":"No")
+    </dd>
+
+    <br />    
+     
+    
     <dl>
         <dd>
             <table class="table">
@@ -103,7 +115,7 @@
         </dd>
 
     </dl>
-</div>
+
 <p>
     @Html.ActionLink("Edit", "Edit", new { id = Model.ResidentID }) |
     @Html.ActionLink("Back to List", "Index")
