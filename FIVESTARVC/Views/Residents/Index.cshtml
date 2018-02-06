@@ -59,7 +59,7 @@
 
             </td>
             <td>
-                @* Room number goes here *@
+                @Html.DisplayFor(modelItem => item.Room.RoomNum)
             </td>
             <td>
                 @Html.ActionLink("Edit", "Edit", new { id = item.ResidentID }, htmlAttributes: new { @class = "btn btn-sm btn-outline-secondary btn-light" }) &nbsp;

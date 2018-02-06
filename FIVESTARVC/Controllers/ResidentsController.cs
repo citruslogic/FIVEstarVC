@@ -21,6 +21,7 @@ namespace FIVESTARVC.Controllers
         // GET: Residents
         public ActionResult Index(string sortOrder, string currentFilter, string searchString, int? page)
         {
+            
             ViewBag.CurrentSort = sortOrder;
             ViewBag.NameSortParm = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
             ViewBag.BranchSortParm = sortOrder == "ServiceBranch" ? "ServiceBranch_desc" : "ServiceBranch";
@@ -40,6 +41,28 @@ namespace FIVESTARVC.Controllers
 
             var residents = from s in db.Residents
                             select s;
+
+
+            //query to get the roomID from the resident table//
+            var RoomToCompare = from s in db.Residents
+                               .Where(s => s.RoomID != null)
+                                select s;
+
+
+            var RoomToAdd = from s in db.Rooms
+                            .Where(s => s.RoomID > 0)
+                            select s;
+
+            
+
+            //Compare the RoomID from resident table to the Room table//
+            //If equal, add the room number to the viewbag//
+            if (RoomToCompare == RoomToAdd)
+            {
+                var RoomToDisplay = RoomToAdd;
+
+                ViewBag.RoomToDisplay = RoomToDisplay;
+            }
 
 
             if (!String.IsNullOrEmpty(searchString))
@@ -92,14 +115,36 @@ namespace FIVESTARVC.Controllers
         // GET: Residents/Create
         public ActionResult Create()
         {
+           
 
-            //Call Get Assigned Room to get available rooms//
+            //Query database for IsOccupied flag//
+            //Query for EastSouth Wing//
+            var AvailRoom = db.Rooms
+                            .Where(s => s.IsOccupied == false)
+                            .Where(s => s.RoomNum > 101 && s.RoomNum < 127);
 
-            GetAssignedRoom();
-      
+            ViewBag.EastSouth = new SelectList(AvailRoom, "RoomNum", "RoomNum");
+
+            //Query for West Wing rooms//
+            var WestWing = db.Rooms
+                           .Where(s => s.IsOccupied == false)
+                           .Where(s => s.RoomNum > 201 && s.RoomNum < 210);
+
+            ViewBag.WestWing = new SelectList(WestWing, "RoomNum", "RoomNum");
+
+            //Query for North Wing Rooms
+            var NorthWing = db.Rooms
+                           .Where(s => s.IsOccupied == false)
+                           .Where(s => s.RoomNum > 300 && s.RoomNum < 311);
+
+            ViewBag.NorthWing = new SelectList(NorthWing, "RoomNum", "RoomNum");
+
+
             return View();
+
         }
 
+            
         // POST: Residents/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
@@ -313,11 +358,11 @@ namespace FIVESTARVC.Controllers
             return View(programEvent);
         }
 
-            private void GetAssignedRoom ()
+        private void GetAssignedRoom()
         {
             //Initialize the AssignedRoom ViewModel//
             var AvailRoom = db.Rooms;
-            
+
             var viewModel = new List<AssignedRoom>();
 
             //Loop through the rooms and check to see if IsOccupied is checked or not//
@@ -325,7 +370,7 @@ namespace FIVESTARVC.Controllers
             foreach (var Rooms in AvailRoom)
             {
                 if (Rooms.IsOccupied == false)
-                { 
+                {
                     viewModel.Add(new AssignedRoom
                     {
                         RoomNum = Rooms.RoomNum,
