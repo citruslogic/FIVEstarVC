@@ -166,6 +166,7 @@
     <Compile Include="Controllers\ProgramEventsController.cs" />
     <Compile Include="Controllers\ReportsController.cs" />
     <Compile Include="Controllers\ResidentsController.cs" />
+    <Compile Include="CsvExport.cs" />
     <Compile Include="DAL\CenterInitializer.cs" />
     <Compile Include="DAL\ResidentContext.cs" />
     <Compile Include="Global.asax.cs">

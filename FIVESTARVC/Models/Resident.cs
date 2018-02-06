@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Web;
-
+using FIVESTARVC.DAL;
 
 namespace FIVESTARVC.Models
 {
@@ -34,6 +34,7 @@ namespace FIVESTARVC.Models
 
     public class Resident
     {
+        private ResidentContext db = new ResidentContext();
 
         public int ResidentID { get; set; }
         [Required]
