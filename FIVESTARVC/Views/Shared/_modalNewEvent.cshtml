@@ -1,9 +1,14 @@
 ﻿@model FIVESTARVC.Models.ProgramEvent
 @using FIVESTARVC.Models
 
+@{ AjaxOptions options = new AjaxOptions();
+    options.HttpMethod = "POST";
+    options.Url = Url.Action("ViewQuickEvent", "Residents");
+    options.UpdateTargetId = "modal-body";
+    options.InsertionMode = InsertionMode.Replace;
+}
 
-
-@using (Html.BeginForm("ViewQuickEvent", "Residents", FormMethod.Post))
+@using (Ajax.BeginForm("ViewQuickEvent", "Residents", options))
 {
     @Html.AntiForgeryToken()
 

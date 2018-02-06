@@ -150,7 +150,7 @@ namespace FIVESTARVC.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "LastName,FirstMidName,ServiceBranch,Rank")] Resident resident)
+        public ActionResult Create([Bind(Include = "LastName,FirstMidName,Birthdate,ServiceBranch,HasPTSD,Note,InVetCourt")] Resident resident)
         {
             try
             {
@@ -184,6 +184,7 @@ namespace FIVESTARVC.Controllers
 
             Resident resident = db.Residents
             .Include(c => c.MilitaryCampaigns)
+            .Include(b => b.Benefits)
             .Where(c => c.ResidentID == id)
             .Single();
 
@@ -214,11 +215,12 @@ namespace FIVESTARVC.Controllers
             var residentToUpdate = db.Residents
                 .Include(p => p.ProgramEvents)
                 .Include(c => c.MilitaryCampaigns)
+                .Include(b => b.Benefits)
                 .Where(c => c.ResidentID == id)
                 .Single();
 
             if (TryUpdateModel(residentToUpdate, "",
-               new string[] { "LastName", "FirstMidName", "ServiceBranch", "MilitaryCampaigns" }))
+               new string[] { "LastName", "FirstMidName", "Birthdate", "ServiceBranch", "Note", "HasPTSD", "InVetCourt", "Benefits", "MilitaryCampaigns" }))
             {
                 try
                 {

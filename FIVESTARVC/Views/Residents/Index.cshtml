@@ -20,11 +20,11 @@
     <p>
         Find by name: <div class="form-group">
             @Html.TextBox("searchString", ViewBag.CurrentFilter as string)
-            <input class="btn btn-outline-secondary" type="submit" value="Search" />
+            <input class="btn btn-sm btn-outline-dark" type="submit" value="Search" />
         </div>
     </p>
 }
-    <table class="table">
+    <table class="table table-striped">
         <tr>
             <th>
                 @Html.ActionLink("Last Name", "Index", new { sortOrder = ViewBag.NameSortParm, currentFilter = ViewBag.CurrentFilter })
@@ -38,6 +38,7 @@
             <th>
                 Room Number
             </th>
+            <th></th>
         </tr>
 
         @foreach (var item in Model)
@@ -66,7 +67,7 @@
 
                 @*Trigger the modal with a button*@
 
-                @Html.ActionLink("Quick Event", "ViewQuickEvent", new { id = item.ResidentID, lastname = item.LastName }, htmlAttributes: new { @class = "btn btn-sm btn-outline-primary btn-light" }) &nbsp;
+                @Html.ActionLink("Quick Event", "ViewQuickEvent", new { id = item.ResidentID, lastname = item.LastName }, htmlAttributes: new { @class = "btn btn-sm btn-outline-secondary btn-light" }) &nbsp;
 
                 @Html.ActionLink("Details", "Details", new { id = item.ResidentID }, htmlAttributes: new { @class = "btn btn-sm btn-outline-secondary btn-light" }) &nbsp;
                 @Html.ActionLink("Delete", "Delete", new { id = item.ResidentID }, htmlAttributes: new { @class = "btn btn-sm btn-danger" })
