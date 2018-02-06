@@ -1,0 +1,98 @@
+﻿@model PagedList.IPagedList<FIVESTARVC.Models.Resident>
+@using PagedList.Mvc;
+@using FIVESTARVC.Models;
+
+
+
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+
+@{
+    ViewBag.Title = "Residents";
+}
+
+<h2>Residents Listing</h2>
+
+<p style="padding-top: 1em;">
+    <input type="button" class="btn btn-success" value="Create New" onclick="location.href='/Residents/Create';" />
+</p>
+@using (Html.BeginForm("Index", "Residents", FormMethod.Get))
+{
+    <p>
+        Find by name: <div class="form-group">
+            @Html.TextBox("searchString", ViewBag.CurrentFilter as string)
+            <input class="btn btn-sm btn-outline-dark" type="submit" value="Search" />
+        </div>
+    </p>
+}
+    <table class="table table-striped">
+        <tr>
+            <th>
+                @Html.ActionLink("Last Name", "Index", new { sortOrder = ViewBag.NameSortParm, currentFilter = ViewBag.CurrentFilter })
+            </th>
+            <th>
+                First Name
+            </th>
+            <th>
+                @Html.ActionLink("Service Branch", "Index", new { sortOrder = ViewBag.BranchSortParm, currentFilter = ViewBag.CurrentFilter })
+            </th>
+            <th>
+                Room Number
+            </th>
+            <th>
+                Current?
+            </th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.LastName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FirstMidName)
+            </td>
+            <td>
+                @{
+                var serviceDescription = FSEnumHelper.GetDescription(item.ServiceBranch);
+
+
+                @Html.DisplayFor(modelItem => serviceDescription)
+                }
+
+            </td>
+            <td>
+                @* Room number goes here *@
+            </td>
+            <td>
+                @{ 
+                    if(item.isCurrent(item) == true)
+                    {
+                        @Html.Raw("Yes")
+                    }
+                    else
+                    {
+                        @Html.Raw("No")
+                    }
+                }
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.ResidentID }, htmlAttributes: new { @class = "btn btn-sm btn-outline-secondary btn-light" }) &nbsp;
+
+                @*Trigger the modal with a button*@
+
+                @Html.ActionLink("Quick Event", "ViewQuickEvent", new { id = item.ResidentID, lastname = item.LastName }, htmlAttributes: new { @class = "btn btn-sm btn-outline-secondary btn-light" }) &nbsp;
+
+                @Html.ActionLink("Details", "Details", new { id = item.ResidentID }, htmlAttributes: new { @class = "btn btn-sm btn-outline-secondary btn-light" }) &nbsp;
+                @Html.ActionLink("Delete", "Delete", new { id = item.ResidentID }, htmlAttributes: new { @class = "btn btn-sm btn-danger" })
+            </td>
+        </tr>
+
+}
+
+    </table>
+
+<br />
+Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+@Html.PagedListPager(Model, page => Url.Action("Index", new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
