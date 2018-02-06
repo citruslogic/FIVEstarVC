@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using FIVESTARVC.DAL;
 using FIVESTARVC.Models;
+using FIVESTARVC.ViewModels;
 using Jitbit.Utils;
 
 
@@ -72,6 +73,15 @@ namespace FIVESTARVC.Controllers
 
         public ActionResult Historic()
         {
+            return View();
+        }
+
+        public ActionResult DownloadData()
+        {
+            HistoricData HB = new HistoricData();
+
+            
+
             var residents = DB.Residents;
 
             var myExport = new CsvExport();
@@ -102,14 +112,13 @@ namespace FIVESTARVC.Controllers
                 */
             }
 
-            myExport.ExportToFile("C:\\Users\\Reports\\CenterReport.csv");
+            string filepath = Server.MapPath(Url.Content("~/Content/CenterReport.csv"));
 
-            return View();
-        }
+            myExport.ExportToFile(filepath);
 
-        public void DownloadData()
-        {
-            //figure out how to make this button work
+            string filename = "~\\Content\\CenterReport.csv";
+
+            return File(filename,"text/csv", "HistoricData.csv");
         }   
     }
 }
