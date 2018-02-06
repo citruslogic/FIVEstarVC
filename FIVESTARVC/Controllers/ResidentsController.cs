@@ -157,8 +157,9 @@ namespace FIVESTARVC.Controllers
                 if (ModelState.IsValid)
                 {
                     db.Residents.Add(resident);
-                    
                     db.SaveChanges();
+
+                   
                     return RedirectToAction("Index");
                 }
             }

@@ -49,7 +49,7 @@
             </div>
             <div class="col-md-offset-2 col-md-10">
 
-                @Html.DropDownList("EastSouth")
+                @Html.DropDownList("EastSouth", (SelectList)ViewBag.EastSouth, "Please Select")
             </div>
 
             <div class="control-label col-md-2">
@@ -57,7 +57,7 @@
             </div>
             <div class="col-md-offset-2 col-md-10">
 
-                @Html.DropDownList("WestWing")
+                @Html.DropDownList("WestWing", (SelectList)ViewBag.WestWing, "Please Select")
             </div>
 
             <div class="control-label col-md-2">
@@ -65,7 +65,7 @@
             </div>
             <div class="col-md-offset-2 col-md-10">
 
-                @Html.DropDownList("NorthWing")
+                @Html.DropDownList("NorthWing", (SelectList)ViewBag.NorthWing, "Please Select")
             </div>
 
         </div>
