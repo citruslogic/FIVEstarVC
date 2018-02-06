@@ -5,6 +5,8 @@ using System.Web;
 using System.Web.Mvc;
 using FIVESTARVC.DAL;
 using FIVESTARVC.Models;
+using Jitbit.Utils;
+
 
 namespace FIVESTARVC.Controllers
 {
@@ -26,7 +28,6 @@ namespace FIVESTARVC.Controllers
             var CurrentRes = DB.ProgramEvents;
             int count = 0;
 
-
             foreach (var ProgramEvents in CurrentRes)
             {
                 if (ProgramEvents.ProgramTypeID == 7 //admission
@@ -46,8 +47,6 @@ namespace FIVESTARVC.Controllers
             }
             ViewBag.TotalCount = count;
 
-            //ViewBag.TotalCount = DB.ProgramEvents.Count(x => x.ProgramTypeID == 7 && x.EndDate == null);
-
             ViewBag.Graduated = DB.ProgramEvents.Count(x => x.ProgramTypeID == 2);
 
             ViewBag.WorkProgram = DB.ProgramEvents.Count(x => x.ProgramTypeID == 1);
@@ -60,7 +59,7 @@ namespace FIVESTARVC.Controllers
 
             ViewBag.SchoolProgram = DB.ProgramEvents.Count(x => x.ProgramTypeID == 6);
 
-            //ViewBag.VeteransCourt = DB.Residents.Count(x => x.ve == 8);
+            ViewBag.VeteransCourt = DB.Residents.Count(x => x.InVetCourt == true);
 
             ViewBag.FinancialProgram = DB.ProgramEvents.Count(x => x.ProgramTypeID == 10);
 
@@ -73,7 +72,44 @@ namespace FIVESTARVC.Controllers
 
         public ActionResult Historic()
         {
+            var residents = DB.Residents;
+
+            var myExport = new CsvExport();
+
+            foreach (var Resident in residents)
+            {
+                myExport.AddRow();
+                myExport["Last Name"] = Resident.LastName;
+                myExport["First Name"] = Resident.FirstMidName;
+                myExport["Birthdate"] = Resident.Birthdate;
+                myExport["Service Branch"] = Resident.ServiceBranch;
+                myExport["PTSD"] = Resident.HasPTSD;
+                myExport["Vet Court"] = Resident.InVetCourt;
+                myExport["Notes"] = Resident.Note;
+                /*
+                myExport["Work Program"] = wp;
+                myExport["Mental Wellness"] = Resident.FirstMidName;
+                myExport["P2I"] = Resident.Birthdate;
+                myExport["Emergency Shelter"] = Resident.ServiceBranch;
+                myExport["School Program"] = Resident.HasPTSD;
+                myExport["Financial Program"] = Resident.InVetCourt;
+                myExport["Readmitted"] = Resident.Note;
+                myExport["Depression/Behavioral"] = Resident.Note;
+                myExport["Substance Abuse"] = Resident.Note;
+                myExport["Discharge for Cause"] = Resident.Note;
+                myExport["Self Discharge"] = Resident.Note;
+                myExport["Higher Level of Care"] = Resident.Note;
+                */
+            }
+
+            myExport.ExportToFile("C:\\Users\\Reports\\CenterReport.csv");
+
             return View();
         }
+
+        public void DownloadData()
+        {
+            //figure out how to make this button work
+        }   
     }
 }

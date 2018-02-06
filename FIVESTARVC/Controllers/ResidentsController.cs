@@ -21,6 +21,8 @@ namespace FIVESTARVC.Controllers
         // GET: Residents
         public ActionResult Index(string sortOrder, string currentFilter, string searchString, int? page)
         {
+
+
             ViewBag.CurrentSort = sortOrder;
             ViewBag.NameSortParm = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
             ViewBag.BranchSortParm = sortOrder == "ServiceBranch" ? "ServiceBranch_desc" : "ServiceBranch";
@@ -337,7 +339,6 @@ namespace FIVESTARVC.Controllers
             }
             ViewBag.AssignRoom = viewModel;
         }
-
 
     }
 }
