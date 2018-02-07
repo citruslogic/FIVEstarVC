@@ -107,26 +107,53 @@ namespace FIVESTARVC.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "LastName,FirstMidName,Birthdate,ServiceBranch,HasPTSD,Note,InVetCourt")] Resident resident)
+        public ActionResult Create(ResidentIncomeModel residentIncomeModel)
         {
+            Resident resident = new Resident
+            {
+                FirstMidName = residentIncomeModel.FirstMidName,
+                LastName = residentIncomeModel.LastName,
+                Birthdate = residentIncomeModel.Birthdate,
+                ServiceBranch = (Models.ServiceType) residentIncomeModel.ServiceBranch,
+                HasPTSD = residentIncomeModel.HasPTSD,
+                InVetCourt = residentIncomeModel.InVetCourt,
+                RoomID = residentIncomeModel.RoomID,
+                Note = residentIncomeModel.Note
+            };
+
+            Benefit benefit = new Benefit
+            {
+                Resident = resident,
+                DisabilityPercentage = residentIncomeModel.DisabilityPercentage,
+                SSI = residentIncomeModel.SSI,
+                SSDI = residentIncomeModel.SSDI,
+                FoodStamp = residentIncomeModel.FoodStamp,
+                OtherDescription = residentIncomeModel.OtherDescription,
+                Other = residentIncomeModel.Other,
+                TotalBenefitAmount = residentIncomeModel.TotalBenefitAmount
+            };
+
             try
             {
                 if (ModelState.IsValid)
                 {
                     db.Residents.Add(resident);
+                    db.SaveChanges();
+                    db.Benefits.Add(benefit);
                     
                     db.SaveChanges();
                     return RedirectToAction("Index");
                 }
             }
-            catch (DataException /* dex */ )
+            catch (DataException dex )
             {
                 //Log the error (uncomment dex variable name and add a line here to write a log.
-                ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists see your system administrator.");
+                Console.Out.WriteLine(dex.Message);
+                ModelState.AddModelError("", dex.Message);
             }
 
 
-            return View(resident);
+            return View(residentIncomeModel);
         }
 
         // GET: Residents/Edit/5
