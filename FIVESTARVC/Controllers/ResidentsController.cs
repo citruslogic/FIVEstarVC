@@ -115,29 +115,39 @@ namespace FIVESTARVC.Controllers
         // GET: Residents/Create
         public ActionResult Create()
         {
-           
+
 
             //Query database for IsOccupied flag//
             //Query for EastSouth Wing//
-            var AvailRoom = db.Rooms
-                            .Where(s => s.IsOccupied == false)
-                            .Where(s => s.RoomNum > 101 && s.RoomNum < 127);
+            var EastSouth = db.Rooms
+                            .Where(s => s.IsOccupied == false);
+                            //.Where(s => s.RoomNum > 101 && s.RoomNum < 127);
 
-            ViewBag.EastSouth = new SelectList(AvailRoom, "RoomNum", "RoomNum");
+            ViewBag.AvailRooms = new SelectList(EastSouth, "RoomNum", "RoomNum");
 
-            //Query for West Wing rooms//
-            var WestWing = db.Rooms
-                           .Where(s => s.IsOccupied == false)
-                           .Where(s => s.RoomNum > 201 && s.RoomNum < 210);
+            ////Query for West Wing rooms//
+            //var WestWing = db.Rooms
+            //               .Where(s => s.IsOccupied == false)
+            //               .Where(s => s.RoomNum > 201 && s.RoomNum < 210);
 
-            ViewBag.WestWing = new SelectList(WestWing, "RoomNum", "RoomNum");
+            //ViewBag.WestWing = new SelectList(WestWing, "RoomNum", "RoomNum");
 
-            //Query for North Wing Rooms
-            var NorthWing = db.Rooms
-                           .Where(s => s.IsOccupied == false)
-                           .Where(s => s.RoomNum > 300 && s.RoomNum < 311);
+            ////Query for North Wing Rooms
+            //var NorthWing = db.Rooms
+            //               .Where(s => s.IsOccupied == false)
+            //               .Where(s => s.RoomNum > 300 && s.RoomNum < 311);
 
-            ViewBag.NorthWing = new SelectList(NorthWing, "RoomNum", "RoomNum");
+            //ViewBag.NorthWing = new SelectList(NorthWing, "RoomNum", "RoomNum");
+
+            //var rooms = new List<SelectListItem>
+            //{
+            //    new SelectListItem() { Text = "East South", Value = AvailRoom.ToString() },
+            //    new SelectListItem() { Text = "West Wing", Value = WestWing.ToString() },
+            //    new SelectListItem() { Text = "North Wing", Value = NorthWing.ToString() }
+            //};
+
+
+            //ViewBag.RoomsToAssign = rooms;
 
 
             return View();

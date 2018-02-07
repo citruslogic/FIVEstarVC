@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Web;
+using System.Web.Mvc;
 
 namespace FIVESTARVC.Models
 {
@@ -19,6 +20,22 @@ namespace FIVESTARVC.Models
         [Display(Name = "Is Occupied")]
         public bool IsOccupied { get; set; }
 
-       
+        //public IList<Room> RoomList { get; set; }
+        //public IList<SelectListItem> RoomListSelectListItem 
+        //    {
+        //         get
+           
+        //        {
+        //           var list = (from item in RoomList
+        //                       select new SelectListItem()
+        //                       {
+        //                           Text = item.customerID.ToString(CultureInfo.InvariantCulture),
+        //                           Value = item.selectedCustomer.ToString(CultureInfo.InvariantCulture)
+        //                       }).ToList();
+        //                return list;
+        //    }
+        //        set{}
+        //} 
     }
 }
+
