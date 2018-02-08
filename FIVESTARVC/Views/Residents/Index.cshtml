@@ -38,7 +38,9 @@
             <th>
                 Room Number
             </th>
-            <th></th>
+            <th>
+                Current?
+            </th>
         </tr>
 
         @foreach (var item in Model)
@@ -61,6 +63,18 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Room.RoomNum)
+            </td>
+            <td>
+                @{ 
+                    if(item.isCurrent(item) == true)
+                    {
+                        @Html.Raw("Yes")
+                    }
+                    else
+                    {
+                        @Html.Raw("No")
+                    }
+                }
             </td>
             <td>
                 @Html.ActionLink("Edit", "Edit", new { id = item.ResidentID }, htmlAttributes: new { @class = "btn btn-sm btn-outline-secondary btn-light" }) &nbsp;

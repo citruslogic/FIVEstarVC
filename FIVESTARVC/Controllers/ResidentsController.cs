@@ -21,7 +21,8 @@ namespace FIVESTARVC.Controllers
         // GET: Residents
         public ActionResult Index(string sortOrder, string currentFilter, string searchString, int? page)
         {
-            
+
+
             ViewBag.CurrentSort = sortOrder;
             ViewBag.NameSortParm = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
             ViewBag.BranchSortParm = sortOrder == "ServiceBranch" ? "ServiceBranch_desc" : "ServiceBranch";
@@ -41,28 +42,6 @@ namespace FIVESTARVC.Controllers
 
             var residents = from s in db.Residents
                             select s;
-
-
-            //query to get the roomID from the resident table//
-            var RoomToCompare = from s in db.Residents
-                               .Where(s => s.RoomID != null)
-                                select s;
-
-
-            var RoomToAdd = from s in db.Rooms
-                            .Where(s => s.RoomID > 0)
-                            select s;
-
-            
-
-            //Compare the RoomID from resident table to the Room table//
-            //If equal, add the room number to the viewbag//
-            if (RoomToCompare == RoomToAdd)
-            {
-                var RoomToDisplay = RoomToAdd;
-
-                ViewBag.RoomToDisplay = RoomToDisplay;
-            }
 
 
             if (!String.IsNullOrEmpty(searchString))
@@ -116,90 +95,65 @@ namespace FIVESTARVC.Controllers
         public ActionResult Create()
         {
 
+            //Call Get Assigned Room to get available rooms//
 
-            //Query database for IsOccupied flag//
-            //Query for EastSouth Wing//
-            var availRoom = db.Rooms
-                            .Where(s => s.IsOccupied == false)
-                            .Select(r => new
-                            {
-                                r.RoomNum,
-                                r.WingName,
-                            });
-
-            ViewBag.rooms = new SelectList(availRoom, dataValueField: "RoomNum", dataTextField: "RoomNum", 
-                                               dataGroupField: "WingName", selectedValue: null);
-
-            ////Query for West Wing rooms//
-            //var WestWing = db.Rooms
-            //               .Where(s => s.IsOccupied == false)
-            //               .Where(s => s.RoomNum > 201 && s.RoomNum < 210);
-
-            //ViewBag.WestWing = new SelectList(WestWing, "RoomNum", "RoomNum");
-
-            ////Query for North Wing Rooms
-            //var NorthWing = db.Rooms
-            //               .Where(s => s.IsOccupied == false)
-            //               .Where(s => s.RoomNum > 300 && s.RoomNum < 311);
-
-            //ViewBag.NorthWing = new SelectList(NorthWing, "RoomNum", "RoomNum");
-
-            //var rooms = new List<SelectListItem>
-            //{
-            //    new SelectListItem() { Text = "East South", Value = AvailRoom.ToString() },
-            //    new SelectListItem() { Text = "West Wing", Value = WestWing.ToString() },
-            //    new SelectListItem() { Text = "North Wing", Value = NorthWing.ToString() }
-            //};
-
-
-            //ViewBag.RoomsToAssign = rooms;
-
-
+            GetAssignedRoom();
+      
             return View();
-
         }
 
-            
         // POST: Residents/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "LastName,FirstMidName,Birthdate,ServiceBranch,HasPTSD,Note,InVetCourt, RoomNum")] Resident resident, [Bind(Include ="RoomNum")] Room room)
+        public ActionResult Create(ResidentIncomeModel residentIncomeModel)
         {
-            //var resRoom = room.RoomNum;
+            Resident resident = new Resident
+            {
+                FirstMidName = residentIncomeModel.FirstMidName,
+                LastName = residentIncomeModel.LastName,
+                Birthdate = residentIncomeModel.Birthdate,
+                ServiceBranch = (Models.ServiceType) residentIncomeModel.ServiceBranch,
+                HasPTSD = residentIncomeModel.HasPTSD,
+                InVetCourt = residentIncomeModel.InVetCourt,
+                RoomID = residentIncomeModel.RoomID,
+                Note = residentIncomeModel.Note
+            };
 
-            //this.db.Residents.Attach(.ToString(room.RoomID));
+            Benefit benefit = new Benefit
+            {
+                Resident = resident,
+                DisabilityPercentage = residentIncomeModel.DisabilityPercentage,
+                SSI = residentIncomeModel.SSI,
+                SSDI = residentIncomeModel.SSDI,
+                FoodStamp = residentIncomeModel.FoodStamp,
+                OtherDescription = residentIncomeModel.OtherDescription,
+                Other = residentIncomeModel.Other,
+                TotalBenefitAmount = residentIncomeModel.TotalBenefitAmount
+            };
+
             try
             {
                 if (ModelState.IsValid)
                 {
                     db.Residents.Add(resident);
                     db.SaveChanges();
-
+                    db.Benefits.Add(benefit);
                     
-                    
-
-                   
-                  //           .Where(s => s.RoomNum == room.RoomNum)
-                  //           .Select(s => s.RoomID);
-
-                  //resRoom = db.Residents
-                  //      .Where(s => s.RoomID == null)
-                  //      .
-                    
-
+                    db.SaveChanges();
                     return RedirectToAction("Index");
                 }
             }
-            catch (DataException /* dex */ )
+            catch (DataException dex )
             {
                 //Log the error (uncomment dex variable name and add a line here to write a log.
-                ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists see your system administrator.");
+                Console.Out.WriteLine(dex.Message);
+                ModelState.AddModelError("", dex.Message);
             }
 
 
-            return View(resident);
+            return View(residentIncomeModel);
         }
 
         // GET: Residents/Edit/5
@@ -390,11 +344,11 @@ namespace FIVESTARVC.Controllers
             return View(programEvent);
         }
 
-        private void GetAssignedRoom()
+            private void GetAssignedRoom ()
         {
             //Initialize the AssignedRoom ViewModel//
             var AvailRoom = db.Rooms;
-
+            
             var viewModel = new List<AssignedRoom>();
 
             //Loop through the rooms and check to see if IsOccupied is checked or not//
@@ -402,7 +356,7 @@ namespace FIVESTARVC.Controllers
             foreach (var Rooms in AvailRoom)
             {
                 if (Rooms.IsOccupied == false)
-                {
+                { 
                     viewModel.Add(new AssignedRoom
                     {
                         RoomNum = Rooms.RoomNum,
@@ -412,7 +366,6 @@ namespace FIVESTARVC.Controllers
             }
             ViewBag.AssignRoom = viewModel;
         }
-
 
     }
 }

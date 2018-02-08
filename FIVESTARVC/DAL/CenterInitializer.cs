@@ -90,7 +90,6 @@ namespace FIVESTARVC.DAL
                 new ProgramType { ProgramDescription="Emergency Shelter" },
                 new ProgramType { ProgramDescription="School Program" },
                 new ProgramType { ProgramDescription="Resident Admission"},
-                new ProgramType { ProgramDescription="Veterans Court"},
                 new ProgramType { ProgramDescription="Re-admit"},
                 new ProgramType { ProgramDescription="Financial Program"},
                 new ProgramType { ProgramDescription="Depression / Behavioral Program"},
