@@ -21,7 +21,7 @@ namespace FIVESTARVC.Models
         [Column(TypeName = "money")]
         [DisplayFormat(DataFormatString = "{0:C0}")]
         [Display(Name = "Total Benefit Amount")]
-        public decimal? TotalBenefitAmount { get; set; }
+        public decimal TotalBenefitAmount { get; set; }
 
         [DataType(DataType.Currency)]
         [Column(TypeName = "money")]
@@ -40,7 +40,7 @@ namespace FIVESTARVC.Models
         public decimal? FoodStamp { get; set; }
         
         /* Other forms of disability as income */
-        [Display(Name = "Other Income (Description)")]
+        [Display(Name = "Other Income")]
         public String OtherDescription { get; set; }
 
         [DataType(DataType.Currency)]

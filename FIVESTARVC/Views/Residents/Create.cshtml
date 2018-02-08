@@ -1,5 +1,4 @@
-﻿@model FIVESTARVC.ViewModels.ResidentIncomeModel
-@using FIVESTARVC.Models
+﻿@model FIVESTARVC.Models.Resident
 
 @{
     ViewBag.Title = "New Resident";
@@ -50,9 +49,8 @@
                     <tr>
                         <td class="col-form-label"> @Html.LabelFor(model => model.RoomID, htmlAttributes: new { @class = "control-label col-md-offset-3" })</td>
                         <td class="col-auto">
-                            @Html.EditorFor(model => model.RoomID, new { htmlAttributes = new { @class = "form-control" } })
-                            @Html.ValidationMessageFor(model => model.RoomID, "", new { @class = "text-danger" })
-                        </td>
+                            @Html.DropDownList("rooms", "Select Room")
+                            </td>
                     </tr>
                     <tr>
                         <td class="col-form-label">@Html.Label("Resident has PTSD?")</td>
@@ -102,8 +100,7 @@
                 total += parseFloat($(this).val()) || 0;
             });
 
-            $('.total').val(total);
-            $('.ptotal').val(total);
+            $('.total').val('$' + total);
         });
 
 

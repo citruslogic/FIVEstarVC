@@ -94,11 +94,28 @@ namespace FIVESTARVC.Controllers
         // GET: Residents/Create
         public ActionResult Create()
         {
+            //Query database for IsOccupied flag//
+            //Query for EastSouth Wing//
+            var availRoom = db.Rooms
+                            .Where(s => s.IsOccupied == false)
+                            .Select(r => new
+                            {
+                                r.RoomNum,
+                                r.WingName,
+                            });
 
-            //Call Get Assigned Room to get available rooms//
+            ViewBag.rooms = new SelectList(availRoom, dataValueField: "RoomNum", dataTextField: "RoomNum",
+                                               dataGroupField: "WingName", selectedValue: null);
 
-            GetAssignedRoom();
-      
+
+            //Query database for IsOccupied flag//
+            //Query for EastSouth Wing//
+            var EastSouth = db.Rooms
+                            .Where(s => s.IsOccupied == false);
+
+
+            ViewBag.AvailRooms = new SelectList(EastSouth, "RoomNum", "RoomNum");
+
             return View();
         }
 
@@ -114,7 +131,7 @@ namespace FIVESTARVC.Controllers
                 FirstMidName = residentIncomeModel.FirstMidName,
                 LastName = residentIncomeModel.LastName,
                 Birthdate = residentIncomeModel.Birthdate,
-                ServiceBranch = (Models.ServiceType) residentIncomeModel.ServiceBranch,
+                ServiceBranch = (Models.ServiceType)residentIncomeModel.ServiceBranch,
                 HasPTSD = residentIncomeModel.HasPTSD,
                 InVetCourt = residentIncomeModel.InVetCourt,
                 RoomID = residentIncomeModel.RoomID,
@@ -140,12 +157,12 @@ namespace FIVESTARVC.Controllers
                     db.Residents.Add(resident);
                     db.SaveChanges();
                     db.Benefits.Add(benefit);
-                    
+
                     db.SaveChanges();
                     return RedirectToAction("Index");
                 }
             }
-            catch (DataException dex )
+            catch (DataException dex)
             {
                 //Log the error (uncomment dex variable name and add a line here to write a log.
                 Console.Out.WriteLine(dex.Message);
@@ -167,8 +184,7 @@ namespace FIVESTARVC.Controllers
 
             Resident resident = db.Residents
             .Include(c => c.MilitaryCampaigns)
-            .Include(b => b.Benefits)
-            .Where(c => c.ResidentID == id)
+            .Where(c => c.ID == id)
             .Single();
 
             PopulateAssignedCampaignData(resident);
@@ -196,10 +212,8 @@ namespace FIVESTARVC.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             var residentToUpdate = db.Residents
-                .Include(p => p.ProgramEvents)
                 .Include(c => c.MilitaryCampaigns)
-                .Include(b => b.Benefits)
-                .Where(c => c.ResidentID == id)
+                .Where(c => c.ID == id)
                 .Single();
 
             if (TryUpdateModel(residentToUpdate, "",
