@@ -95,7 +95,7 @@ namespace FIVESTARVC.Controllers
                 myExport["Service Branch"] = Resident.ServiceBranch;
                 myExport["PTSD"] = Resident.HasPTSD;
                 myExport["Vet Court"] = Resident.InVetCourt;
-                myExport["Notes"] = Resident.Note;
+                //myExport["Notes"] = Resident.Note;
                 /*
                 myExport["Work Program"] = wp;
                 myExport["Mental Wellness"] = Resident.FirstMidName;
@@ -120,5 +120,65 @@ namespace FIVESTARVC.Controllers
 
             return File(filename,"text/csv", "HistoricData.csv");
         }   
+
+        public String checkMonth(ProgramEvent program)
+        {
+            String month = null;
+
+            if (program.StartDate.Month == 1)
+            {
+                month = "January";
+            }
+            else if (program.StartDate.Month == 2)
+            {
+                month = "February";
+            }
+            else if (program.StartDate.Month == 2)
+            {
+                month = "February";
+            }
+            else if (program.StartDate.Month == 3)
+            {
+                month = "March";
+            }
+            else if (program.StartDate.Month == 4)
+            {
+                month = "April";
+            }
+            else if (program.StartDate.Month == 5)
+            {
+                month = "May";
+            }
+            else if (program.StartDate.Month == 6)
+            {
+                month = "June";
+            }
+            else if (program.StartDate.Month == 7)
+            {
+                month = "July";
+            }
+            else if (program.StartDate.Month == 8)
+            {
+                month = "August";
+            }
+            else if (program.StartDate.Month == 9)
+            {
+                month = "September";
+            }
+            else if (program.StartDate.Month == 10)
+            {
+                month = "October";
+            }
+            else if (program.StartDate.Month == 11)
+            {
+                month = "November";
+            }
+            else 
+            {
+                month = "December";
+            }
+
+            return month;
+        }
     }
 }
