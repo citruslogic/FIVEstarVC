@@ -1,5 +1,4 @@
-﻿@model FIVESTARVC.ViewModels.ResidentIncomeModel
-@using FIVESTARVC.Models
+﻿@model FIVESTARVC.Models.Resident
 
 @{
     ViewBag.Title = "New Resident";
@@ -101,8 +100,7 @@
                 total += parseFloat($(this).val()) || 0;
             });
 
-            $('.total').val(total);
-            $('.ptotal').val(total);
+            $('.total').val('$' + total);
         });
 
 
