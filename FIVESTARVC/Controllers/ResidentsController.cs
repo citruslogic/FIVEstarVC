@@ -119,11 +119,16 @@ namespace FIVESTARVC.Controllers
 
             //Query database for IsOccupied flag//
             //Query for EastSouth Wing//
-            var EastSouth = db.Rooms
-                            .Where(s => s.IsOccupied == false);
-                            //.Where(s => s.RoomNum > 101 && s.RoomNum < 127);
+            var availRoom = db.Rooms
+                            .Where(s => s.IsOccupied == false)
+                            .Select(r => new
+                            {
+                                r.RoomNum,
+                                r.WingName,
+                            });
 
-            ViewBag.AvailRooms = new SelectList(EastSouth, "RoomNum", "RoomNum");
+            ViewBag.rooms = new SelectList(availRoom, dataValueField: "RoomNum", dataTextField: "RoomNum", 
+                                               dataGroupField: "WingName", selectedValue: null);
 
             ////Query for West Wing rooms//
             //var WestWing = db.Rooms
@@ -160,8 +165,11 @@ namespace FIVESTARVC.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "LastName,FirstMidName,Birthdate,ServiceBranch,HasPTSD,Note,InVetCourt")] Resident resident)
+        public ActionResult Create([Bind(Include = "LastName,FirstMidName,Birthdate,ServiceBranch,HasPTSD,Note,InVetCourt, RoomNum")] Resident resident, [Bind(Include ="RoomNum")] Room room)
         {
+            //var resRoom = room.RoomNum;
+
+            //this.db.Residents.Attach(.ToString(room.RoomID));
             try
             {
                 if (ModelState.IsValid)
@@ -169,7 +177,18 @@ namespace FIVESTARVC.Controllers
                     db.Residents.Add(resident);
                     db.SaveChanges();
 
+                    
+                    
+
                    
+                  //           .Where(s => s.RoomNum == room.RoomNum)
+                  //           .Select(s => s.RoomID);
+
+                  //resRoom = db.Residents
+                  //      .Where(s => s.RoomID == null)
+                  //      .
+                    
+
                     return RedirectToAction("Index");
                 }
             }
