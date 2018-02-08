@@ -1,9 +1,7 @@
-﻿@model FIVESTARVC.Models.Benefit
+﻿@model FIVESTARVC.ViewModels.ResidentIncomeModel
+@using FIVESTARVC.Models;
 
 
-@using (Html.BeginForm())
-{
-    @Html.AntiForgeryToken()
         <div class="col-sm-5 table-responsive">
             <h2>Income </h2>
             <table class="table table-striped">
@@ -82,7 +80,7 @@
                 </tbody>
             </table>
 </div>
-}
+
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")

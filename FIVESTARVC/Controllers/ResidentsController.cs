@@ -100,11 +100,12 @@ namespace FIVESTARVC.Controllers
                             .Where(s => s.IsOccupied == false)
                             .Select(r => new
                             {
+                                r.RoomID,
                                 r.RoomNum,
                                 r.WingName,
                             });
 
-            ViewBag.rooms = new SelectList(availRoom, dataValueField: "RoomNum", dataTextField: "RoomNum",
+            ViewBag.rooms = new SelectList(availRoom, dataValueField: "RoomID", dataTextField: "RoomNum",
                                                dataGroupField: "WingName", selectedValue: null);
 
 
@@ -184,7 +185,7 @@ namespace FIVESTARVC.Controllers
 
             Resident resident = db.Residents
             .Include(c => c.MilitaryCampaigns)
-            .Where(c => c.ID == id)
+            .Where(c => c.ResidentID == id)
             .Single();
 
             PopulateAssignedCampaignData(resident);
@@ -213,7 +214,7 @@ namespace FIVESTARVC.Controllers
             }
             var residentToUpdate = db.Residents
                 .Include(c => c.MilitaryCampaigns)
-                .Where(c => c.ID == id)
+                .Where(c => c.ResidentID == id)
                 .Single();
 
             if (TryUpdateModel(residentToUpdate, "",
@@ -358,28 +359,7 @@ namespace FIVESTARVC.Controllers
             return View(programEvent);
         }
 
-            private void GetAssignedRoom ()
-        {
-            //Initialize the AssignedRoom ViewModel//
-            var AvailRoom = db.Rooms;
-            
-            var viewModel = new List<AssignedRoom>();
-
-            //Loop through the rooms and check to see if IsOccupied is checked or not//
-            //if not checked, add it to the viewmodel//
-            foreach (var Rooms in AvailRoom)
-            {
-                if (Rooms.IsOccupied == false)
-                { 
-                    viewModel.Add(new AssignedRoom
-                    {
-                        RoomNum = Rooms.RoomNum,
-                        IsOccupied = Rooms.IsOccupied
-                    });
-                }
-            }
-            ViewBag.AssignRoom = viewModel;
-        }
+   
 
     }
 }

@@ -11,26 +11,29 @@ namespace FIVESTARVC.ViewModels
 {
     public class ResidentIncomeModel
     {
-        
-            // RESIDENT
-            public int ResidentID { get; set; }
-            [Required]
-            [Display(Name = "Last Name")]
-            public string LastName { get; set; }
-            [Display(Name = "First Name")]
-            public string FirstMidName { get; set; }
-            [Display(Name = "Birthdate")]
-            [DataType(DataType.Date)]
-            [DisplayFormat(DataFormatString = "{0:MM-dd-yyyy}", ApplyFormatInEditMode = true)]
-            public DateTime? Birthdate { get; set; }
-            [Display(Name = "Service Branch")]
-            public ServiceType ServiceBranch { get; set; }
-            [Display(Name = "Resident has PTSD?")]
-            public Boolean HasPTSD { get; set; }
-            [Display(Name = "In Veterans Court")]
-            public Boolean InVetCourt { get; set; }
-            [Display(Name = "Room Number")]
-            public int RoomID { get; set; }
+
+        // RESIDENT
+        public int ResidentID { get; set; }
+        [Required]
+        [Display(Name = "Last Name")]
+        public string LastName { get; set; }
+        [Display(Name = "First Name")]
+        public string FirstMidName { get; set; }
+        [Display(Name = "Birthdate")]
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:MM-dd-yyyy}", ApplyFormatInEditMode = true)]
+        public DateTime? Birthdate { get; set; }
+        [Display(Name = "Service Branch")]
+        public ServiceType ServiceBranch { get; set; }
+        [Display(Name = "Resident has PTSD?")]
+        public Boolean HasPTSD { get; set; }
+        [Display(Name = "In Veterans Court")]
+        public Boolean InVetCourt { get; set; }
+        [Display(Name = "Room Number")]
+        public int RoomID { get; set; }
+        [Display(Name = "Note")]
+        [StringLength(150)]
+        public string Note { get; set; }
 
         // BENEFIT
         public int BenefitID { get; set; }
