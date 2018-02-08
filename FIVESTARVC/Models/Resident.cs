@@ -53,7 +53,7 @@ namespace FIVESTARVC.Models
         [Display(Name = "In Veterans Court")]
         public Boolean InVetCourt { get; set; }
         [Display(Name = "Room Number")]
-        public int RoomNumber { get; set; }
+        public int RoomID { get; set; }
 
         public virtual ICollection<MilitaryCampaign> MilitaryCampaigns { get; set; }
         public virtual ICollection<ProgramEvent> ProgramEvents { get; set; }
