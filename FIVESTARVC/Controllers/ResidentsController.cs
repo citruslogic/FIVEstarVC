@@ -109,14 +109,6 @@ namespace FIVESTARVC.Controllers
                                                dataGroupField: "WingName", selectedValue: null);
 
 
-            //Query database for IsOccupied flag//
-            //Query for EastSouth Wing//
-            var EastSouth = db.Rooms
-                            .Where(s => s.IsOccupied == false);
-
-
-            ViewBag.AvailRooms = new SelectList(EastSouth, "RoomNum", "RoomNum");
-
             return View();
         }
 
@@ -125,8 +117,9 @@ namespace FIVESTARVC.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(ResidentIncomeModel residentIncomeModel)
+        public ActionResult Create(ResidentIncomeModel residentIncomeModel, [Bind(Include="RoomNum")] Room rooms)
         {
+
             Resident resident = new Resident
             {
                 FirstMidName = residentIncomeModel.FirstMidName,
@@ -135,7 +128,7 @@ namespace FIVESTARVC.Controllers
                 ServiceBranch = (Models.ServiceType)residentIncomeModel.ServiceBranch,
                 HasPTSD = residentIncomeModel.HasPTSD,
                 InVetCourt = residentIncomeModel.InVetCourt,
-                RoomID = residentIncomeModel.RoomID,
+                RoomID = rooms.RoomID,
                 Note = residentIncomeModel.Note
             };
 
@@ -318,6 +311,7 @@ namespace FIVESTARVC.Controllers
             try
             {
                 Resident resident = db.Residents.Find(id);
+
                 db.Residents.Remove(resident);
                 db.SaveChanges();
             }
