@@ -1,5 +1,5 @@
 ﻿@model FIVESTARVC.ViewModels.ResidentIncomeModel
-
+@using FIVESTARVC.Models;
 
 
         <div class="col-sm-5 table-responsive">
@@ -75,12 +75,12 @@
                         <td class="alert-dark">
                             @Html.EditorFor(model => model.TotalBenefitAmount, new { htmlAttributes = new { @class = "form-control total money-wide", @disabled = "disabled", @readonly = "readonly" } })
                             @Html.ValidationMessageFor(model => model.TotalBenefitAmount, "", new { @class = "text-danger" })
-                            @Html.HiddenFor(model => model.TotalBenefitAmount, new { @class = "ptotal" })
                         </td>
                     </tr>
                 </tbody>
             </table>
 </div>
+
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")

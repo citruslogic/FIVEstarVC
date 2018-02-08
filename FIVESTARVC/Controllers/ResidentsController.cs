@@ -94,11 +94,21 @@ namespace FIVESTARVC.Controllers
         // GET: Residents/Create
         public ActionResult Create()
         {
+            //Query database for IsOccupied flag//
+            //Query for EastSouth Wing//
+            var availRoom = db.Rooms
+                            .Where(s => s.IsOccupied == false)
+                            .Select(r => new
+                            {
+                                r.RoomID,
+                                r.RoomNum,
+                                r.WingName,
+                            });
 
-            //Call Get Assigned Room to get available rooms//
+            ViewBag.rooms = new SelectList(availRoom, dataValueField: "RoomID", dataTextField: "RoomNum",
+                                               dataGroupField: "WingName", selectedValue: null);
 
-            GetAssignedRoom();
-      
+
             return View();
         }
 
@@ -107,17 +117,18 @@ namespace FIVESTARVC.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(ResidentIncomeModel residentIncomeModel)
+        public ActionResult Create(ResidentIncomeModel residentIncomeModel, [Bind(Include="RoomNum")] Room rooms)
         {
+
             Resident resident = new Resident
             {
                 FirstMidName = residentIncomeModel.FirstMidName,
                 LastName = residentIncomeModel.LastName,
                 Birthdate = residentIncomeModel.Birthdate,
-                ServiceBranch = (Models.ServiceType) residentIncomeModel.ServiceBranch,
+                ServiceBranch = (Models.ServiceType)residentIncomeModel.ServiceBranch,
                 HasPTSD = residentIncomeModel.HasPTSD,
                 InVetCourt = residentIncomeModel.InVetCourt,
-                RoomID = residentIncomeModel.RoomID,
+                RoomID = rooms.RoomID,
                 Note = residentIncomeModel.Note
             };
 
@@ -140,12 +151,12 @@ namespace FIVESTARVC.Controllers
                     db.Residents.Add(resident);
                     db.SaveChanges();
                     db.Benefits.Add(benefit);
-                    
+
                     db.SaveChanges();
                     return RedirectToAction("Index");
                 }
             }
-            catch (DataException dex )
+            catch (DataException dex)
             {
                 //Log the error (uncomment dex variable name and add a line here to write a log.
                 Console.Out.WriteLine(dex.Message);
@@ -167,7 +178,6 @@ namespace FIVESTARVC.Controllers
 
             Resident resident = db.Residents
             .Include(c => c.MilitaryCampaigns)
-            .Include(b => b.Benefits)
             .Where(c => c.ResidentID == id)
             .Single();
 
@@ -196,9 +206,7 @@ namespace FIVESTARVC.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             var residentToUpdate = db.Residents
-                .Include(p => p.ProgramEvents)
                 .Include(c => c.MilitaryCampaigns)
-                .Include(b => b.Benefits)
                 .Where(c => c.ResidentID == id)
                 .Single();
 
@@ -303,6 +311,7 @@ namespace FIVESTARVC.Controllers
             try
             {
                 Resident resident = db.Residents.Find(id);
+
                 db.Residents.Remove(resident);
                 db.SaveChanges();
             }
@@ -344,28 +353,7 @@ namespace FIVESTARVC.Controllers
             return View(programEvent);
         }
 
-            private void GetAssignedRoom ()
-        {
-            //Initialize the AssignedRoom ViewModel//
-            var AvailRoom = db.Rooms;
-            
-            var viewModel = new List<AssignedRoom>();
-
-            //Loop through the rooms and check to see if IsOccupied is checked or not//
-            //if not checked, add it to the viewmodel//
-            foreach (var Rooms in AvailRoom)
-            {
-                if (Rooms.IsOccupied == false)
-                { 
-                    viewModel.Add(new AssignedRoom
-                    {
-                        RoomNum = Rooms.RoomNum,
-                        IsOccupied = Rooms.IsOccupied
-                    });
-                }
-            }
-            ViewBag.AssignRoom = viewModel;
-        }
+   
 
     }
 }

@@ -19,11 +19,11 @@ namespace FIVESTARVC.Controllers
         public ActionResult Index()
         {
             //Variables to count branch types
-            ViewBag.NavyCount = DB.Residents.Count(x => x.ServiceBranch == Models.ServiceType.NAVY);
-            ViewBag.MarineCount = DB.Residents.Count(x => x.ServiceBranch == Models.ServiceType.MARINES);
-            ViewBag.ArmyCount = DB.Residents.Count(x => x.ServiceBranch == Models.ServiceType.ARMY);
-            ViewBag.AirForceCount = DB.Residents.Count(x => x.ServiceBranch == Models.ServiceType.AIRFORCE);
-            ViewBag.CoastGuardCount = DB.Residents.Count(x => x.ServiceBranch == Models.ServiceType.COASTGUARD);
+            ViewBag.NavyCount = DB.Residents.Count(x => x.ServiceBranch == ServiceType.NAVY);
+            ViewBag.MarineCount = DB.Residents.Count(x => x.ServiceBranch == ServiceType.MARINES);
+            ViewBag.ArmyCount = DB.Residents.Count(x => x.ServiceBranch == ServiceType.ARMY);
+            ViewBag.AirForceCount = DB.Residents.Count(x => x.ServiceBranch == ServiceType.AIRFORCE);
+            ViewBag.CoastGuardCount = DB.Residents.Count(x => x.ServiceBranch == ServiceType.COASTGUARD);
 
             //Counts number of current residents, based on events
             var CurrentRes = DB.ProgramEvents;

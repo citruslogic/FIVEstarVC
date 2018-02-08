@@ -1,40 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using FIVESTARVC.Models;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Web;
-using FIVESTARVC.DAL;
-using FIVESTARVC.Models;
 
 namespace FIVESTARVC.ViewModels
 {
-    public enum ServiceType
-    {
-        [Description("Air Force")]
-        [Display(Name = "Air Force")]
-        AIRFORCE,
-        [Description("Army")]
-        [Display(Name = "Army")]
-        ARMY,
-        [Description("Coast Guard")]
-        [Display(Name = "Coast Guard")]
-        COASTGUARD,
-        [Description("Marines")]
-        [Display(Name = "Marines")]
-        MARINES,
-        [Description("Navy")]
-        [Display(Name = "Navy")]
-        NAVY
-    }
-
     public class ResidentIncomeModel
     {
 
-
-
-        /* RESIDENT */
+        // RESIDENT
         public int ResidentID { get; set; }
         [Required]
         [Display(Name = "Last Name")]
@@ -52,13 +30,12 @@ namespace FIVESTARVC.ViewModels
         [Display(Name = "In Veterans Court")]
         public Boolean InVetCourt { get; set; }
         [Display(Name = "Room Number")]
-        [ForeignKey("Room")]
-        public int? RoomID { get; set; }
+        public int RoomID { get; set; }
         [Display(Name = "Note")]
         [StringLength(150)]
         public string Note { get; set; }
 
-        /* BENEFITS */
+        // BENEFIT
         public int BenefitID { get; set; }
 
         [Display(Name = "Disability Rating (%)")]
@@ -69,7 +46,7 @@ namespace FIVESTARVC.ViewModels
         [Column(TypeName = "money")]
         [DisplayFormat(DataFormatString = "{0:C0}")]
         [Display(Name = "Total Benefit Amount")]
-        public decimal? TotalBenefitAmount { get; set; }
+        public decimal TotalBenefitAmount { get; set; }
 
         [DataType(DataType.Currency)]
         [Column(TypeName = "money")]
@@ -88,7 +65,7 @@ namespace FIVESTARVC.ViewModels
         public decimal? FoodStamp { get; set; }
 
         /* Other forms of disability as income */
-        [Display(Name = "Other Income (Description)")]
+        [Display(Name = "Other Income")]
         public String OtherDescription { get; set; }
 
         [DataType(DataType.Currency)]
@@ -97,6 +74,5 @@ namespace FIVESTARVC.ViewModels
         [Display(Name = "Other (Amount)")]
         public decimal? Other { get; set; }
         /***************************************/
-
     }
 }
