@@ -94,7 +94,28 @@ namespace FIVESTARVC.Controllers
         // GET: Residents/Create
         public ActionResult Create()
         {
-            ViewBag.AvailRoom = db.Rooms.Contains<Room();
+            //Query database for IsOccupied flag//
+            //Query for EastSouth Wing//
+            var availRoom = db.Rooms
+                            .Where(s => s.IsOccupied == false)
+                            .Select(r => new
+                            {
+                                r.RoomNum,
+                                r.WingName,
+                            });
+
+            ViewBag.rooms = new SelectList(availRoom, dataValueField: "RoomNum", dataTextField: "RoomNum",
+                                               dataGroupField: "WingName", selectedValue: null);
+
+
+            //Query database for IsOccupied flag//
+            //Query for EastSouth Wing//
+            var EastSouth = db.Rooms
+                            .Where(s => s.IsOccupied == false);
+
+
+            ViewBag.AvailRooms = new SelectList(EastSouth, "RoomNum", "RoomNum");
+
             return View();
         }
 
@@ -110,7 +131,7 @@ namespace FIVESTARVC.Controllers
                 FirstMidName = residentIncomeModel.FirstMidName,
                 LastName = residentIncomeModel.LastName,
                 Birthdate = residentIncomeModel.Birthdate,
-                ServiceBranch = (Models.ServiceType) residentIncomeModel.ServiceBranch,
+                ServiceBranch = (Models.ServiceType)residentIncomeModel.ServiceBranch,
                 HasPTSD = residentIncomeModel.HasPTSD,
                 InVetCourt = residentIncomeModel.InVetCourt,
                 RoomID = residentIncomeModel.RoomID,
@@ -136,12 +157,12 @@ namespace FIVESTARVC.Controllers
                     db.Residents.Add(resident);
                     db.SaveChanges();
                     db.Benefits.Add(benefit);
-                    
+
                     db.SaveChanges();
                     return RedirectToAction("Index");
                 }
             }
-            catch (DataException dex )
+            catch (DataException dex)
             {
                 //Log the error (uncomment dex variable name and add a line here to write a log.
                 Console.Out.WriteLine(dex.Message);
