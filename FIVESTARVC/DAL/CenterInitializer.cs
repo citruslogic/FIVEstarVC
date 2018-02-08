@@ -68,9 +68,9 @@ namespace FIVESTARVC.DAL
 
             var residents = new List<Resident>
             {
-                new Resident { FirstMidName="Carson", LastName="Steven", ServiceBranch=ServiceType.ARMY, RoomNumber=100 },
-                new Resident { FirstMidName="Naomi", LastName="Wildman", ServiceBranch=ServiceType.AIRFORCE, RoomNumber=200 },
-                new Resident { FirstMidName="Gary", LastName="Noonan", ServiceBranch=ServiceType.NAVY, RoomNumber=110 }
+                new Resident { FirstMidName="Carson", LastName="Steven", ServiceBranch=ServiceType.ARMY, RoomID=1 },
+                new Resident { FirstMidName="Naomi", LastName="Wildman", ServiceBranch=ServiceType.AIRFORCE, RoomID=2 },
+                new Resident { FirstMidName="Gary", LastName="Noonan", ServiceBranch=ServiceType.NAVY, RoomID=3 }
             };
 
             residents.ForEach(r => context.Residents.Add(r));

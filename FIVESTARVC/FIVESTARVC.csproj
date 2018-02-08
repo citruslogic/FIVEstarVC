@@ -183,6 +183,7 @@
     <Compile Include="ViewModels\AssignedCampaignData.cs" />
     <Compile Include="ViewModels\AssignedRoom.cs" />
     <Compile Include="ViewModels\HistoricData.cs" />
+    <Compile Include="ViewModels\ResidentIncomeModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap-grid.css" />

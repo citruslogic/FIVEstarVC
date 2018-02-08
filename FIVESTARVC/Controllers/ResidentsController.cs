@@ -100,21 +100,14 @@ namespace FIVESTARVC.Controllers
                             .Where(s => s.IsOccupied == false)
                             .Select(r => new
                             {
+                                r.RoomID,
                                 r.RoomNum,
                                 r.WingName,
                             });
 
-            ViewBag.rooms = new SelectList(availRoom, dataValueField: "RoomNum", dataTextField: "RoomNum",
+            ViewBag.rooms = new SelectList(availRoom, dataValueField: "RoomID", dataTextField: "RoomNum",
                                                dataGroupField: "WingName", selectedValue: null);
 
-
-            //Query database for IsOccupied flag//
-            //Query for EastSouth Wing//
-            var EastSouth = db.Rooms
-                            .Where(s => s.IsOccupied == false);
-
-
-            ViewBag.AvailRooms = new SelectList(EastSouth, "RoomNum", "RoomNum");
 
             return View();
         }
@@ -124,8 +117,9 @@ namespace FIVESTARVC.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(ResidentIncomeModel residentIncomeModel)
+        public ActionResult Create(ResidentIncomeModel residentIncomeModel, [Bind(Include="RoomNum")] Room rooms)
         {
+
             Resident resident = new Resident
             {
                 FirstMidName = residentIncomeModel.FirstMidName,
@@ -134,7 +128,7 @@ namespace FIVESTARVC.Controllers
                 ServiceBranch = (Models.ServiceType)residentIncomeModel.ServiceBranch,
                 HasPTSD = residentIncomeModel.HasPTSD,
                 InVetCourt = residentIncomeModel.InVetCourt,
-                RoomID = residentIncomeModel.RoomID,
+                RoomID = rooms.RoomID,
                 Note = residentIncomeModel.Note
             };
 
@@ -184,7 +178,7 @@ namespace FIVESTARVC.Controllers
 
             Resident resident = db.Residents
             .Include(c => c.MilitaryCampaigns)
-            .Where(c => c.ID == id)
+            .Where(c => c.ResidentID == id)
             .Single();
 
             PopulateAssignedCampaignData(resident);
@@ -213,7 +207,7 @@ namespace FIVESTARVC.Controllers
             }
             var residentToUpdate = db.Residents
                 .Include(c => c.MilitaryCampaigns)
-                .Where(c => c.ID == id)
+                .Where(c => c.ResidentID == id)
                 .Single();
 
             if (TryUpdateModel(residentToUpdate, "",
@@ -317,6 +311,7 @@ namespace FIVESTARVC.Controllers
             try
             {
                 Resident resident = db.Residents.Find(id);
+
                 db.Residents.Remove(resident);
                 db.SaveChanges();
             }
@@ -358,28 +353,7 @@ namespace FIVESTARVC.Controllers
             return View(programEvent);
         }
 
-            private void GetAssignedRoom ()
-        {
-            //Initialize the AssignedRoom ViewModel//
-            var AvailRoom = db.Rooms;
-            
-            var viewModel = new List<AssignedRoom>();
-
-            //Loop through the rooms and check to see if IsOccupied is checked or not//
-            //if not checked, add it to the viewmodel//
-            foreach (var Rooms in AvailRoom)
-            {
-                if (Rooms.IsOccupied == false)
-                { 
-                    viewModel.Add(new AssignedRoom
-                    {
-                        RoomNum = Rooms.RoomNum,
-                        IsOccupied = Rooms.IsOccupied
-                    });
-                }
-            }
-            ViewBag.AssignRoom = viewModel;
-        }
+   
 
     }
 }
