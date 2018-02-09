@@ -50,7 +50,5 @@ namespace FIVESTARVC.Models
         public decimal? Other { get; set; }
         /***************************************/
 
-        public virtual Resident Resident { get; set; }
-
     }
 }

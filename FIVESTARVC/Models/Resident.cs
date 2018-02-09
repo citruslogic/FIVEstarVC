@@ -63,10 +63,10 @@ namespace FIVESTARVC.Models
         public virtual ICollection<ProgramEvent> ProgramEvents { get; set; }
         public virtual Room Room { get; set; }
 
-        [ForeignKey("Benefits")]
+        [ForeignKey("Benefit")]
         public int? BenefitID { get; set; }
 
-        public virtual ICollection<Benefit> Benefits { get; set; }
+        public virtual Benefit Benefit { get; set; }
 
         public Boolean isCurrent(Resident resident)
         {

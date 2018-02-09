@@ -117,24 +117,11 @@ namespace FIVESTARVC.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(ResidentIncomeModel residentIncomeModel, [Bind(Include="RoomNum")] Room rooms)
+        public ActionResult Create(ResidentIncomeModel residentIncomeModel)
         {
-
-            Resident resident = new Resident
-            {
-                FirstMidName = residentIncomeModel.FirstMidName,
-                LastName = residentIncomeModel.LastName,
-                Birthdate = residentIncomeModel.Birthdate,
-                ServiceBranch = (Models.ServiceType)residentIncomeModel.ServiceBranch,
-                HasPTSD = residentIncomeModel.HasPTSD,
-                InVetCourt = residentIncomeModel.InVetCourt,
-                RoomID = rooms.RoomID,
-                Note = residentIncomeModel.Note
-            };
-
             Benefit benefit = new Benefit
             {
-                Resident = resident,
+
                 DisabilityPercentage = residentIncomeModel.DisabilityPercentage,
                 SSI = residentIncomeModel.SSI,
                 SSDI = residentIncomeModel.SSDI,
@@ -148,22 +135,49 @@ namespace FIVESTARVC.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    db.Residents.Add(resident);
-                    db.SaveChanges();
                     db.Benefits.Add(benefit);
-
                     db.SaveChanges();
-                    return RedirectToAction("Index");
+
                 }
+
+
             }
             catch (DataException dex)
             {
                 //Log the error (uncomment dex variable name and add a line here to write a log.
-                Console.Out.WriteLine(dex.Message);
-                ModelState.AddModelError("", dex.Message);
+                ModelState.AddModelError("", dex.InnerException.Message);
             }
 
+            Resident resident = new Resident
+            {
+                BenefitID = benefit.BenefitID,
+                FirstMidName = residentIncomeModel.FirstMidName,
+                LastName = residentIncomeModel.LastName,
+                Birthdate = residentIncomeModel.Birthdate,
+                ServiceBranch = (ServiceType)residentIncomeModel.ServiceBranch,
+                HasPTSD = residentIncomeModel.HasPTSD,
+                InVetCourt = residentIncomeModel.InVetCourt,
+                RoomID = residentIncomeModel.RoomID,
+                Note = residentIncomeModel.Note
+            };
 
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    db.Residents.Add(resident);
+                    db.SaveChanges();
+
+                    return RedirectToAction("Index");
+                }
+
+
+            }
+            catch (DataException dex)
+            {
+                //Log the error (uncomment dex variable name and add a line here to write a log.
+                ModelState.AddModelError("", dex.InnerException.Message);
+            }
             return View(residentIncomeModel);
         }
 
@@ -192,7 +206,7 @@ namespace FIVESTARVC.Controllers
             return View(resident);
         }
 
-       
+
 
         // POST: Residents/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
@@ -280,7 +294,7 @@ namespace FIVESTARVC.Controllers
             }
         }
 
-       
+
 
         // GET: Residents/Delete/5
         [HttpGet]
@@ -311,7 +325,9 @@ namespace FIVESTARVC.Controllers
             try
             {
                 Resident resident = db.Residents.Find(id);
+                Benefit benefit = db.Benefits.Find(resident.BenefitID);
 
+                db.Benefits.Remove(benefit);
                 db.Residents.Remove(resident);
                 db.SaveChanges();
             }
@@ -353,7 +369,7 @@ namespace FIVESTARVC.Controllers
             return View(programEvent);
         }
 
-   
+
 
     }
 }
