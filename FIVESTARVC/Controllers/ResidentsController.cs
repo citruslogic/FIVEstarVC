@@ -44,6 +44,28 @@ namespace FIVESTARVC.Controllers
                             select s;
 
 
+            //query to get the roomID from the resident table//
+            var RoomToCompare = from s in db.Residents
+                               .Where(s => s.RoomID != null)
+                                select s;
+
+
+            var RoomToAdd = from s in db.Rooms
+                            .Where(s => s.RoomID > 0)
+                            select s;
+
+            
+
+            //Compare the RoomID from resident table to the Room table//
+            //If equal, add the room number to the viewbag//
+            if (RoomToCompare == RoomToAdd)
+            {
+                var RoomToDisplay = RoomToAdd;
+
+                ViewBag.RoomToDisplay = RoomToDisplay;
+            }
+
+
             if (!String.IsNullOrEmpty(searchString))
             {
                 residents = residents.Where(s => s.LastName.Contains(searchString)
@@ -94,19 +116,44 @@ namespace FIVESTARVC.Controllers
         // GET: Residents/Create
         public ActionResult Create()
         {
+
+
             //Query database for IsOccupied flag//
             //Query for EastSouth Wing//
             var availRoom = db.Rooms
                             .Where(s => s.IsOccupied == false)
                             .Select(r => new
                             {
-                                r.RoomID,
                                 r.RoomNum,
                                 r.WingName,
                             });
 
-            ViewBag.rooms = new SelectList(availRoom, dataValueField: "RoomID", dataTextField: "RoomNum",
+            ViewBag.rooms = new SelectList(availRoom, dataValueField: "RoomNum", dataTextField: "RoomNum", 
                                                dataGroupField: "WingName", selectedValue: null);
+
+            ////Query for West Wing rooms//
+            //var WestWing = db.Rooms
+            //               .Where(s => s.IsOccupied == false)
+            //               .Where(s => s.RoomNum > 201 && s.RoomNum < 210);
+
+            //ViewBag.WestWing = new SelectList(WestWing, "RoomNum", "RoomNum");
+
+            ////Query for North Wing Rooms
+            //var NorthWing = db.Rooms
+            //               .Where(s => s.IsOccupied == false)
+            //               .Where(s => s.RoomNum > 300 && s.RoomNum < 311);
+
+            //ViewBag.NorthWing = new SelectList(NorthWing, "RoomNum", "RoomNum");
+
+            //var rooms = new List<SelectListItem>
+            //{
+            //    new SelectListItem() { Text = "East South", Value = AvailRoom.ToString() },
+            //    new SelectListItem() { Text = "West Wing", Value = WestWing.ToString() },
+            //    new SelectListItem() { Text = "North Wing", Value = NorthWing.ToString() }
+            //};
+
+
+            //ViewBag.RoomsToAssign = rooms;
 
 
             return View();
@@ -117,7 +164,8 @@ namespace FIVESTARVC.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(ResidentIncomeModel residentIncomeModel, [Bind(Include="RoomNum")] Room rooms)
+<<<<<<<<< Temporary merge branch 1
+        public ActionResult Create(ResidentIncomeModel residentIncomeModel)
         {
 
             Resident resident = new Resident
@@ -151,7 +199,9 @@ namespace FIVESTARVC.Controllers
                     db.Residents.Add(resident);
                     db.SaveChanges();
                     db.Benefits.Add(benefit);
-
+                    
+=========
+>>>>>>>>> Temporary merge branch 2
                     db.SaveChanges();
                     return RedirectToAction("Index");
                 }
@@ -353,7 +403,28 @@ namespace FIVESTARVC.Controllers
             return View(programEvent);
         }
 
-   
+        private void GetAssignedRoom()
+        {
+            //Initialize the AssignedRoom ViewModel//
+            var AvailRoom = db.Rooms;
+
+            var viewModel = new List<AssignedRoom>();
+
+            //Loop through the rooms and check to see if IsOccupied is checked or not//
+            //if not checked, add it to the viewmodel//
+            foreach (var Rooms in AvailRoom)
+            {
+                if (Rooms.IsOccupied == false)
+                {
+                    viewModel.Add(new AssignedRoom
+                    {
+                        RoomNum = Rooms.RoomNum,
+                        IsOccupied = Rooms.IsOccupied
+                    });
+                }
+            }
+            ViewBag.AssignRoom = viewModel;
+        }
 
     }
 }
