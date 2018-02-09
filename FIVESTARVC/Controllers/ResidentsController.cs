@@ -124,9 +124,15 @@ namespace FIVESTARVC.Controllers
                             .Where(s => s.IsOccupied == false)
                             .Select(r => new
                             {
+                                r.RoomID,
+                                r.IsOccupied,
                                 r.RoomNum,
                                 r.WingName,
                             });
+
+            IEnumerable<SelectList> roomsAvail = 
+           
+                
 
             ViewBag.rooms = new SelectList(availRoom, dataValueField: "RoomNum", dataTextField: "RoomNum", 
                                                dataGroupField: "WingName", selectedValue: null);
@@ -164,7 +170,6 @@ namespace FIVESTARVC.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-<<<<<<<<< Temporary merge branch 1
         public ActionResult Create(ResidentIncomeModel residentIncomeModel)
         {
 
@@ -176,7 +181,7 @@ namespace FIVESTARVC.Controllers
                 ServiceBranch = (Models.ServiceType)residentIncomeModel.ServiceBranch,
                 HasPTSD = residentIncomeModel.HasPTSD,
                 InVetCourt = residentIncomeModel.InVetCourt,
-                RoomID = rooms.RoomID,
+                //RoomID = rooms.RoomID,
                 Note = residentIncomeModel.Note
             };
 
@@ -200,8 +205,7 @@ namespace FIVESTARVC.Controllers
                     db.SaveChanges();
                     db.Benefits.Add(benefit);
                     
-=========
->>>>>>>>> Temporary merge branch 2
+
                     db.SaveChanges();
                     return RedirectToAction("Index");
                 }
@@ -425,6 +429,8 @@ namespace FIVESTARVC.Controllers
             }
             ViewBag.AssignRoom = viewModel;
         }
+
+      
 
     }
 }

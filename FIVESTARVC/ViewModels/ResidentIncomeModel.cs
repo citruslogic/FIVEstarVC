@@ -6,11 +6,24 @@ using FIVESTARVC.Models;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Web.Mvc;
 
 namespace FIVESTARVC.ViewModels
 {
     public class ResidentIncomeModel
     {
+        //Room
+        public int RoomID { get; set; }
+
+        [Display(Name = "Room Number")]
+        public int RoomNum { get; set; }
+
+        [Display(Name = "Is Occupied")]
+        public bool IsOccupied { get; set; }
+        public string WingName { get; set; }
+
+        public IEnumerable<SelectListItem> AvailRoom { get; set; }
+
 
         // RESIDENT
         public int ResidentID { get; set; }
