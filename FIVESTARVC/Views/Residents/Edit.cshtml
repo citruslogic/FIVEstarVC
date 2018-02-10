@@ -10,81 +10,136 @@
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-    
+
     <div class="form-horizontal">
         <h4>Edit Resident</h4>
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         @Html.HiddenFor(model => model.ResidentID)
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.LastName, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.LastName, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.LastName, "", new { @class = "text-danger" })
-            </div>
-        </div>
+        <div class="row">
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.FirstMidName, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.FirstMidName, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.FirstMidName, "", new { @class = "text-danger" })
-            </div>
-        </div>
+            <div class="col-sm-5 table-responsive">
+                <h2> New Resident </h2>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.ServiceBranch, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EnumDropDownListFor(model => model.ServiceBranch, htmlAttributes: new { @class = "form-control" })
-                @Html.ValidationMessageFor(model => model.ServiceBranch, "", new { @class = "text-danger" })
-            </div>
-        </div>
+                <table class="table table-active">
 
-        @*<div class="form-group">
-            @Html.LabelFor(model => model.Room.RoomNum, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Room.RoomNum, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Room.RoomNum, "", new { @class = "text-danger" })
-            </div>
-        </div>*@
-        
-        <div class="form-group">
-            @Html.Label("Military Campaigns", htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-offset-2 col-md-10">
-                <table>
-                    <tr>
-                        @{
-                            int cnt = 0;
-                            List<FIVESTARVC.ViewModels.AssignedCampaignData> campaigns = ViewBag.Campaigns;
 
-                            foreach (var campaign in campaigns)
-                            {
-                                if (cnt++ % 4 == 0)
-                                {
-                                    @:</tr><tr>
-                        }
-                                @:<td>
-                                    <input type="checkbox"
-                                           name="selectedCampaigns"
-                                           value="@campaign.MilitaryCampaignID"
-                                           @(Html.Raw(campaign.Assigned ? "checked=\"checked\"" : "")) />
-                                    @:  @campaign.MilitaryCampaign
-                                    @: </td>
-                    }
-                            @:</tr>
-                         }
-                    </table>
+                    <tbody>
+                        <tr>
+
+                            <td class="col-form-label">
+                                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                                @Html.LabelFor(model => model.LastName, htmlAttributes: new { @class = "control-label col-md-offset-3" })
+                            </td>
+                            <td class="col-auto">
+                                @Html.EditorFor(model => model.LastName, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.LastName, "", new { @class = "text-danger" })
+                            </td>
+
+                        </tr>
+                        <tr>
+                            <td class="col-form-label">@Html.LabelFor(model => model.FirstMidName, htmlAttributes: new { @class = "control-label col-md-offset-3" })</td>
+                            <td class="col-auto">
+                                @Html.EditorFor(model => model.FirstMidName, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.FirstMidName, "", new { @class = "text-danger" })
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="col-form-label">@Html.LabelFor(model => model.Birthdate, htmlAttributes: new { @class = "control-label col-md-offset-3" })</td>
+                            <td class="col-auto">
+                                @Html.EditorFor(model => model.Birthdate, new { htmlAttributes = new { @class = "form-control date" } })
+                                @Html.ValidationMessageFor(model => model.Birthdate, "", new { @class = "text-danger" })
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="col-form-label"> @Html.LabelFor(model => model.ServiceBranch, htmlAttributes: new { @class = "control-label col-md-offset-3" })</td>
+                            <td class="col-auto">
+                                @Html.EnumDropDownListFor(model => model.ServiceBranch, htmlAttributes: new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.ServiceBranch, "", new { @class = "text-danger" })
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="col-form-label"> @Html.LabelFor(model => model.RoomID, htmlAttributes: new { @class = "control-label col-md-offset-3" })</td>
+                            <td class="col-auto">
+                                @*@Html.DropDownList("rooms", "Select Room")*@
+                                @Html.EditorFor(model => model.RoomID)
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="col-form-label">@Html.Label("Resident has PTSD?", htmlAttributes: new { @class = "control-label col-sm-offset-10" })</td>
+                            <td class="col-auto">
+                                @Html.EditorFor(model => model.HasPTSD)
+                                @Html.ValidationMessageFor(model => model.HasPTSD, "", new { @class = "text-danger" })
+                            </td>
+
+                        </tr>
+                        <tr>
+                            <td class="col-form-label">@Html.Label("in Veteran's Court?", htmlAttributes: new { @class = "control-label col-sm-offset-10" })</td>
+                            <td class="col-auto">
+                                @Html.EditorFor(model => model.InVetCourt)
+                                @Html.ValidationMessageFor(model => model.InVetCourt, "", new { @class = "text-danger" })
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="col-form-label">
+                                @Html.Label("Military Campaigns", htmlAttributes: new { @class = "control-label col-md-offset-3" })
+                            </td>
+                            <td>
+                                @{
+                                    int cnt = 0;
+                                    List<FIVESTARVC.ViewModels.AssignedCampaignData> campaigns = ViewBag.Campaigns;
+
+                                    foreach (var campaign in campaigns)
+                                    {
+                                        if (cnt++ % 2 == 0)
+                                        {
+                                            @:<br />
+                                        }
+                                        @:
+
+
+
+                                        <input type="checkbox"
+                                               name="selectedCampaigns"
+                                               value="@campaign.MilitaryCampaignID"
+                                               @(Html.Raw(campaign.Assigned ? "checked=\"checked\"" : "")) />
+                                        @campaign.MilitaryCampaign @:
+                                    }
+
+                                }
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="col-form-label">@Html.LabelFor(model => model.Note, htmlAttributes: new { @class = "control-label col-md-offset-3" }) </td>
+                            <td class="col-auto">
+                                @Html.TextBoxFor(model => model.Note, htmlAttributes: new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.Note, "", new { @class = "text-danger" })
+                            </td>
+                        </tr>
+
+
+
+
+                    </tbody>
+                </table>
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <table>
+                            <tr>
+
+                        </table>
+                    </div>
                 </div>
+
             </div>
-        
-        <div class="form-group">
-            @Html.LabelFor(model => model.HasPTSD, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10"> 
-                @Html.EditorFor(model => model.HasPTSD, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.HasPTSD, "", new { @class = "text-danger" })
-            </div>
+
+            @Html.Partial("BenefitPartialViewEdit")
+
         </div>
+
+
 
 
         <div class="form-group">
@@ -101,4 +156,19 @@
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
+
+    <script type="text/javascript">
+
+
+                $('.income').on("keyup", function () {
+                    var total = parseFloat(0.0);
+                    $('.income').each(function () {
+                        total += parseFloat($(this).val()) || 0;
+                    });
+
+                    $('.total').val(total);
+                });
+
+
+    </script>
 }

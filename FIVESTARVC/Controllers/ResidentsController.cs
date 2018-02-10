@@ -44,28 +44,6 @@ namespace FIVESTARVC.Controllers
                             select s;
 
 
-            //query to get the roomID from the resident table//
-            var RoomToCompare = from s in db.Residents
-                               .Where(s => s.RoomID != null)
-                                select s;
-
-
-            var RoomToAdd = from s in db.Rooms
-                            .Where(s => s.RoomID > 0)
-                            select s;
-
-
-
-            //Compare the RoomID from resident table to the Room table//
-            //If equal, add the room number to the viewbag//
-            if (RoomToCompare == RoomToAdd)
-            {
-                var RoomToDisplay = RoomToAdd;
-
-                ViewBag.RoomToDisplay = RoomToDisplay;
-            }
-
-
             if (!String.IsNullOrEmpty(searchString))
             {
                 residents = residents.Where(s => s.LastName.Contains(searchString)
@@ -101,7 +79,9 @@ namespace FIVESTARVC.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Resident resident = db.Residents.Find(id);
+            Resident resident = db.Residents
+                .Include(p => p.ProgramEvents)
+                .Where(r => r.ResidentID == id).Single();
 
             if (resident == null)
             {
@@ -110,50 +90,41 @@ namespace FIVESTARVC.Controllers
 
             PopulateAssignedCampaignData(resident);
 
+            /* Retrieve the first event where the veteran is admitted for the first time */
+            ViewBag.DateFirstAdmitted = (from pgm in db.ProgramEvents
+                                         join res in db.Residents on new { pgm.ResidentID } equals new { res.ResidentID }
+                                         join pgmt in db.ProgramTypes on pgm.ProgramTypeID equals pgmt.ProgramTypeID
+                                         where pgmt.ProgramTypeID.Equals(7)
+                                         orderby pgm.ProgramEventID ascending
+                                         select DbFunctions.TruncateTime(pgm.StartDate)).First().Value.ToShortDateString();
+
+                                        
+                                        
+                                        
+
+
             return View(resident);
         }
 
         // GET: Residents/Create
         public ActionResult Create()
         {
-
-            GetRoom();
-            
-
             //Query database for IsOccupied flag//
             //Query for EastSouth Wing//
-            //var availRoom = db.Rooms
-            //                .Where(s => s.IsOccupied == false)
-            //                .Select(r => new
-            //                {
-            //                    r.RoomNum,
-            //                    r.WingName,
-            //                });
+            var availRoom = db.Rooms
+                            .Where(s => s.IsOccupied == false)
+                            .Select(r => new
+                            {
+                                r.RoomID,
+                                r.RoomNum,
+                                r.WingName,
+                            });
+
+            ViewBag.rooms = new SelectList(availRoom, dataValueField: "RoomID", dataTextField: "RoomNum",
+                                               dataGroupField: "WingName", selectedValue: null);
 
 
-            //ViewBag.rooms = new SelectList(availRoom, dataValueField: "RoomNum", dataTextField: "RoomNum",
-            //                                   dataGroupField: "WingName", selectedValue: null);
-
-
-            //var availRoom = from r in db.Rooms
-            //            .Where(r => r.IsOccupied == false)
-            //            .Include(r => r.RoomID)
-            //            .Include(r => r.RoomNum)
-            //            .OrderBy(r => r.WingName)
-            //            .Select(r => r.RoomNum);
-
-            //var roomToAssign = from y in db.Rooms
-            //            .Where(y => y.IsOccupied == false)
-            //            .Select(x => new ResidentIncomeModel { RoomNum = x.RoomNum, RoomID = x.RoomID, IsOccupied = x.IsOccupied })
-            //            select y;
-
-
-
-            
-
-
-            return View(ViewBag.AssignRoom);
-   
+            return View();
         }
 
         // POST: Residents/Create
@@ -163,36 +134,9 @@ namespace FIVESTARVC.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create(ResidentIncomeModel residentIncomeModel)
         {
-            //int addRoom = rooms.GetEnumerator;
-
-            //var roomToAdd = db.Rooms
-            //                .Where(s => s.RoomNum== addRoom)
-            //                .Select(s => s.RoomID);
-
-
-            Room room = new Room
-            {
-                RoomID = residentIncomeModel.RoomID,
-                RoomNum = residentIncomeModel.RoomNum,
-                WingName = residentIncomeModel.WingName,
-                IsOccupied = residentIncomeModel.IsOccupied
-            };
-
-            Resident resident = new Resident
-            {
-                FirstMidName = residentIncomeModel.FirstMidName,
-                LastName = residentIncomeModel.LastName,
-                Birthdate = residentIncomeModel.Birthdate,
-                ServiceBranch = (Models.ServiceType)residentIncomeModel.ServiceBranch,
-                HasPTSD = residentIncomeModel.HasPTSD,
-                InVetCourt = residentIncomeModel.InVetCourt,
-                //RoomID = rooms.RoomID,
-                Note = residentIncomeModel.Note
-            };
-
             Benefit benefit = new Benefit
             {
-                Resident = resident,
+
                 DisabilityPercentage = residentIncomeModel.DisabilityPercentage,
                 SSI = residentIncomeModel.SSI,
                 SSDI = residentIncomeModel.SSDI,
@@ -206,29 +150,49 @@ namespace FIVESTARVC.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    db.Residents.Add(resident);
-                    db.SaveChanges();
-
-                    //resident.RoomID = ParseInt(roomToAdd);
-                    db.SaveChanges();
-
-                  
-
                     db.Benefits.Add(benefit);
-                    
-
                     db.SaveChanges();
-                    return RedirectToAction("Index");
+
                 }
+
+
             }
             catch (DataException dex)
             {
                 //Log the error (uncomment dex variable name and add a line here to write a log.
-                Console.Out.WriteLine(dex.Message);
-                ModelState.AddModelError("", dex.Message);
+                ModelState.AddModelError("", dex.InnerException.Message);
             }
 
+            Resident resident = new Resident
+            {
+                BenefitID = benefit.BenefitID,
+                FirstMidName = residentIncomeModel.FirstMidName,
+                LastName = residentIncomeModel.LastName,
+                Birthdate = residentIncomeModel.Birthdate,
+                ServiceBranch = residentIncomeModel.ServiceBranch,
+                HasPTSD = residentIncomeModel.HasPTSD,
+                InVetCourt = residentIncomeModel.InVetCourt,
+                RoomID = residentIncomeModel.RoomID,
+                Note = residentIncomeModel.Note
+            };
 
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    db.Residents.Add(resident);
+                    db.SaveChanges();
+
+                    return RedirectToAction("Index");
+                }
+
+
+            }
+            catch (DataException dex)
+            {
+                //Log the error (uncomment dex variable name and add a line here to write a log.
+                ModelState.AddModelError("", dex.InnerException.Message);
+            }
             return View(residentIncomeModel);
         }
 
@@ -243,11 +207,15 @@ namespace FIVESTARVC.Controllers
 
             Resident resident = db.Residents
             .Include(c => c.MilitaryCampaigns)
+            .Include(b => b.Benefit)
             .Where(c => c.ResidentID == id)
             .Single();
 
+
             PopulateAssignedCampaignData(resident);
 
+          
+            
             if (resident == null)
             {
                 return HttpNotFound();
@@ -257,7 +225,7 @@ namespace FIVESTARVC.Controllers
             return View(resident);
         }
 
-       
+
 
         // POST: Residents/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
@@ -272,11 +240,12 @@ namespace FIVESTARVC.Controllers
             }
             var residentToUpdate = db.Residents
                 .Include(c => c.MilitaryCampaigns)
+                .Include(b => b.Benefit)
                 .Where(c => c.ResidentID == id)
                 .Single();
 
             if (TryUpdateModel(residentToUpdate, "",
-               new string[] { "LastName", "FirstMidName", "Birthdate", "ServiceBranch", "Note", "HasPTSD", "InVetCourt", "Benefits", "MilitaryCampaigns" }))
+               new string[] { "LastName", "FirstMidName", "Birthdate", "ServiceBranch", "Note", "HasPTSD", "InVetCourt", "Benefit", "MilitaryCampaigns" }))
             {
                 try
                 {
@@ -345,7 +314,7 @@ namespace FIVESTARVC.Controllers
             }
         }
 
-       
+
 
         // GET: Residents/Delete/5
         [HttpGet]
@@ -376,7 +345,9 @@ namespace FIVESTARVC.Controllers
             try
             {
                 Resident resident = db.Residents.Find(id);
+                Benefit benefit = db.Benefits.Find(resident.BenefitID);
 
+                db.Benefits.Remove(benefit);
                 db.Residents.Remove(resident);
                 db.SaveChanges();
             }
@@ -416,44 +387,6 @@ namespace FIVESTARVC.Controllers
             ViewBag.ProgramTypeID = new SelectList(db.ProgramTypes, "ProgramTypeID", "ProgramDescription", programEvent.ProgramTypeID);
             ViewBag.ResidentID = id;
             return View(programEvent);
-        }
-
-        public void GetRoom ()
-        {
-            IQueryable<Room> AvailRoom =
-            from AvailRooms in db.Rooms
-            .Where(r => r.IsOccupied == false)
-                 //.Include(r => r.RoomID)
-                 .Include(r => r.RoomNum)
-                 .OrderBy(r => r.WingName)
-                 select AvailRooms;
-
-
-
-            //Initialize the AssignedRoom ViewModel//
-            //AvailRoom = db.Rooms;
-                 
-                
-
-            var viewModel = new List<ResidentIncomeModel>();
-
-            //Loop through the rooms and check to see if IsOccupied is checked or not//
-            //if not checked, add it to the viewmodel//
-            foreach (var Rooms in AvailRoom) 
-            {
-                //if (Rooms.IsOccupied == false)
-                //{
-                    viewModel.Add(new ResidentIncomeModel
-                    {
-                        RoomNum = Rooms.RoomNum,
-                        IsOccupied = Rooms.IsOccupied,
-                        RoomID = Rooms.RoomID,
-                        WingName = Rooms.WingName
-                    });                    
-                //}
-                               
-            }
-            ViewBag.AssignRoom = viewModel;
         }
 
 

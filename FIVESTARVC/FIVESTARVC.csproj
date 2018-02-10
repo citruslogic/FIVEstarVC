@@ -173,6 +173,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\Benefit.cs" />
+    <Compile Include="Models\EnumServiceType.cs" />
     <Compile Include="Models\FSEnumHelper.cs" />
     <Compile Include="Models\MilitaryCampaign.cs" />
     <Compile Include="Models\ProgramEvent.cs" />
@@ -301,6 +302,7 @@
     <Content Include="Views\Shared\_modalNewEvent.cshtml" />
     <Content Include="Views\Reports\Historic.cshtml" />
     <Content Include="Views\Shared\BenefitPartialView.cshtml" />
+    <Content Include="Views\Shared\BenefitPartialViewEdit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

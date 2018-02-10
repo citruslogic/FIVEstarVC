@@ -6,115 +6,141 @@
 }
 
 
-<h2>Details</h2>
+<h2>Details for @(Model.LastName)</h2>
 
 <div>
-    <h4>Resident</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.LastName)
-        </dt>
+    <div class="row">
+        <div class="col-sm-5 table-responsive">
+            <table class="table">
+                <tr class="form-row">
+                    <td class="col-form-label">
+                        @Html.LabelFor(model => model.LastName, htmlAttributes: new { @class = "control-label font-weight-bold" })
+                    </td>
+                    <td class="col-form-label">
+                        @Html.DisplayFor(model => model.LastName)
+                    </td>
 
-        <dd>
-            @Html.DisplayFor(model => model.LastName)
-        </dd>
+                    <td class="col-form-label">
+                        @Html.LabelFor(model => model.FirstMidName, htmlAttributes: new { @class = "control-label font-weight-bold" })
+                    </td>
+                    <td class="col-form-label">
+                        @Html.DisplayFor(model => model.FirstMidName)
 
-        <dt>
-            @Html.DisplayNameFor(model => model.FirstMidName)
-        </dt>
+                    </td>
 
-        <dd>
-            @Html.DisplayFor(model => model.FirstMidName)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.ServiceBranch)
-        </dt>
-
-        <dd>
-            @{ 
-                var serviceBranch = FSEnumHelper.GetDescription(Model.ServiceBranch);
-
-                @Html.DisplayFor(model => serviceBranch)
-            }
-           
-        </dd>
-
-        <dt>
-            @*@Html.DisplayNameFor(model => model.Room.RoomNum)*@
-        </dt>
-
-        <dd>
-            @*@Html.DisplayFor(model => model.Room.RoomNum)*@
-        </dd>
-        </dl>
-        <div class="form-group">
-            <b>@Html.Label("Campaigns", htmlAttributes: new { @class = "control-label col-md-0" })</b>
-            <div class="col-md-offset-2 col-md-10">
-                <table>
-                    <tr>
+                </tr>
+                <tr class="form-row">
+                    <td class="col-form-label">
+                        @Html.LabelFor(model => model.Birthdate, htmlAttributes: new { @class = "control-label font-weight-bold" })
+                    </td>
+                    <td class="col-form-label">
                         @{
-                            int cnt = 0;
+                            if (Model.Birthdate == null)
+                            {
+                                <text>No birthdate provided.</text>
+                            }
+                            else
+                            {
+                                @Html.DisplayFor(model => model.Birthdate)
+
+                            }
+                        }
+                    </td>
+                </tr>
+                <tr class="form-row">
+                    <td class="col-form-label">
+                        @Html.Label("First Admitted", htmlAttributes: new { @class = "control-label font-weight-bold" })
+                    </td>
+                    <td class="col-form-label">
+                        @(ViewBag.DateFirstAdmitted)
+                    </td>
+
+                </tr>
+
+
+            </table>
+        </div>
+        
+        <div class="col-sm-7 table-responsive">
+            <table class="table">
+                <tr class="form-row">
+                    <td>
+                        @Html.Label("Campaigns", htmlAttributes: new { @class = "control-label col-md-0 font-weight-bold" })
+
+                    </td>
+                    <td>
+                        @{
+                            bool campaignsExist = false;
                             List<FIVESTARVC.ViewModels.AssignedCampaignData> campaigns = ViewBag.Campaigns;
+
 
                             foreach (var campaign in campaigns)
                             {
-                                if (cnt++ % 4 == 0)
+
+
+                                if (campaign.Assigned)
                                 {
-                                    @:</tr><tr>
+                                    campaignsExist = true;
+                                    @campaign.MilitaryCampaign@:<br/>
                                 }
-                                @:<td>
-                                    <input type="checkbox"
-                                           name="selectedCampaigns"
-                                           disabled
-                                           value="@campaign.MilitaryCampaignID"
-                                           @(Html.Raw(campaign.Assigned ? "checked=\"checked\"" : "")) />
-                                        @:  @campaign.MilitaryCampaign
-                                        @:</td>&nbsp;
+
                             }
-                            @:</tr>
+
+                            if (!campaignsExist)
+                            {
+                                <text>No campaigns. </text>
+                            }
+
                         }
-                    </table>
-                </div>
-            </div>
+                    </td>
+                </tr>
+                <tr class="form-row">
+                    <td>@Html.LabelFor(model => model.HasPTSD, htmlAttributes: new { @class = "control-label col-md-0 font-weight-bold" })</td>
+                    <td>@(Model.HasPTSD ? "Yes" : "No")</td>
+                </tr>
+                <tr class="form-row">
+                    <td>@Html.LabelFor(model => model.InVetCourt, htmlAttributes: new { @class = "control-label col-md-0 font-weight-bold" })</td>
+                    <td>@(Model.InVetCourt ? "Yes" : "No")</td>
+                </tr>
+                
+
+
+            </table>
+
+
+        </div>
     </div>
-    <dt>
-    @Html.DisplayName("Resident has PTSD?")
-    </dt>
+
+</div>
+
+
+<h2>Events</h2>
+<dl>
     <dd>
-     @(Model.HasPTSD?"Yes":"No")
+        <table class="table">
+            <tr>
+                <th>Program Name</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+            </tr>
+            @foreach (var item in Model.ProgramEvents)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ProgramType.ProgramDescription)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.StartDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.EndDate)
+                    </td>
+                </tr>
+            }
+        </table>
     </dd>
 
-    <br />    
-     
-    
-    <dl>
-        <dd>
-            <table class="table">
-                <tr>
-                    <th>Program Name</th>
-                    <th>Start Date</th>
-                    <th>End Date</th>
-                </tr>
-                @foreach (var item in Model.ProgramEvents)
-                {
-                    <tr>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.ProgramType.ProgramDescription)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.StartDate)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.EndDate)
-                        </td>
-                    </tr>
-                }
-            </table>
-        </dd>
-
-    </dl>
+</dl>
 
 <p>
     @Html.ActionLink("Edit", "Edit", new { id = Model.ResidentID }) |
