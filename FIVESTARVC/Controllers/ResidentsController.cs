@@ -109,22 +109,44 @@ namespace FIVESTARVC.Controllers
         // GET: Residents/Create
         public ActionResult Create()
         {
+
+            GetRoom();
+
+
             //Query database for IsOccupied flag//
             //Query for EastSouth Wing//
-            var availRoom = db.Rooms
-                            .Where(s => s.IsOccupied == false)
-                            .Select(r => new
-                            {
-                                r.RoomID,
-                                r.RoomNum,
-                                r.WingName,
-                            });
-
-            ViewBag.rooms = new SelectList(availRoom, dataValueField: "RoomID", dataTextField: "RoomNum",
-                                               dataGroupField: "WingName", selectedValue: null);
+            //var availRoom = db.Rooms
+            //                .Where(s => s.IsOccupied == false)
+            //                .Select(r => new
+            //                {
+            //                    r.RoomNum,
+            //                    r.WingName,
+            //                });
 
 
-            return View();
+            //ViewBag.rooms = new SelectList(availRoom, dataValueField: "RoomNum", dataTextField: "RoomNum",
+            //                                   dataGroupField: "WingName", selectedValue: null);
+
+
+            //var availRoom = from r in db.Rooms
+            //            .Where(r => r.IsOccupied == false)
+            //            .Include(r => r.RoomID)
+            //            .Include(r => r.RoomNum)
+            //            .OrderBy(r => r.WingName)
+            //            .Select(r => r.RoomNum);
+
+            //var roomToAssign = from y in db.Rooms
+            //            .Where(y => y.IsOccupied == false)
+            //            .Select(x => new ResidentIncomeModel { RoomNum = x.RoomNum, RoomID = x.RoomID, IsOccupied = x.IsOccupied })
+            //            select y;
+
+
+
+
+
+
+            return View(ViewBag.AssignRoom);
+
         }
 
         // POST: Residents/Create
@@ -389,7 +411,43 @@ namespace FIVESTARVC.Controllers
             return View(programEvent);
         }
 
+        public void GetRoom()
+        {
+            IQueryable<Room> AvailRoom =
+            from AvailRooms in db.Rooms
+            .Where(r => r.IsOccupied == false)
+                 //.Include(r => r.RoomID)
+                 .Include(r => r.RoomNum)
+                 .OrderBy(r => r.WingName)
+            select AvailRooms;
 
+
+
+            //Initialize the AssignedRoom ViewModel//
+            //AvailRoom = db.Rooms;
+
+
+
+            var viewModel = new List<ResidentIncomeModel>();
+
+            //Loop through the rooms and check to see if IsOccupied is checked or not//
+            //if not checked, add it to the viewmodel//
+            foreach (var Rooms in AvailRoom)
+            {
+                //if (Rooms.IsOccupied == false)
+                //{
+                viewModel.Add(new ResidentIncomeModel
+                {
+                    RoomNum = Rooms.RoomNum,
+                    IsOccupied = Rooms.IsOccupied,
+                    RoomID = Rooms.RoomID,
+                    WingName = Rooms.WingName
+                });
+                //}
+
+            }
+            ViewBag.AssignRoom = viewModel;
+        }
 
     }
 }
