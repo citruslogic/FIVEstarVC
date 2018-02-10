@@ -13,8 +13,8 @@ namespace FIVESTARVC.ViewModels
     public class ResidentIncomeModel
     {
         //Room
-        public int RoomID { get; set; }
-
+        //public int RoomID { get; set; }
+        [Required]
         [Display(Name = "Room Number")]
         public int RoomNum { get; set; }
 
@@ -22,7 +22,7 @@ namespace FIVESTARVC.ViewModels
         public bool IsOccupied { get; set; }
         public string WingName { get; set; }
 
-        public IEnumerable<SelectListItem> AvailRoom { get; set; }
+        //public Room Room  { get; set; }
 
 
         // RESIDENT
