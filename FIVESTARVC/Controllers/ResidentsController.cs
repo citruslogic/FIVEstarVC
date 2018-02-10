@@ -91,13 +91,12 @@ namespace FIVESTARVC.Controllers
 
             PopulateAssignedCampaignData(resident);
 
-            /* Retrieve the event where the veteran is admitted for the first time */
-            ViewBag.DateFirstAdmitted = (from pgm in db.ProgramEvents
-                                         join res in db.Residents on new { pgm.ResidentID } equals new { res.ResidentID }
-                                         join pgmt in db.ProgramTypes on pgm.ProgramTypeID equals pgmt.ProgramTypeID
-                                         where pgmt.ProgramTypeID.Equals(7)
-                                         orderby pgm.ProgramEventID ascending
-                                         select DbFunctions.TruncateTime(pgm.StartDate)).First().Value.ToShortDateString();
+            ViewBag.DateFirstAdmitted = db.ProgramEvents
+                                            .Include(r => r.Resident).Where(r => r.ResidentID == id)
+                                            .Include(t => t.ProgramType).Where(p => p.ProgramTypeID == 7)
+                                            .OrderBy(d => d.StartDate)
+                                            .Select(s => s.StartDate)
+                                            .FirstOrDefault().ToShortDateString();
 
             return View(resident);
         }

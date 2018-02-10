@@ -27,11 +27,14 @@
         <br />
         @RenderBody()
         <hr />
-        <footer>
-            <p>&copy; @DateTime.Now.Year - FIVE STAR Veterans Center</p>
-        </footer>
-    </div>
+        
 
+    </div>
+    <nav class="navbar navbar-dark" style="background-color: navy">
+        <footer>
+            <p class="text-light">&copy; @DateTime.Now.Year - FIVE STAR Veterans Center</p>
+        </footer>
+    </nav>
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)
