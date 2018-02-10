@@ -90,18 +90,13 @@ namespace FIVESTARVC.Controllers
 
             PopulateAssignedCampaignData(resident);
 
-            /* Retrieve the first event where the veteran is admitted for the first time */
+            /* Retrieve the event where the veteran is admitted for the first time */
             ViewBag.DateFirstAdmitted = (from pgm in db.ProgramEvents
                                          join res in db.Residents on new { pgm.ResidentID } equals new { res.ResidentID }
                                          join pgmt in db.ProgramTypes on pgm.ProgramTypeID equals pgmt.ProgramTypeID
                                          where pgmt.ProgramTypeID.Equals(7)
                                          orderby pgm.ProgramEventID ascending
                                          select DbFunctions.TruncateTime(pgm.StartDate)).First().Value.ToShortDateString();
-
-                                        
-                                        
-                                        
-
 
             return View(resident);
         }
@@ -245,7 +240,7 @@ namespace FIVESTARVC.Controllers
                 .Single();
 
             if (TryUpdateModel(residentToUpdate, "",
-               new string[] { "LastName", "FirstMidName", "Birthdate", "ServiceBranch", "Note", "HasPTSD", "InVetCourt", "Benefit", "MilitaryCampaigns" }))
+               new string[] { "LastName", "FirstMidName", "Birthdate", "ServiceBranch", "Note", "HasPTSD", "InVetCourt", "Benefit", "MilitaryCampaigns", "TotalBenefitAmount" }))
             {
                 try
                 {

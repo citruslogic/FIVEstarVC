@@ -4,15 +4,13 @@
     ViewBag.Title = "Edit Resident";
 }
 
-@*<h2>Edit</h2>*@
-
 
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
 
     <div class="form-horizontal">
-        <h4>Edit Resident</h4>
+        <h4>Update @(Model.LastName)</h4>
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         @Html.HiddenFor(model => model.ResidentID)
@@ -20,10 +18,7 @@
         <div class="row">
 
             <div class="col-sm-5 table-responsive">
-                <h2> New Resident </h2>
-
                 <table class="table table-active">
-
 
                     <tbody>
                         <tr>
@@ -105,7 +100,7 @@
                                                name="selectedCampaigns"
                                                value="@campaign.MilitaryCampaignID"
                                                @(Html.Raw(campaign.Assigned ? "checked=\"checked\"" : "")) />
-                                        @campaign.MilitaryCampaign @:
+                                        @campaign.MilitaryCampaign @:&nbsp;
                                     }
 
                                 }
@@ -118,9 +113,6 @@
                                 @Html.ValidationMessageFor(model => model.Note, "", new { @class = "text-danger" })
                             </td>
                         </tr>
-
-
-
 
                     </tbody>
                 </table>
@@ -159,15 +151,15 @@
 
     <script type="text/javascript">
 
+        $('.income').on("keyup", function () {
+            var total = parseFloat(0.0);
 
-                $('.income').on("keyup", function () {
-                    var total = parseFloat(0.0);
-                    $('.income').each(function () {
-                        total += parseFloat($(this).val()) || 0;
-                    });
+            $('.income').each(function () {
+            total += parseFloat($(this).val() || 0);
+            });
 
-                    $('.total').val(total);
-                });
+            $('#Benefit_TotalBenefitAmount').val(total);
+        });
 
 
     </script>

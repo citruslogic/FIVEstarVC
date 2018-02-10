@@ -72,9 +72,8 @@
                         <td class="col-form-label alert-dark">
                             @Html.LabelFor(model => model.Benefit.TotalBenefitAmount, htmlAttributes: new { @class = "control-label col-md-offset-1" })
                         </td>
-                        <td class="alert-dark">
-                            @Html.EditorFor(model => model.Benefit.TotalBenefitAmount, new { htmlAttributes = new { @class = "form-control total money-wide", @disabled = "disabled" } })
-                            @Html.ValidationMessageFor(model => model.Benefit.TotalBenefitAmount, "", new { @class = "text-danger" })
+                        <td class="col-form-label alert-dark">
+                            @Html.EditorFor(model => model.Benefit.TotalBenefitAmount, new { htmlAttributes = new { @class = "form-control total money-wide" } })
                         </td>
                     </tr>
                 </tbody>
