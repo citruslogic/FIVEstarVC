@@ -22,7 +22,7 @@ namespace FIVESTARVC.ViewModels
         public bool IsOccupied { get; set; }
         public string WingName { get; set; }
 
-        //public Room Room  { get; set; }
+        public Room GetRoom { get; set; }
 
 
         // RESIDENT

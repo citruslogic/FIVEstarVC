@@ -98,9 +98,9 @@ namespace FIVESTARVC.Controllers
                                          orderby pgm.ProgramEventID ascending
                                          select DbFunctions.TruncateTime(pgm.StartDate)).First().Value.ToShortDateString();
 
-                                        
-                                        
-                                        
+
+
+
 
 
             return View(resident);
@@ -110,44 +110,30 @@ namespace FIVESTARVC.Controllers
         public ActionResult Create()
         {
 
-            GetRoom();
+            var roomToAssign = from y in db.Rooms
+                        .Where(y => y.IsOccupied == false)
+                        select y;
 
+            foreach(var room in roomToAssign)
+            {
+                ResidentIncomeModel rooms = new ResidentIncomeModel
+                {
+                    RoomID = room.RoomID,
+                    RoomNum = room.RoomNum,
+                    WingName = room.WingName
+                };
 
-            //Query database for IsOccupied flag//
-            //Query for EastSouth Wing//
-            //var availRoom = db.Rooms
-            //                .Where(s => s.IsOccupied == false)
-            //                .Select(r => new
-            //                {
-            //                    r.RoomNum,
-            //                    r.WingName,
-            //                });
+               
 
+                ViewBag.rooms = room.RoomNum;
+                
+            }
 
-            //ViewBag.rooms = new SelectList(availRoom, dataValueField: "RoomNum", dataTextField: "RoomNum",
-            //                                   dataGroupField: "WingName", selectedValue: null);
+            return (ViewBag.rooms);
 
-
-            //var availRoom = from r in db.Rooms
-            //            .Where(r => r.IsOccupied == false)
-            //            .Include(r => r.RoomID)
-            //            .Include(r => r.RoomNum)
-            //            .OrderBy(r => r.WingName)
-            //            .Select(r => r.RoomNum);
-
-            //var roomToAssign = from y in db.Rooms
-            //            .Where(y => y.IsOccupied == false)
-            //            .Select(x => new ResidentIncomeModel { RoomNum = x.RoomNum, RoomID = x.RoomID, IsOccupied = x.IsOccupied })
-            //            select y;
-
-
-
-
-
-
-            return View(ViewBag.AssignRoom);
 
         }
+          
 
         // POST: Residents/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
@@ -411,43 +397,40 @@ namespace FIVESTARVC.Controllers
             return View(programEvent);
         }
 
-        public void GetRoom()
-        {
-            IQueryable<Room> AvailRoom =
-            from AvailRooms in db.Rooms
-            .Where(r => r.IsOccupied == false)
-                 //.Include(r => r.RoomID)
-                 .Include(r => r.RoomNum)
-                 .OrderBy(r => r.WingName)
-            select AvailRooms;
+        //         public void GetRoom ()
+        //{
+        //    IQueryable<Room> AvailRoom =
+        //    from AvailRooms in db.Rooms
+        //    .Where(r => r.IsOccupied == false)
+        //    select AvailRooms;
 
 
 
-            //Initialize the AssignedRoom ViewModel//
-            //AvailRoom = db.Rooms;
+        //    //Initialize the AssignedRoom ViewModel//
+        //    //AvailRoom = db.Rooms;
 
 
 
-            var viewModel = new List<ResidentIncomeModel>();
+        //    var viewModel = new List<ResidentIncomeModel>();
 
-            //Loop through the rooms and check to see if IsOccupied is checked or not//
-            //if not checked, add it to the viewmodel//
-            foreach (var Rooms in AvailRoom)
-            {
-                //if (Rooms.IsOccupied == false)
-                //{
-                viewModel.Add(new ResidentIncomeModel
-                {
-                    RoomNum = Rooms.RoomNum,
-                    IsOccupied = Rooms.IsOccupied,
-                    RoomID = Rooms.RoomID,
-                    WingName = Rooms.WingName
-                });
-                //}
+        //    //Loop through the rooms and check to see if IsOccupied is checked or not//
+        //    //if not checked, add it to the viewmodel//
+        //    foreach (var Rooms in AvailRoom) 
+        //    {
+        //        if (Rooms.IsOccupied == false)
+        //        {
+        //            viewModel.Add(new ResidentIncomeModel
+        //            {
+        //                RoomNum = Rooms.RoomNum,
+        //                IsOccupied = Rooms.IsOccupied,
+        //                RoomID = Rooms.RoomID,
+        //                WingName = Rooms.WingName
+        //            });
+        //        }
 
-            }
-            ViewBag.AssignRoom = viewModel;
-        }
+        //    }
+        //    ViewBag.AssignRoom = viewModel;
+        //}
 
     }
 }
