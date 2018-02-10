@@ -301,8 +301,8 @@
     <Content Include="Views\ProgramEvents\Index.cshtml" />
     <Content Include="Views\Shared\_modalNewEvent.cshtml" />
     <Content Include="Views\Reports\Historic.cshtml" />
-    <Content Include="Views\Shared\BenefitPartialView.cshtml" />
     <Content Include="Views\Shared\BenefitPartialViewEdit.cshtml" />
+    <Content Include="Views\Shared\BenefitPartialViewCreate.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

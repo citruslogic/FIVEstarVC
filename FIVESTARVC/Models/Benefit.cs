@@ -40,7 +40,7 @@ namespace FIVESTARVC.Models
         public decimal? FoodStamp { get; set; }
         
         /* Other forms of disability as income */
-        [Display(Name = "Other Income")]
+        [Display(Name = "Other Income (Description)")]
         public String OtherDescription { get; set; }
 
         [DataType(DataType.Currency)]

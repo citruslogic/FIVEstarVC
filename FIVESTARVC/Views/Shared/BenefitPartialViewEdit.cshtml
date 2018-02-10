@@ -3,8 +3,8 @@
 
 
         <div class="col-sm-5 table-responsive">
-            <h2>Income </h2>
-            <table class="table table-striped">
+            <h4>Income </h4>
+            <table class="table table-sm table-striped">
                 <thead>
                     <tr>
                         <th class="col-md-2">Type</th>
@@ -55,7 +55,7 @@
                             @Html.LabelFor(model => model.Benefit.OtherDescription, htmlAttributes: new { @class = "control-label" })
                         </td>
                         <td>
-                            @Html.EditorFor(model => model.Benefit.OtherDescription, new { htmlAttributes = new { @class = "form-control money-wide" } })
+                            @Html.EditorFor(model => model.Benefit.OtherDescription, new { htmlAttributes = new { @class = "form-control" } })
                             @Html.ValidationMessageFor(model => model.Benefit.OtherDescription, "", new { @class = "text-danger" })
                         </td>
                     </tr>
@@ -73,7 +73,7 @@
                             @Html.LabelFor(model => model.Benefit.TotalBenefitAmount, htmlAttributes: new { @class = "control-label col-md-offset-1" })
                         </td>
                         <td class="col-form-label alert-dark">
-                            @Html.EditorFor(model => model.Benefit.TotalBenefitAmount, new { htmlAttributes = new { @class = "form-control total money-wide" } })
+                            @Html.EditorFor(model => model.Benefit.TotalBenefitAmount, new { htmlAttributes = new { @class = "form-control money-wide" } })
                         </td>
                     </tr>
                 </tbody>

@@ -10,6 +10,7 @@ using FIVESTARVC.DAL;
 using FIVESTARVC.Models;
 using PagedList;
 using FIVESTARVC.ViewModels;
+using System.Data.Entity.Validation;
 
 namespace FIVESTARVC.Controllers
 {
@@ -118,6 +119,21 @@ namespace FIVESTARVC.Controllers
             ViewBag.rooms = new SelectList(availRoom, dataValueField: "RoomID", dataTextField: "RoomNum",
                                                dataGroupField: "WingName", selectedValue: null);
 
+            var allMilitaryCampaigns = db.MilitaryCampaigns;
+            var viewModel = new List<AssignedCampaignData>();
+
+
+            foreach (var militaryCampaign in allMilitaryCampaigns)
+            {
+                viewModel.Add(new AssignedCampaignData
+                {
+                    MilitaryCampaignID = militaryCampaign.MilitaryCampaignID,
+                    MilitaryCampaign = militaryCampaign.CampaignName,
+                    Assigned = false
+                });
+            }
+
+            ViewBag.Campaigns = viewModel;
 
             return View();
         }
@@ -127,11 +143,69 @@ namespace FIVESTARVC.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(ResidentIncomeModel residentIncomeModel)
+        public ActionResult Create(ResidentIncomeModel residentIncomeModel, string[] selectedCampaigns)
         {
+            var allMilitaryCampaigns = db.MilitaryCampaigns;
+            var viewModel = new List<AssignedCampaignData>();
+
+
+            foreach (var militaryCampaign in allMilitaryCampaigns)
+            {
+                viewModel.Add(new AssignedCampaignData
+                {
+                    MilitaryCampaignID = militaryCampaign.MilitaryCampaignID,
+                    MilitaryCampaign = militaryCampaign.CampaignName,
+                    Assigned = false
+                });
+            }
+
+            ViewBag.Campaigns = viewModel;
+
+            Resident resident = new Resident
+            {
+                FirstMidName = residentIncomeModel.FirstMidName,
+                LastName = residentIncomeModel.LastName,
+                Birthdate = residentIncomeModel.Birthdate,
+                ServiceBranch = residentIncomeModel.ServiceBranch,
+                HasPTSD = residentIncomeModel.HasPTSD,
+                InVetCourt = residentIncomeModel.InVetCourt,
+                RoomID = residentIncomeModel.RoomID,
+                Note = residentIncomeModel.Note,
+                MilitaryCampaigns = new List<MilitaryCampaign>(),
+                Benefit = new Benefit()
+
+
+            };
+
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    db.Residents.Add(resident);
+                    db.SaveChanges();
+
+                }
+
+
+            }
+            catch (DbEntityValidationException e)
+            {
+                foreach (var eve in e.EntityValidationErrors)
+                {
+                    Console.WriteLine("Entity of type \"{0}\" in state \"{1}\" has the following validation errors:",
+                        eve.Entry.Entity.GetType().Name, eve.Entry.State);
+                    foreach (var ve in eve.ValidationErrors)
+                    {
+                        Console.WriteLine("- Property: \"{0}\", Error: \"{1}\"",
+                            ve.PropertyName, ve.ErrorMessage);
+                    }
+                }
+                throw;
+                //ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
+            }
+
             Benefit benefit = new Benefit
             {
-
                 DisabilityPercentage = residentIncomeModel.DisabilityPercentage,
                 SSI = residentIncomeModel.SSI,
                 SSDI = residentIncomeModel.SSDI,
@@ -146,6 +220,7 @@ namespace FIVESTARVC.Controllers
                 if (ModelState.IsValid)
                 {
                     db.Benefits.Add(benefit);
+                    resident.Benefit = benefit;
                     db.SaveChanges();
 
                 }
@@ -156,38 +231,35 @@ namespace FIVESTARVC.Controllers
             {
                 //Log the error (uncomment dex variable name and add a line here to write a log.
                 ModelState.AddModelError("", dex.InnerException.Message);
+                Response.Write("<script>alert('Exception: '" + dex.StackTrace + ")</script>");
             }
 
-            Resident resident = new Resident
-            {
-                BenefitID = benefit.BenefitID,
-                FirstMidName = residentIncomeModel.FirstMidName,
-                LastName = residentIncomeModel.LastName,
-                Birthdate = residentIncomeModel.Birthdate,
-                ServiceBranch = residentIncomeModel.ServiceBranch,
-                HasPTSD = residentIncomeModel.HasPTSD,
-                InVetCourt = residentIncomeModel.InVetCourt,
-                RoomID = residentIncomeModel.RoomID,
-                Note = residentIncomeModel.Note
-            };
+           
 
-            try
+
+
+            if (TryUpdateModel(residentIncomeModel, "",
+                 new string[] { "LastName", "FirstMidName", "Birthdate", "ServiceBranch", "Note", "HasPTSD", "InVetCourt", "Benefit", "MilitaryCampaigns", "TotalBenefitAmount" }))
             {
-                if (ModelState.IsValid)
+                try
                 {
-                    db.Residents.Add(resident);
+
+                    UpdateResidentCampaigns(selectedCampaigns, resident);
                     db.SaveChanges();
 
                     return RedirectToAction("Index");
                 }
+                catch (DataException /* dex */)
+                {
+                    //Log the error (uncomment dex variable name and add a line here to write a log.
+                    ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
+                }
+            }
 
 
-            }
-            catch (DataException dex)
-            {
-                //Log the error (uncomment dex variable name and add a line here to write a log.
-                ModelState.AddModelError("", dex.InnerException.Message);
-            }
+
+
+
             return View(residentIncomeModel);
         }
 
@@ -209,8 +281,8 @@ namespace FIVESTARVC.Controllers
 
             PopulateAssignedCampaignData(resident);
 
-          
-            
+
+
             if (resident == null)
             {
                 return HttpNotFound();
@@ -342,7 +414,11 @@ namespace FIVESTARVC.Controllers
                 Resident resident = db.Residents.Find(id);
                 Benefit benefit = db.Benefits.Find(resident.BenefitID);
 
-                db.Benefits.Remove(benefit);
+                if (benefit != null)
+                {
+                    db.Benefits.Remove(benefit);
+                } 
+
                 db.Residents.Remove(resident);
                 db.SaveChanges();
             }
