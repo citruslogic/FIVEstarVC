@@ -139,17 +139,18 @@
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
 
-    <script type="text/javascript">
+<script type="text/javascript">
 
-        $('.income').on("keyup", function () {
-            var total = parseFloat(0.0);
-            $('.income').each(function () {
-                total += parseFloat($(this).val()) || 0;
-            });
+    $('.income').on("keyup", function () {
+        var total = parseFloat(0.0);
 
-            $('.total').val(total);
+        $('.income').each(function () {
+            total += parseFloat($(this).val() || 0);
         });
 
+        $('#TotalBenefitAmount').val(total);
+    });
 
-    </script>
+
+</script>
 }
