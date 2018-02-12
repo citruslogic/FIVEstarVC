@@ -49,8 +49,7 @@ namespace FIVESTARVC.Models
 
 
         /* return the age of a veteran (in years) and do not store in the database. */
-        [Display(Name="Age")]
-        public int ResidentAge
+        public int Age
         { 
             get
             {
