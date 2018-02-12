@@ -12,8 +12,8 @@ namespace FIVESTARVC.ViewModels
 {
     public class ResidentIncomeModel
     {
-        //Room
-        //public int RoomID { get; set; }
+       
+        public int RoomID { get; set; }
         [Required]
         [Display(Name = "Room Number")]
         public int RoomNum { get; set; }
@@ -22,7 +22,7 @@ namespace FIVESTARVC.ViewModels
         public bool IsOccupied { get; set; }
         public string WingName { get; set; }
 
-        public Room GetRoom { get; set; }
+        //public Room GetRoom { get; set; }
 
 
         // RESIDENT
@@ -42,8 +42,8 @@ namespace FIVESTARVC.ViewModels
         public Boolean HasPTSD { get; set; }
         [Display(Name = "In Veterans Court")]
         public Boolean InVetCourt { get; set; }
-        [Display(Name = "Room Number")]
-        public int RoomID { get; set; }
+        //[Display(Name = "Room Number")]
+        //public int RoomID { get; set; }
         [Display(Name = "Note")]
         [StringLength(150)]
         public string Note { get; set; }

@@ -109,36 +109,76 @@ namespace FIVESTARVC.Controllers
         // GET: Residents/Create
         public ActionResult Create()
         {
+            var rooms = db.Rooms
+                .Where(r => r.IsOccupied == false)
+                .ToList();
 
-            var roomToAssign = from y in db.Rooms
-                        .Where(y => y.IsOccupied == false)
-                        select y;
+            IEnumerable<SelectListItem> items = from room in rooms
+                                                select new SelectListItem
+                                                {
 
-            foreach(var room in roomToAssign)
-            {
-                ResidentIncomeModel rooms = new ResidentIncomeModel
-                {
-                    RoomID = room.RoomID,
-                    RoomNum = room.RoomNum,
-                    WingName = room.WingName
-                };
+                                                    Text = room.RoomNum.ToString(),
+                                                    Value = room.RoomID.ToString(),
+                                                    Selected = room.RoomNum == room.RoomNum,
 
-               
+                                                };
 
-                ViewBag.rooms = room.RoomNum;
-                
-            }
 
-            return (ViewBag.rooms);
+            
+
+                ViewBag.Rooms = items;
+
+           
+
+            return (ViewBag.Rooms);
 
 
         }
-          
 
-        // POST: Residents/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
+    //var model = new List<ResidentIncomeModel>();
+
+    //foreach (Room CurrentRoom in rooms)
+    //{
+    //    ResidentIncomeModel AvailRoom = new ResidentIncomeModel
+
+    //    {
+    //        RoomID = CurrentRoom.RoomID,
+    //        RoomNum = CurrentRoom.RoomNum,
+    //        IsOccupied = CurrentRoom.IsOccupied,
+    //        WingName = CurrentRoom.WingName
+    //    };
+
+
+
+
+    //    model.Add(AvailRoom);
+
+    //var roomToAssign = from y in db.Rooms
+    //            .Where(y => y.IsOccupied == false)
+    //            select y;
+
+    //foreach(var room in roomToAssign)
+    //{
+    //    ResidentIncomeModel rooms = new ResidentIncomeModel
+    //    {
+    //        RoomID = room.RoomID,
+    //        RoomNum = room.RoomNum,
+    //        WingName = room.WingName
+    //    };
+
+
+
+    //    ViewBag.rooms = room.RoomNum;
+
+    //}
+
+
+
+
+    // POST: Residents/Create
+    // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+    // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
+    [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create(ResidentIncomeModel residentIncomeModel)
         {
