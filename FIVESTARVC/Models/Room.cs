@@ -12,7 +12,7 @@ namespace FIVESTARVC.Models
    
     public class Room
     {
-        //public List<Room> rooms
+        
         public int RoomID { get; set; }
 
         [Display(Name = "Room Number")]

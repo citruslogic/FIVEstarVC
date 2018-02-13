@@ -18,7 +18,7 @@ namespace FIVESTARVC.Controllers
         private ResidentContext db = new ResidentContext();
 
         public static List<Models.Room> MyRoom = new List<Models.Room>();
-        
+
 
 
         // GET: Residents
@@ -146,7 +146,7 @@ namespace FIVESTARVC.Controllers
             }
                 return View(Rooms);
         }
-               
+
         // POST: Residents/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
@@ -154,6 +154,29 @@ namespace FIVESTARVC.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create(ResidentIncomeModel residentIncomeModel)
         {
+            //convert the dropdown to local variable
+            Convert.ToInt32(residentIncomeModel.RoomID);
+
+            //query rooms to retrieve the room object
+            var AddRooms = from y in db.Rooms
+                            .Where(y => y.RoomID == residentIncomeModel.RoomID)
+                           select y;
+
+            
+                 //explode the room object to get the items needed.
+                foreach (var item in AddRooms)
+                {
+
+                    residentIncomeModel.RoomID = item.RoomID;
+                    residentIncomeModel.RoomNum = item.RoomNum;
+                    item.IsOccupied = true;
+                }
+
+            //Save the room in the room table
+           
+               //Room rooms.IsOccupied = residentIncomeModel.IsOccupied;           
+           
+
             Benefit benefit = new Benefit
             {
 
@@ -192,8 +215,9 @@ namespace FIVESTARVC.Controllers
                 ServiceBranch = residentIncomeModel.ServiceBranch,
                 HasPTSD = residentIncomeModel.HasPTSD,
                 InVetCourt = residentIncomeModel.InVetCourt,
-                //RoomID = residentIncomeModel.RoomID,
-                Note = residentIncomeModel.Note
+                RoomID = residentIncomeModel.RoomID,
+                Note = residentIncomeModel.Note,
+                
             };
 
             try
@@ -202,6 +226,8 @@ namespace FIVESTARVC.Controllers
                 {
                     db.Residents.Add(resident);
                     db.SaveChanges();
+                   
+                    
 
                     return RedirectToAction("Index");
                 }

@@ -50,7 +50,8 @@
                     <tr>
                         <td class="col-form-label"> @Html.LabelFor(model => model.RoomIEnum, htmlAttributes: new { @class = "control-label col-md-offset-3" })</td>
                         <td>
-                            @Html.DropDownListFor(p => p.Rooms,  Model.RoomIEnum, "Select a Room", new{@Room = "Room-DropdownID",@class = "Room-DropdownCls"})
+                            @Html.DropDownListFor(p => p.RoomID,  Model.RoomIEnum, "Select Room")
+                           
                         </td>
                             
                         

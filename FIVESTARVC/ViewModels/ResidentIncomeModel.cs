@@ -16,6 +16,12 @@ namespace FIVESTARVC.ViewModels
 
         public List<Room> Rooms = new List<Room>();
         public int SelectedRoomID { get; set; }
+        public int RoomID { get; set; }
+
+        public bool IsOccupied {get; set;}
+        public int RoomNum { get; set; }
+
+
         public IEnumerable<SelectListItem> RoomIEnum
         {
             get
@@ -47,8 +53,8 @@ namespace FIVESTARVC.ViewModels
         public Boolean HasPTSD { get; set; }
         [Display(Name = "In Veterans Court")]
         public Boolean InVetCourt { get; set; }
-        [Display(Name = "Room Number")]
-        public int RoomID { get; set; }
+        //[Display(Name = "Room Number")]
+        //public int RoomID { get; set; }
         [Display(Name = "Note")]
         [StringLength(150)]
         public string Note { get; set; }
