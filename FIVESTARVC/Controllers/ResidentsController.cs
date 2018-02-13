@@ -118,6 +118,7 @@ namespace FIVESTARVC.Controllers
             var roomToAssign = from y in db.Rooms
                         .Where(y => y.IsOccupied == false)
                                select y;
+            
 
             //MyRoom.Clear();
             foreach (Models.Room y in roomToAssign)
@@ -144,7 +145,11 @@ namespace FIVESTARVC.Controllers
                 }
 
             }
+
+            
+                
                 return View(Rooms);
+            
         }
 
         // POST: Residents/Create
@@ -155,28 +160,35 @@ namespace FIVESTARVC.Controllers
         public ActionResult Create(ResidentIncomeModel residentIncomeModel)
         {
             //convert the dropdown to local variable
-            Convert.ToInt32(residentIncomeModel.RoomID);
+            //Convert.ToInt32(residentIncomeModel.RoomID);
 
             //query rooms to retrieve the room object
             var AddRooms = from y in db.Rooms
                             .Where(y => y.RoomID == residentIncomeModel.RoomID)
                            select y;
 
-            
-                 //explode the room object to get the items needed.
-                foreach (var item in AddRooms)
-                {
 
-                    residentIncomeModel.RoomID = item.RoomID;
-                    residentIncomeModel.RoomNum = item.RoomNum;
-                    item.IsOccupied = true;
-                }
+            //explode the room object to get the items needed.
+            foreach (var item in AddRooms)
+            {
+
+                residentIncomeModel.RoomID = item.RoomID;
+                residentIncomeModel.RoomNum = item.RoomNum;
+                residentIncomeModel.IsOccupied = item.IsOccupied = true;
+
+            }
 
             //Save the room in the room table
-           
-               //Room rooms.IsOccupied = residentIncomeModel.IsOccupied;           
-           
 
+            var roomToUpdate = db.Rooms.Find(residentIncomeModel.RoomID);
+
+            if (TryUpdateModel(roomToUpdate))
+            {
+               roomToUpdate.IsOccupied = residentIncomeModel.IsOccupied;
+                                               
+               db.SaveChanges();
+            }
+            
             Benefit benefit = new Benefit
             {
 
