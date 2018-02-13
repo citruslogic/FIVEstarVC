@@ -17,6 +17,9 @@ namespace FIVESTARVC.Controllers
     {
         private ResidentContext db = new ResidentContext();
 
+        public static List<Models.Room> MyRoom = new List<Models.Room>();
+        
+
 
         // GET: Residents
         public ActionResult Index(string sortOrder, string currentFilter, string searchString, int? page)
@@ -109,76 +112,122 @@ namespace FIVESTARVC.Controllers
         // GET: Residents/Create
         public ActionResult Create()
         {
-            var rooms = db.Rooms
-                .Where(r => r.IsOccupied == false)
-                .ToList();
 
-            IEnumerable<SelectListItem> items = from room in rooms
-                                                select new SelectListItem
-                                                {
+            ResidentIncomeModel databaseContext = new ResidentIncomeModel();
 
-                                                    Text = room.RoomNum.ToString(),
-                                                    Value = room.RoomID.ToString(),
-                                                    Selected = room.RoomNum == room.RoomNum,
+            var roomToAssign = from y in db.Rooms
+                        .Where(y => y.IsOccupied == false)
+                               select y;
 
-                                                };
+            //MyRoom.Clear();
+            foreach (Models.Room y in roomToAssign)
+            {
+                MyRoom.Add(y);               
+            }
+             
 
-
-            
-
-                ViewBag.Rooms = items;
-
-           
-
-            return (ViewBag.Rooms);
-
-
+            //databaseContext = MyRoom.ToList();
+            return View(databaseContext);
         }
 
-    //var model = new List<ResidentIncomeModel>();
-
-    //foreach (Room CurrentRoom in rooms)
-    //{
-    //    ResidentIncomeModel AvailRoom = new ResidentIncomeModel
-
-    //    {
-    //        RoomID = CurrentRoom.RoomID,
-    //        RoomNum = CurrentRoom.RoomNum,
-    //        IsOccupied = CurrentRoom.IsOccupied,
-    //        WingName = CurrentRoom.WingName
-    //    };
 
 
 
 
-    //    model.Add(AvailRoom);
-
-    //var roomToAssign = from y in db.Rooms
-    //            .Where(y => y.IsOccupied == false)
-    //            select y;
-
-    //foreach(var room in roomToAssign)
-    //{
-    //    ResidentIncomeModel rooms = new ResidentIncomeModel
-    //    {
-    //        RoomID = room.RoomID,
-    //        RoomNum = room.RoomNum,
-    //        WingName = room.WingName
-    //    };
 
 
 
-    //    ViewBag.rooms = room.RoomNum;
+        //List<Room> MyRoom = new List<Room>();
 
-    //}
+        //MyRoom = db.Rooms
+        //     .Where(r => r.IsOccupied == false)
+        //        .ToList();
+
+        //    return View();
+
+        //IEnumerable<SelectListItem> items = from room in rooms
+        //                                    select new SelectListItem
+        //                                    {
+        //                                        room.RoomID,
+        //                                        room.RoomNum,
+        //                                        room.WingName
+
+        //                                        Text = room.RoomID.ToString(),
+        //                                        Value = room.RoomID.ToString(),
+
+        //                                        Text = room.RoomNum.ToString(),
+        //                                        Value = room.RoomID.ToString(),
+
+
+        //                                    };
+
+
+        
 
 
 
 
-    // POST: Residents/Create
-    // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-    // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
-    [HttpPost]
+
+        //ViewBag.Rooms = items;
+
+
+        //IList<ResidentIncomeModel> viewmodel = new List<ResidentIncomeModel>();
+
+        //foreach (SelectListItem item in items)
+        //{
+        //    ResidentIncomeModel viewItem = new ResidentIncomeModel();
+        //    // I don't know the properties of Question.
+        //    viewItem.RoomID = item.RoomID;
+        //    viewItem.CName = item.???;
+        //    viewItem.SName = -item.???;
+        //    viewModel.Add(viewItem);
+        //}
+        //return View(viewModel);
+
+        //var model = new List<ResidentIncomeModel>();
+
+        //foreach (Room CurrentRoom in rooms)
+        //{
+        //    ResidentIncomeModel AvailRoom = new ResidentIncomeModel
+
+        //    {
+        //        RoomID = CurrentRoom.RoomID,
+        //        RoomNum = CurrentRoom.RoomNum,
+        //        IsOccupied = CurrentRoom.IsOccupied,
+        //        WingName = CurrentRoom.WingName
+        //    };
+
+
+
+
+        //    model.Add(AvailRoom);
+
+        //var roomToAssign = from y in db.Rooms
+        //            .Where(y => y.IsOccupied == false)
+        //            select y;
+
+        //foreach(var room in roomToAssign)
+        //{
+        //    ResidentIncomeModel rooms = new ResidentIncomeModel
+        //    {
+        //        RoomID = room.RoomID,
+        //        RoomNum = room.RoomNum,
+        //        WingName = room.WingName
+        //    };
+
+
+
+        //    ViewBag.rooms = room.RoomNum;
+
+        //}
+
+
+
+
+        // POST: Residents/Create
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create(ResidentIncomeModel residentIncomeModel)
         {
@@ -220,7 +269,7 @@ namespace FIVESTARVC.Controllers
                 ServiceBranch = residentIncomeModel.ServiceBranch,
                 HasPTSD = residentIncomeModel.HasPTSD,
                 InVetCourt = residentIncomeModel.InVetCourt,
-                RoomID = residentIncomeModel.RoomID,
+                //RoomID = residentIncomeModel.RoomID,
                 Note = residentIncomeModel.Note
             };
 

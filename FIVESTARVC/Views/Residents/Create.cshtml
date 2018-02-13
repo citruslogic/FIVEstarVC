@@ -48,18 +48,9 @@
                         </td>
                     </tr>
                     <tr>
-                        <td class="col-form-label"> @Html.LabelFor(model => model.RoomID, htmlAttributes: new { @class = "control-label col-md-offset-3" })</td>
+                        <td class="col-form-label"> @Html.LabelFor(model => model.RoomIEnum, htmlAttributes: new { @class = "control-label col-md-offset-3" })</td>
                         <td>
-                            @*@Html.DropDownListFor(m => m.RoomID, )*@
-                            @{
-
-                                List<Room> availRoom = ViewBag.rooms;
-
-                                foreach (var room in availRoom)
-                                {
-                                        @Html.EnumDropDownListFor(x => x.RoomNum)
-                                    }
-                                }
+                            @Html.DropDownListFor(model => model.RoomIEnum,  Model.RoomIEnum, "Select a Room", new{@id = "Room-DropdownID",@class = "Room-DropdownCls"})
                         </td>
                             
                         

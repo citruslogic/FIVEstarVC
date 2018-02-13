@@ -12,15 +12,34 @@ namespace FIVESTARVC.ViewModels
 {
     public class ResidentIncomeModel
     {
-       
-        public int RoomID { get; set; }
-        [Required]
-        [Display(Name = "Room Number")]
-        public int RoomNum { get; set; }
+        //Room
 
-        [Display(Name = "Is Occupied")]
-        public bool IsOccupied { get; set; }
-        public string WingName { get; set; }
+        public List<Room> MyRoom = new List<Room>();
+        public int SelectedRoomID { get; set; }
+        public IEnumerable<SelectListItem> RoomIEnum
+        {
+            get
+            {
+                return new SelectList(MyRoom, "ID", "RoomNum");
+            }
+
+        }
+
+        //public static implicit operator ResidentIncomeModel(List<Room> v)
+        //{
+
+
+        //    throw new NotImplementedException();
+        //}
+
+        //public int RoomID { get; set; }
+        //[Required]
+        //[Display(Name = "Room Number")]
+        //public int RoomNum { get; set; }
+
+        //[Display(Name = "Is Occupied")]
+        //public bool IsOccupied { get; set; }
+        //public string WingName { get; set; }
 
         //public Room GetRoom { get; set; }
 
@@ -86,6 +105,8 @@ namespace FIVESTARVC.ViewModels
         [DisplayFormat(DataFormatString = "{0:C0}")]
         [Display(Name = "Other (Amount)")]
         public decimal? Other { get; set; }
+
+       
         /***************************************/
     }
 }
