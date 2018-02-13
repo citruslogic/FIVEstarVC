@@ -15,6 +15,8 @@ namespace FIVESTARVC.Controllers
     {
         private ResidentContext DB = new ResidentContext();
 
+        public HistoricData HD = new HistoricData();
+
         // GET: Reports
         public ActionResult Index()
         {
@@ -73,6 +75,8 @@ namespace FIVESTARVC.Controllers
 
         public ActionResult Historic()
         {
+            //HD.totalAdmitted;
+
             return View();
         }
 
@@ -180,5 +184,8 @@ namespace FIVESTARVC.Controllers
 
             return month;
         }
+
+        
+
     }
 }

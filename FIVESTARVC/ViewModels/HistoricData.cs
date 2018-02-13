@@ -8,9 +8,10 @@ namespace FIVESTARVC.ViewModels
 {
     public class HistoricData
     {
+        public Resident resident = new Resident();
+        public ProgramEvent program = new ProgramEvent();
 
+        public int totalAdmitted { get; set; }
 
-        public Resident resident;
-        public ProgramEvent program;
     }
 }
