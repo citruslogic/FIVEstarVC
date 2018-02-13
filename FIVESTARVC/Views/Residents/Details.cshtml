@@ -46,6 +46,19 @@
                             }
                         }
                     </td>
+                    <td class="col-form-label">
+                        @Html.Label("Age", htmlAttributes: new { @class = "control-label font-weight-bold"})
+                    </td>
+                    <td class="col-form-label">
+                        
+                        @if((Model.Age) != 0)
+                        {
+                            @(Model.Age)
+                        } else
+                        {
+                            <text>Not available.</text>
+                        }
+                    </td>
                 </tr>
                 <tr class="form-row">
                     <td class="col-form-label">

@@ -16,7 +16,7 @@
         <div class="col-sm-5 table-responsive">
             <h2> New Resident </h2>
 
-            <table class="table table-active">
+            <table class="table-sm">
 
 
                 <tbody>
@@ -40,6 +40,14 @@
                             @Html.ValidationMessageFor(model => model.FirstMidName, "", new { @class = "text-danger" })
                         </td>
                     </tr>
+                    <tr>
+                        <td class="col-form-label">@Html.LabelFor(model => model.Birthdate, htmlAttributes: new { @class = "control-label col-md-offset-3" })</td>
+                        <td class="col-auto">
+                            @Html.EditorFor(model => model.Birthdate, new { htmlAttributes = new { @class = "form-control date" } })
+                            @Html.ValidationMessageFor(model => model.Birthdate, "", new { @class = "text-danger" })
+                        </td>
+                    </tr>
+
                     <tr>
                         <td class="col-form-label"> @Html.LabelFor(model => model.ServiceBranch, htmlAttributes: new { @class = "control-label col-md-offset-3" })</td>
                         <td class="col-auto">
@@ -65,10 +73,49 @@
                         </td>
                     </tr>
                     <tr>
+                        <td class="col-form-label">@Html.Label("in Veteran's Court?", htmlAttributes: new { @class = "control-label col-sm-offset-10" })</td>
+                        <td class="col-auto">
+                            @Html.EditorFor(model => model.InVetCourt)
+                            @Html.ValidationMessageFor(model => model.InVetCourt, "", new { @class = "text-danger" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-form-label">
+                            @Html.Label("Campaigns", htmlAttributes: new { @class = "control-label col-md-offset-3" })
+                        </td>
+                        <td>
+                            <div class="form-check">
+                                @{
+                                    int cnt = 0;
+                                    List<FIVESTARVC.ViewModels.AssignedCampaignData> campaigns = ViewBag.Campaigns;
+
+                                    foreach (var campaign in campaigns)
+                                    {
+                                        if (cnt++ % 1 == 0)
+                                        {
+                                            @:<br />
+                                        }
+                                        @:
+
+
+
+
+                                        <input type="checkbox"
+                                               name="selectedCampaigns"
+                                               value="@campaign.MilitaryCampaignID"
+                                               @(Html.Raw(campaign.Assigned ? "checked=\"checked\"" : "")) />
+                                        @campaign.MilitaryCampaign @: &nbsp;
+                                    }
+
+                                }
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
                         <td class="col-form-label">@Html.LabelFor(model => model.Note, htmlAttributes: new { @class = "control-label col-md-offset-3" }) </td>
                         <td class="col-auto">
-                            @Html.TextBoxFor(model => model.Note, htmlAttributes: new { @class = "form-control" })
-                            @Html.ValidationMessageFor(model => model.Note, "", new { @class = "text-danger"})
+                            @Html.TextAreaFor(model => model.Note, htmlAttributes: new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.Note, "", new { @class = "text-danger" })
                         </td>
                     </tr>
                 </tbody>
@@ -76,23 +123,22 @@
 
         </div>
 
-        @Html.Partial("BenefitPartialView")
+        @Html.Partial("BenefitPartialViewCreate")
 
     </div>
 
 
-
-    <div class="form-group">
-        <div class="col-md-offset-2 col-md-10">
-            <input type="submit" value="Create" class="btn btn-default" />
+    <br />
+    <div class="form-group form-inline">
+        <div class="col-md-offset-1 col-md-2">
+            <input type="submit" value="Update" class="btn btn-dark" />
+        </div>
+        <div>
+            @Html.ActionLink("Back to List", "Index")
         </div>
     </div>
-
+  
 }
-
-<div>
-    @Html.ActionLink("Back to List", "Index")
-</div>
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
@@ -101,11 +147,12 @@
 
         $('.income').on("keyup", function () {
             var total = parseFloat(0.0);
+
             $('.income').each(function () {
-                total += parseFloat($(this).val()) || 0;
+                total += parseFloat($(this).val() || 0);
             });
 
-            $('.total').val(total);
+            $('#TotalBenefitAmount').val(total);
         });
 
 
