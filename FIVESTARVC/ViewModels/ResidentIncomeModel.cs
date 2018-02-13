@@ -14,34 +14,20 @@ namespace FIVESTARVC.ViewModels
     {
         //Room
 
-        public List<Room> MyRoom = new List<Room>();
+        public List<Room> Rooms = new List<Room>();
         public int SelectedRoomID { get; set; }
         public IEnumerable<SelectListItem> RoomIEnum
         {
             get
             {
-                return new SelectList(MyRoom, "ID", "RoomNum");
+                return new SelectList(Rooms, "RoomID", "RoomNum");
+
+                //return new SelectList(Rooms, "RoomID", "RoomNum", "WingName");
             }
 
         }
 
-        //public static implicit operator ResidentIncomeModel(List<Room> v)
-        //{
-
-
-        //    throw new NotImplementedException();
-        //}
-
-        //public int RoomID { get; set; }
-        //[Required]
-        //[Display(Name = "Room Number")]
-        //public int RoomNum { get; set; }
-
-        //[Display(Name = "Is Occupied")]
-        //public bool IsOccupied { get; set; }
-        //public string WingName { get; set; }
-
-        //public Room GetRoom { get; set; }
+        
 
 
         // RESIDENT
@@ -61,8 +47,8 @@ namespace FIVESTARVC.ViewModels
         public Boolean HasPTSD { get; set; }
         [Display(Name = "In Veterans Court")]
         public Boolean InVetCourt { get; set; }
-        //[Display(Name = "Room Number")]
-        //public int RoomID { get; set; }
+        [Display(Name = "Room Number")]
+        public int RoomID { get; set; }
         [Display(Name = "Note")]
         [StringLength(150)]
         public string Note { get; set; }

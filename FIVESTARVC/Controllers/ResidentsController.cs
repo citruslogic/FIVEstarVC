@@ -113,7 +113,7 @@ namespace FIVESTARVC.Controllers
         public ActionResult Create()
         {
 
-            ResidentIncomeModel databaseContext = new ResidentIncomeModel();
+            ResidentIncomeModel Rooms = new ResidentIncomeModel();
 
             var roomToAssign = from y in db.Rooms
                         .Where(y => y.IsOccupied == false)
@@ -122,108 +122,31 @@ namespace FIVESTARVC.Controllers
             //MyRoom.Clear();
             foreach (Models.Room y in roomToAssign)
             {
-                MyRoom.Add(y);               
+                MyRoom.Add(y); 
+                
             }
-             
 
-            //databaseContext = MyRoom.ToList();
-            return View(databaseContext);
+            foreach (var z in MyRoom)
+            {
+                if (z.WingName == "EastSouth")
+                {
+                    Rooms.Rooms.Add(z);
+                }
+
+                else if (z.WingName == "North")
+                {
+                    Rooms.Rooms.Add(z);
+                }
+
+                else
+                {
+                    Rooms.Rooms.Add(z);
+                }
+
+            }
+                return View(Rooms);
         }
-
-
-
-
-
-
-
-
-        //List<Room> MyRoom = new List<Room>();
-
-        //MyRoom = db.Rooms
-        //     .Where(r => r.IsOccupied == false)
-        //        .ToList();
-
-        //    return View();
-
-        //IEnumerable<SelectListItem> items = from room in rooms
-        //                                    select new SelectListItem
-        //                                    {
-        //                                        room.RoomID,
-        //                                        room.RoomNum,
-        //                                        room.WingName
-
-        //                                        Text = room.RoomID.ToString(),
-        //                                        Value = room.RoomID.ToString(),
-
-        //                                        Text = room.RoomNum.ToString(),
-        //                                        Value = room.RoomID.ToString(),
-
-
-        //                                    };
-
-
-        
-
-
-
-
-
-        //ViewBag.Rooms = items;
-
-
-        //IList<ResidentIncomeModel> viewmodel = new List<ResidentIncomeModel>();
-
-        //foreach (SelectListItem item in items)
-        //{
-        //    ResidentIncomeModel viewItem = new ResidentIncomeModel();
-        //    // I don't know the properties of Question.
-        //    viewItem.RoomID = item.RoomID;
-        //    viewItem.CName = item.???;
-        //    viewItem.SName = -item.???;
-        //    viewModel.Add(viewItem);
-        //}
-        //return View(viewModel);
-
-        //var model = new List<ResidentIncomeModel>();
-
-        //foreach (Room CurrentRoom in rooms)
-        //{
-        //    ResidentIncomeModel AvailRoom = new ResidentIncomeModel
-
-        //    {
-        //        RoomID = CurrentRoom.RoomID,
-        //        RoomNum = CurrentRoom.RoomNum,
-        //        IsOccupied = CurrentRoom.IsOccupied,
-        //        WingName = CurrentRoom.WingName
-        //    };
-
-
-
-
-        //    model.Add(AvailRoom);
-
-        //var roomToAssign = from y in db.Rooms
-        //            .Where(y => y.IsOccupied == false)
-        //            select y;
-
-        //foreach(var room in roomToAssign)
-        //{
-        //    ResidentIncomeModel rooms = new ResidentIncomeModel
-        //    {
-        //        RoomID = room.RoomID,
-        //        RoomNum = room.RoomNum,
-        //        WingName = room.WingName
-        //    };
-
-
-
-        //    ViewBag.rooms = room.RoomNum;
-
-        //}
-
-
-
-
+               
         // POST: Residents/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
