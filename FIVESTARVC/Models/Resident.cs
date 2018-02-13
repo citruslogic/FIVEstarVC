@@ -9,28 +9,7 @@ using FIVESTARVC.DAL;
 
 namespace FIVESTARVC.Models
 {
-    /* May be removed in the future in favor of a separate entity. 
-     * The entity name could be ServiceType with ServiceTypeID as 
-     * a property to this entity, Resident. 
-     * - Frank Butler (1/27/2018) */
-    public enum ServiceType
-    {
-        [Description("Air Force")]
-        [Display(Name = "Air Force")]
-        AIRFORCE,
-        [Description("Army")]
-        [Display(Name = "Army")]
-        ARMY,
-        [Description("Coast Guard")]
-        [Display(Name = "Coast Guard")]
-        COASTGUARD,
-        [Description("Marines")]
-        [Display(Name = "Marines")]
-        MARINES,
-        [Description("Navy")]
-        [Display(Name = "Navy")]
-        NAVY
-    }
+   
 
     public class Resident
     {
@@ -44,13 +23,13 @@ namespace FIVESTARVC.Models
         public string FirstMidName { get; set; }
         [Display(Name = "Birthdate")]
         [DataType(DataType.Date)]
-        [DisplayFormat(DataFormatString = "{0:MM-dd-yyyy}", ApplyFormatInEditMode = true)]
+        [DisplayFormat(DataFormatString = "{0:MM/dd/yyyy}", ApplyFormatInEditMode = true)]
         public DateTime? Birthdate { get; set; }
         [Display(Name = "Service Branch")]
         public ServiceType ServiceBranch { get; set; }
         [Display(Name = "Resident has PTSD?")]
         public Boolean HasPTSD { get; set; }
-        [Display(Name = "In Veterans Court")]
+        [Display(Name = "In Veterans Court?")]
         public Boolean InVetCourt { get; set; }
         [Display(Name = "Room Number")]
         [ForeignKey("Room")]
@@ -63,10 +42,23 @@ namespace FIVESTARVC.Models
         public virtual ICollection<ProgramEvent> ProgramEvents { get; set; }
         public virtual Room Room { get; set; }
 
-        [ForeignKey("Benefits")]
+        [ForeignKey("Benefit")]
         public int? BenefitID { get; set; }
 
-        public virtual ICollection<Benefit> Benefits { get; set; }
+        public virtual Benefit Benefit { get; set; }
+
+
+        /* return the age of a veteran (in years) and do not store in the database. */
+        public int Age
+        { 
+            get
+            {
+                TimeSpan span = DateTime.Now - Birthdate.GetValueOrDefault(DateTime.Now);
+                DateTime age = DateTime.MinValue + span;
+
+                return age.Year - 1;
+            }
+        }
 
         public Boolean isCurrent(Resident resident)
         {
@@ -100,4 +92,6 @@ namespace FIVESTARVC.Models
         }
 
     }
+
+
 }

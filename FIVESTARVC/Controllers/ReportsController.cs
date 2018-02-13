@@ -21,7 +21,7 @@ namespace FIVESTARVC.Controllers
         public ActionResult Index()
         {
             //Variables to count branch types
-            ViewBag.NavyCount = DB.Residents.Count(x => x.ServiceBranch == ServiceType.NAVY);
+            ViewBag.NavyCount = DB.Residents.Count(x => x.ServiceBranch == ServiceType.ARMY);
             ViewBag.MarineCount = DB.Residents.Count(x => x.ServiceBranch == ServiceType.MARINES);
             ViewBag.ArmyCount = DB.Residents.Count(x => x.ServiceBranch == ServiceType.ARMY);
             ViewBag.AirForceCount = DB.Residents.Count(x => x.ServiceBranch == ServiceType.AIRFORCE);
