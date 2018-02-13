@@ -10,7 +10,7 @@
         <thead>
             <tr>
                 <th class="col-md-2">Type</th>
-                <th class="col-md-3">Amount</th>
+                <th class="col-md-2">Amount</th>
             </tr>
         </thead>
         <tbody>
@@ -19,7 +19,13 @@
                     @Html.LabelFor(model => model.DisabilityPercentage, htmlAttributes: new { @class = "control-label col-md-offset-1" })
                 </td>
                 <td>
-                    @Html.EditorFor(model => model.DisabilityPercentage, new { htmlAttributes = new { @class = "form-control" } })
+                    <div class="input-group money-wide mb-2">
+
+                        @Html.EditorFor(model => model.DisabilityPercentage, new { htmlAttributes = new { @class = "form-control money-wide" } })
+                        <div class="input-group-append">
+                            <span class="input-group-text">%</span>
+                        </div>
+                    </div>
                     @Html.ValidationMessageFor(model => model.DisabilityPercentage, "", new { @class = "text-danger" })
                 </td>
 
@@ -57,13 +63,13 @@
                     @Html.LabelFor(model => model.OtherDescription, htmlAttributes: new { @class = "control-label" })
                 </td>
                 <td>
-                    @Html.EditorFor(model => model.OtherDescription, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.TextAreaFor(model => model.OtherDescription, htmlAttributes: new { @class = "form-control" })
                     @Html.ValidationMessageFor(model => model.OtherDescription, "", new { @class = "text-danger" })
                 </td>
             </tr>
             <tr>
                 <td class="col-form-label">
-                    @Html.LabelFor(model => model.Other, htmlAttributes: new { @class = "control-label col-md-offset-1" })
+                    @Html.LabelFor(model => model.Other, htmlAttributes: new { @class = "control-label" })
                 </td>
                 <td>
                     @Html.EditorFor(model => model.Other, new { htmlAttributes = new { @class = "form-control income money-wide" } })
@@ -71,16 +77,26 @@
                 </td>
             </tr>
             <tr>
-                <td class="col-form-label alert-dark">
-                    @Html.LabelFor(model => model.TotalBenefitAmount, htmlAttributes: new { @class = "control-label col-md-offset-1" })
+                <td class="col-form-label  alert-dark">
+                    @Html.LabelFor(model => model.TotalBenefitAmount, htmlAttributes: new { @class = "control-label" })
                 </td>
-                <td class="col-form-label alert-dark">
-                    @Html.EditorFor(model => model.TotalBenefitAmount, new { htmlAttributes = new { @class = "form-control money-wide" } })
+                <td class="alert-dark">
+                    <div class="input-group mb-2 money-wide">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">$</span>
+                        </div>
+                        @Html.EditorFor(model => model.TotalBenefitAmount, new { htmlAttributes = new { @class = "form-control" } })
+                        </div>
                 </td>
             </tr>
         </tbody>
     </table>
 </div>
+
+
+
+
+
 
 
 @section Scripts {

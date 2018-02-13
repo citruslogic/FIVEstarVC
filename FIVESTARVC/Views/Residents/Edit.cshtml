@@ -117,14 +117,6 @@
 
                     </tbody>
                 </table>
-                <div class="form-group">
-                    <div class="col-md-offset-2 col-md-10">
-                        <table>
-                            <tr>
-
-                        </table>
-                    </div>
-                </div>
 
             </div>
 
@@ -135,17 +127,18 @@
 
 
 
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
+        <div class="form-group form-inline">
+            <div class="col-md-offset-1 col-md-2">
                 <input type="submit" value="Update" class="btn btn-dark" />
+            </div>
+            <div>
+                @Html.ActionLink("Back to List", "Index")
             </div>
         </div>
     </div>
 }
 
-<div>
-    @Html.ActionLink("Back to List", "Index")
-</div>
+
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
