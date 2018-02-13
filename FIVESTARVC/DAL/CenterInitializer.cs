@@ -70,7 +70,10 @@ namespace FIVESTARVC.DAL
             {
                 new Resident { FirstMidName="Carson", LastName="Steven", ServiceBranch=ServiceType.ARMY, RoomID=1 },
                 new Resident { FirstMidName="Naomi", LastName="Wildman", ServiceBranch=ServiceType.AIRFORCE, RoomID=2 },
-                new Resident { FirstMidName="Gary", LastName="Noonan", ServiceBranch=ServiceType.NAVY, RoomID=3 }
+                new Resident { FirstMidName="Gary", LastName="Noonan", ServiceBranch=ServiceType.NAVY, RoomID=3 },
+                new Resident { FirstMidName="Steve", LastName="Nash", ServiceBranch=ServiceType.MARINES, RoomID=4 },
+                new Resident { FirstMidName="Neo", LastName="Anderson", ServiceBranch=ServiceType.AIRFORCE, RoomID=5 },
+                new Resident { FirstMidName="Charlie", LastName="Brown", ServiceBranch=ServiceType.NAVY, RoomID=6 }
             };
 
             residents.ForEach(r => context.Residents.Add(r));
