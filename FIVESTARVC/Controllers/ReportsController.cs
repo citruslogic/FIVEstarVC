@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Data.Entity;
 using FIVESTARVC.DAL;
 using FIVESTARVC.Models;
 using FIVESTARVC.ViewModels;
@@ -83,6 +84,7 @@ namespace FIVESTARVC.Controllers
             
 
             var residents = DB.Residents;
+
 
             var myExport = new CsvExport();
 

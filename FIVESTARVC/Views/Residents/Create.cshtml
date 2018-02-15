@@ -81,7 +81,7 @@
                             @Html.Label("Campaigns", htmlAttributes: new { @class = "control-label col-md-offset-3" })
                         </td>
                         <td>
-                            <div class="form-check">
+                            <div class="form-check campaigns" style="overflow-y: scroll">
                                 @{
                                     int cnt = 0;
                                     List<FIVESTARVC.ViewModels.AssignedCampaignData> campaigns = ViewBag.Campaigns;
@@ -106,6 +106,9 @@
 
                                 }
                             </div>
+                            <div class="newcampaign" hidden>
+                                ...
+                            </div>
                         </td>
                     </tr>
                     <tr>
@@ -128,7 +131,7 @@
     <br />
     <div class="form-group form-inline">
         <div class="col-md-offset-1 col-md-2">
-            <input type="submit" value="Update" class="btn btn-dark" />
+            <input type="submit" value="Add" class="btn btn-dark" />
         </div>
         <div>
             @Html.ActionLink("Back to List", "Index")
