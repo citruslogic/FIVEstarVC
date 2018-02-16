@@ -1,33 +1,5 @@
 ﻿@model FIVESTARVC.ViewModels.ResidentIncomeModel
-@using FIVESTARVC.Models;
 
-<head>
-    <script type="text/javascript">
-
-        function DropDownClear()
-        {
-            document.getElementById('RoomID').length = 0;
-
-            roomsort();
-        }
-
-        function roomsort()
-         {             
-             //Call the GET method again and run the query
-             //By calling it now, you ensure the Rooms
-             //Dropdown is updated everytime the page is loaded.
-
-             $.ajax({
-            
-                 type: "GET",
-                 url: '@Url.Action("Create", "Resident")'
-                 
-             });
-    </script>
- </head>
-
-<body onload="DropDownClear()">
-   
 
     @{
         ViewBag.Title = "New Resident";
@@ -124,12 +96,12 @@
         @Html.ActionLink("Back to List", "Index")
     </div>
 
-</body>
+
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
 
-    <script type="text/javascript">
+<script type="text/javascript">
 
         $('.income').on("keyup", function () {
             var total = parseFloat(0.0);
@@ -139,7 +111,27 @@
 
             $('.total').val(total);
         });
+        $('.DropDownClear').on("onload", function () {
+            document.getElementById('RoomID').length = 0;
 
+            roomsort();
 
-    </script>
+        });
+
+            //Clear the rooms dropdown
+        
+        function roomsort()
+         {
+             //Call the GET method again and run the query
+             //By calling it now, you ensure the Rooms
+             //Dropdown is updated everytime the page is loaded.
+
+             $.ajax({
+
+                 type: "GET",
+                 url: '@Url.Action("Create", "Resident")'
+
+             });
+
+</script>
 }
