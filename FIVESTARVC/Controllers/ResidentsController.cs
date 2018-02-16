@@ -112,21 +112,26 @@ namespace FIVESTARVC.Controllers
         // GET: Residents/Create
         public ActionResult Create()
         {
-
             ResidentIncomeModel Rooms = new ResidentIncomeModel();
 
+            MyRoom.Clear();
+            Rooms.Rooms.Clear();
+
+            //Query the database and store the rooms in roomToAssign
             var roomToAssign = from y in db.Rooms
                         .Where(y => y.IsOccupied == false)
                                select y;
             
-
-            //MyRoom.Clear();
+            //Itterate the array and add it to Room MyRoom
             foreach (Models.Room y in roomToAssign)
             {
-                MyRoom.Add(y); 
-                
+                MyRoom.Add(y);
+
             }
 
+            //Itterate again and take it from Room.MyRoom to 
+            //ResidentIncomeModel Rooms.Rooms
+            
             foreach (var z in MyRoom)
             {
                 if (z.WingName == "EastSouth")
@@ -147,9 +152,8 @@ namespace FIVESTARVC.Controllers
             }
 
             
-                
-                return View(Rooms);
-            
+            return View(Rooms);
+
         }
 
         // POST: Residents/Create
@@ -159,6 +163,12 @@ namespace FIVESTARVC.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create(ResidentIncomeModel residentIncomeModel)
         {
+            
+
+
+
+            
+
             //convert the dropdown to local variable
             //Convert.ToInt32(residentIncomeModel.RoomID);
 
@@ -251,7 +261,7 @@ namespace FIVESTARVC.Controllers
                 //Log the error (uncomment dex variable name and add a line here to write a log.
                 ModelState.AddModelError("", dex.InnerException.Message);
             }
-            return View(residentIncomeModel);
+            return View(resident);
         }
 
         // GET: Residents/Edit/5
@@ -447,40 +457,7 @@ namespace FIVESTARVC.Controllers
             return View(programEvent);
         }
 
-        //         public void GetRoom ()
-        //{
-        //    IQueryable<Room> AvailRoom =
-        //    from AvailRooms in db.Rooms
-        //    .Where(r => r.IsOccupied == false)
-        //    select AvailRooms;
-
-
-
-        //    //Initialize the AssignedRoom ViewModel//
-        //    //AvailRoom = db.Rooms;
-
-
-
-        //    var viewModel = new List<ResidentIncomeModel>();
-
-        //    //Loop through the rooms and check to see if IsOccupied is checked or not//
-        //    //if not checked, add it to the viewmodel//
-        //    foreach (var Rooms in AvailRoom) 
-        //    {
-        //        if (Rooms.IsOccupied == false)
-        //        {
-        //            viewModel.Add(new ResidentIncomeModel
-        //            {
-        //                RoomNum = Rooms.RoomNum,
-        //                IsOccupied = Rooms.IsOccupied,
-        //                RoomID = Rooms.RoomID,
-        //                WingName = Rooms.WingName
-        //            });
-        //        }
-
-        //    }
-        //    ViewBag.AssignRoom = viewModel;
-        //}
+      
 
     }
 }

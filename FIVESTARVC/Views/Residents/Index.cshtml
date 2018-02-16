@@ -13,7 +13,10 @@
 <h2>Residents Listing</h2>
 
 <p style="padding-top: 1em;">
-    <input type="button" class="btn btn-success" value="Create New" onclick="location.href='/Residents/Create';" />
+    <input type="button" class="btn btn-success" value="Create New" onclick="location.href='/Residents/Create', ClearDropDown()" />
+
+    
+
 </p>
 @using (Html.BeginForm("Index", "Residents", FormMethod.Get))
 {
