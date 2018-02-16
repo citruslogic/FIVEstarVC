@@ -24,30 +24,30 @@
         </div>
     </p>
 }
-    <table class="table table-striped">
-        <tr>
-            <th>
-                @Html.ActionLink("Last Name", "Index", new { sortOrder = ViewBag.NameSortParm, currentFilter = ViewBag.CurrentFilter })
-            </th>
-            <th>
-                First Name
-            </th>
-            <th>
-                @Html.ActionLink("Service Branch", "Index", new { sortOrder = ViewBag.BranchSortParm, currentFilter = ViewBag.CurrentFilter })
-            </th>
-            <th>
-                Room Number
-            </th>
-            <th>
-                Current?
-            </th>
-            <th>
+<table class="table table-striped">
+    <tr>
+        <th>
+            @Html.ActionLink("Last Name", "Index", new { sortOrder = ViewBag.NameSortParm, currentFilter = ViewBag.CurrentFilter })
+        </th>
+        <th>
+            First Name
+        </th>
+        <th>
+            @Html.ActionLink("Service Branch", "Index", new { sortOrder = ViewBag.BranchSortParm, currentFilter = ViewBag.CurrentFilter })
+        </th>
+        <th>
+            Room Number
+        </th>
+        <th>
+            Current?
+        </th>
+        <th>
 
-            </th>
-        </tr>
+        </th>
+    </tr>
 
-        @foreach (var item in Model)
-        {
+    @foreach (var item in Model)
+    {
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.LastName)
@@ -57,10 +57,10 @@
             </td>
             <td>
                 @{
-                var serviceDescription = FSEnumHelper.GetDescription(item.ServiceBranch);
+                    var serviceDescription = FSEnumHelper.GetDescription(item.ServiceBranch);
 
 
-                @Html.DisplayFor(modelItem => serviceDescription)
+                    @Html.DisplayFor(modelItem => serviceDescription)
                 }
 
             </td>
@@ -68,8 +68,8 @@
                 @Html.DisplayFor(modelItem => item.Room.RoomNum)
             </td>
             <td>
-                @{ 
-                    if(item.isCurrent(item) == true)
+                @{
+                    if (item.isCurrent(item) == true)
                     {
                         @Html.Raw("Yes")
                     }
@@ -84,18 +84,41 @@
 
                 @*Trigger the modal with a button*@
 
-                @Html.ActionLink("Quick Event", "ViewQuickEvent", new { id = item.ResidentID, lastname = item.LastName }, htmlAttributes: new { @class = "btn btn-sm btn-outline-secondary btn-light" }) &nbsp;
+                @Html.ActionLink("Quick Event", "ViewQuickEvent", new { id = item.ResidentID, lastname = item.LastName },
+                              htmlAttributes: new { @class = "btn btn-sm btn-outline-secondary btn-light", @data_target="eventModal", @data_toggle="modal" }) &nbsp;
 
                 @Html.ActionLink("Details", "Details", new { id = item.ResidentID }, htmlAttributes: new { @class = "btn btn-sm btn-outline-secondary btn-light" }) &nbsp;
                 @Html.ActionLink("Delete", "Delete", new { id = item.ResidentID }, htmlAttributes: new { @class = "btn btn-sm btn-danger" })
             </td>
         </tr>
 
-}
+    }
 
-    </table>
+</table>
+
+<div class="modal fade" id="eventModal" tabindex="-1" role="dialog" aria-labelledby="eventModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="eventModalLabel">New Event for @ViewBag.Lastname</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+            </div>
+            <div class="modal-footer">
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" value="ViewQuickEvent">Save Event</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 <br />
-Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+                Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
 
-@Html.PagedListPager(Model, page => Url.Action("Index", new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
+                @Html.PagedListPager(Model, page => Url.Action("Index", new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))

@@ -171,6 +171,7 @@ namespace FIVESTARVC.Controllers
                 RoomID = residentIncomeModel.RoomID,
                 Note = residentIncomeModel.Note,
                 MilitaryCampaigns = new List<MilitaryCampaign>(),
+                ProgramEvents = new List<ProgramEvent>(),
                 Benefit = new Benefit()
 
 
@@ -181,6 +182,14 @@ namespace FIVESTARVC.Controllers
                 if (ModelState.IsValid)
                 {
                     db.Residents.Add(resident);
+                    resident.ProgramEvents.Add(new ProgramEvent
+                    {
+                        ProgramTypeID = 7,
+                        StartDate = DateTime.Now,
+                        EndDate = null
+
+                    });
+
                     db.SaveChanges();
 
                 }
@@ -226,11 +235,10 @@ namespace FIVESTARVC.Controllers
 
 
             }
-            catch (DataException dex)
+            catch (DataException /*dex*/)
             {
                 //Log the error (uncomment dex variable name and add a line here to write a log.
-                ModelState.AddModelError("", dex.InnerException.Message);
-                Response.Write("<script>alert('Exception: '" + dex.StackTrace + ")</script>");
+                ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
             }
 
            
@@ -437,7 +445,7 @@ namespace FIVESTARVC.Controllers
             ViewBag.Lastname = lastname;
             ViewBag.ProgramTypeID = new SelectList(db.ProgramTypes, "ProgramTypeID", "ProgramDescription");
 
-            return View("_modalNewEvent");
+            return PartialView("_modalNewEvent");
         }
 
         /*
@@ -456,6 +464,7 @@ namespace FIVESTARVC.Controllers
 
             ViewBag.ProgramTypeID = new SelectList(db.ProgramTypes, "ProgramTypeID", "ProgramDescription", programEvent.ProgramTypeID);
             ViewBag.ResidentID = id;
+
             return View(programEvent);
         }
 
