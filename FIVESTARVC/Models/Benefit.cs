@@ -13,7 +13,7 @@ namespace FIVESTARVC.Models
 
         public int BenefitID { get; set; }
 
-        [Display(Name = "Disability Rating (%)")]
+        [Display(Name = "Disability Rating")]
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:#}")]
         public double? DisabilityPercentage { get; set; }
 
@@ -40,7 +40,7 @@ namespace FIVESTARVC.Models
         public decimal? FoodStamp { get; set; }
         
         /* Other forms of disability as income */
-        [Display(Name = "Other Income")]
+        [Display(Name = "Other Income (Description)")]
         public String OtherDescription { get; set; }
 
         [DataType(DataType.Currency)]

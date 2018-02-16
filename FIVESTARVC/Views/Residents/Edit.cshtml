@@ -4,26 +4,21 @@
     ViewBag.Title = "Edit Resident";
 }
 
-@*<h2>Edit</h2>*@
-
 
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
 
     <div class="form-horizontal">
-        <h4>Edit Resident</h4>
-        <hr />
+        <h4>Update @(Model.LastName)</h4>
+       <br />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         @Html.HiddenFor(model => model.ResidentID)
 
         <div class="row">
 
             <div class="col-sm-5 table-responsive">
-                <h2> New Resident </h2>
-
-                <table class="table table-active">
-
+                <table class="table table-sm">
 
                     <tbody>
                         <tr>
@@ -84,54 +79,44 @@
                         </tr>
                         <tr>
                             <td class="col-form-label">
-                                @Html.Label("Military Campaigns", htmlAttributes: new { @class = "control-label col-md-offset-3" })
+                                @Html.Label("Campaigns", htmlAttributes: new { @class = "control-label col-md-offset-3" })
                             </td>
                             <td>
-                                @{
-                                    int cnt = 0;
-                                    List<FIVESTARVC.ViewModels.AssignedCampaignData> campaigns = ViewBag.Campaigns;
+                                <div class="form-check">
+                                    @{
+                                        int cnt = 0;
+                                        List<FIVESTARVC.ViewModels.AssignedCampaignData> campaigns = ViewBag.Campaigns;
 
-                                    foreach (var campaign in campaigns)
-                                    {
-                                        if (cnt++ % 2 == 0)
+                                        foreach (var campaign in campaigns)
                                         {
-                                            @:<br />
+                                            if (cnt++ % 1 == 0)
+                                            {
+                                                @:<br />
+                                            }
+                                            @:
+
+
+                                            <input type="checkbox"
+                                                   name="selectedCampaigns"
+                                                   value="@campaign.MilitaryCampaignID"
+                                                   @(Html.Raw(campaign.Assigned ? "checked=\"checked\"" : "")) />
+                                            @campaign.MilitaryCampaign @: &nbsp;
                                         }
-                                        @:
 
-
-
-                                        <input type="checkbox"
-                                               name="selectedCampaigns"
-                                               value="@campaign.MilitaryCampaignID"
-                                               @(Html.Raw(campaign.Assigned ? "checked=\"checked\"" : "")) />
-                                        @campaign.MilitaryCampaign @:
                                     }
-
-                                }
+                                </div>
                             </td>
                         </tr>
                         <tr>
                             <td class="col-form-label">@Html.LabelFor(model => model.Note, htmlAttributes: new { @class = "control-label col-md-offset-3" }) </td>
                             <td class="col-auto">
-                                @Html.TextBoxFor(model => model.Note, htmlAttributes: new { @class = "form-control" })
+                                @Html.TextAreaFor(model => model.Note, htmlAttributes: new { @class = "form-control" })
                                 @Html.ValidationMessageFor(model => model.Note, "", new { @class = "text-danger" })
                             </td>
                         </tr>
 
-
-
-
                     </tbody>
                 </table>
-                <div class="form-group">
-                    <div class="col-md-offset-2 col-md-10">
-                        <table>
-                            <tr>
-
-                        </table>
-                    </div>
-                </div>
 
             </div>
 
@@ -142,32 +127,33 @@
 
 
 
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Save" class="btn btn-default" />
+        <div class="form-group form-inline">
+            <div class="col-md-offset-1 col-md-2">
+                <input type="submit" value="Update" class="btn btn-dark" />
+            </div>
+            <div>
+                @Html.ActionLink("Back to List", "Index")
             </div>
         </div>
     </div>
 }
 
-<div>
-    @Html.ActionLink("Back to List", "Index")
-</div>
+
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
 
     <script type="text/javascript">
 
+        $('.income').on("keyup", function () {
+            var total = parseFloat(0.0);
 
-                $('.income').on("keyup", function () {
-                    var total = parseFloat(0.0);
-                    $('.income').each(function () {
-                        total += parseFloat($(this).val()) || 0;
-                    });
+            $('.income').each(function () {
+                total += parseFloat($(this).val() || 0);
+            });
 
-                    $('.total').val(total);
-                });
+            $('#Benefit_TotalBenefitAmount').val(total);
+        });
 
 
     </script>
