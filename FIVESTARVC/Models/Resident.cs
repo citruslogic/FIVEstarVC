@@ -47,6 +47,19 @@ namespace FIVESTARVC.Models
 
         public virtual Benefit Benefit { get; set; }
 
+
+        /* return the age of a veteran (in years) and do not store in the database. */
+        public int Age
+        { 
+            get
+            {
+                TimeSpan span = DateTime.Now - Birthdate.GetValueOrDefault(DateTime.Now);
+                DateTime age = DateTime.MinValue + span;
+
+                return age.Year - 1;
+            }
+        }
+
         public Boolean isCurrent(Resident resident)
         {
             var current = db.ProgramEvents;
@@ -79,4 +92,6 @@ namespace FIVESTARVC.Models
         }
 
     }
+
+
 }

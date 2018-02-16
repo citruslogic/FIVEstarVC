@@ -1,0 +1,106 @@
+﻿@model FIVESTARVC.ViewModels.ResidentIncomeModel
+@using FIVESTARVC.Models;
+@{
+    Layout = null;
+}
+
+<div class="col-sm-5 table-responsive">
+    <h4>Income </h4>
+    <table class="table table-sm table-striped">
+        <thead>
+            <tr>
+                <th class="col-md-2">Type</th>
+                <th class="col-md-2">Amount</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td class="col-form-label">
+                    @Html.LabelFor(model => model.DisabilityPercentage, htmlAttributes: new { @class = "control-label col-md-offset-1" })
+                </td>
+                <td>
+                    <div class="input-group money-wide mb-2">
+
+                        @Html.EditorFor(model => model.DisabilityPercentage, new { htmlAttributes = new { @class = "form-control money-wide" } })
+                        <div class="input-group-append">
+                            <span class="input-group-text">%</span>
+                        </div>
+                    </div>
+                    @Html.ValidationMessageFor(model => model.DisabilityPercentage, "", new { @class = "text-danger" })
+                </td>
+
+            </tr>
+            <tr>
+                <td class="col-form-label">@Html.LabelFor(model => model.SSI, htmlAttributes: new { @class = "control-label col-md-offset-1" })</td>
+                <td>
+                    @Html.EditorFor(model => model.SSI, new { htmlAttributes = new { @class = "form-control income money-wide" } })
+                    @Html.ValidationMessageFor(model => model.SSI, "", new { @class = "text-danger" })
+                </td>
+
+            </tr>
+            <tr>
+                <td class="col-form-label">
+                    @Html.LabelFor(model => model.SSDI, htmlAttributes: new { @class = "control-label col-md-offset-1" })
+
+                </td>
+                <td>
+                    @Html.EditorFor(model => model.SSDI, new { htmlAttributes = new { @class = "form-control income money-wide" } })
+                    @Html.ValidationMessageFor(model => model.SSDI, "", new { @class = "text-danger" })
+                </td>
+
+            </tr>
+            <tr>
+                <td class="col-form-label">
+                    @Html.LabelFor(model => model.FoodStamp, htmlAttributes: new { @class = "control-label col-md-offset-1" })
+                </td>
+                <td>
+                    @Html.EditorFor(model => model.FoodStamp, new { htmlAttributes = new { @class = "form-control income money-wide" } })
+                    @Html.ValidationMessageFor(model => model.FoodStamp, "", new { @class = "text-danger" })
+                </td>
+            </tr>
+            <tr>
+                <td class="col-form-label">
+                    @Html.LabelFor(model => model.OtherDescription, htmlAttributes: new { @class = "control-label" })
+                </td>
+                <td>
+                    @Html.TextAreaFor(model => model.OtherDescription, htmlAttributes: new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.OtherDescription, "", new { @class = "text-danger" })
+                </td>
+            </tr>
+            <tr>
+                <td class="col-form-label">
+                    @Html.LabelFor(model => model.Other, htmlAttributes: new { @class = "control-label" })
+                </td>
+                <td>
+                    @Html.EditorFor(model => model.Other, new { htmlAttributes = new { @class = "form-control income money-wide" } })
+                    @Html.ValidationMessageFor(model => model.Other, "", new { @class = "text-danger" })
+                </td>
+            </tr>
+            <tr>
+                <td class="col-form-label  alert-dark">
+                    @Html.LabelFor(model => model.TotalBenefitAmount, htmlAttributes: new { @class = "control-label" })
+                </td>
+                <td class="alert-dark">
+                    <div class="input-group mb-2 money-wide">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">$</span>
+                        </div>
+                        @Html.EditorFor(model => model.TotalBenefitAmount, new { htmlAttributes = new { @class = "form-control" } })
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+
+
+
+
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+
+
+}

@@ -1,6 +1,10 @@
 ﻿@model FIVESTARVC.Models.ProgramEvent
 @using FIVESTARVC.Models
 
+@{ 
+    Layout = null;
+}
+
 @{ AjaxOptions options = new AjaxOptions();
     options.HttpMethod = "POST";
     options.Url = Url.Action("ViewQuickEvent", "Residents");

@@ -45,25 +45,31 @@ namespace FIVESTARVC.ViewModels
         public string FirstMidName { get; set; }
         [Display(Name = "Birthdate")]
         [DataType(DataType.Date)]
-        [DisplayFormat(DataFormatString = "{0:MM-dd-yyyy}", ApplyFormatInEditMode = true)]
+        [DisplayFormat(DataFormatString = "{0:MM/dd/yyyy}", ApplyFormatInEditMode = true)]
         public DateTime? Birthdate { get; set; }
         [Display(Name = "Service Branch")]
         public ServiceType ServiceBranch { get; set; }
         [Display(Name = "Resident has PTSD?")]
         public Boolean HasPTSD { get; set; }
-        [Display(Name = "In Veterans Court")]
+        [Display(Name = "In Veterans Court?")]
         public Boolean InVetCourt { get; set; }
-        //[Display(Name = "Room Number")]
-        //public int RoomID { get; set; }
+        [Display(Name = "Room Number")]
+        [ForeignKey("Room")]
+        public int? RoomID { get; set; }
         [Display(Name = "Note")]
         [StringLength(150)]
         public string Note { get; set; }
 
+        public virtual ICollection<MilitaryCampaign> MilitaryCampaigns { get; set; }
+        public virtual ICollection<ProgramEvent> ProgramEvents { get; set; }
+        public virtual Room Room { get; set; }
+
+
         // BENEFIT
         public int BenefitID { get; set; }
 
-        [Display(Name = "Disability Rating (%)")]
-        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:P2}")]
+        [Display(Name = "Disability Rating")]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:#}")]
         public double? DisabilityPercentage { get; set; }
 
         [DataType(DataType.Currency)]
@@ -89,7 +95,7 @@ namespace FIVESTARVC.ViewModels
         public decimal? FoodStamp { get; set; }
 
         /* Other forms of disability as income */
-        [Display(Name = "Other Income")]
+        [Display(Name = "Other Income (Description)")]
         public String OtherDescription { get; set; }
 
         [DataType(DataType.Currency)]
@@ -98,7 +104,5 @@ namespace FIVESTARVC.ViewModels
         [Display(Name = "Other (Amount)")]
         public decimal? Other { get; set; }
 
-       
-        /***************************************/
     }
 }
