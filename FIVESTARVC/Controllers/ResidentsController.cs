@@ -146,9 +146,18 @@ namespace FIVESTARVC.Controllers
 
             }
 
-            ViewBag.rooms = new SelectList(availRoom, dataValueField: "RoomID", dataTextField: "RoomNum",
-                                               dataGroupField: "WingName", selectedValue: null);
+            
+           
 
+        }
+
+        // POST: Residents/Create
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Create(ResidentIncomeModel residentIncomeModel, string[] selectedCampaigns)
+        {
             var allMilitaryCampaigns = db.MilitaryCampaigns;
             var viewModel = new List<AssignedCampaignData>();
 
