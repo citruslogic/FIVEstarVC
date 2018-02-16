@@ -1,0 +1,72 @@
+﻿@model FIVESTARVC.ViewModels.DischargeResidentReason
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to discharge this resident?</h3>
+<div>
+
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.LastName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.LastName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.FirstMidName)
+        </dt>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Birthdate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Birthdate)
+        </dd>
+
+        <dd>
+            @Html.DisplayFor(model => model.FirstMidName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ServiceBranch)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ServiceBranch)
+        </dd>
+
+        <dt>
+            @*@Html.DisplayNameFor(model => model.Room.RoomNum)*@
+        </dt>
+
+        <dd>
+            @*@Html.DisplayFor(model => model.Room.RoomNum)*@
+        </dd>
+
+    </dl>
+    <br />
+    <div class="form-group">
+        @Html.LabelFor(model => model.ProgramTypeID, "ProgramTypeID", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.DropDownList("ProgramTypeID", null, htmlAttributes: new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.ProgramTypeID, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Discharge" class="btn btn-danger" /> |
+            @Html.ActionLink("Back to List", "Index")
+        </div>
+    }
+</div>

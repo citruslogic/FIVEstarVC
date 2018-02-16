@@ -196,21 +196,12 @@ namespace FIVESTARVC.Controllers
 
 
             }
-            catch (DbEntityValidationException e)
+            catch (DataException /* dex */)
             {
-                foreach (var eve in e.EntityValidationErrors)
-                {
-                    Console.WriteLine("Entity of type \"{0}\" in state \"{1}\" has the following validation errors:",
-                        eve.Entry.Entity.GetType().Name, eve.Entry.State);
-                    foreach (var ve in eve.ValidationErrors)
-                    {
-                        Console.WriteLine("- Property: \"{0}\", Error: \"{1}\"",
-                            ve.PropertyName, ve.ErrorMessage);
-                    }
-                }
-                throw;
-                //ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
+                //Log the error (uncomment dex variable name and add a line here to write a log.
+                ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
             }
+        
 
             Benefit benefit = new Benefit
             {
@@ -388,6 +379,74 @@ namespace FIVESTARVC.Controllers
             }
         }
 
+
+        // GET: Residents/Discharge/5
+        [HttpGet]
+        public ActionResult Discharge(int? id, bool? saveChangesError = false)
+        {
+
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            if (saveChangesError.GetValueOrDefault())
+            {
+                ViewBag.ErrorMessage = "Discharging resident failed. Try again, and if the problem persists see your system administrator.";
+            }
+
+            Resident resident = db.Residents.Find(id);
+
+            if (resident == null)
+            {
+                return HttpNotFound();
+            }
+
+            DischargeResidentReason dischargeResident = new DischargeResidentReason
+            {
+                ResidentID = resident.ResidentID,
+                LastName = resident.LastName,
+                FirstMidName = resident.FirstMidName,
+                Birthdate = resident.Birthdate,
+                ServiceBranch = resident.ServiceBranch,
+
+            };
+
+            ViewBag.ProgramTypeID = new SelectList(db.ProgramTypes, "ProgramTypeID", "ProgramDescription");
+
+
+            return View(dischargeResident);
+
+        }
+         
+        // POST: Residents/Discharge/5
+        public ActionResult Discharge(int id, int? ProgramTypeID = 13)
+        {
+
+            ViewBag.ProgramTypeID = new SelectList(db.ProgramTypes, "ProgramTypeID", "ProgramDescription");
+
+            try
+            {
+                Resident resident = db.Residents.Find(id);
+
+                resident.ProgramEvents.Add(new ProgramEvent
+                {
+                    ProgramTypeID = ProgramTypeID,
+                    StartDate = DateTime.Now,
+                    EndDate = DateTime.Now
+                });
+
+                db.SaveChanges();
+            }
+            catch (DataException/* dex */)
+            {
+                //Log the error (uncomment dex variable name and add a line here to write a log.
+                return RedirectToAction("Discharge", new { id = id, saveChangesError = true });
+            }
+
+
+            return RedirectToAction("Index");  
+        }
 
 
         // GET: Residents/Delete/5
