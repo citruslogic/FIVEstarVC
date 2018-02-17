@@ -1,72 +1,117 @@
-﻿@model FIVESTARVC.ViewModels.DischargeResidentReason
+﻿@model FIVESTARVC.Models.Resident
 
 @{
-    ViewBag.Title = "Delete";
+    ViewBag.Title = "Edit Resident";
 }
 
-<h2>Delete</h2>
 
-<h3>Are you sure you want to discharge this resident?</h3>
-<div>
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
 
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.LastName)
-        </dt>
+    <div class="form-horizontal">
+        <h4>Discharge @(Model.LastName)</h4>
+        <p> Are you sure you want to discharge this resident from your center?</p>
+       <br />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.ResidentID)
 
-        <dd>
-            @Html.DisplayFor(model => model.LastName)
-        </dd>
+       <div class="row">
 
-        <dt>
-            @Html.DisplayNameFor(model => model.FirstMidName)
-        </dt>
+           <div class="col-sm-5 table-responsive">
+               <table class="table table-sm">
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Birthdate)
-        </dt>
+                   <tbody>
+                       <tr>
 
-        <dd>
-            @Html.DisplayFor(model => model.Birthdate)
-        </dd>
+                           <td class="col-form-label">
 
-        <dd>
-            @Html.DisplayFor(model => model.FirstMidName)
-        </dd>
+                               @Html.LabelFor(model => model.LastName, htmlAttributes: new { @class = "control-label col-md-offset-3" })
+                           </td>
+                           <td class="col-auto">
+                               @(Model.LastName)
+                           </td>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.ServiceBranch)
-        </dt>
+                       </tr>
+                       <tr>
+                           <td class="col-form-label">@Html.LabelFor(model => model.FirstMidName, htmlAttributes: new { @class = "control-label col-md-offset-3" })</td>
+                           <td class="col-auto">
+                               @(Model.FirstMidName)
+                           </td>
+                       </tr>
+                       <tr>
+                           <td class="col-form-label">@Html.LabelFor(model => model.Birthdate, htmlAttributes: new { @class = "control-label col-md-offset-3" })</td>
+                           <td class="col-auto">
+                               @(Model.Birthdate)
+                           </td>
+                       </tr>
+                       <tr>
+                           <td class="col-form-label"> @Html.LabelFor(model => model.ServiceBranch, htmlAttributes: new { @class = "control-label col-md-offset-3" })</td>
+                           <td class="col-auto">
+                               @(Model.ServiceBranch)
+                           </td>
+                       </tr>
+                       <tr>
+                           <td class="col-form-label"> @Html.LabelFor(model => model.RoomID, htmlAttributes: new { @class = "control-label col-md-offset-3" })</td>
+                           <td class="col-auto">
+                               @*@Html.DropDownList("rooms", "Select Room")*@
+                               @(Model.RoomID)
+                           </td>
+                       </tr>
+                       <tr>
 
-        <dd>
-            @Html.DisplayFor(model => model.ServiceBranch)
-        </dd>
+                           <td class="col-form-label">@Html.LabelFor(model => model.Note, htmlAttributes: new { @class = "control-label col-md-offset-3" }) </td>
+                           <td class="col-auto">
+                               @Html.TextAreaFor(model => model.Note, htmlAttributes: new { @class = "form-control" })
+                               @Html.ValidationMessageFor(model => model.Note, "", new { @class = "text-danger" })
+                           </td>
+                       </tr>
 
-        <dt>
-            @*@Html.DisplayNameFor(model => model.Room.RoomNum)*@
-        </dt>
+                   </tbody>
+               </table>
+           </div>
 
-        <dd>
-            @*@Html.DisplayFor(model => model.Room.RoomNum)*@
-        </dd>
+           <div class="form-group">
+               @Html.Label("Discharge Reason", htmlAttributes: new { @class = "control-label col-md-2" })
+               <div class="col-md-10">
+                   @Html.DropDownList("ProgramTypeID", null, htmlAttributes: new { @class = "form-control" })
+                   @Html.ValidationMessageFor(model => model.ProgramEvents, "", new { @class = "text-danger" })
+               </div>
+           </div>
 
-    </dl>
-    <br />
-    <div class="form-group">
-        @Html.LabelFor(model => model.ProgramTypeID, "ProgramTypeID", htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.DropDownList("ProgramTypeID", null, htmlAttributes: new { @class = "form-control" })
-            @Html.ValidationMessageFor(model => model.ProgramTypeID, "", new { @class = "text-danger" })
+       </div>
+
+}
+
+
+        <div class="form-group form-inline">
+            <div class="col-md-offset-1 col-md-2">
+                <input type="submit" value="Discharge" class="btn btn-danger" />
+            </div>
+            <div>
+                @Html.ActionLink("Back to List", "Index")
+            </div>
         </div>
     </div>
-    @using (Html.BeginForm())
-    {
-        @Html.AntiForgeryToken()
+}
 
-        <div class="form-actions no-color">
-            <input type="submit" value="Discharge" class="btn btn-danger" /> |
-            @Html.ActionLink("Back to List", "Index")
-        </div>
-    }
-</div>
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script type="text/javascript">
+
+        $('.income').on("keyup", function () {
+            var total = parseFloat(0.0);
+
+            $('.income').each(function () {
+                total += parseFloat($(this).val() || 0);
+            });
+
+            $('#Benefit_TotalBenefitAmount').val(total);
+        });
+
+
+    </script>
+}

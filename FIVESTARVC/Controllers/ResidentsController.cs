@@ -380,11 +380,10 @@ namespace FIVESTARVC.Controllers
         }
 
 
-        // GET: Residents/Discharge/5
-        [HttpGet]
-        public ActionResult Discharge(int? id, bool? saveChangesError = false)
+       // GET: Residents/Discharge/5
+       [HttpGet]
+       public ActionResult Discharge(int? id, bool? saveChangesError = false)
         {
-
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -392,48 +391,42 @@ namespace FIVESTARVC.Controllers
 
             if (saveChangesError.GetValueOrDefault())
             {
-                ViewBag.ErrorMessage = "Discharging resident failed. Try again, and if the problem persists see your system administrator.";
+                ViewBag.ErrorMessage = "Discharge failed. Try again, and if the problem persists see your system administrator.";
             }
 
-            Resident resident = db.Residents.Find(id);
+            var residentToDischarge = db.Residents
+                .Include(p => p.ProgramEvents)
+                .Where(r => r.ResidentID == id)
+                .Single();
 
-            if (resident == null)
+            if (residentToDischarge == null)
             {
                 return HttpNotFound();
             }
 
-            DischargeResidentReason dischargeResident = new DischargeResidentReason
-            {
-                ResidentID = resident.ResidentID,
-                LastName = resident.LastName,
-                FirstMidName = resident.FirstMidName,
-                Birthdate = resident.Birthdate,
-                ServiceBranch = resident.ServiceBranch,
-
-            };
-
             ViewBag.ProgramTypeID = new SelectList(db.ProgramTypes, "ProgramTypeID", "ProgramDescription");
 
-
-            return View(dischargeResident);
-
+            return View(residentToDischarge);
         }
-         
-        // POST: Residents/Discharge/5
-        public ActionResult Discharge(int id, int? ProgramTypeID = 13)
+
+        // POST: Residents/Delete/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Discharge(int id, int ProgramTypeID)
         {
-
-            ViewBag.ProgramTypeID = new SelectList(db.ProgramTypes, "ProgramTypeID", "ProgramDescription");
-
             try
             {
-                Resident resident = db.Residents.Find(id);
+                Resident residentToDischarge = db.Residents
+                .Include(p => p.ProgramEvents)
+                .Where(r => r.ResidentID == id)
+                .Single();
 
-                resident.ProgramEvents.Add(new ProgramEvent
+                residentToDischarge.ProgramEvents.Add(new ProgramEvent
                 {
                     ProgramTypeID = ProgramTypeID,
                     StartDate = DateTime.Now,
                     EndDate = DateTime.Now
+
                 });
 
                 db.SaveChanges();
@@ -444,10 +437,10 @@ namespace FIVESTARVC.Controllers
                 return RedirectToAction("Discharge", new { id = id, saveChangesError = true });
             }
 
+            ViewBag.ProgramTypeID = new SelectList(db.ProgramTypes, "ProgramTypeID", "ProgramDescription");
 
-            return RedirectToAction("Index");  
+            return RedirectToAction("Index");
         }
-
 
         // GET: Residents/Delete/5
         [HttpGet]
