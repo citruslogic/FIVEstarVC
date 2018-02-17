@@ -11,17 +11,21 @@
 }
 
 <h2>Residents Listing</h2>
-
-<p style="padding-top: 1em;">
+<hr />
+<li class="btn-block">
     <input type="button" class="btn btn-success" value="Create New" onclick="location.href='/Residents/Create';" />
-</p>
+   
+</li>
+<br />
 @using (Html.BeginForm("Index", "Residents", FormMethod.Get))
 {
     <p>
         Find by name: <div class="form-group">
-            @Html.TextBox("searchString", ViewBag.CurrentFilter as string)
-            <input class="btn btn-sm btn-outline-dark" type="submit" value="Search" />
-        </div>
+    @Html.TextBox("searchString", ViewBag.CurrentFilter as string)
+    <input class="btn btn-sm btn-outline-dark" type="submit" value="Refine" />
+    </div>
+
+
     </p>
 }
 <table class="table table-striped">
@@ -69,7 +73,7 @@
             </td>
             <td>
                 @{
-                    if (item.IsCurrent() == true)
+                    if (item.IsCurrent())
                     {
                         @Html.Raw("Yes")
                     }

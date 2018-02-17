@@ -29,7 +29,6 @@ namespace FIVESTARVC.Controllers
             ViewBag.BranchSortParm = sortOrder == "ServiceBranch" ? "ServiceBranch_desc" : "ServiceBranch";
             ViewBag.ProgramTypeID = new SelectList(db.ProgramTypes, "ProgramTypeID", "ProgramDescription");
 
-
             if (searchString != null)
             {
                 page = 1;
@@ -45,9 +44,11 @@ namespace FIVESTARVC.Controllers
                             select s;
 
 
+
+
             if (!String.IsNullOrEmpty(searchString))
             {
-                residents = residents.Where(s => s.LastName.Contains(searchString)
+                    residents = residents.Where(s => s.LastName.Contains(searchString)
                                        || s.FirstMidName.Contains(searchString));
             }
 
