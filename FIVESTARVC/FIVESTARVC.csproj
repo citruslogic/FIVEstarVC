@@ -186,7 +186,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModels\AssignedCampaignData.cs" />
     <Compile Include="ViewModels\AssignedRoom.cs" />
-    <Compile Include="ViewModels\DischargeResidentReason.cs" />
     <Compile Include="ViewModels\HistoricData.cs" />
     <Compile Include="ViewModels\ResidentIncomeModel.cs" />
   </ItemGroup>
