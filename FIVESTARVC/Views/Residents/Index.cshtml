@@ -69,7 +69,7 @@
             </td>
             <td>
                 @{
-                    if (item.isCurrent(item) == true)
+                    if (item.IsCurrent() == true)
                     {
                         @Html.Raw("Yes")
                     }
@@ -85,10 +85,15 @@
                 @*Trigger the modal with a button*@
 
                 @Html.ActionLink("Quick Event", "ViewQuickEvent", new { id = item.ResidentID, lastname = item.LastName },
-                              htmlAttributes: new { @class = "btn btn-sm btn-outline-secondary btn-light", @data_target="eventModal", @data_toggle="modal" }) &nbsp;
+                       htmlAttributes: new { @class = "btn btn-sm btn-outline-secondary btn-light", @data_target = "eventModal", @data_toggle = "modal" }) &nbsp;
 
                 @Html.ActionLink("Details", "Details", new { id = item.ResidentID }, htmlAttributes: new { @class = "btn btn-sm btn-outline-secondary btn-light" }) &nbsp;
-                @Html.ActionLink("Discharge", "Discharge", new { id = item.ResidentID }, htmlAttributes: new { @class = "btn btn-sm btn-danger" })
+
+                @if (item.IsCurrent())
+                {
+                    @Html.ActionLink("Discharge", "Discharge", new { id = item.ResidentID }, htmlAttributes: new { @class = "btn btn-sm btn-danger" })
+
+                }
             </td>
         </tr>
 

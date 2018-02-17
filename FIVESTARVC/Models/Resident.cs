@@ -60,11 +60,11 @@ namespace FIVESTARVC.Models
             }
         }
 
-        public Boolean isCurrent(Resident resident)
+        public Boolean IsCurrent()
         {
             var current = db.ProgramEvents;
 
-            int ID = resident.ResidentID;
+            int ID = ResidentID;
 
             Boolean internalBool = false;
 
