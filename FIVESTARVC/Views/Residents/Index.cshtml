@@ -10,20 +10,29 @@
     ViewBag.Title = "Residents";
 }
 
+@if (TempData["UserMessage"] != null)
+{
+    var message = TempData["UserMessage"];
+    <div class="alert alert-info alert-dismissable">
+        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+        @message
+    </div>
+}
+
 <h2>Residents Listing</h2>
 <hr />
 <li class="btn-block">
     <input type="button" class="btn btn-success" value="Create New" onclick="location.href='/Residents/Create';" />
-   
+
 </li>
 <br />
 @using (Html.BeginForm("Index", "Residents", FormMethod.Get))
 {
     <p>
         Find by name: <div class="form-group">
-    @Html.TextBox("searchString", ViewBag.CurrentFilter as string)
-    <input class="btn btn-sm btn-outline-dark" type="submit" value="Refine" />
-    </div>
+            @Html.TextBox("searchString", ViewBag.CurrentFilter as string)
+            <input class="btn btn-sm btn-outline-dark" type="submit" value="Refine" />
+        </div>
 
 
     </p>
@@ -89,7 +98,7 @@
                 @*Trigger the modal with a button*@
 
                 @Html.ActionLink("Quick Event", "ViewQuickEvent", new { id = item.ResidentID, lastname = item.LastName },
-                       htmlAttributes: new { @class = "btn btn-sm btn-outline-secondary btn-light", @data_target = "eventModal", @data_toggle = "modal" }) &nbsp;
+                                                htmlAttributes: new { @class = "btn btn-sm btn-outline-secondary btn-light", @data_target = "eventModal", @data_toggle = "modal" }) &nbsp;
 
                 @Html.ActionLink("Details", "Details", new { id = item.ResidentID }, htmlAttributes: new { @class = "btn btn-sm btn-outline-secondary btn-light" }) &nbsp;
 
@@ -128,6 +137,19 @@
 </div>
 
 <br />
-                Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
 
-                @Html.PagedListPager(Model, page => Url.Action("Index", new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
+ Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+@Html.PagedListPager(Model, page => Url.Action("Index", new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
+
+@section Scripts {
+    <script type="text/javascript">
+        window.setTimeout(function () {
+            $(".alert").fadeTo(500, 0).slideUp(500, function () {
+                $(this).remove();
+            });
+        }, 4000);
+
+    </script>
+
+}               

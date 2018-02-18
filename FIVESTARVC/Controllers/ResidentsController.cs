@@ -431,15 +431,19 @@ namespace FIVESTARVC.Controllers
                 });
 
                 db.SaveChanges();
+                TempData["UserMessage"] = residentToDischarge.LastName + " has been discharged from the center.";
             }
             catch (DataException/* dex */)
             {
                 //Log the error (uncomment dex variable name and add a line here to write a log.
+                TempData["UserMessage"] = "Failed to discharge the resident from the center.";
+
                 return RedirectToAction("Discharge", new { id = id, saveChangesError = true });
             }
 
             ViewBag.ProgramTypeID = new SelectList(db.ProgramTypes.Where(t => t.ProgramTypeID >= 12), "ProgramTypeID", "ProgramDescription");
 
+            
             return RedirectToAction("Index");
         }
 

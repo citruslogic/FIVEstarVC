@@ -8,6 +8,8 @@
     @Scripts.Render("~/bundles/modernizr")
     @Styles.Render("~/Content/fontawesome")
     @Styles.Render("~/Content/themes/base/css")
+
+
 </head>
 <body style="background-color: whitesmoke">
     <img src="~/Content/fivestar_logo.jpg" style="margin-top: -50px" />
@@ -25,9 +27,10 @@
         </div>
     </nav>
     <div class="container body-content">
+       
         <br />
         @RenderBody()
-      
+
 
     </div>
     <div class="navbar navbar-dark" style="background-color: navy">
@@ -38,5 +41,7 @@
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)
+
+  
 </body>
 </html>
