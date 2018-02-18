@@ -12,7 +12,8 @@
     @Html.AntiForgeryToken()
     
     <div class="form-horizontal">
-        <h4>ProgramEvent</h4>
+        <h4>Programs and Events</h4><br />
+        <h6>Change this event currently for @(Model.Resident.LastName)</h6>
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         @Html.HiddenFor(model => model.ProgramEventID)
