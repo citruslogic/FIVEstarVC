@@ -41,7 +41,7 @@
                             }
                             else
                             {
-                                @Html.DisplayFor(model => model.Birthdate)
+                                @(Model.Birthdate.Value.ToLongDateString())
 
                             }
                         }
