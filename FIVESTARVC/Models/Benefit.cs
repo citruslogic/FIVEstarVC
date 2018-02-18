@@ -21,7 +21,7 @@ namespace FIVESTARVC.Models
         [Column(TypeName = "money")]
         [DisplayFormat(DataFormatString = "{0:C0}")]
         [Display(Name = "Total Benefit Amount")]
-        public decimal TotalBenefitAmount { get; set; }
+        public decimal? TotalBenefitAmount { get; set; }
 
         [DataType(DataType.Currency)]
         [Column(TypeName = "money")]
