@@ -13,7 +13,7 @@
 
     <div class="form-horizontal">
         <h4>Programs and Events</h4><br />
-        <h6>Change this event currently for @(Model.Resident.LastName)</h6>
+        <h6>Change this event for the resident, and click Update to make the change. </h6>
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         @Html.HiddenFor(model => model.ProgramEventID)
@@ -21,8 +21,8 @@
         <div class="form-group">
             @Html.LabelFor(model => model.ResidentID, "Resident", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.DropDownList("ResidentID", null, htmlAttributes: new { @class = "form-control" })
-                @Html.ValidationMessageFor(model => model.ResidentID, "", new { @class = "text-danger" })
+                <strong>@String.Concat(Model.Resident.FirstMidName, " ", Model.Resident.LastName)</strong>
+                @Html.HiddenFor(model => model.ResidentID)
             </div>
         </div>
 
@@ -62,7 +62,7 @@
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Save" class="btn btn-default" />
+                <input type="submit" value="Update" class="btn btn-default" />
             </div>
         </div>
     </div>
@@ -73,15 +73,17 @@
 </div>
 
 @section Scripts {
-    @Scripts.Render("~/bundles/jqueryval");
-    @Scripts.Render("~/bundles/jqueryui");
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/jqueryui")
 
     <script type="text/javascript">
-
-        $(document).ready(function () {
-            $('#StartDate').datepicker({ dateFormat: 'mm/dd/yy' });
-            $('#EndDate').datepicker({ dateFormat: 'mm/dd/yy' });
-        });
+        if (!Modernizr.inputtypes.date) {
+            $('input[type=date]')
+                .attr('type', 'text')
+                .datepicker({
+                    // Consistent format with the HTML5 picker
+                    dateFormat: 'mm/dd/yy'
+                });
 
     </script>
 }

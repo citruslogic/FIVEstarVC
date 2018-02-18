@@ -13,7 +13,7 @@
 @if (TempData["UserMessage"] != null)
 {
     var message = TempData["UserMessage"];
-    <div class="alert alert-info alert-dismissable">
+    <div class="alert alert-info alert-dismissable" style="position: absolute; right: 50px;">
         <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
         @message
     </div>
