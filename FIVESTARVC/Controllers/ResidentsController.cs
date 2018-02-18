@@ -97,7 +97,7 @@ namespace FIVESTARVC.Controllers
                                             .Include(t => t.ProgramType).Where(p => p.ProgramTypeID == 7)
                                             .OrderBy(d => d.StartDate)
                                             .Select(s => s.StartDate)
-                                            .FirstOrDefault().ToShortDateString();
+                                            .FirstOrDefault().ToLongDateString();
 
             return View(resident);
         }
