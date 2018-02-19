@@ -64,7 +64,7 @@ namespace FIVESTARVC.Controllers
                     residents = residents.OrderByDescending(s => s.ServiceBranch);
                     break;
                 default:
-                    residents = residents.OrderBy(s => s.LastName);
+                    residents = residents.OrderByDescending(s => s.ResidentID);
                     break;
             }
 
