@@ -409,7 +409,7 @@ namespace FIVESTARVC.Controllers
                 return HttpNotFound();
             }
 
-            ViewBag.ProgramTypeID = new SelectList(db.ProgramTypes.Where(t => t.ProgramTypeID >= 12), "ProgramTypeID", "ProgramDescription");
+            ViewBag.ProgramTypeID = new SelectList(db.ProgramTypes.Where(t => t.ProgramTypeID >= 12 || t.ProgramTypeID == 2), "ProgramTypeID", "ProgramDescription");
 
             return View(residentToDischarge);
         }
