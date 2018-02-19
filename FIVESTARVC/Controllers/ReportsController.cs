@@ -177,25 +177,26 @@ namespace FIVESTARVC.Controllers
                 string filename = "~\\Content\\CenterReport.csv";
             
                 return File(filename,"text/csv", "HistoricData.csv");
-            }   
-
-        public bool checkEvent(Resident res, int pgmType)
-        {
-            var pgmEventCheck = db.ProgramEvents;
-
-            foreach(var ProgramEvent in pgmEventCheck)
-            {
-                if(ProgramEvent.ResidentID == res.ResidentID)
-                {
-                    
-                    if (ProgramEvent.ProgramTypeID == pgmType)
-                    {
-                        return true;
-                    }
-                }
             }
+        //Not a very good method
+    
+        //public bool checkEvent(Resident res, int pgmType)
+        //{
+        //    var pgmEventCheck = db.ProgramEvents;
 
-            return false;
-        }
+        //    foreach (var ProgramEvent in pgmEventCheck)
+        //    {
+        //        if (ProgramEvent.ResidentID == res.ResidentID)
+        //        {
+
+        //            if (ProgramEvent.ProgramTypeID == pgmType)
+        //            {
+        //                return true;
+        //            }
+        //        }
+        //    }
+
+        //    return false;
+        //}
     }
 }
