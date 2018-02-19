@@ -15,7 +15,7 @@ namespace FIVESTARVC.Controllers
 
         public ActionResult Index()
         {
-            ViewBag.lastFiveResidents = db.Residents.OrderByDescending(r => r.LastName).Take(5);
+            ViewBag.lastFiveResidents = db.Residents.OrderByDescending(r => r.ResidentID).Take(5);
 
             return View();
         }
