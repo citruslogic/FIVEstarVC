@@ -146,7 +146,21 @@ namespace FIVESTARVC.Controllers
                 }
 
             }
+            var allMilitaryCampaigns = db.MilitaryCampaigns;
+            var viewModel = new List<AssignedCampaignData>();
 
+
+            foreach (var militaryCampaign in allMilitaryCampaigns)
+            {
+                viewModel.Add(new AssignedCampaignData
+                {
+                    MilitaryCampaignID = militaryCampaign.MilitaryCampaignID,
+                    MilitaryCampaign = militaryCampaign.CampaignName,
+                    Assigned = false
+                });
+            }
+
+            ViewBag.Campaigns = viewModel;
 
             return View(Rooms);
 
@@ -497,51 +511,51 @@ namespace FIVESTARVC.Controllers
         }
 
         // GET: Residents/Delete/5
-        [HttpGet]
-        public ActionResult Delete(int? id, bool? saveChangesError = false)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            if (saveChangesError.GetValueOrDefault())
-            {
-                ViewBag.ErrorMessage = "Delete failed. Try again, and if the problem persists see your system administrator.";
-            }
-            Resident resident = db.Residents.Find(id);
+        //[HttpGet]
+        //public ActionResult Delete(int? id, bool? saveChangesError = false)
+        //{
+        //    if (id == null)
+        //    {
+        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+        //    }
+        //    if (saveChangesError.GetValueOrDefault())
+        //    {
+        //        ViewBag.ErrorMessage = "Delete failed. Try again, and if the problem persists see your system administrator.";
+        //    }
+        //    Resident resident = db.Residents.Find(id);
 
-            if (resident == null)
-            {
-                return HttpNotFound();
-            }
-            return View(resident);
-        }
+        //    if (resident == null)
+        //    {
+        //        return HttpNotFound();
+        //    }
+        //    return View(resident);
+        //}
 
         // POST: Residents/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id)
-        {
-            try
-            {
-                Resident resident = db.Residents.Find(id);
-                Benefit benefit = db.Benefits.Find(resident.BenefitID);
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public ActionResult Delete(int id)
+        //{
+        //    try
+        //    {
+        //        Resident resident = db.Residents.Find(id);
+        //        Benefit benefit = db.Benefits.Find(resident.BenefitID);
 
-                if (benefit != null)
-                {
-                    db.Benefits.Remove(benefit);
-                } 
+        //        if (benefit != null)
+        //        {
+        //            db.Benefits.Remove(benefit);
+        //        } 
 
-                db.Residents.Remove(resident);
-                db.SaveChanges();
-            }
-            catch (DataException/* dex */)
-            {
-                //Log the error (uncomment dex variable name and add a line here to write a log.
-                return RedirectToAction("Delete", new { id = id, saveChangesError = true });
-            }
-            return RedirectToAction("Index");
-        }
+        //        db.Residents.Remove(resident);
+        //        db.SaveChanges();
+        //    }
+        //    catch (DataException/* dex */)
+        //    {
+        //        //Log the error (uncomment dex variable name and add a line here to write a log.
+        //        return RedirectToAction("Delete", new { id = id, saveChangesError = true });
+        //    }
+        //    return RedirectToAction("Index");
+        //}
 
         // GET
         // Quick Event form (soon to be part of a modal dialog)
