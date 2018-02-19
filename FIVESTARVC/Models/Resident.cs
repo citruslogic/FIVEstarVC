@@ -23,7 +23,7 @@ namespace FIVESTARVC.Models
         public string FirstMidName { get; set; }
         [Display(Name = "Birthdate")]
         [DataType(DataType.Date)]
-        [DisplayFormat(DataFormatString = "{0:MM/dd/yyyy}", ApplyFormatInEditMode = true)]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public DateTime? Birthdate { get; set; }
         [Display(Name = "Service Branch")]
         public ServiceType ServiceBranch { get; set; }
@@ -60,11 +60,11 @@ namespace FIVESTARVC.Models
             }
         }
 
-        public Boolean isCurrent(Resident resident)
+        public Boolean IsCurrent()
         {
             var current = db.ProgramEvents;
 
-            int ID = resident.ResidentID;
+            int ID = ResidentID;
 
             Boolean internalBool = false;
 
@@ -80,9 +80,9 @@ namespace FIVESTARVC.Models
                     }
 
                     if (ProgramEvent.ProgramTypeID == 2 //graduation
+                    || ProgramEvent.ProgramTypeID == 12 //discharge
                     || ProgramEvent.ProgramTypeID == 13 //discharge
-                    || ProgramEvent.ProgramTypeID == 14 //discharge
-                    || ProgramEvent.ProgramTypeID == 15)
+                    || ProgramEvent.ProgramTypeID == 14)
                     {
                         internalBool = false;
                     }

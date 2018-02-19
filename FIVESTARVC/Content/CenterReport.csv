@@ -1,8 +1,10 @@
 ﻿sep=,
-Last Name,First Name,Birthdate,Service Branch,PTSD,Vet Court,Notes
-Steven,Carson,,ARMY,False,True,
-Wildman,Naomi,,AIRFORCE,False,False,
-Noonan,Gary,1970-02-19,NAVY,False,False,
-Bryant,Koby,,ARMY,False,False,
-Welling,Jason,,NAVY,False,False,
-Clark,Vanessa,,NAVY,False,False,
+Last Name,First Name,Birthdate,Service Branch,PTSD,Vet Court,Work Program,Self Discharge,Higher Level of Care
+Steven,Carson,,ARMY,False,False,1,1,
+Wildman,Naomi,,AIRFORCE,False,False,,,1
+Noonan,Gary,,NAVY,False,False,,1,
+Bryant,Koby,,ARMY,False,False,,,
+Welling,Jason,,NAVY,False,False,,,
+Clark,Vanessa,,NAVY,False,False,,,
+Tytus,Hamilton,2018-02-22,MARINES,True,True,,,
+Hana,Hamilton,2018-02-09,AIRFORCE,False,True,,1,

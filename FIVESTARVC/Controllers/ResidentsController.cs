@@ -32,7 +32,6 @@ namespace FIVESTARVC.Controllers
             ViewBag.BranchSortParm = sortOrder == "ServiceBranch" ? "ServiceBranch_desc" : "ServiceBranch";
             ViewBag.ProgramTypeID = new SelectList(db.ProgramTypes, "ProgramTypeID", "ProgramDescription");
 
-
             if (searchString != null)
             {
                 page = 1;
@@ -48,9 +47,11 @@ namespace FIVESTARVC.Controllers
                             select s;
 
 
+
+
             if (!String.IsNullOrEmpty(searchString))
             {
-                residents = residents.Where(s => s.LastName.Contains(searchString)
+                    residents = residents.Where(s => s.LastName.Contains(searchString)
                                        || s.FirstMidName.Contains(searchString));
             }
 
@@ -99,7 +100,7 @@ namespace FIVESTARVC.Controllers
                                             .Include(t => t.ProgramType).Where(p => p.ProgramTypeID == 7)
                                             .OrderBy(d => d.StartDate)
                                             .Select(s => s.StartDate)
-                                            .FirstOrDefault().ToShortDateString();
+                                            .FirstOrDefault().ToLongDateString();
 
             return View(resident);
         }
@@ -214,6 +215,7 @@ namespace FIVESTARVC.Controllers
                 RoomID = residentIncomeModel.RoomID,
                 Note = residentIncomeModel.Note,
                 MilitaryCampaigns = new List<MilitaryCampaign>(),
+                ProgramEvents = new List<ProgramEvent>(),
                 Benefit = new Benefit()
 
 
@@ -224,27 +226,26 @@ namespace FIVESTARVC.Controllers
                 if (ModelState.IsValid)
                 {
                     db.Residents.Add(resident);
+                    resident.ProgramEvents.Add(new ProgramEvent
+                    {
+                        ProgramTypeID = 7,
+                        StartDate = DateTime.Now,
+                        EndDate = null
+
+                    });
+
                     db.SaveChanges();
 
                 }
 
 
             }
-            catch (DbEntityValidationException e)
+            catch (DataException /* dex */)
             {
-                foreach (var eve in e.EntityValidationErrors)
-                {
-                    Console.WriteLine("Entity of type \"{0}\" in state \"{1}\" has the following validation errors:",
-                        eve.Entry.Entity.GetType().Name, eve.Entry.State);
-                    foreach (var ve in eve.ValidationErrors)
-                    {
-                        Console.WriteLine("- Property: \"{0}\", Error: \"{1}\"",
-                            ve.PropertyName, ve.ErrorMessage);
-                    }
-                }
-                throw;
-                //ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
+                //Log the error (uncomment dex variable name and add a line here to write a log.
+                ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
             }
+        
 
             Benefit benefit = new Benefit
             {
@@ -269,11 +270,10 @@ namespace FIVESTARVC.Controllers
 
 
             }
-            catch (DataException dex)
+            catch (DataException /*dex*/)
             {
                 //Log the error (uncomment dex variable name and add a line here to write a log.
-                ModelState.AddModelError("", dex.InnerException.Message);
-                Response.Write("<script>alert('Exception: '" + dex.StackTrace + ")</script>");
+                ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
             }
 
            
@@ -290,6 +290,8 @@ namespace FIVESTARVC.Controllers
                     db.SaveChanges();
                    
                     
+
+                    TempData["UserMessage"] = residentIncomeModel.LastName + " has been admitted into your center.";
 
                     return RedirectToAction("Index");
                 }
@@ -364,6 +366,8 @@ namespace FIVESTARVC.Controllers
                     UpdateResidentCampaigns(selectedCampaigns, residentToUpdate);
                     db.SaveChanges();
 
+                    TempData["UserMessage"] = residentToUpdate.LastName + " has been updated.";
+
                     return RedirectToAction("Index");
                 }
                 catch (DataException /* dex */)
@@ -426,6 +430,71 @@ namespace FIVESTARVC.Controllers
         }
 
 
+       // GET: Residents/Discharge/5
+       [HttpGet]
+       public ActionResult Discharge(int? id, bool? saveChangesError = false)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            if (saveChangesError.GetValueOrDefault())
+            {
+                ViewBag.ErrorMessage = "Discharge failed. Try again, and if the problem persists see your system administrator.";
+            }
+
+            var residentToDischarge = db.Residents
+                .Include(p => p.ProgramEvents)
+                .Where(r => r.ResidentID == id)
+                .Single();
+
+            if (residentToDischarge == null)
+            {
+                return HttpNotFound();
+            }
+
+            ViewBag.ProgramTypeID = new SelectList(db.ProgramTypes.Where(t => t.ProgramTypeID >= 12), "ProgramTypeID", "ProgramDescription");
+
+            return View(residentToDischarge);
+        }
+
+        // POST: Residents/Delete/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Discharge(int id, int ProgramTypeID)
+        {
+            try
+            {
+                Resident residentToDischarge = db.Residents
+                .Include(p => p.ProgramEvents)
+                .Where(r => r.ResidentID == id)
+                .Single();
+
+                residentToDischarge.ProgramEvents.Add(new ProgramEvent
+                {
+                    ProgramTypeID = ProgramTypeID,
+                    StartDate = DateTime.Now,
+                    EndDate = DateTime.Now
+
+                });
+
+                db.SaveChanges();
+                TempData["UserMessage"] = residentToDischarge.LastName + " has been discharged from your center.";
+            }
+            catch (DataException/* dex */)
+            {
+                //Log the error (uncomment dex variable name and add a line here to write a log.
+                TempData["UserMessage"] = "Failed to discharge the resident from the center.";
+
+                return RedirectToAction("Discharge", new { id = id, saveChangesError = true });
+            }
+
+            ViewBag.ProgramTypeID = new SelectList(db.ProgramTypes.Where(t => t.ProgramTypeID >= 12), "ProgramTypeID", "ProgramDescription");
+
+            
+            return RedirectToAction("Index");
+        }
 
         // GET: Residents/Delete/5
         [HttpGet]
@@ -482,7 +551,7 @@ namespace FIVESTARVC.Controllers
             ViewBag.Lastname = lastname;
             ViewBag.ProgramTypeID = new SelectList(db.ProgramTypes, "ProgramTypeID", "ProgramDescription");
 
-            return View("_modalNewEvent");
+            return PartialView("_modalNewEvent");
         }
 
         /*
@@ -501,6 +570,7 @@ namespace FIVESTARVC.Controllers
 
             ViewBag.ProgramTypeID = new SelectList(db.ProgramTypes, "ProgramTypeID", "ProgramDescription", programEvent.ProgramTypeID);
             ViewBag.ResidentID = id;
+
             return View(programEvent);
         }
 
