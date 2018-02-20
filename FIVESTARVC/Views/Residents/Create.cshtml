@@ -47,7 +47,7 @@
                                     <div class="input-group-prepend">
                                         <span class="input-group-text fa fa-calendar fa-fw" style="width:40px;"></span>
                                     </div>
-                                    <input type="text" id="Birthdate" name="Birthdate" class="form-control" style="width: auto;" />
+                                    @Html.EditorFor(model => model.Birthdate)
                                     @Html.ValidationMessageFor(model => model.Birthdate, "", new { @class = "text-danger" })
                                 </div>
                             </td>
