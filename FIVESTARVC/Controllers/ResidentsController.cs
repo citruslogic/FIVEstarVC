@@ -18,6 +18,9 @@ namespace FIVESTARVC.Controllers
     {
         private ResidentContext db = new ResidentContext();
 
+        public static List<Models.Room> MyRoom = new List<Models.Room>();
+
+
 
         // GET: Residents
         public ActionResult Index(string sortOrder, string currentFilter, string searchString, int? page)
@@ -105,20 +108,44 @@ namespace FIVESTARVC.Controllers
         // GET: Residents/Create
         public ActionResult Create()
         {
-            //Query database for IsOccupied flag//
-            //Query for EastSouth Wing//
-            var availRoom = db.Rooms
-                            .Where(s => s.IsOccupied == false)
-                            .Select(r => new
-                            {
-                                r.RoomID,
-                                r.RoomNum,
-                                r.WingName,
-                            });
+            ResidentIncomeModel Rooms = new ResidentIncomeModel();
 
-            ViewBag.rooms = new SelectList(availRoom, dataValueField: "RoomID", dataTextField: "RoomNum",
-                                               dataGroupField: "WingName", selectedValue: null);
+            MyRoom.Clear();
+            Rooms.Rooms.Clear();
 
+            //Query the database and store the rooms in roomToAssign
+            var roomToAssign = from y in db.Rooms
+                        .Where(y => y.IsOccupied == false)
+                               select y;
+            
+            //Itterate the array and add it to Room MyRoom
+            foreach (Models.Room y in roomToAssign)
+            {
+                MyRoom.Add(y);
+
+            }
+
+            //Itterate again and take it from Room.MyRoom to 
+            //ResidentIncomeModel Rooms.Rooms
+            
+            foreach (var z in MyRoom)
+            {
+                if (z.WingName == "EastSouth")
+                {
+                    Rooms.Rooms.Add(z);
+                }
+
+                else if (z.WingName == "North")
+                {
+                    Rooms.Rooms.Add(z);
+                }
+
+                else
+                {
+                    Rooms.Rooms.Add(z);
+                }
+
+            }
             var allMilitaryCampaigns = db.MilitaryCampaigns;
             var viewModel = new List<AssignedCampaignData>();
 
@@ -135,8 +162,11 @@ namespace FIVESTARVC.Controllers
 
             ViewBag.Campaigns = viewModel;
 
-            return View();
+            return View(Rooms);
+
         }
+
+
 
         // POST: Residents/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
@@ -145,6 +175,33 @@ namespace FIVESTARVC.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create(ResidentIncomeModel residentIncomeModel, string[] selectedCampaigns)
         {
+            //query rooms to retrieve the room object
+            var AddRooms = from y in db.Rooms
+                            .Where(y => y.RoomID == residentIncomeModel.RoomID)
+                           select y;
+
+
+            //explode the room object to get the items needed.
+            foreach (var item in AddRooms)
+            {
+
+                residentIncomeModel.RoomID = item.RoomID;
+                residentIncomeModel.RoomNum = item.RoomNum;
+                residentIncomeModel.IsOccupied = item.IsOccupied = true;
+
+            }
+
+            //Save the room in the room table
+
+            var roomToUpdate = db.Rooms.Find(residentIncomeModel.RoomID);
+
+            if (TryUpdateModel(roomToUpdate))
+            {
+                roomToUpdate.IsOccupied = residentIncomeModel.IsOccupied;
+
+                db.SaveChanges();
+            }
+
             var allMilitaryCampaigns = db.MilitaryCampaigns;
             var viewModel = new List<AssignedCampaignData>();
 
@@ -245,6 +302,8 @@ namespace FIVESTARVC.Controllers
 
                     UpdateResidentCampaigns(selectedCampaigns, resident);
                     db.SaveChanges();
+                   
+                    
 
                     TempData["UserMessage"] = residentIncomeModel.LastName + " has been admitted into your center.";
 
@@ -452,51 +511,51 @@ namespace FIVESTARVC.Controllers
         }
 
         // GET: Residents/Delete/5
-        [HttpGet]
-        public ActionResult Delete(int? id, bool? saveChangesError = false)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            if (saveChangesError.GetValueOrDefault())
-            {
-                ViewBag.ErrorMessage = "Delete failed. Try again, and if the problem persists see your system administrator.";
-            }
-            Resident resident = db.Residents.Find(id);
+        //[HttpGet]
+        //public ActionResult Delete(int? id, bool? saveChangesError = false)
+        //{
+        //    if (id == null)
+        //    {
+        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+        //    }
+        //    if (saveChangesError.GetValueOrDefault())
+        //    {
+        //        ViewBag.ErrorMessage = "Delete failed. Try again, and if the problem persists see your system administrator.";
+        //    }
+        //    Resident resident = db.Residents.Find(id);
 
-            if (resident == null)
-            {
-                return HttpNotFound();
-            }
-            return View(resident);
-        }
+        //    if (resident == null)
+        //    {
+        //        return HttpNotFound();
+        //    }
+        //    return View(resident);
+        //}
 
         // POST: Residents/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id)
-        {
-            try
-            {
-                Resident resident = db.Residents.Find(id);
-                Benefit benefit = db.Benefits.Find(resident.BenefitID);
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public ActionResult Delete(int id)
+        //{
+        //    try
+        //    {
+        //        Resident resident = db.Residents.Find(id);
+        //        Benefit benefit = db.Benefits.Find(resident.BenefitID);
 
-                if (benefit != null)
-                {
-                    db.Benefits.Remove(benefit);
-                } 
+        //        if (benefit != null)
+        //        {
+        //            db.Benefits.Remove(benefit);
+        //        } 
 
-                db.Residents.Remove(resident);
-                db.SaveChanges();
-            }
-            catch (DataException/* dex */)
-            {
-                //Log the error (uncomment dex variable name and add a line here to write a log.
-                return RedirectToAction("Delete", new { id = id, saveChangesError = true });
-            }
-            return RedirectToAction("Index");
-        }
+        //        db.Residents.Remove(resident);
+        //        db.SaveChanges();
+        //    }
+        //    catch (DataException/* dex */)
+        //    {
+        //        //Log the error (uncomment dex variable name and add a line here to write a log.
+        //        return RedirectToAction("Delete", new { id = id, saveChangesError = true });
+        //    }
+        //    return RedirectToAction("Index");
+        //}
 
         // GET
         // Quick Event form (soon to be part of a modal dialog)
@@ -529,7 +588,7 @@ namespace FIVESTARVC.Controllers
             return View(programEvent);
         }
 
-
+      
 
     }
 }
