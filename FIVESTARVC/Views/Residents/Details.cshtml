@@ -41,7 +41,7 @@
                             }
                             else
                             {
-                                @Html.DisplayFor(model => model.Birthdate)
+                                @(Model.Birthdate.Value.ToLongDateString())
 
                             }
                         }
@@ -128,10 +128,10 @@
 
 
 <h2>Events</h2>
-<dl>
-    <dd>
-        <table class="table">
-            <tr>
+
+    <div style="height: 200px; overflow-y: scroll">
+        <table class="table table-striped">
+            <tr class="thead-dark">
                 <th>Program Name</th>
                 <th>Start Date</th>
                 <th>End Date</th>
@@ -151,9 +151,9 @@
                 </tr>
             }
         </table>
-    </dd>
+    </div>
 
-</dl>
+
 
 <p>
     @Html.ActionLink("Edit", "Edit", new { id = Model.ResidentID }) |

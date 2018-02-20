@@ -10,23 +10,24 @@
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-    
+
     <div class="form-horizontal">
-        <h4>Program Event for @(Model.Resident.LastName)</h4>
+        <h4>Programs and Events</h4><br />
+        <h6>Change this event for the resident, and click Update to make the change. </h6>
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         @Html.HiddenFor(model => model.ProgramEventID)
 
         <div class="form-group">
-            @Html.LabelFor(model => model.ResidentID, "Last Name", htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.ResidentID, "Resident", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.DropDownList("ResidentID", null, htmlAttributes: new { @class = "form-control" })
-                @Html.ValidationMessageFor(model => model.ResidentID, "", new { @class = "text-danger" })
+                <strong>@String.Concat(Model.Resident.FirstMidName, " ", Model.Resident.LastName)</strong>
+                @Html.HiddenFor(model => model.ResidentID)
             </div>
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.ProgramTypeID, "Program Category", htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.ProgramTypeID, "Program Event", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.DropDownList("ProgramTypeID", null, htmlAttributes: new { @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.ProgramTypeID, "", new { @class = "text-danger" })
@@ -48,7 +49,7 @@
                 @Html.ValidationMessageFor(model => model.EndDate, "", new { @class = "text-danger" })
             </div>
         </div>
-        
+
         <div class="form-group">
             @Html.LabelFor(model => model.Completed, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
@@ -61,13 +62,28 @@
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Update" class="btn btn-dark" />    @Html.ActionLink("Back to List", "Index")
-
+                <input type="submit" value="Update" class="btn btn-default" />
             </div>
         </div>
     </div>
 }
 
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/jqueryui")
+
+    <script type="text/javascript">
+        if (!Modernizr.inputtypes.date) {
+            $('input[type=date]')
+                .attr('type', 'text')
+                .datepicker({
+                    // Consistent format with the HTML5 picker
+                    dateFormat: 'mm/dd/yy'
+                });
+
+    </script>
 }

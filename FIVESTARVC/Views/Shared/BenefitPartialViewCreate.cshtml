@@ -86,7 +86,9 @@
                             <span class="input-group-text">$</span>
                         </div>
                         @Html.EditorFor(model => model.TotalBenefitAmount, new { htmlAttributes = new { @class = "form-control" } })
-                        </div>
+                        @Html.ValidationMessageFor(model => model.TotalBenefitAmount, "", new { @class = "text-danger" })
+
+                    </div>
                 </td>
             </tr>
         </tbody>

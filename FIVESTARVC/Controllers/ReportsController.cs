@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Data.Entity;
 using System.Web;
 using System.Web.Mvc;
 using System.Data.Entity;
@@ -15,6 +16,7 @@ namespace FIVESTARVC.Controllers
     public class ReportsController : Controller
     {
         private ResidentContext DB = new ResidentContext();
+        private ResidentContext db = new ResidentContext();
 
         // GET: Reports
         public ActionResult Index()
@@ -72,55 +74,131 @@ namespace FIVESTARVC.Controllers
             return View(); 
         }
 
-        public ActionResult Historic()
+        public ActionResult Historic(int year)
         {
-            return View();
-        }
-
-        public ActionResult DownloadData()
-        {
-            HistoricData HB = new HistoricData();
-
+            var yearlyEvents = DB.ProgramEvents;
             
 
-            var residents = DB.Residents;
+            return View(year);
+        }
+
+
+        public ActionResult DownloadData()
+            {
+                var residents = DB.Residents;
+
+                var residentProgramType = (from r in residents
+                                          join pgm in DB.ProgramEvents on r.ResidentID equals pgm.ResidentID
+                                      
+                                         select new
+                                         {
+                                             r.ResidentID,
+                                             r.FirstMidName,
+                                             r.LastName,
+                                             r.Birthdate,
+                                             r.ServiceBranch,
+                                             r.HasPTSD,
+                                             r.InVetCourt,
+                                             r.Note,
+                                             pgm.ProgramTypeID
+                                         }).GroupBy(r => r.ResidentID).ToList();
+
 
 
             var myExport = new CsvExport();
 
-            foreach (var Resident in residents)
-            {
-                myExport.AddRow();
-                myExport["Last Name"] = Resident.LastName;
-                myExport["First Name"] = Resident.FirstMidName;
-                myExport["Birthdate"] = Resident.Birthdate;
-                myExport["Service Branch"] = Resident.ServiceBranch;
-                myExport["PTSD"] = Resident.HasPTSD;
-                myExport["Vet Court"] = Resident.InVetCourt;
-                myExport["Notes"] = Resident.Note;
-                /*
-                myExport["Work Program"] = wp;
-                myExport["Mental Wellness"] = Resident.FirstMidName;
-                myExport["P2I"] = Resident.Birthdate;
-                myExport["Emergency Shelter"] = Resident.ServiceBranch;
-                myExport["School Program"] = Resident.HasPTSD;
-                myExport["Financial Program"] = Resident.InVetCourt;
-                myExport["Readmitted"] = Resident.Note;
-                myExport["Depression/Behavioral"] = Resident.Note;
-                myExport["Substance Abuse"] = Resident.Note;
-                myExport["Discharge for Cause"] = Resident.Note;
-                myExport["Self Discharge"] = Resident.Note;
-                myExport["Higher Level of Care"] = Resident.Note;
-                */
+                foreach (var r in residentProgramType)
+                {
+                    myExport.AddRow();
+                    myExport["Last Name"] = r.First().LastName;
+                    myExport["First Name"] = r.First().FirstMidName;
+                    myExport["Birthdate"] = r.First().Birthdate;
+                    myExport["Service Branch"] = r.First().ServiceBranch;
+                    myExport["PTSD"] = r.First().HasPTSD;
+                    myExport["Vet Court"] = r.First().InVetCourt;
+
+
+
+                    var eventids = r.Select(i => i.ProgramTypeID).ToList();
+
+
+                foreach(var eid in eventids)
+                {
+                    switch(eid) {
+                        case 1:
+                            myExport["Work Program"] = "1";
+                            break;
+                        case 2:
+                            break;
+                        case 3:
+                            myExport["Mental Wellness"] = "1";
+                            break;
+                        case 4:
+                            myExport["P2I"] = "1";
+                            break;
+                        case 5:
+                            myExport["Emergency Shelter"] = "1";
+                            break;
+                        case 6:
+                            myExport["School Program"] = "1";
+                            break;
+                        case 8:
+                            myExport["Re-Admit"] = "1";
+                            break;
+                        case 9:
+                            myExport["Financial Program"] = "1";
+                            break;
+                        case 10:
+                            myExport["Depression/Behavioral Program"] = "1";
+                            break;
+                        case 11:
+                            myExport["Substance Abuse Program"] = "1";
+                            break;
+                        case 12:
+                            myExport["Discharge for Cause"] = "1";
+                            break;
+                        case 13:
+                            myExport["Self Discharge"] = "1";
+                            break;
+                        case 14:
+                            myExport["Higher Level of Care"] = "1";
+                            break;
+                        default:
+                            //do something
+                            break;
+                        
+                    }   
+                }
+
+                }
+
+                string filepath = Server.MapPath(Url.Content("~/Content/CenterReport.csv"));
+
+                myExport.ExportToFile(filepath);
+
+                string filename = "~\\Content\\CenterReport.csv";
+            
+                return File(filename,"text/csv", "HistoricData.csv");
             }
+        //Not a very good method
+    
+        //public bool checkEvent(Resident res, int pgmType)
+        //{
+        //    var pgmEventCheck = db.ProgramEvents;
 
-            string filepath = Server.MapPath(Url.Content("~/Content/CenterReport.csv"));
+        //    foreach (var ProgramEvent in pgmEventCheck)
+        //    {
+        //        if (ProgramEvent.ResidentID == res.ResidentID)
+        //        {
 
-            myExport.ExportToFile(filepath);
+        //            if (ProgramEvent.ProgramTypeID == pgmType)
+        //            {
+        //                return true;
+        //            }
+        //        }
+        //    }
 
-            string filename = "~\\Content\\CenterReport.csv";
-
-            return File(filename,"text/csv", "HistoricData.csv");
-        }   
+        //    return false;
+        //}
     }
 }
