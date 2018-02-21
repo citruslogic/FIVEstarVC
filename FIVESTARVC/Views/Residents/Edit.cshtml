@@ -64,9 +64,17 @@
                         <tr>
                             <td class="col-form-label"> @Html.LabelFor(model => model.RoomID, htmlAttributes: new { @class = "control-label col-md-offset-3" })</td>
                             <td class="col-auto">
-                                @*@Html.DropDownList("rooms", "Select Room")*@
-                                @Html.EditorFor(model => model.RoomID)
+                               @ViewBag.room
                             </td>
+                        </tr>
+                        <tr>
+                                <td>
+
+                                </td>
+                                <td>
+
+                                </td>
+
                         </tr>
                         <tr>
                             <td class="col-form-label">@Html.Label("Resident has PTSD?", htmlAttributes: new { @class = "control-label col-sm-offset-10" })</td>
