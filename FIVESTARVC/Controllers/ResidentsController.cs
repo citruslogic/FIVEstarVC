@@ -363,7 +363,7 @@ namespace FIVESTARVC.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost, ActionName("Edit")]
         [ValidateAntiForgeryToken]
-        public ActionResult EditPost(int? id, string[] selectedCampaigns)
+        public ActionResult EditPost(int? id, string[] selectedCampaigns, string moveTo)
         {
             if (id == null)
             {
@@ -374,6 +374,24 @@ namespace FIVESTARVC.Controllers
                 .Include(b => b.Benefit)
                 .Where(c => c.ResidentID == id)
                 .Single();
+
+            int newRoom = Convert.ToInt32(moveTo);
+
+            var roomToChange = db.Rooms.Find(residentToUpdate.RoomID);
+
+            roomToChange.IsOccupied = false;
+
+
+            var changeRoom = from y in db.Rooms
+                           .Where(y => y.RoomNum == newRoom)
+                             select y;
+
+            foreach (var z in changeRoom)
+            {
+                z.IsOccupied = true;
+                residentToUpdate.RoomID = z.RoomID;
+
+            }
 
             if (TryUpdateModel(residentToUpdate, "",
                new string[] { "LastName", "FirstMidName", "Birthdate", "ServiceBranch", "Note", "HasPTSD", "InVetCourt", "Benefit", "MilitaryCampaigns", "TotalBenefitAmount" }))
