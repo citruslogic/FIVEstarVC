@@ -22,7 +22,6 @@ namespace FIVESTARVC.Controllers
             var residents =
                     (from resident in db.Residents
                      join room in db.Rooms on resident.RoomID equals room.RoomID
-                     where room.RoomID == resident.RoomID
                      select new DashboardData
                      {
                          ResidentID = resident.ResidentID,
