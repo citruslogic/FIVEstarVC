@@ -6,11 +6,36 @@ using FIVESTARVC.Models;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Web.Mvc;
 
 namespace FIVESTARVC.ViewModels
 {
     public class ResidentIncomeModel
     {
+        //Room
+
+        public List<Room> Rooms = new List<Room>();
+        public int SelectedRoomID { get; set; }
+        public int RoomID { get; set; }
+
+        public bool IsOccupied {get; set;}
+        public int RoomNum { get; set; }
+
+
+        public IEnumerable<SelectListItem> RoomIEnum
+        {
+            get
+            {
+                return new SelectList(Rooms, "RoomID", "RoomNum");
+
+                //return new SelectList(Rooms, "RoomID", "RoomNum", "WingName");
+            }
+
+        }
+
+        
+
+
         // RESIDENT
         public int ResidentID { get; set; }
         [Required]
@@ -28,9 +53,8 @@ namespace FIVESTARVC.ViewModels
         public Boolean HasPTSD { get; set; }
         [Display(Name = "In Veterans Court?")]
         public Boolean InVetCourt { get; set; }
-        [Display(Name = "Room Number")]
-        [ForeignKey("Room")]
-        public int? RoomID { get; set; }
+        //[Display(Name = "Room Number")]
+        //public int RoomID { get; set; }
         [Display(Name = "Note")]
         [StringLength(150)]
         public string Note { get; set; }
