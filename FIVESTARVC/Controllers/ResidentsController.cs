@@ -341,7 +341,11 @@ namespace FIVESTARVC.Controllers
 
             PopulateAssignedCampaignData(resident);
 
+            var roomToEdit = db.Rooms.Find(resident.RoomID);
 
+            int roomToDisplay = roomToEdit.RoomNum;
+
+            ViewBag.room = roomToDisplay;
 
             if (resident == null)
             {
