@@ -88,6 +88,20 @@ namespace FIVESTARVC.Controllers
                 .Include(p => p.ProgramEvents)
                 .Where(r => r.ResidentID == id).Single();
 
+            var room = db.Rooms.Find(resident.RoomID);
+
+            if (resident.RoomID != null)
+            {
+                int roomNum = room.RoomNum;
+
+                ViewBag.room = roomNum;
+            }
+            
+            else
+            {
+                ViewBag.room = "No Room Assigned";
+            }
+
             if (resident == null)
             {
                 return HttpNotFound();
@@ -341,11 +355,18 @@ namespace FIVESTARVC.Controllers
 
             PopulateAssignedCampaignData(resident);
 
+          
             var roomToEdit = db.Rooms.Find(resident.RoomID);
 
-            int roomToDisplay = roomToEdit.RoomNum;
-
-            ViewBag.room = roomToDisplay;
+            if (resident.RoomID != null)
+            {
+                int roomToDisplay = roomToEdit.RoomNum;
+                ViewBag.room = roomToDisplay;
+            }
+             else
+            {
+                ViewBag.room = "No Room Assigned";
+            }
 
             if (resident == null)
             {
@@ -374,6 +395,8 @@ namespace FIVESTARVC.Controllers
                 .Include(b => b.Benefit)
                 .Where(c => c.ResidentID == id)
                 .Single();
+
+           
 
             int newRoom = Convert.ToInt32(moveTo);
 
