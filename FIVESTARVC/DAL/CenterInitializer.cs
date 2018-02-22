@@ -68,12 +68,12 @@ namespace FIVESTARVC.DAL
 
             var residents = new List<Resident>
             {
-                new Resident { FirstMidName="Carson", LastName="Steven", ServiceBranch=ServiceType.ARMY, RoomID=1 },
-                new Resident { FirstMidName="Naomi", LastName="Wildman", ServiceBranch=ServiceType.AIRFORCE, RoomID=2 },
-                new Resident { FirstMidName="Gary", LastName="Noonan", ServiceBranch=ServiceType.NAVY, RoomID=3 },
-                new Resident { FirstMidName="Steve", LastName="Nash", ServiceBranch=ServiceType.MARINES, RoomID=4 },
-                new Resident { FirstMidName="Neo", LastName="Anderson", ServiceBranch=ServiceType.AIRFORCE, RoomID=5 },
-                new Resident { FirstMidName="Charlie", LastName="Brown", ServiceBranch=ServiceType.NAVY, RoomID=6 }
+                new Resident { FirstMidName="Carson", Birthdate=DateTime.Parse("3/4/1988"), LastName="Steven", ServiceBranch=ServiceType.ARMY },
+                new Resident { FirstMidName="Naomi", Birthdate=DateTime.Parse("6/12/1979"), LastName="Wildman", ServiceBranch=ServiceType.AIRFORCE },
+                new Resident { FirstMidName="Gary", Birthdate=DateTime.Parse("6/24/1980"), LastName="Noonan", ServiceBranch=ServiceType.NAVY },
+                new Resident { FirstMidName="Steve", Birthdate=DateTime.Parse("1/15/1981"), LastName="Nash", ServiceBranch=ServiceType.MARINES },
+                new Resident { FirstMidName="Neo", Birthdate=DateTime.Parse("3/8/1974"), LastName="Anderson", ServiceBranch=ServiceType.AIRFORCE },
+                new Resident { FirstMidName="Charlie", LastName="Brown", Birthdate=DateTime.Parse("12/23/1976"), ServiceBranch=ServiceType.NAVY }
             };
 
             residents.ForEach(r => context.Residents.Add(r));
@@ -130,9 +130,9 @@ namespace FIVESTARVC.DAL
             var militaryCampaigns = new List<MilitaryCampaign>
             {
                 new MilitaryCampaign { CampaignName="Persian Gulf", Residents = new List<Resident>() },
-                new MilitaryCampaign { CampaignName="Afghanistan", Residents = new List<Resident>() },
+                new MilitaryCampaign { CampaignName="Afghanistan/OEF", Residents = new List<Resident>() },
                 new MilitaryCampaign { CampaignName="Vietnam", Residents = new List<Resident>() },
-                new MilitaryCampaign { CampaignName="Iraq", Residents = new List<Resident>() },
+                new MilitaryCampaign { CampaignName="Iraq/OIF", Residents = new List<Resident>() },
                 new MilitaryCampaign { CampaignName="Bosnia", Residents = new List<Resident>() }
             };
 
