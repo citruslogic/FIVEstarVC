@@ -507,6 +507,11 @@ namespace FIVESTARVC.Controllers
                 .Where(r => r.ResidentID == id)
                 .Single();
 
+                var roomToRelease = db.Rooms.Find(residentToDischarge.RoomID);
+
+                roomToRelease.IsOccupied = false;
+                residentToDischarge.RoomID = null;
+
                 residentToDischarge.ProgramEvents.Add(new ProgramEvent
                 {
                     ProgramTypeID = ProgramTypeID,
