@@ -8,6 +8,7 @@ using FIVESTARVC.DAL;
 using FIVESTARVC.Models;
 using FIVESTARVC.ViewModels;
 using Jitbit.Utils;
+using DelegateDecompiler;
 
 
 namespace FIVESTARVC.Controllers
@@ -15,17 +16,88 @@ namespace FIVESTARVC.Controllers
     public class ReportsController : Controller
     {
         private ResidentContext DB = new ResidentContext();
-        private ResidentContext db = new ResidentContext();
 
         // GET: Reports
         public ActionResult Index()
         {
-            //Variables to count branch types
-            ViewBag.NavyCount = DB.Residents.Count(x => x.ServiceBranch == ServiceType.ARMY);
+            //Variables used in counting current residents
+            int nvyCount = 0;
+            int armyCount = 0;
+            int marineCount = 0;
+            int afCount = 0;
+            int cgCount = 0;
+
+            //Variables to count cumulative branch types
+            ViewBag.NavyCount = DB.Residents.Count(x => x.ServiceBranch == ServiceType.NAVY);
             ViewBag.MarineCount = DB.Residents.Count(x => x.ServiceBranch == ServiceType.MARINES);
             ViewBag.ArmyCount = DB.Residents.Count(x => x.ServiceBranch == ServiceType.ARMY);
             ViewBag.AirForceCount = DB.Residents.Count(x => x.ServiceBranch == ServiceType.AIRFORCE);
             ViewBag.CoastGuardCount = DB.Residents.Count(x => x.ServiceBranch == ServiceType.COASTGUARD);
+
+            //Count current Navy Residents
+            var navyQuery = (from Resident in DB.Residents
+                             where Resident.ServiceBranch == ServiceType.NAVY
+                             select Resident).ToList();
+
+            foreach(Resident item in navyQuery)
+            {
+                if (item.IsCurrent())
+                {
+                    ViewBag.CurrentNavy = ++nvyCount;
+                }
+            }
+
+            //Count current Army Residents
+            var armyQuery = (from Resident in DB.Residents
+                             where Resident.ServiceBranch == ServiceType.ARMY
+                             select Resident).ToList();
+
+            foreach (Resident item in armyQuery)
+            {
+                if (item.IsCurrent())
+                {
+                    ViewBag.CurrentArmy = ++armyCount;
+                }
+            }
+
+            //Count current Marine Residents
+            var marineQuery = (from Resident in DB.Residents
+                             where Resident.ServiceBranch == ServiceType.MARINES
+                             select Resident).ToList();
+
+            foreach (Resident item in marineQuery)
+            {
+                if (item.IsCurrent())
+                {
+                    ViewBag.CurrentMarine = ++marineCount;
+                }
+            }
+
+            //Count current AirForce Residents
+            var afQuery = (from Resident in DB.Residents
+                           where Resident.ServiceBranch == ServiceType.AIRFORCE
+                           select Resident).ToList();
+
+            foreach (Resident item in afQuery)
+            {
+                if (item.IsCurrent())
+                {
+                    ViewBag.CurrentAF = ++afCount;
+                }
+            }
+
+            //Count current CoastGuard Residents
+            var cgQuery = (from Resident in DB.Residents
+                           where Resident.ServiceBranch == ServiceType.COASTGUARD
+                           select Resident).ToList();
+
+            foreach (Resident item in cgQuery)
+            {
+                if (item.IsCurrent())
+                {
+                    ViewBag.CurrentCG = ++cgCount;
+                }
+            }
 
             //Counts number of current residents, based on events
             var CurrentRes = DB.ProgramEvents;
@@ -48,7 +120,10 @@ namespace FIVESTARVC.Controllers
                     count--;
                 }
             }
+
             ViewBag.TotalCount = count;
+
+            ViewBag.PTSD = DB.Residents.Count(x => x.HasPTSD == true);
 
             ViewBag.Graduated = DB.ProgramEvents.Count(x => x.ProgramTypeID == 2);
 
@@ -66,19 +141,16 @@ namespace FIVESTARVC.Controllers
 
             ViewBag.FinancialProgram = DB.ProgramEvents.Count(x => x.ProgramTypeID == 10);
 
-            ViewBag.DepressionBehavioralProgram = DB.ProgramEvents.Count(x => x.ProgramTypeID == 11);
-
-            ViewBag.SubstanceAbuseProgram = DB.ProgramEvents.Count(x => x.ProgramTypeID == 12);
-
             return View(); 
         }
 
-        public ActionResult Historic(int year)
+        public ActionResult Historic()
         {
             var yearlyEvents = DB.ProgramEvents;
             
 
-            return View(year);
+
+            return View();
         }
 
 

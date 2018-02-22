@@ -82,26 +82,18 @@
     </tr>
     <tr>
         <td>
+            PTSD
+        </td>
+        <td>
+            @Html.Raw(ViewBag.PTSD)
+        </td>
+    </tr>
+    <tr>
+        <td>
             Financial Program
         </td>
         <td>
             @Html.Raw(ViewBag.FinancialProgram)
-        </td>
-    </tr>
-    <tr>
-        <td>
-            Depression/Behavioral Program
-        </td>
-        <td>
-            @Html.Raw(ViewBag.DepressionBehavioralProgram)
-        </td>
-    </tr>
-    <tr>
-        <td>
-            Substance Abuse Program
-        </td>
-        <td>
-            @Html.Raw(ViewBag.SubstanceAbuseProgram)
         </td>
     </tr>
 </table>
@@ -113,10 +105,10 @@
                 Service Branch
             </th>
             <th style="font-weight: bold; color:dodgerblue; font-size: 110%">
-                Total Count
+                Cumulative Residents
             </th>
             <th style="font-weight: bold; color:dodgerblue; font-size: 110%">
-                Current Count
+                Current Residents
             </th>
         </tr>
         <tr>
@@ -126,6 +118,16 @@
             <td>
                 @Html.Raw(ViewBag.NavyCount)
             </td>
+            <td>
+                @{ 
+                    if (ViewBag.CurrentNavy == null)
+                    { <text>0</text> }
+                    else
+                    {
+                        @Html.Raw(ViewBag.CurrentNavy)
+                    }
+                }
+            </td>
         </tr>
         <tr>
             <td>
@@ -133,6 +135,16 @@
             </td>
             <td>
                 @Html.Raw(ViewBag.ArmyCount)
+            </td>
+            <td>
+                @{
+                    if (ViewBag.CurrentArmy == null)
+                    { <text>0</text> }
+                    else
+                    {
+                        @Html.Raw(ViewBag.CurrentArmy)
+                    }
+                }
             </td>
         </tr>
         <tr>
@@ -142,6 +154,16 @@
             <td>
                 @Html.Raw(ViewBag.MarineCount)
             </td>
+            <td>
+                @{
+                    if (ViewBag.CurrentMarine == null)
+                    { <text>0</text> }
+                    else
+                    {
+                        @Html.Raw(ViewBag.CurrentMarine)
+                    }
+                }
+            </td>
         </tr>
         <tr>
             <td>
@@ -150,6 +172,16 @@
             <td>
                 @Html.Raw(ViewBag.AirForceCount)
             </td>
+            <td>
+                @{
+                    if (ViewBag.CurrentAF == null)
+                    { <text>0</text> }
+                    else
+                    {
+                        @Html.Raw(ViewBag.CurrentAF)
+                    }
+                }
+            </td>
         </tr>
         <tr>
             <td>
@@ -157,6 +189,16 @@
             </td>
             <td>
                 @Html.Raw(ViewBag.CoastGuardCount)
+            </td>
+            <td>
+                @{
+                    if (ViewBag.CurrentCG == null)
+                    { <text>0</text> }
+                    else
+                    {
+                        @Html.Raw(ViewBag.CurrentCG)
+                    }
+                }
             </td>
         </tr>
     </table>
