@@ -60,8 +60,7 @@
                        <tr>
                            <td class="col-form-label"> @Html.LabelFor(model => model.RoomID, htmlAttributes: new { @class = "control-label col-md-offset-3" })</td>
                            <td class="col-auto">
-                               @*@Html.DropDownList("rooms", "Select Room")*@
-                               @(Model.RoomID)
+                              @ViewBag.releaseRoom
                            </td>
                        </tr>
                        <tr>
