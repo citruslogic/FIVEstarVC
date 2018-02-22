@@ -196,6 +196,7 @@
     <Compile Include="Validators\CheckBirthdate.cs" />
     <Compile Include="ViewModels\AssignedCampaignData.cs" />
     <Compile Include="ViewModels\AssignedRoom.cs" />
+    <Compile Include="ViewModels\DashboardData.cs" />
     <Compile Include="ViewModels\HistoricData.cs" />
     <Compile Include="ViewModels\ResidentIncomeModel.cs" />
   </ItemGroup>

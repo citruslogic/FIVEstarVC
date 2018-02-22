@@ -4,6 +4,7 @@ using System.Linq;
 using System.Data.Entity;
 using System.Web;
 using System.Web.Mvc;
+using System.Data.Entity;
 using FIVESTARVC.DAL;
 using FIVESTARVC.Models;
 using FIVESTARVC.ViewModels;
@@ -173,6 +174,7 @@ namespace FIVESTARVC.Controllers
                                              r.Note,
                                              pgm.ProgramTypeID
                                          }).GroupBy(r => r.ResidentID).ToList();
+
 
 
             var myExport = new CsvExport();
