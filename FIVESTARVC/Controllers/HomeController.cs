@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.Entity;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using FIVESTARVC.Models;
 using FIVESTARVC.DAL;
+using FIVESTARVC.ViewModels;
 
 namespace FIVESTARVC.Controllers
 {
@@ -17,9 +20,23 @@ namespace FIVESTARVC.Controllers
 
         public ActionResult Index()
         {
-            ViewBag.lastFiveResidents = db.Residents.OrderByDescending(r => r.ResidentID).Take(5);
 
-            return View();
+            var residents =
+                    (from resident in db.Residents
+                     join room in db.Rooms on resident.RoomID equals room.RoomID
+                     where room.RoomID == resident.RoomID
+                     select new DashboardData
+                     {
+                         ResidentID = resident.ResidentID,
+                         LastName = resident.LastName,
+                         FirstMidName = resident.FirstMidName,
+                         RoomNumber = room.RoomNum
+
+                     }).OrderByDescending(r => r.ResidentID).Take(5);
+
+
+
+            return View(residents.ToList());
         }
 
         public ActionResult Reports()
