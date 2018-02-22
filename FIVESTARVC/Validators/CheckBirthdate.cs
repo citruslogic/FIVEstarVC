@@ -11,11 +11,17 @@ namespace FIVESTARVC.Validators
 
         public override bool IsValid(object value)
         {
-            var dt = (DateTime)value;
-            if (dt <= DateTime.Now)
+            DateTime? dt = (DateTime?) value;
+
+            if (dt.HasValue)
             {
-                return true;
+                 if (DateTime.TryParse(dt.ToString(), out DateTime date))
+                {
+                    return date <= DateTime.Now;
+                }
             }
+          
+
             return false;
         }
     }

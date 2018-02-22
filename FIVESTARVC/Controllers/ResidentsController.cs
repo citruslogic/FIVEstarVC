@@ -294,7 +294,7 @@ namespace FIVESTARVC.Controllers
 
 
             if (TryUpdateModel(residentIncomeModel, "",
-                 new string[] { "LastName", "FirstMidName", "Birthdate", "ServiceBranch", "Note", "HasPTSD", "InVetCourt", "Benefit", "MilitaryCampaigns", "TotalBenefitAmount" }))
+                 new string[] { "LastName", "FirstMidName", "Birthdate", "ServiceBranch", "Note", "InVetCourt", "Benefit", "MilitaryCampaigns", "TotalBenefitAmount" }))
             {
                 try
                 {
