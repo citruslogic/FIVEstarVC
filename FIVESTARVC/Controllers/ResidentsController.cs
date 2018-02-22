@@ -485,6 +485,13 @@ namespace FIVESTARVC.Controllers
                 .Where(r => r.ResidentID == id)
                 .Single();
 
+            var roomToRelease = db.Rooms.Find(residentToDischarge.RoomID);
+
+            int room = roomToRelease.RoomNum;
+
+
+            ViewBag.releaseRoom = room;
+
             if (residentToDischarge == null)
             {
                 return HttpNotFound();
