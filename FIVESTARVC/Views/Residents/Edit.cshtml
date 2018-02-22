@@ -69,14 +69,6 @@
                             </td>
                         </tr>
                         <tr>
-                            <td class="col-form-label">@Html.Label("Resident has PTSD?", htmlAttributes: new { @class = "control-label col-sm-offset-10" })</td>
-                            <td class="col-auto">
-                                @Html.EditorFor(model => model.HasPTSD)
-                                @Html.ValidationMessageFor(model => model.HasPTSD, "", new { @class = "text-danger" })
-                            </td>
-
-                        </tr>
-                        <tr>
                             <td class="col-form-label">@Html.Label("in Veteran's Court?", htmlAttributes: new { @class = "control-label col-sm-offset-10" })</td>
                             <td class="col-auto">
                                 @Html.EditorFor(model => model.InVetCourt)

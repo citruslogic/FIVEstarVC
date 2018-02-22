@@ -6,11 +6,11 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Web;
 using FIVESTARVC.DAL;
+using FIVESTARVC.Validators;
 
 namespace FIVESTARVC.Models
 {
    
-
     public class Resident
     {
         private ResidentContext db = new ResidentContext();
@@ -23,12 +23,12 @@ namespace FIVESTARVC.Models
         public string FirstMidName { get; set; }
         [Display(Name = "Birthdate")]
         [DataType(DataType.Date)]
+        [Birthdate(ErrorMessage = "Birthdate must not be in the future.")]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public DateTime? Birthdate { get; set; }
         [Display(Name = "Service Branch")]
         public ServiceType ServiceBranch { get; set; }
-        [Display(Name = "Resident has PTSD?")]
-        public Boolean HasPTSD { get; set; }
+
         [Display(Name = "In Veterans Court?")]
         public Boolean InVetCourt { get; set; }
         [Display(Name = "Room Number")]

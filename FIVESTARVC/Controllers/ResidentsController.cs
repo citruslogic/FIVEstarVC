@@ -224,7 +224,6 @@ namespace FIVESTARVC.Controllers
                 LastName = residentIncomeModel.LastName,
                 Birthdate = residentIncomeModel.Birthdate,
                 ServiceBranch = residentIncomeModel.ServiceBranch,
-                HasPTSD = residentIncomeModel.HasPTSD,
                 InVetCourt = residentIncomeModel.InVetCourt,
                 RoomID = residentIncomeModel.RoomID,
                 Note = residentIncomeModel.Note,

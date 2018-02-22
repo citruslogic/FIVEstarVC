@@ -1,11 +1,11 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace CustomDataAnnotations
+namespace FIVESTARVC.Validators
 {
-    public class CurrentDateAttribute : ValidationAttribute
+    public class BirthdateAttribute : ValidationAttribute
     {
-        public CurrentDateAttribute()
+        public BirthdateAttribute()
         {
         }
 
