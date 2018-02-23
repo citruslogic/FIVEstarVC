@@ -48,8 +48,8 @@
                                     <div class="input-group-prepend">
                                         <span class="input-group-text fa fa-calendar fa-fw" style="width:40px;"></span>
                                     </div>
-                                    @Html.EditorFor(model => model.Birthdate, 
-                                   new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.EditorFor(model => model.Birthdate,
+                                        new { htmlAttributes = new { @class = "form-control" } })
                                     @Html.ValidationMessageFor(model => model.Birthdate, "", new { @class = "text-danger" })
                                 </div>
                             </td>
@@ -64,8 +64,9 @@
                         <tr>
                             <td class="col-form-label"> @Html.LabelFor(model => model.RoomID, htmlAttributes: new { @class = "control-label col-md-offset-3" })</td>
                             <td class="col-auto">
-                               @ViewBag.room
+                                @ViewBag.room
                             </td>
+                               @ViewBag.AlertMessage
                         </tr>
                         <tr>
                             @{
@@ -79,6 +80,7 @@
                             }
 
                         </tr>
+
                         <tr>
                             <td class="col-form-label">@Html.Label("in Veteran's Court?", htmlAttributes: new { @class = "control-label col-sm-offset-10" })</td>
                             <td class="col-auto">
@@ -103,9 +105,6 @@
                                                 @:<br />
                                             }
                                             @:
-
-
-
 
                                             <input type="checkbox"
                                                    name="selectedCampaigns"
@@ -173,6 +172,11 @@
             });
 
             $('#Benefit_TotalBenefitAmount').val(total);
+        });
+        $('.moveTo').on("onload", function () {
+            if (!ViewBag.AlertMessage == null) {
+                document.getElementById('moveTo') = ViewBag.AlertMessage;
+            }
         });
 
 
