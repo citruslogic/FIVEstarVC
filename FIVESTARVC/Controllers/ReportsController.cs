@@ -103,6 +103,7 @@ namespace FIVESTARVC.Controllers
             //Counts number of current residents, based on events
             var CurrentRes = DB.ProgramEvents;
             int count = 0;
+            int dischargeCount = 0;
 
             foreach (var ProgramEvents in CurrentRes)
             {
@@ -120,27 +121,43 @@ namespace FIVESTARVC.Controllers
                 {
                     count--;
                 }
+
+                if (ProgramEvents.ProgramTypeID == 13 //discharge
+                    || ProgramEvents.ProgramTypeID == 14 //discharge
+                    || ProgramEvents.ProgramTypeID == 15)
+                {
+                    dischargeCount++;
+                }
             }
 
             ViewBag.TotalCount = count;
+            ViewBag.DischargeCount = dischargeCount;
+            
+            //Finds graduation percent
+            float Graduated = DB.ProgramEvents.Count(x => x.ProgramTypeID == 2);
+            ViewBag.Graduated = Graduated;
 
-            ViewBag.PTSD = DB.Residents.Count(x => x.HasPTSD == true);
+            //Finds number admitted
+            float Admitted = DB.ProgramEvents.Count(x => x.ProgramTypeID == 7);
+            ViewBag.Admitted = Admitted;
 
-            ViewBag.Graduated = DB.ProgramEvents.Count(x => x.ProgramTypeID == 2);
+            float gradPercent = (Graduated / Admitted) * 100;
+            
+            ViewBag.GraduatedPercent = gradPercent.ToString("n2");
 
-            ViewBag.WorkProgram = DB.ProgramEvents.Count(x => x.ProgramTypeID == 1);
+            //ViewBag.WorkProgram = DB.ProgramEvents.Count(x => x.ProgramTypeID == 1);
 
-            ViewBag.MentalWellness = DB.ProgramEvents.Count(x => x.ProgramTypeID == 3);
+            //ViewBag.MentalWellness = DB.ProgramEvents.Count(x => x.ProgramTypeID == 3);
 
             ViewBag.P2I = DB.ProgramEvents.Count(x => x.ProgramTypeID == 4);
 
             ViewBag.EmergencyShelter = DB.ProgramEvents.Count(x => x.ProgramTypeID == 5);
 
-            ViewBag.SchoolProgram = DB.ProgramEvents.Count(x => x.ProgramTypeID == 6);
+            //ViewBag.SchoolProgram = DB.ProgramEvents.Count(x => x.ProgramTypeID == 6);
 
             ViewBag.VeteransCourt = DB.Residents.Count(x => x.InVetCourt == true);
 
-            ViewBag.FinancialProgram = DB.ProgramEvents.Count(x => x.ProgramTypeID == 10);
+            //ViewBag.FinancialProgram = DB.ProgramEvents.Count(x => x.ProgramTypeID == 10);
 
             return View(); 
         }
@@ -169,7 +186,6 @@ namespace FIVESTARVC.Controllers
                                              r.LastName,
                                              r.Birthdate,
                                              r.ServiceBranch,
-                                             r.HasPTSD,
                                              r.InVetCourt,
                                              r.Note,
                                              pgm.ProgramTypeID
@@ -185,9 +201,10 @@ namespace FIVESTARVC.Controllers
                     myExport["Last Name"] = r.First().LastName;
                     myExport["First Name"] = r.First().FirstMidName;
                     myExport["Birthdate"] = r.First().Birthdate;
+                    //myExport["Age"] = r.First().Age;
                     myExport["Service Branch"] = r.First().ServiceBranch;
-                    myExport["PTSD"] = r.First().HasPTSD;
                     myExport["Vet Court"] = r.First().InVetCourt;
+                    myExport["Notes"] = r.First().Note;
 
 
 
@@ -252,7 +269,7 @@ namespace FIVESTARVC.Controllers
             
                 return File(filename,"text/csv", "HistoricData.csv");
             }
-        //Not a very good method
+        //A very naughty method
     
         //public bool checkEvent(Resident res, int pgmType)
         //{

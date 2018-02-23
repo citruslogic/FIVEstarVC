@@ -1,10 +1,18 @@
 ﻿sep=,
-Last Name,First Name,Birthdate,Service Branch,PTSD,Vet Court,Work Program,Self Discharge,Higher Level of Care
-Steven,Carson,,ARMY,False,False,1,1,
-Wildman,Naomi,,AIRFORCE,False,False,,,1
-Noonan,Gary,,NAVY,False,False,,1,
-Bryant,Koby,,ARMY,False,False,,,
-Welling,Jason,,NAVY,False,False,,,
-Clark,Vanessa,,NAVY,False,False,,,
-Tytus,Hamilton,2018-02-22,MARINES,True,True,,,
-Hana,Hamilton,2018-02-09,AIRFORCE,False,True,,1,
+Last Name,First Name,Birthdate,Service Branch,Vet Court,Notes,Work Program,Self Discharge,Higher Level of Care
+Steven,Carson,,ARMY,False,,1,1,
+Wildman,Naomi,,AIRFORCE,False,,,,1
+Noonan,Gary,,NAVY,False,,,,
+Nash,Steve,,MARINES,False,,,,
+Anderson,Neo,,AIRFORCE,False,,,,
+Brown,Charlie,,NAVY,False,,,,
+Hamilton,Tyts,2018-02-06,ARMY,True,,,1,
+batler,frank,2018-02-16,MARINES,True,,,,
+Hamilton,Navy,2018-02-07,NAVY,True,,,,
+Butler,Navy,2018-02-14,NAVY,False,,,,
+ddd,aaa,,NAVY,False,,,,1
+1212,121,2018-01-31,AIRFORCE,False,,,,
+12312,442,2018-01-09,NAVY,False,,,,
+3123,424,2018-01-29,MARINES,False,,,,
+qweqw,qwe,2018-02-14,COASTGUARD,False,,,,
+army,man,2018-02-20,ARMY,False,,,,
