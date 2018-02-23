@@ -27,6 +27,13 @@
                         @Html.DisplayFor(model => model.FirstMidName)
 
                     </td>
+                    </tr>
+                <tr class="form-row">
+                    <td class="col-form-label">
+                        @Html.LabelFor(model => model.RoomID, htmlAttributes: new { @class = "control-label font-weight-bold" })
+
+                        @ViewBag.room
+                    </td>
 
                 </tr>
                 <tr class="form-row">
@@ -106,10 +113,6 @@
 
                         }
                     </td>
-                </tr>
-                <tr class="form-row">
-                    <td>@Html.LabelFor(model => model.HasPTSD, htmlAttributes: new { @class = "control-label col-md-0 font-weight-bold" })</td>
-                    <td>@(Model.HasPTSD ? "Yes" : "No")</td>
                 </tr>
                 <tr class="form-row">
                     <td>@Html.LabelFor(model => model.InVetCourt, htmlAttributes: new { @class = "control-label col-md-0 font-weight-bold" })</td>
