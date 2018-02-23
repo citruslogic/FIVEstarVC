@@ -337,7 +337,7 @@ namespace FIVESTARVC.Controllers
         }
 
         // GET: Residents/Edit/5
-        public ActionResult Edit(int? id)
+        public ActionResult Edit(int? id, string moveTo)
         {
 
             if (id == null)
@@ -395,21 +395,56 @@ namespace FIVESTARVC.Controllers
                 .Where(c => c.ResidentID == id)
                 .Single();
 
-           
+            var newRoom = Convert.ToInt32(moveTo);
+            
 
-            int newRoom = Convert.ToInt32(moveTo);
+            //Get all rooms//
+             var r = (from y in db.Rooms
+                    select y.RoomNum).ToList();
+
+
+            if (!r.Contains(newRoom))
+                {
+                //post back to the textbox//
+                //ViewBag.AlertMessage = "Invalid Room";
+                return RedirectToAction("Edit");
+
+                }
+
+
+            var changeRoom = from y in db.Rooms
+                            .Where(y => y.RoomNum == newRoom)
+                             select y;
+
+            //To get the variable out of the object, I had to use a viewbag//
+            foreach (var z in changeRoom)
+            {
+                ViewBag.room = z.RoomID;
+            }
+
+            int roomTo = ViewBag.room;
+
+            var roomLookUP = from v in db.Residents
+                             select v.RoomID;
+
+
+
+            //Check to see if room is already used//
+            if (roomLookUP.Contains(roomTo))
+            {
+                //ViewBag.AlertMessage = "Room Already Assigned, Please Select Another Room.";
+                return RedirectToAction("Edit");
+
+            }
 
             var roomToChange = db.Rooms.Find(residentToUpdate.RoomID);
 
             roomToChange.IsOccupied = false;
-
-
-            var changeRoom = from y in db.Rooms
-                           .Where(y => y.RoomNum == newRoom)
-                             select y;
+                       
 
             foreach (var z in changeRoom)
             {
+               
                 z.IsOccupied = true;
                 residentToUpdate.RoomID = z.RoomID;
 
