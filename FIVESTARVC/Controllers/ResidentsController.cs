@@ -355,7 +355,7 @@ namespace FIVESTARVC.Controllers
 
             PopulateAssignedCampaignData(resident);
 
-          
+            
             var roomToEdit = db.Rooms.Find(resident.RoomID);
 
             if (resident.RoomID != null)
@@ -367,8 +367,6 @@ namespace FIVESTARVC.Controllers
             {
                 ViewBag.room = "No Room Assigned";
             }
-
-            ViewBag.room = roomToDisplay;
 
             if (resident == null)
             {
