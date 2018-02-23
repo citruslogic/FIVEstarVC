@@ -4,7 +4,6 @@ using System.Linq;
 using System.Data.Entity;
 using System.Web;
 using System.Web.Mvc;
-using System.Data.Entity;
 using FIVESTARVC.DAL;
 using FIVESTARVC.Models;
 using FIVESTARVC.ViewModels;
@@ -97,7 +96,7 @@ namespace FIVESTARVC.Controllers
                                              r.LastName,
                                              r.Birthdate,
                                              r.ServiceBranch,
-                                             r.HasPTSD,
+                                            
                                              r.InVetCourt,
                                              r.Note,
                                              pgm.ProgramTypeID
@@ -114,7 +113,6 @@ namespace FIVESTARVC.Controllers
                     myExport["First Name"] = r.First().FirstMidName;
                     myExport["Birthdate"] = r.First().Birthdate;
                     myExport["Service Branch"] = r.First().ServiceBranch;
-                    myExport["PTSD"] = r.First().HasPTSD;
                     myExport["Vet Court"] = r.First().InVetCourt;
 
 

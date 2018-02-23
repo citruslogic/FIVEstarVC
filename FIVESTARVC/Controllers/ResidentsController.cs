@@ -238,7 +238,6 @@ namespace FIVESTARVC.Controllers
                 LastName = residentIncomeModel.LastName,
                 Birthdate = residentIncomeModel.Birthdate,
                 ServiceBranch = residentIncomeModel.ServiceBranch,
-                HasPTSD = residentIncomeModel.HasPTSD,
                 InVetCourt = residentIncomeModel.InVetCourt,
                 RoomID = residentIncomeModel.RoomID,
                 Note = residentIncomeModel.Note,
@@ -417,7 +416,7 @@ namespace FIVESTARVC.Controllers
             }
 
             if (TryUpdateModel(residentToUpdate, "",
-               new string[] { "LastName", "FirstMidName", "Birthdate", "ServiceBranch", "Note", "HasPTSD", "InVetCourt", "Benefit", "MilitaryCampaigns", "TotalBenefitAmount" }))
+               new string[] { "LastName", "FirstMidName", "Birthdate", "ServiceBranch", "Note", "InVetCourt", "Benefit", "MilitaryCampaigns", "TotalBenefitAmount" }))
             {
                 try
                 {
