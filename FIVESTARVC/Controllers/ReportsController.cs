@@ -158,7 +158,40 @@ namespace FIVESTARVC.Controllers
 
             //ViewBag.FinancialProgram = DB.ProgramEvents.Count(x => x.ProgramTypeID == 10);
 
-            return View(); 
+            
+            var resToCount = DB.ProgramEvents;
+            int numb = 0;
+
+            foreach(var e in resToCount)
+            {
+                if (e.ProgramTypeID ==7 &&
+                    e.Completed == true
+                    || e.ProgramTypeID ==9 &&
+                    e.Completed == true
+                    || e.ProgramTypeID ==5 &&
+                    e.Completed == true)
+                {
+                    numb++;
+                    DateTime Start = e.StartDate;
+                   
+                    DateTime End = (DateTime)e.EndDate;
+                    
+                   
+                    // to get the total days in between
+                    var days = (End - Start).TotalDays;
+                    double total = 0;
+
+                    total += days;
+
+                    double avgDay = total /(double)numb;
+
+                    ViewBag.Avg = avgDay;
+                    
+                }
+                
+            }
+            
+            return View();
         }
 
         public ActionResult Historic()

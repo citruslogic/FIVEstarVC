@@ -28,13 +28,11 @@ namespace FIVESTARVC.ViewModels
             {
                 return new SelectList(Rooms, "RoomID", "RoomNum");
 
-                //return new SelectList(Rooms, "RoomID", "RoomNum", "WingName");
             }
 
         }
 
         
-
 
         // RESIDENT
         public int ResidentID { get; set; }
