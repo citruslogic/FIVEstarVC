@@ -19,9 +19,9 @@ namespace FIVESTARVC.DAL
                new Room { RoomNum=102, IsOccupied = true, WingName = "EastSouth"},
                new Room { RoomNum=103, IsOccupied = true, WingName = "EastSouth"},
                new Room { RoomNum=105, IsOccupied = true, WingName = "EastSouth"},
-               new Room { RoomNum=106, IsOccupied = false, WingName = "EastSouth"},
-               new Room { RoomNum=107, IsOccupied = false, WingName = "EastSouth"},
-               new Room { RoomNum=108, IsOccupied = false, WingName = "EastSouth"},
+               new Room { RoomNum=106, IsOccupied = true, WingName = "EastSouth"},
+               new Room { RoomNum=107, IsOccupied = true, WingName = "EastSouth"},
+               new Room { RoomNum=108, IsOccupied = true, WingName = "EastSouth"},
                new Room { RoomNum=109, IsOccupied = false, WingName = "EastSouth"},
                new Room { RoomNum=110, IsOccupied = false, WingName = "EastSouth"},
                new Room { RoomNum=112, IsOccupied = false, WingName = "EastSouth"},
@@ -68,12 +68,12 @@ namespace FIVESTARVC.DAL
 
             var residents = new List<Resident>
             {
-                new Resident { FirstMidName="Carson", Birthdate=DateTime.Parse("3/4/1988"), LastName="Steven", ServiceBranch=ServiceType.ARMY },
-                new Resident { FirstMidName="Naomi", Birthdate=DateTime.Parse("6/12/1979"), LastName="Wildman", ServiceBranch=ServiceType.AIRFORCE },
-                new Resident { FirstMidName="Gary", Birthdate=DateTime.Parse("6/24/1980"), LastName="Noonan", ServiceBranch=ServiceType.NAVY },
-                new Resident { FirstMidName="Steve", Birthdate=DateTime.Parse("1/15/1981"), LastName="Nash", ServiceBranch=ServiceType.MARINES },
-                new Resident { FirstMidName="Neo", Birthdate=DateTime.Parse("3/8/1974"), LastName="Anderson", ServiceBranch=ServiceType.AIRFORCE },
-                new Resident { FirstMidName="Charlie", LastName="Brown", Birthdate=DateTime.Parse("12/23/1976"), ServiceBranch=ServiceType.NAVY }
+                new Resident { FirstMidName="Carson", Birthdate=DateTime.Parse("3/4/1988"), LastName="Steven", RoomID = 1, ServiceBranch=ServiceType.ARMY },
+                new Resident { FirstMidName="Naomi", Birthdate=DateTime.Parse("6/12/1979"), LastName="Wildman", RoomID = 2, ServiceBranch=ServiceType.AIRFORCE },
+                new Resident { FirstMidName="Gary", Birthdate=DateTime.Parse("6/24/1980"), LastName="Noonan", RoomID = 3, ServiceBranch=ServiceType.NAVY },
+                new Resident { FirstMidName="Steve", Birthdate=DateTime.Parse("1/15/1981"), LastName="Nash", RoomID = 4, ServiceBranch=ServiceType.MARINES },
+                new Resident { FirstMidName="Neo", Birthdate=DateTime.Parse("3/8/1974"), LastName="Anderson", RoomID = 5, ServiceBranch=ServiceType.AIRFORCE },
+                new Resident { FirstMidName="Charlie", LastName="Brown", Birthdate=DateTime.Parse("12/23/1976"), RoomID = 6, ServiceBranch=ServiceType.NAVY }
             };
 
             residents.ForEach(r => context.Residents.Add(r));
