@@ -18,8 +18,8 @@
 @if (TempData["UserMessage"] != null)
 {
     var message = TempData["UserMessage"];
-    <div class="alert alert-info alert-dismissable" style="position: absolute; right: 50px;">
-        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+    <div class="alert alert-dark alert-dismissable" style="position: absolute; right: 80px;">
+        <a href="#" class="close" data-dismiss="alert" aria-label="close"> &times;</a>
         @message
     </div>
 }
@@ -109,7 +109,8 @@
                 @if (item.IsCurrent())
                 {
 
-                    @:<input type="button" value="Discharge" class="modal-link btn btn-sm btn-danger" data-toggle="modal" data-target="#QuickEventModal" onclick="showDischargeDialog(@item.ResidentID)" />
+                    @:<input type="button" value="Discharge" class="modal-link btn btn-sm btn-danger" 
+                             @:data-toggle="modal" data-target="#QuickEventModal" onclick="showDischargeDialog(@item.ResidentID)" />
 
                 }               
             </td>

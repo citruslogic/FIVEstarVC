@@ -318,7 +318,7 @@ namespace FIVESTARVC.Controllers
                    
                     
 
-                    TempData["UserMessage"] = residentIncomeModel.LastName + " has been admitted into your center.";
+                    TempData["UserMessage"] = residentIncomeModel.LastName + " has been admitted into your center.  ";
 
                     return RedirectToAction("Index");
                 }
@@ -459,7 +459,7 @@ namespace FIVESTARVC.Controllers
                     UpdateResidentCampaigns(selectedCampaigns, residentToUpdate);
                     db.SaveChanges();
 
-                    TempData["UserMessage"] = residentToUpdate.LastName + " has been updated.";
+                    TempData["UserMessage"] = residentToUpdate.LastName + " has been updated.  ";
 
                     return RedirectToAction("Index");
                 }
@@ -585,7 +585,7 @@ namespace FIVESTARVC.Controllers
                 });
 
                 db.SaveChanges();
-                TempData["UserMessage"] = residentToDischarge.LastName + " has been discharged from your center.";
+                TempData["UserMessage"] = residentToDischarge.LastName + " has been discharged from your center.  ";
             }
             catch (DataException/* dex */)
             {
@@ -672,7 +672,7 @@ namespace FIVESTARVC.Controllers
             {
                 db.ProgramEvents.Add(programEvent);
                 db.SaveChanges();
-                TempData["UserMessage"] = db.Residents.Find(id).Fullname + " has a new event.";
+                TempData["UserMessage"] = db.Residents.Find(id).Fullname + " has a new event.  ";
 
             }
 
