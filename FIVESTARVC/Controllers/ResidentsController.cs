@@ -672,13 +672,15 @@ namespace FIVESTARVC.Controllers
             {
                 db.ProgramEvents.Add(programEvent);
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                TempData["UserMessage"] = db.Residents.Find(id).Fullname + " has a new event.";
+
             }
 
             ViewBag.ProgramTypeID = new SelectList(db.ProgramTypes, "ProgramTypeID", "ProgramDescription", programEvent.ProgramTypeID);
             ViewBag.ResidentID = id;
 
-            return View(programEvent);
+            return RedirectToAction("Index");
+
         }
 
       
