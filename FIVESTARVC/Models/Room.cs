@@ -21,8 +21,7 @@ namespace FIVESTARVC.Models
         [Display(Name = "Is Occupied")]
         public bool IsOccupied { get; set; }
         public string WingName { get; set; }
-
-        //public IEnumerator<SelectList> GetEnumerator { get; set; }
+        
     }
 }
 

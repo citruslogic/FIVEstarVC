@@ -30,6 +30,6 @@ namespace FIVESTARVC.Models
 
         public virtual Resident Resident { get; set; }
         public virtual ProgramType ProgramType { get; set; }
-
+       
     }
 }

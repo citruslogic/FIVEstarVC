@@ -18,7 +18,7 @@ namespace FIVESTARVC.Controllers
     {
         private ResidentContext db = new ResidentContext();
 
-        public static List<Models.Room> MyRoom = new List<Models.Room>();
+        public static List<Room> MyRoom = new List<Room>();
 
 
 
@@ -133,7 +133,7 @@ namespace FIVESTARVC.Controllers
                                select y;
             
             //Itterate the array and add it to Room MyRoom
-            foreach (Models.Room y in roomToAssign)
+            foreach (Room y in roomToAssign)
             {
                 MyRoom.Add(y);
 

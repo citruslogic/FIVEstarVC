@@ -27,6 +27,8 @@ namespace FIVESTARVC.Controllers
             ViewBag.AirForceCount = DB.Residents.Count(x => x.ServiceBranch == ServiceType.AIRFORCE);
             ViewBag.CoastGuardCount = DB.Residents.Count(x => x.ServiceBranch == ServiceType.COASTGUARD);
 
+           
+
             //Counts number of current residents, based on events
             var CurrentRes = DB.ProgramEvents;
             int count = 0;
@@ -70,8 +72,47 @@ namespace FIVESTARVC.Controllers
 
             ViewBag.SubstanceAbuseProgram = DB.ProgramEvents.Count(x => x.ProgramTypeID == 12);
 
-            return View(); 
+            
+            var resToCount = DB.ProgramEvents;
+            int numb = 0;
+
+            foreach(var e in resToCount)
+            {
+                if (e.ProgramTypeID ==7 &&
+                    e.Completed == true
+                    || e.ProgramTypeID ==9 &&
+                    e.Completed == true
+                    || e.ProgramTypeID ==5 &&
+                    e.Completed == true)
+                {
+                    numb++;
+                    DateTime Start = e.StartDate;
+                   
+                    DateTime End = (DateTime)e.EndDate;
+                    
+                   
+                    // to get the total days in between
+                    var days = (End - Start).TotalDays;
+                    double total = 0;
+
+                    total += days;
+
+                    double avgDay = total /(double)numb;
+
+                    ViewBag.Avg = avgDay;
+                    
+                }
+                
+            }
+            
+            return View();
         }
+
+
+
+
+               
+       
 
         public ActionResult Historic(int year)
         {
@@ -178,6 +219,32 @@ namespace FIVESTARVC.Controllers
             
                 return File(filename,"text/csv", "HistoricData.csv");
             }
+        //Query database to pull out the start date and end date of evdents//
+        //ProgramTypeID 7 = Resident check in.//
+        //public void StayLength ()
+        //{
+        //    ViewBag.count = DB.ProgramTypes.Count(c => c.ProgramTypeID == 7);
+
+        //    var stay = from g in DB.ProgramEvents
+        //               .Where(x => x.ProgramTypeID == 7)
+        //               select g;
+
+        //    foreach(var i in stay)
+        //    {
+        //        ViewBag.stayLength = i.StayLength;
+
+        //        ViewBag.Sum = ViewBag.Sum + ViewBag.stayLength;
+        //    }
+
+        //    int sum = ViewBag.Sum;
+
+        //    int count = ViewBag.count;
+
+        //    int Ave = sum / count;
+            
+        //    ViewBag.ave = Ave;
+            
+        //}
         //Not a very good method
     
         //public bool checkEvent(Resident res, int pgmType)
