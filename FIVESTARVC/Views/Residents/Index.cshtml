@@ -101,16 +101,17 @@
                 @Html.ActionLink("Edit", "Edit", new { id = item.ResidentID }, htmlAttributes: new { @class = "btn btn-sm btn-outline-secondary btn-light" }) &nbsp;
 
                 @*Trigger the modal with a button*@
-                <input type="button" value="Quick Event" class="modal-link btn btn-sm btn-outline-secondary btn-light" 
+                <input type="button" value="Quick Event" class="modal-link btn btn-sm btn-outline-secondary btn-light"
                        data-toggle="modal" data-target="#QuickEventModal" onclick="showQuickEventDialog(@item.ResidentID)" />
 
                 @Html.ActionLink("Details", "Details", new { id = item.ResidentID }, htmlAttributes: new { @class = "btn btn-sm btn-outline-secondary btn-light" }) &nbsp;
 
                 @if (item.IsCurrent())
                 {
-                    @Html.ActionLink("Discharge", "Discharge", new { id = item.ResidentID }, htmlAttributes: new { @class = "btn btn-sm btn-danger" })
 
-                }
+                    @:<input type="button" value="Discharge" class="modal-link btn btn-sm btn-danger" data-toggle="modal" data-target="#QuickEventModal" onclick="showDischargeDialog(@item.ResidentID)" />
+
+                }               
             </td>
         </tr>
 
@@ -123,7 +124,7 @@
         <div class="modal-content" >
             <div class="modal-header">
                 
-                <h5 class="modal-title">Quick Event</h5>
+                <h5 class="modal-title"></h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
             </div>
 
@@ -150,12 +151,21 @@
 
                         $.get('/Residents/ViewQuickEvent/' + resident, function (data) {
                             $('.modal-body').html(data);
-
+                            $('.modal-title').html("Quick Event")
                             $('#QuickEventModal').modal('show');
                         });
                    
                 }
 
+                function showDischargeDialog(resident) {
+
+                    $.get('/Residents/Discharge/' + resident, function (data) {
+                        $('.modal-body').html(data);
+                        $('.modal-title').html("Discharge from Center")
+                        $('#QuickEventModal').modal('show');
+                    });
+
+                }
             </script>
 
         }

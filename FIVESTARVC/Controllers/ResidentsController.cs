@@ -555,8 +555,8 @@ namespace FIVESTARVC.Controllers
             }
 
             ViewBag.ProgramTypeID = new SelectList(db.ProgramTypes.Where(t => t.ProgramTypeID >= 12 || t.ProgramTypeID == 2), "ProgramTypeID", "ProgramDescription");
-
-            return View(residentToDischarge);
+           
+            return PartialView("_Discharge", residentToDischarge);
         }
 
         // POST: Residents/Delete/5
