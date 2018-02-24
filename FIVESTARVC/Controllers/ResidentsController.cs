@@ -557,13 +557,15 @@ namespace FIVESTARVC.Controllers
         //}
 
         // GET
-        // Quick Event form (soon to be part of a modal dialog)
-        public ActionResult ViewQuickEvent(int id, string lastname)
+        // Quick Event form (part of a modal dialog)
+        [HttpGet]
+        public ActionResult ViewQuickEvent(int id)
         {
             ViewBag.ResidentID = id;
-            ViewBag.Lastname = lastname;
+            ViewBag.Fullname = db.Residents.Find(id).Fullname;
             ViewBag.ProgramTypeID = new SelectList(db.ProgramTypes, "ProgramTypeID", "ProgramDescription");
 
+ 
             return PartialView("_modalNewEvent");
         }
 

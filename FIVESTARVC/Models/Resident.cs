@@ -60,6 +60,11 @@ namespace FIVESTARVC.Models
             }
         }
 
+        public string Fullname
+        {
+            get { return FirstMidName + " " + LastName; }
+        }
+
         public Boolean IsCurrent()
         {
             var current = db.ProgramEvents;

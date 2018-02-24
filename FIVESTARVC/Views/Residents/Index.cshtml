@@ -5,7 +5,12 @@
 
 
 <link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
-
+<style>
+    .modal-content {
+        width: 600px !important;
+        margin: 30px auto !important;
+    }
+</style>
 @{
     ViewBag.Title = "Residents";
 }
@@ -96,9 +101,8 @@
                 @Html.ActionLink("Edit", "Edit", new { id = item.ResidentID }, htmlAttributes: new { @class = "btn btn-sm btn-outline-secondary btn-light" }) &nbsp;
 
                 @*Trigger the modal with a button*@
-
-                @Html.ActionLink("Quick Event", "ViewQuickEvent", new { id = item.ResidentID, lastname = item.LastName },
-                                                htmlAttributes: new { @class = "btn btn-sm btn-outline-secondary btn-light", @data_target = "eventModal", @data_toggle = "modal" }) &nbsp;
+                <input type="button" value="Quick Event" class="modal-link btn btn-sm btn-outline-secondary btn-light" 
+                       data-toggle="modal" data-target="#QuickEventModal" onclick="showQuickEventDialog(@item.ResidentID)" />
 
                 @Html.ActionLink("Details", "Details", new { id = item.ResidentID }, htmlAttributes: new { @class = "btn btn-sm btn-outline-secondary btn-light" }) &nbsp;
 
@@ -114,42 +118,44 @@
 
 </table>
 
-<div class="modal fade" id="eventModal" tabindex="-1" role="dialog" aria-labelledby="eventModalLabel" aria-hidden="true">
+<div id="QuickEventModal" class="modal fade">
     <div class="modal-dialog" role="document">
-        <div class="modal-content">
+        <div class="modal-content" >
             <div class="modal-header">
-                <h5 class="modal-title" id="eventModalLabel">New Event for @ViewBag.Lastname</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+                
+                <h5 class="modal-title">Quick Event</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
             </div>
-            <div class="modal-body">
 
-            </div>
-            <div class="modal-footer">
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="submit" value="ViewQuickEvent">Save Event</button>
-                </div>
+            <div class="modal-body">
             </div>
         </div>
     </div>
 </div>
+        <br />
 
-<br />
+        Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
 
- Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+        @Html.PagedListPager(Model, page => Url.Action("Index", new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
 
-@Html.PagedListPager(Model, page => Url.Action("Index", new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
+        @section Scripts {
+            <script type="text/javascript">
+                window.setTimeout(function () {
+                    $(".alert").fadeTo(500, 0).slideUp(500, function () {
+                        $(this).remove();
+                    });
+                }, 4000);
 
-@section Scripts {
-    <script type="text/javascript">
-        window.setTimeout(function () {
-            $(".alert").fadeTo(500, 0).slideUp(500, function () {
-                $(this).remove();
-            });
-        }, 4000);
+                function showQuickEventDialog(resident) {
 
-    </script>
+                        $.get('/Residents/ViewQuickEvent/' + resident, function (data) {
+                            $('.modal-body').html(data);
 
-}               
+                            $('#QuickEventModal').modal('show');
+                        });
+                   
+                }
+
+            </script>
+
+        }
