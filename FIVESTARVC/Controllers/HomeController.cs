@@ -16,6 +16,8 @@ namespace FIVESTARVC.Controllers
     {
         private ResidentContext db = new ResidentContext();
 
+        public static List<Room> MyRoom = new List<Room>();
+
         public ActionResult Index()
         {
 

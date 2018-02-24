@@ -88,6 +88,20 @@ namespace FIVESTARVC.Controllers
                 .Include(p => p.ProgramEvents)
                 .Where(r => r.ResidentID == id).Single();
 
+            var room = db.Rooms.Find(resident.RoomID);
+
+            if (resident.RoomID != null)
+            {
+                int roomNum = room.RoomNum;
+
+                ViewBag.room = roomNum;
+            }
+            
+            else
+            {
+                ViewBag.room = "No Room Assigned";
+            }
+
             if (resident == null)
             {
                 return HttpNotFound();
@@ -340,7 +354,18 @@ namespace FIVESTARVC.Controllers
 
             PopulateAssignedCampaignData(resident);
 
+            
+            var roomToEdit = db.Rooms.Find(resident.RoomID);
 
+            if (resident.RoomID != null)
+            {
+                int roomToDisplay = roomToEdit.RoomNum;
+                ViewBag.room = roomToDisplay;
+            }
+             else
+            {
+                ViewBag.room = "No Room Assigned";
+            }
 
             if (resident == null)
             {
@@ -358,7 +383,7 @@ namespace FIVESTARVC.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost, ActionName("Edit")]
         [ValidateAntiForgeryToken]
-        public ActionResult EditPost(int? id, string[] selectedCampaigns)
+        public ActionResult EditPost(int? id, string[] selectedCampaigns, string moveTo)
         {
             if (id == null)
             {
@@ -370,8 +395,28 @@ namespace FIVESTARVC.Controllers
                 .Where(c => c.ResidentID == id)
                 .Single();
 
+           
+
+            int newRoom = Convert.ToInt32(moveTo);
+
+            var roomToChange = db.Rooms.Find(residentToUpdate.RoomID);
+
+            roomToChange.IsOccupied = false;
+
+
+            var changeRoom = from y in db.Rooms
+                           .Where(y => y.RoomNum == newRoom)
+                             select y;
+
+            foreach (var z in changeRoom)
+            {
+                z.IsOccupied = true;
+                residentToUpdate.RoomID = z.RoomID;
+
+            }
+
             if (TryUpdateModel(residentToUpdate, "",
-               new string[] { "LastName", "FirstMidName", "Birthdate", "ServiceBranch", "Note", "HasPTSD", "InVetCourt", "Benefit", "MilitaryCampaigns", "TotalBenefitAmount" }))
+               new string[] { "LastName", "FirstMidName", "Birthdate", "ServiceBranch", "Note", "InVetCourt", "Benefit", "MilitaryCampaigns", "TotalBenefitAmount" }))
             {
                 try
                 {
@@ -462,6 +507,13 @@ namespace FIVESTARVC.Controllers
                 .Where(r => r.ResidentID == id)
                 .Single();
 
+            var roomToRelease = db.Rooms.Find(residentToDischarge.RoomID);
+
+            int room = roomToRelease.RoomNum;
+
+
+            ViewBag.releaseRoom = room;
+
             if (residentToDischarge == null)
             {
                 return HttpNotFound();
@@ -483,6 +535,11 @@ namespace FIVESTARVC.Controllers
                 .Include(p => p.ProgramEvents)
                 .Where(r => r.ResidentID == id)
                 .Single();
+
+                var roomToRelease = db.Rooms.Find(residentToDischarge.RoomID);
+
+                roomToRelease.IsOccupied = false;
+                residentToDischarge.RoomID = null;
 
                 residentToDischarge.ProgramEvents.Add(new ProgramEvent
                 {

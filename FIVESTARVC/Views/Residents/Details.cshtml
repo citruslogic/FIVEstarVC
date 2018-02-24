@@ -27,6 +27,13 @@
                         @Html.DisplayFor(model => model.FirstMidName)
 
                     </td>
+                    </tr>
+                <tr class="form-row">
+                    <td class="col-form-label">
+                        @Html.LabelFor(model => model.RoomID, htmlAttributes: new { @class = "control-label font-weight-bold" })
+
+                        @ViewBag.room
+                    </td>
 
                 </tr>
                 <tr class="form-row">
