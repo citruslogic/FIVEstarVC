@@ -79,17 +79,17 @@ namespace FIVESTARVC.Models
                 {
                     if (ID == ProgramEvent.ResidentID)
                     {
-                        if (ProgramEvent.ProgramTypeID == 7 //admission
-                        || ProgramEvent.ProgramTypeID == 9 //re-admit
-                        || ProgramEvent.ProgramTypeID == 5)
+                        if (ProgramEvent.ProgramTypeID == 2 //admission
+                        || ProgramEvent.ProgramTypeID == 3 //re-admit
+                        || ProgramEvent.ProgramTypeID == 1)
                         {
                             internalBool = true;
                         }
 
-                        if (ProgramEvent.ProgramTypeID == 2 //graduation
-                        || ProgramEvent.ProgramTypeID == 12 //discharge
-                        || ProgramEvent.ProgramTypeID == 13 //discharge
-                        || ProgramEvent.ProgramTypeID == 14)
+                        if (ProgramEvent.ProgramTypeID == 4 //graduation
+                        || ProgramEvent.ProgramTypeID == 5 //discharge
+                        || ProgramEvent.ProgramTypeID == 6 //discharge
+                        || ProgramEvent.ProgramTypeID == 7)
                         {
                             internalBool = false;
                         }

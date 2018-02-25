@@ -79,7 +79,7 @@
                                 @Html.Label("Campaigns", htmlAttributes: new { @class = "control-label col-md-offset-3" })
                             </td>
                             <td>
-                                <div class="form-check">
+                                <div class="form-check" style="height: 100px; overflow-y: scroll;">
                                     @{
                                 int cnt = 0;
                                 List<FIVESTARVC.ViewModels.AssignedCampaignData> campaigns = ViewBag.Campaigns;
@@ -89,7 +89,7 @@
                                     if (cnt++ % 1 == 0)
                                     {
                                         @:<br />
-                            }
+                                    }
                             @:
 
                             <input type="checkbox"

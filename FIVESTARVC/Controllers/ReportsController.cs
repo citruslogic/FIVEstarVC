@@ -106,24 +106,24 @@ namespace FIVESTARVC.Controllers
 
             foreach (var ProgramEvents in CurrentRes)
             {
-                if (ProgramEvents.ProgramTypeID == 7 //admission
-                    || ProgramEvents.ProgramTypeID == 9 //re-admit
-                    || ProgramEvents.ProgramTypeID == 5) //emergency shelter
+                if (ProgramEvents.ProgramTypeID == 2 //admission
+                    || ProgramEvents.ProgramTypeID == 3 //re-admit
+                    || ProgramEvents.ProgramTypeID == 1) //emergency shelter
                 {
                     count++;
                     continue;
                 }
-                else if (ProgramEvents.ProgramTypeID == 2 //graduation
-                    || ProgramEvents.ProgramTypeID == 13 //discharge
-                    || ProgramEvents.ProgramTypeID == 14 //discharge
-                    || ProgramEvents.ProgramTypeID == 15)//discharge
+                else if (ProgramEvents.ProgramTypeID == 4 //graduation
+                    || ProgramEvents.ProgramTypeID == 5 //discharge
+                    || ProgramEvents.ProgramTypeID == 6 //discharge
+                    || ProgramEvents.ProgramTypeID == 7)//discharge
                 {
                     count--;
                 }
 
-                if (ProgramEvents.ProgramTypeID == 13 //discharge
-                    || ProgramEvents.ProgramTypeID == 14 //discharge
-                    || ProgramEvents.ProgramTypeID == 15)
+                if (ProgramEvents.ProgramTypeID == 5 //discharge
+                    || ProgramEvents.ProgramTypeID == 6 //discharge
+                    || ProgramEvents.ProgramTypeID == 7)
                 {
                     dischargeCount++;
                 }
@@ -133,11 +133,11 @@ namespace FIVESTARVC.Controllers
             ViewBag.DischargeCount = dischargeCount;
             
             //Finds graduation percent
-            float Graduated = DB.ProgramEvents.Count(x => x.ProgramTypeID == 2);
+            float Graduated = DB.ProgramEvents.Count(x => x.ProgramTypeID == 4);
             ViewBag.Graduated = Graduated;
 
             //Finds number admitted
-            float Admitted = DB.ProgramEvents.Count(x => x.ProgramTypeID == 7);
+            float Admitted = DB.ProgramEvents.Count(x => x.ProgramTypeID == 2);
             ViewBag.Admitted = Admitted;
 
             float gradPercent = (Graduated / Admitted) * 100;
@@ -148,9 +148,9 @@ namespace FIVESTARVC.Controllers
 
             //ViewBag.MentalWellness = DB.ProgramEvents.Count(x => x.ProgramTypeID == 3);
 
-            ViewBag.P2I = DB.ProgramEvents.Count(x => x.ProgramTypeID == 4);
+            ViewBag.P2I = DB.ProgramEvents.Count(x => x.ProgramTypeID == 10);
 
-            ViewBag.EmergencyShelter = DB.ProgramEvents.Count(x => x.ProgramTypeID == 5);
+            ViewBag.EmergencyShelter = DB.ProgramEvents.Count(x => x.ProgramTypeID == 1);
 
             //ViewBag.SchoolProgram = DB.ProgramEvents.Count(x => x.ProgramTypeID == 6);
 
@@ -164,11 +164,11 @@ namespace FIVESTARVC.Controllers
 
             foreach(var e in resToCount)
             {
-                if (e.ProgramTypeID ==7 &&
+                if (e.ProgramTypeID == 2 &&
                     e.Completed == true
-                    || e.ProgramTypeID ==9 &&
+                    || e.ProgramTypeID == 1 &&
                     e.Completed == true
-                    || e.ProgramTypeID ==5 &&
+                    || e.ProgramTypeID == 3 &&
                     e.Completed == true)
                 {
                     numb++;
@@ -242,47 +242,52 @@ namespace FIVESTARVC.Controllers
 
                     var eventids = r.Select(i => i.ProgramTypeID).ToList();
 
-
+                /* These Event IDs have changed, and the order of the columns 
+                 * may not be what is expected.
+                 * See CenterInitializer.cs for the ProgramTypeID order. 
+                 * - Frank Butler
+                 */
                 foreach(var eid in eventids)
                 {
                     switch(eid) {
                         case 1:
-                            myExport["Work Program"] = "1";
-                            break;
-                        case 2:
-                            break;
-                        case 3:
-                            myExport["Mental Wellness"] = "1";
-                            break;
-                        case 4:
-                            myExport["P2I"] = "1";
-                            break;
-                        case 5:
                             myExport["Emergency Shelter"] = "1";
                             break;
-                        case 6:
-                            myExport["School Program"] = "1";
+                        case 2:
+                            myExport["Resident Admission"] = "1";
                             break;
-                        case 8:
-                            myExport["Re-Admit"] = "1";
+                        case 3:
+                            myExport["Re-admit"] = "1";
                             break;
-                        case 9:
-                            myExport["Financial Program"] = "1";
+                        case 4:
+                            myExport["Resident Graduation"] = "1";
                             break;
-                        case 10:
-                            myExport["Depression/Behavioral Program"] = "1";
-                            break;
-                        case 11:
-                            myExport["Substance Abuse Program"] = "1";
-                            break;
-                        case 12:
-                            myExport["Discharge for Cause"] = "1";
-                            break;
-                        case 13:
+                        case 5:
                             myExport["Self Discharge"] = "1";
                             break;
+                        case 6:
+                            myExport["Discharge for Cause"] = "1";
+                            break;
+                        case 8:
+                            myExport["Work Program"] = "1";
+                            break;
+                        case 9:
+                            myExport["Mental Wellness"] = "1";
+                            break;
+                        case 10:
+                            myExport["P2I"] = "1";
+                            break;
+                        case 11:
+                            myExport["School Program"] = "1";
+                            break;
+                        case 12:
+                            myExport["Financial Program"] = "1";
+                            break;
+                        case 13:
+                            myExport["Depression / Behavioral Program"] = "1";
+                            break;
                         case 14:
-                            myExport["Higher Level of Care"] = "1";
+                            myExport["Substance Abuse Program"] = "1";
                             break;
                         default:
                             //do something
