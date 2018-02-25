@@ -542,12 +542,15 @@ namespace FIVESTARVC.Controllers
                 .Where(r => r.ResidentID == id)
                 .Single();
 
-            var roomToRelease = db.Rooms.Find(residentToDischarge.RoomID);
+            Room roomToRelease = db.Rooms.Find(residentToDischarge.RoomID);
 
-            int room = roomToRelease.RoomNum;
+            if (roomToRelease != null)
+            {
+                ViewBag.releaseRoom = roomToRelease.RoomNum;
 
+            }
+            // The room may not be assigned. 
 
-            ViewBag.releaseRoom = room;
 
             if (residentToDischarge == null)
             {
@@ -571,10 +574,16 @@ namespace FIVESTARVC.Controllers
                 .Where(r => r.ResidentID == id)
                 .Single();
 
-                var roomToRelease = db.Rooms.Find(residentToDischarge.RoomID);
+                Room roomToRelease = db.Rooms.Find(residentToDischarge.RoomID);
+                
+                // It is possible for the resident to not be assigned a room at this point.
+                if (roomToRelease != null)
+                {
+                    residentToDischarge.RoomID = null;
+                    roomToRelease.IsOccupied = false;
+                    
+                }   
 
-                roomToRelease.IsOccupied = false;
-                residentToDischarge.RoomID = null;
 
                 residentToDischarge.ProgramEvents.Add(new ProgramEvent
                 {
@@ -601,52 +610,6 @@ namespace FIVESTARVC.Controllers
             return RedirectToAction("Index");
         }
 
-        // GET: Residents/Delete/5
-        //[HttpGet]
-        //public ActionResult Delete(int? id, bool? saveChangesError = false)
-        //{
-        //    if (id == null)
-        //    {
-        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-        //    }
-        //    if (saveChangesError.GetValueOrDefault())
-        //    {
-        //        ViewBag.ErrorMessage = "Delete failed. Try again, and if the problem persists see your system administrator.";
-        //    }
-        //    Resident resident = db.Residents.Find(id);
-
-        //    if (resident == null)
-        //    {
-        //        return HttpNotFound();
-        //    }
-        //    return View(resident);
-        //}
-
-        // POST: Residents/Delete/5
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public ActionResult Delete(int id)
-        //{
-        //    try
-        //    {
-        //        Resident resident = db.Residents.Find(id);
-        //        Benefit benefit = db.Benefits.Find(resident.BenefitID);
-
-        //        if (benefit != null)
-        //        {
-        //            db.Benefits.Remove(benefit);
-        //        } 
-
-        //        db.Residents.Remove(resident);
-        //        db.SaveChanges();
-        //    }
-        //    catch (DataException/* dex */)
-        //    {
-        //        //Log the error (uncomment dex variable name and add a line here to write a log.
-        //        return RedirectToAction("Delete", new { id = id, saveChangesError = true });
-        //    }
-        //    return RedirectToAction("Index");
-        //}
 
         // GET
         // Quick Event form (part of a modal dialog)
