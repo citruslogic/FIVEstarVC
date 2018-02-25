@@ -5,56 +5,75 @@
     Layout = null;
 }
 
-@{ AjaxOptions options = new AjaxOptions();
-    options.HttpMethod = "POST";
-    options.Url = Url.Action("ViewQuickEvent", "Residents");
-    options.UpdateTargetId = "modal-body";
-    options.InsertionMode = InsertionMode.Replace;
-}
-@* Ajax form *@
 <!-- Modal -->
-@using (Ajax.BeginForm("ViewQuickEvent", "Residents", options))
-{
-    @Html.AntiForgeryToken()
 
-  
-                    <input type="hidden" name="ResidentID" value="@ViewBag.ResidentID" />
-                    <div class="form-group">
-                        @Html.LabelFor(model => model.ProgramTypeID, "Program name", htmlAttributes: new { @class = "control-label col-md-2" })
-                        <div class="col-md-10">
-                            @Html.DropDownList("ProgramTypeID", null, htmlAttributes: new { @class = "form-control" })
-                            @Html.ValidationMessageFor(model => model.ProgramTypeID, "", new { @class = "text-danger" })
-                        </div>
-                    </div>
+    @using (Html.BeginForm("ViewQuickEvent", "Residents"))
+    {
+        @Html.AntiForgeryToken()
 
-                    <div class="form-group">
-                        @Html.LabelFor(model => model.StartDate, htmlAttributes: new { @class = "control-label col-md-2" })
-                        <div class="col-md-10">
-                            @Html.EditorFor(model => model.StartDate, new { htmlAttributes = new { @class = "form-control" } })
-                            @Html.ValidationMessageFor(model => model.StartDate, "", new { @class = "text-danger" })
-                        </div>
-                    </div>
 
-                    <div class="form-group">
-                        @Html.LabelFor(model => model.EndDate, htmlAttributes: new { @class = "control-label col-md-2" })
-                        <div class="col-md-10">
-                            @Html.EditorFor(model => model.EndDate, new { htmlAttributes = new { @class = "form-control" } })
-                            @Html.ValidationMessageFor(model => model.EndDate, "", new { @class = "text-danger" })
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        @Html.LabelFor(model => model.Completed, htmlAttributes: new { @class = "control-label col-md-2" })
-                        <div class="col-md-10">
-                            <div class="checkbox">
-                                @Html.EditorFor(model => model.Completed)
-                                @Html.ValidationMessageFor(model => model.Completed, "", new { @class = "text-danger" })
-                            </div>
-                        </div>
-                    </div>
-               
+        <input type="hidden" name="ResidentID" value="@ViewBag.ResidentID" />
+        <p> @ViewBag.Fullname is starting a new program, or their status in the center is changing.</p>
+        <div class="form-group">
+            @Html.LabelFor(model => model.ProgramTypeID, "Program name", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownList("ProgramTypeID", null, htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.ProgramTypeID, "", new { @class = "text-danger" })
+            </div>
+        </div>
 
-}
+        <div class="form-group">
+            @Html.LabelFor(model => model.StartDate, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.StartDate, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.StartDate, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.EndDate, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.EndDate, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.EndDate, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.Completed, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <div class="checkbox">
+                    @Html.EditorFor(model => model.Completed)
+                    @Html.ValidationMessageFor(model => model.Completed, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            &nbsp;
+        </div>
+        <div class="row">
+            <div class="col-md-2">
+                <button type="button" class="btn btn-default"
+                        data-dismiss="modal">
+                    Cancel
+                </button>
+                </div>
+            <div class="col-md-2">
+                <button type="submit" id="submit-btn"
+                        class="btn btn-primary">
+                    Save Event
+                </button>
+            </div>
+        </div>
+
+    }
+
+
 @section scripts {
-
+    <script type="text/javascript">
+    $(function () {
+        $('#submit-btn').click(function () {
+            $('#modal-container').modal('hide');
+        });
+    });
+    </script>
 }
 

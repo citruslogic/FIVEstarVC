@@ -308,7 +308,7 @@ namespace FIVESTARVC.Controllers
 
 
             if (TryUpdateModel(residentIncomeModel, "",
-                 new string[] { "LastName", "FirstMidName", "Birthdate", "ServiceBranch", "Note", "HasPTSD", "InVetCourt", "Benefit", "MilitaryCampaigns", "TotalBenefitAmount" }))
+                 new string[] { "LastName", "FirstMidName", "Birthdate", "ServiceBranch", "Note", "InVetCourt", "Benefit", "MilitaryCampaigns", "TotalBenefitAmount" }))
             {
                 try
                 {
@@ -318,7 +318,7 @@ namespace FIVESTARVC.Controllers
                    
                     
 
-                    TempData["UserMessage"] = residentIncomeModel.LastName + " has been admitted into your center.";
+                    TempData["UserMessage"] = residentIncomeModel.LastName + " has been admitted into your center.  ";
 
                     return RedirectToAction("Index");
                 }
@@ -459,7 +459,7 @@ namespace FIVESTARVC.Controllers
                     UpdateResidentCampaigns(selectedCampaigns, residentToUpdate);
                     db.SaveChanges();
 
-                    TempData["UserMessage"] = residentToUpdate.LastName + " has been updated.";
+                    TempData["UserMessage"] = residentToUpdate.LastName + " has been updated.  ";
 
                     return RedirectToAction("Index");
                 }
@@ -555,8 +555,8 @@ namespace FIVESTARVC.Controllers
             }
 
             ViewBag.ProgramTypeID = new SelectList(db.ProgramTypes.Where(t => t.ProgramTypeID >= 12 || t.ProgramTypeID == 2), "ProgramTypeID", "ProgramDescription");
-
-            return View(residentToDischarge);
+           
+            return PartialView("_Discharge", residentToDischarge);
         }
 
         // POST: Residents/Delete/5
@@ -585,7 +585,7 @@ namespace FIVESTARVC.Controllers
                 });
 
                 db.SaveChanges();
-                TempData["UserMessage"] = residentToDischarge.LastName + " has been discharged from your center.";
+                TempData["UserMessage"] = residentToDischarge.LastName + " has been discharged from your center.  ";
             }
             catch (DataException/* dex */)
             {
@@ -649,13 +649,15 @@ namespace FIVESTARVC.Controllers
         //}
 
         // GET
-        // Quick Event form (soon to be part of a modal dialog)
-        public ActionResult ViewQuickEvent(int id, string lastname)
+        // Quick Event form (part of a modal dialog)
+        [HttpGet]
+        public ActionResult ViewQuickEvent(int id)
         {
             ViewBag.ResidentID = id;
-            ViewBag.Lastname = lastname;
+            ViewBag.Fullname = db.Residents.Find(id).Fullname;
             ViewBag.ProgramTypeID = new SelectList(db.ProgramTypes, "ProgramTypeID", "ProgramDescription");
 
+ 
             return PartialView("_modalNewEvent");
         }
 
@@ -670,13 +672,15 @@ namespace FIVESTARVC.Controllers
             {
                 db.ProgramEvents.Add(programEvent);
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                TempData["UserMessage"] = db.Residents.Find(id).Fullname + " has a new event.  ";
+
             }
 
             ViewBag.ProgramTypeID = new SelectList(db.ProgramTypes, "ProgramTypeID", "ProgramDescription", programEvent.ProgramTypeID);
             ViewBag.ResidentID = id;
 
-            return View(programEvent);
+            return RedirectToAction("Index");
+
         }
 
       

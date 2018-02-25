@@ -27,8 +27,7 @@ namespace FIVESTARVC.Controllers
                      select new DashboardData
                      {
                          ResidentID = resident.ResidentID,
-                         LastName = resident.LastName,
-                         FirstMidName = resident.FirstMidName,
+                         Fullname = resident.FirstMidName + " " + resident.LastName,
                          RoomNumber = room.RoomNum
 
                      }).OrderByDescending(r => r.ResidentID).Take(5);

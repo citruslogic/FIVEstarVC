@@ -6,11 +6,12 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Web;
 using FIVESTARVC.DAL;
+using FIVESTARVC.Validators;
+using DelegateDecompiler;
 
 namespace FIVESTARVC.Models
 {
    
-
     public class Resident
     {
         private ResidentContext db = new ResidentContext();
@@ -23,6 +24,7 @@ namespace FIVESTARVC.Models
         public string FirstMidName { get; set; }
         [Display(Name = "Birthdate")]
         [DataType(DataType.Date)]
+        [Birthdate(ErrorMessage = "Birthdate must not be in the future.")]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public DateTime? Birthdate { get; set; }
         [Display(Name = "Service Branch")]
@@ -59,38 +61,43 @@ namespace FIVESTARVC.Models
             }
         }
 
+        public string Fullname
+        {
+            get { return FirstMidName + " " + LastName; }
+        }
+
+        //[Computed]
         public Boolean IsCurrent()
         {
-            var current = db.ProgramEvents;
+                var current = db.ProgramEvents;
 
-            int ID = ResidentID;
+                int ID = ResidentID;
 
-            Boolean internalBool = false;
+                Boolean internalBool = false;
 
-            foreach (var ProgramEvent in current)
-            {
-                if (ID == ProgramEvent.ResidentID)
+                foreach (var ProgramEvent in current)
                 {
-                    if (ProgramEvent.ProgramTypeID == 7 //admission
-                    || ProgramEvent.ProgramTypeID == 9 //re-admit
-                    || ProgramEvent.ProgramTypeID == 5)
+                    if (ID == ProgramEvent.ResidentID)
                     {
-                        internalBool = true;
-                    }
+                        if (ProgramEvent.ProgramTypeID == 7 //admission
+                        || ProgramEvent.ProgramTypeID == 9 //re-admit
+                        || ProgramEvent.ProgramTypeID == 5)
+                        {
+                            internalBool = true;
+                        }
 
-                    if (ProgramEvent.ProgramTypeID == 2 //graduation
-                    || ProgramEvent.ProgramTypeID == 12 //discharge
-                    || ProgramEvent.ProgramTypeID == 13 //discharge
-                    || ProgramEvent.ProgramTypeID == 14)
-                    {
-                        internalBool = false;
+                        if (ProgramEvent.ProgramTypeID == 2 //graduation
+                        || ProgramEvent.ProgramTypeID == 12 //discharge
+                        || ProgramEvent.ProgramTypeID == 13 //discharge
+                        || ProgramEvent.ProgramTypeID == 14)
+                        {
+                            internalBool = false;
+                        }
                     }
                 }
+                return internalBool;
             }
-            return internalBool;
         }
 
     }
 
-
-}

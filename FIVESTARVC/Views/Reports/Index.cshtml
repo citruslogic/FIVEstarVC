@@ -23,53 +23,105 @@
 <table class="table">
     <tr>
         <th style="font-weight: bold; color:dodgerblue; font-size: 110%">
-            Event Name
+            Metric
         </th>
         <th style="font-weight: bold; color:dodgerblue; font-size: 110%">
-            Total Count
+            Total?
         </th>
         <th style="font-weight: bold; color:dodgerblue; font-size: 110%">
-            Current Count
+            Cumulative
         </th>
     </tr>
     <tr>
         <td>
-            Work Program
+            Admitted
         </td>
         <td>
-            @Html.Raw(ViewBag.WorkProgram)
-        </td>
-    </tr>
-    <tr>
-        <td>
-            Mental Wellness
+            @Html.Raw(ViewBag.Admitted)
         </td>
         <td>
-            @Html.Raw(ViewBag.MentalWellness)
-        </td>
-    </tr>
-    <tr>
-        <td>
-            P2I
-        </td>
-        <td>
-            @Html.Raw(ViewBag.P2I)
+            @{
+                if (ViewBag.Admitted == null)
+                { <text>0</text> }
+                else
+                {
+                    @Html.Raw(ViewBag.Admitted)
+                }
+            }
         </td>
     </tr>
     <tr>
         <td>
+            
             Emergency Shelter
         </td>
         <td>
             @Html.Raw(ViewBag.EmergencyShelter)
         </td>
+        <td>
+            @{
+                if (ViewBag.EmergencyShelter == null)
+                { <text>0</text> }
+                else
+                {
+                    @Html.Raw(ViewBag.EmergencyShelter)
+                }
+            }
+        </td>
     </tr>
     <tr>
         <td>
-            School Program
+            Discharged
         </td>
         <td>
-            @Html.Raw(ViewBag.SchoolProgram)
+            @Html.Raw(ViewBag.DischargeCount)
+        </td>
+        <td>
+            @{
+                if (ViewBag.DischargeCount == null)
+                { <text>0</text> }
+                else
+                {
+                    @Html.Raw(ViewBag.DischargeCount)
+                }
+            }
+        </td>
+    </tr>
+    <tr>
+        <td>
+            Graduated
+        </td>
+        <td>
+            @Html.Raw(ViewBag.Graduated)
+        </td>
+        <td>
+            @{
+                if (ViewBag.Graduated == null)
+                { <text>0</text> }
+                else
+                {
+                    @Html.Raw(ViewBag.Graduated)
+                }
+            }
+        </td>
+    </tr>
+    <tr>
+        <td>
+            Graduation Percent
+        </td>
+        <td>
+            @Html.Raw(ViewBag.GraduatedPercent) %
+        </td>
+        <td>
+            @{
+                if (ViewBag.GraduatedPercent == null)
+                { <text>0</text> }
+                else
+                {
+                    @Html.Raw(ViewBag.GraduatedPercent)
+                }
+            }
+            %
         </td>
     </tr>
     <tr>
@@ -79,31 +131,36 @@
         <td>
             @Html.Raw(ViewBag.VeteransCourt)
         </td>
-    </tr>
-    <tr>
         <td>
-            Financial Program
-        </td>
-        <td>
-            @Html.Raw(ViewBag.FinancialProgram)
-        </td>
-    </tr>
-    <tr>
-        <td>
-            Depression/Behavioral Program
-        </td>
-        <td>
-            @Html.Raw(ViewBag.DepressionBehavioralProgram)
+            @{
+                if (ViewBag.VeteransCourt == null)
+                { <text>0</text> }
+                else
+                {
+                    @Html.Raw(ViewBag.VeteransCourt)
+                }
+            }
         </td>
     </tr>
     <tr>
         <td>
-            Substance Abuse Program
+            P2I
         </td>
         <td>
-            @Html.Raw(ViewBag.SubstanceAbuseProgram)
+            @Html.Raw(ViewBag.P2I)
+        </td>
+        <td>
+            @{
+                if (ViewBag.P2I == null)
+                { <text>0</text> }
+                else
+                {
+                    @Html.Raw(ViewBag.P2I)
+                }
+            }
         </td>
     </tr>
+
 </table>
 
     <h3>Military Service Statistics</h3>
@@ -113,10 +170,10 @@
                 Service Branch
             </th>
             <th style="font-weight: bold; color:dodgerblue; font-size: 110%">
-                Total Count
+                Cumulative Residents
             </th>
             <th style="font-weight: bold; color:dodgerblue; font-size: 110%">
-                Current Count
+                Current Residents
             </th>
         </tr>
         <tr>
@@ -126,6 +183,16 @@
             <td>
                 @Html.Raw(ViewBag.NavyCount)
             </td>
+            <td>
+                @{ 
+                    if (ViewBag.CurrentNavy == null)
+                    { <text>0</text> }
+                    else
+                    {
+                        @Html.Raw(ViewBag.CurrentNavy)
+                    }
+                }
+            </td>
         </tr>
         <tr>
             <td>
@@ -133,6 +200,16 @@
             </td>
             <td>
                 @Html.Raw(ViewBag.ArmyCount)
+            </td>
+            <td>
+                @{
+                    if (ViewBag.CurrentArmy == null)
+                    { <text>0</text> }
+                    else
+                    {
+                        @Html.Raw(ViewBag.CurrentArmy)
+                    }
+                }
             </td>
         </tr>
         <tr>
@@ -142,6 +219,16 @@
             <td>
                 @Html.Raw(ViewBag.MarineCount)
             </td>
+            <td>
+                @{
+                    if (ViewBag.CurrentMarine == null)
+                    { <text>0</text> }
+                    else
+                    {
+                        @Html.Raw(ViewBag.CurrentMarine)
+                    }
+                }
+            </td>
         </tr>
         <tr>
             <td>
@@ -149,6 +236,16 @@
             </td>
             <td>
                 @Html.Raw(ViewBag.AirForceCount)
+            </td>
+            <td>
+                @{
+                    if (ViewBag.CurrentAF == null)
+                    { <text>0</text> }
+                    else
+                    {
+                        @Html.Raw(ViewBag.CurrentAF)
+                    }
+                }
             </td>
         </tr>
         <tr>
@@ -158,6 +255,23 @@
             <td>
                 @Html.Raw(ViewBag.CoastGuardCount)
             </td>
+            <td>
+                @{
+                    if (ViewBag.CurrentCG == null)
+                    { <text>0</text> }
+                    else
+                    {
+                        @Html.Raw(ViewBag.CurrentCG)
+                    }
+                }
+            </td>
+        </tr>
+        <tr>
+            <td class="col-form-label"> @Html.LabelFor(model => model.ProgramEvents, htmlAttributes: new { @class = "control-label col-md-offset-3" })</td>
+            <td class="col-auto">
+                @Html.Raw(ViewBag.Avg)
+            </td>
+            
         </tr>
         <tr>
             <td class="col-form-label"> @Html.LabelFor(model => model.ProgramEvents, htmlAttributes: new { @class = "control-label col-md-offset-3" })</td>
