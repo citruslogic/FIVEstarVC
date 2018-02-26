@@ -81,22 +81,19 @@
                             <td>
                                 <div class="form-check" style="height: 100px; overflow-y: scroll;">
                                     @{
-                                int cnt = 0;
                                 List<FIVESTARVC.ViewModels.AssignedCampaignData> campaigns = ViewBag.Campaigns;
 
                                 foreach (var campaign in campaigns)
                                 {
-                                    if (cnt++ % 1 == 0)
-                                    {
-                                        @:<br />
-                                    }
+                             
                             @:
 
                             <input type="checkbox"
+                                    class="form-check-input"
                                    name="selectedCampaigns"
                                    value="@campaign.MilitaryCampaignID"
                                    @(Html.Raw(campaign.Assigned ? "checked=\"checked\"" : "")) />
-                            @campaign.MilitaryCampaign @: &nbsp;
+                            @campaign.MilitaryCampaign @:<br /> 
                             }
 
                                     }

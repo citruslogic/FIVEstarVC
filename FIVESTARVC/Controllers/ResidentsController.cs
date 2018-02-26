@@ -552,6 +552,7 @@ namespace FIVESTARVC.Controllers
             });
 
             db.SaveChanges();
+            TempData["UserMessage"] = "A new campaign has been added.  ";
 
             return RedirectToAction("Index");
         }

@@ -11,14 +11,14 @@
     @Html.AntiForgeryToken()
 
     <div class="form-horizontal">
-        <h4>Add Campaign</h4>
+        
         <p> Type in the name of the new campaign in the text box below and then click Add.</p>
         <br />
 
 
         <div class="form-group form-inline">
-            @Html.Label("Campaign name", htmlAttributes: new { @class = "control-label" })
-            @Html.TextBoxFor(Model => Model.CampaignName, htmlAttributes: new { @class = "form-control" })
+            @Html.LabelFor(Model => Model.CampaignName, htmlAttributes: new { @class = "control-label" })
+            @Html.TextBoxFor(Model => Model.CampaignName, htmlAttributes: new { @class = "form-control offset-1" })
 
         </div>
         <div class="form-group form-inline">
