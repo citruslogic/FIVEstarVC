@@ -111,7 +111,7 @@ namespace FIVESTARVC.Controllers
 
             ViewBag.DateFirstAdmitted = db.ProgramEvents
                                             .Include(r => r.Resident).Where(r => r.ResidentID == id)
-                                            .Include(t => t.ProgramType).Where(p => p.ProgramTypeID == 7)
+                                            .Include(t => t.ProgramType).Where(p => p.ProgramTypeID == 2)
                                             .OrderBy(d => d.StartDate)
                                             .Select(s => s.StartDate)
                                             .FirstOrDefault().ToLongDateString();
@@ -255,7 +255,7 @@ namespace FIVESTARVC.Controllers
                     db.Residents.Add(resident);
                     resident.ProgramEvents.Add(new ProgramEvent
                     {
-                        ProgramTypeID = 7,
+                        ProgramTypeID = 2,
                         StartDate = DateTime.Now,
                         EndDate = null
 
@@ -522,6 +522,41 @@ namespace FIVESTARVC.Controllers
             }
         }
 
+        // GET: Residents/AddCampaign/5
+        [HttpGet]
+        public ActionResult AddCampaign(bool? saveCampaignError = false)
+        {
+
+            MilitaryCampaign militaryCampaign = new MilitaryCampaign();
+
+            return PartialView("_NewCampaign", militaryCampaign);
+        }
+
+        // POST: Residents/AddCampaign/5
+        [HttpPost]
+        public ActionResult AddCampaign(string CampaignName)
+        {
+            if (CampaignName == null)
+            {
+                // don't add a blank campaign to the context.
+                ViewBag.ErrorMessage = "Cannot add a blank campaign name to the system.";
+
+                return RedirectToAction("AddCampaign", new { saveCampaignError = true });
+
+            }
+
+            db.MilitaryCampaigns.Add(new MilitaryCampaign
+            {
+                CampaignName = CampaignName,
+                Residents = new List<Resident>()
+            });
+
+            db.SaveChanges();
+            TempData["UserMessage"] = "A new campaign has been added.  ";
+
+            return RedirectToAction("Index");
+        }
+
 
        // GET: Residents/Discharge/5
        [HttpGet]
@@ -542,24 +577,28 @@ namespace FIVESTARVC.Controllers
                 .Where(r => r.ResidentID == id)
                 .Single();
 
-            var roomToRelease = db.Rooms.Find(residentToDischarge.RoomID);
+            Room roomToRelease = db.Rooms.Find(residentToDischarge.RoomID);
 
-            int room = roomToRelease.RoomNum;
+            if (roomToRelease != null)
+            {
+                ViewBag.releaseRoom = roomToRelease.RoomNum;
 
+            }
+            // The room may not be assigned. 
 
-            ViewBag.releaseRoom = room;
 
             if (residentToDischarge == null)
             {
                 return HttpNotFound();
             }
 
-            ViewBag.ProgramTypeID = new SelectList(db.ProgramTypes.Where(t => t.ProgramTypeID >= 12 || t.ProgramTypeID == 2), "ProgramTypeID", "ProgramDescription");
+            ViewBag.ProgramTypeID = new SelectList(db.ProgramTypes
+                .Where(t => t.ProgramTypeID < 8 && t.ProgramTypeID >= 4 ), "ProgramTypeID", "ProgramDescription");
            
             return PartialView("_Discharge", residentToDischarge);
         }
 
-        // POST: Residents/Delete/5
+        // POST: Residents/Discharge/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Discharge(int id, int ProgramTypeID)
@@ -571,10 +610,16 @@ namespace FIVESTARVC.Controllers
                 .Where(r => r.ResidentID == id)
                 .Single();
 
-                var roomToRelease = db.Rooms.Find(residentToDischarge.RoomID);
+                Room roomToRelease = db.Rooms.Find(residentToDischarge.RoomID);
+                
+                // It is possible for the resident to not be assigned a room at this point.
+                if (roomToRelease != null)
+                {
+                    residentToDischarge.RoomID = null;
+                    roomToRelease.IsOccupied = false;
+                    
+                }   
 
-                roomToRelease.IsOccupied = false;
-                residentToDischarge.RoomID = null;
 
                 residentToDischarge.ProgramEvents.Add(new ProgramEvent
                 {
@@ -595,58 +640,13 @@ namespace FIVESTARVC.Controllers
                 return RedirectToAction("Discharge", new { id = id, saveChangesError = true });
             }
 
-            ViewBag.ProgramTypeID = new SelectList(db.ProgramTypes.Where(t => t.ProgramTypeID >= 12), "ProgramTypeID", "ProgramDescription");
+            ViewBag.ProgramTypeID = new SelectList(db.ProgramTypes
+                .Where(t => t.ProgramTypeID >= 4 && t.ProgramTypeID <= 7), "ProgramTypeID", "ProgramDescription");
 
             
             return RedirectToAction("Index");
         }
 
-        // GET: Residents/Delete/5
-        //[HttpGet]
-        //public ActionResult Delete(int? id, bool? saveChangesError = false)
-        //{
-        //    if (id == null)
-        //    {
-        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-        //    }
-        //    if (saveChangesError.GetValueOrDefault())
-        //    {
-        //        ViewBag.ErrorMessage = "Delete failed. Try again, and if the problem persists see your system administrator.";
-        //    }
-        //    Resident resident = db.Residents.Find(id);
-
-        //    if (resident == null)
-        //    {
-        //        return HttpNotFound();
-        //    }
-        //    return View(resident);
-        //}
-
-        // POST: Residents/Delete/5
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public ActionResult Delete(int id)
-        //{
-        //    try
-        //    {
-        //        Resident resident = db.Residents.Find(id);
-        //        Benefit benefit = db.Benefits.Find(resident.BenefitID);
-
-        //        if (benefit != null)
-        //        {
-        //            db.Benefits.Remove(benefit);
-        //        } 
-
-        //        db.Residents.Remove(resident);
-        //        db.SaveChanges();
-        //    }
-        //    catch (DataException/* dex */)
-        //    {
-        //        //Log the error (uncomment dex variable name and add a line here to write a log.
-        //        return RedirectToAction("Delete", new { id = id, saveChangesError = true });
-        //    }
-        //    return RedirectToAction("Index");
-        //}
 
         // GET
         // Quick Event form (part of a modal dialog)
@@ -655,7 +655,8 @@ namespace FIVESTARVC.Controllers
         {
             ViewBag.ResidentID = id;
             ViewBag.Fullname = db.Residents.Find(id).Fullname;
-            ViewBag.ProgramTypeID = new SelectList(db.ProgramTypes, "ProgramTypeID", "ProgramDescription");
+            ViewBag.ProgramTypeID = new SelectList(db.ProgramTypes
+                .Where(t => t.ProgramTypeID >= 8), "ProgramTypeID", "ProgramDescription");
 
  
             return PartialView("_modalNewEvent");
@@ -676,7 +677,8 @@ namespace FIVESTARVC.Controllers
 
             }
 
-            ViewBag.ProgramTypeID = new SelectList(db.ProgramTypes, "ProgramTypeID", "ProgramDescription", programEvent.ProgramTypeID);
+            ViewBag.ProgramTypeID = new SelectList(db.ProgramTypes
+                .Where(t => t.ProgramTypeID >= 8), "ProgramTypeID", "ProgramDescription", programEvent.ProgramTypeID);
             ViewBag.ResidentID = id;
 
             return RedirectToAction("Index");

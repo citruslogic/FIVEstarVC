@@ -20,14 +20,16 @@
     var message = TempData["UserMessage"];
     <div class="alert alert-dark alert-dismissable" style="position: absolute; right: 80px;">
         <a href="#" class="close" data-dismiss="alert" aria-label="close"> &times;</a>
-        @message
+        @message &nbsp;
     </div>
 }
 
 <h2>Residents Listing</h2>
 <hr />
 <li class="btn-block">
-    <input type="button" class="btn btn-success" value="Create New" onclick="location.href='/Residents/Create';" />
+    <input type="button" class="btn btn-success" value="New Resident" onclick="location.href='/Residents/Create';" />
+    &nbsp; 
+    <input type="button" class="btn btn-secondary" value="New Campaign" onclick="newCampaign()" />
 
 </li>
 <br />
@@ -152,7 +154,7 @@
 
                         $.get('/Residents/ViewQuickEvent/' + resident, function (data) {
                             $('.modal-body').html(data);
-                            $('.modal-title').html("Quick Event")
+                            $('.modal-title').html("Quick Event");
                             $('#QuickEventModal').modal('show');
                         });
                    
@@ -162,11 +164,21 @@
 
                     $.get('/Residents/Discharge/' + resident, function (data) {
                         $('.modal-body').html(data);
-                        $('.modal-title').html("Discharge from Center")
+                        $('.modal-title').html("Discharge from Center");
                         $('#QuickEventModal').modal('show');
                     });
-
                 }
+
+                function newCampaign() {
+
+                    $.get('/Residents/AddCampaign/', function (data) {
+                        $('.modal-body').html(data);
+                        $('.modal-title').html("Add New Campaign");
+                        $('#QuickEventModal').modal('show');
+                    });
+                }
+
+                
             </script>
 
         }
