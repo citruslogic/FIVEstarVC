@@ -112,12 +112,12 @@ namespace FIVESTARVC.DAL
             var events = new List<ProgramEvent>
             {
                 //adding admission event for all residents, the admission doesn't "end."
-                new ProgramEvent { StartDate=DateTime.Today, EndDate=null, Completed=true, ResidentID=1, ProgramTypeID=2},
-                new ProgramEvent { StartDate=DateTime.Today, EndDate=null, Completed=true, ResidentID=2, ProgramTypeID=2},
-                new ProgramEvent { StartDate=DateTime.Today, EndDate=null, Completed=true, ResidentID=3, ProgramTypeID=2},
-                new ProgramEvent { StartDate=DateTime.Today, EndDate=null, Completed=true, ResidentID=4, ProgramTypeID=2},
-                new ProgramEvent { StartDate=DateTime.Today, EndDate=null, Completed=true, ResidentID=5, ProgramTypeID=2},
-                new ProgramEvent { StartDate=DateTime.Today, EndDate=null, Completed=true, ResidentID=6, ProgramTypeID=2},
+                new ProgramEvent { StartDate=DateTime.Today, EndDate=null, Completed=false, ResidentID=1, ProgramTypeID=2},
+                new ProgramEvent { StartDate=DateTime.Today, EndDate=null, Completed=false, ResidentID=2, ProgramTypeID=2},
+                new ProgramEvent { StartDate=DateTime.Today, EndDate=null, Completed=false, ResidentID=3, ProgramTypeID=2},
+                new ProgramEvent { StartDate=DateTime.Today, EndDate=null, Completed=false, ResidentID=4, ProgramTypeID=2},
+                new ProgramEvent { StartDate=DateTime.Today, EndDate=null, Completed=false, ResidentID=5, ProgramTypeID=2},
+                new ProgramEvent { StartDate=DateTime.Today, EndDate=null, Completed=false, ResidentID=6, ProgramTypeID=2},
                 //Other events
                 new ProgramEvent { StartDate=DateTime.Parse("2005-09-01"), EndDate=DateTime.Parse("2005-09-25"), Completed=true, ResidentID=1, ProgramTypeID=3},
                 new ProgramEvent { StartDate=DateTime.Parse("2005-04-02"), EndDate=DateTime.Parse("2006-06-05"), Completed=true, ResidentID=4, ProgramTypeID=10},

@@ -28,8 +28,10 @@
 <hr />
 <li class="btn-block">
     <input type="button" class="btn btn-success" value="New Resident" onclick="location.href='/Residents/Create';" />
-    &nbsp; 
+    &nbsp;
     <input type="button" class="btn btn-secondary" value="New Campaign" onclick="newCampaign()" />
+    &nbsp;
+    <input type="button" class="btn btn-secondary" value="New Room" onclick="newRoom()" />
 
 </li>
 <br />
@@ -176,6 +178,15 @@
                         $('.modal-title').html("Add New Campaign");
                         $('#QuickEventModal').modal('show');
                     });
+                }
+
+                    function newRoom() {
+
+                        $.get('/Residents/AddRoom/', function (data) {
+                            $('.modal-body').html(data);
+                            $('.modal-title').html("Add New Room");
+                            $('#QuickEventModal').modal('show');
+                        });
                 }
 
                 
