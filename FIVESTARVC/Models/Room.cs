@@ -20,6 +20,7 @@ namespace FIVESTARVC.Models
 
         [Display(Name = "Is Occupied")]
         public bool IsOccupied { get; set; }
+        [Display(Name = "Wing")]
         public string WingName { get; set; }
         
     }

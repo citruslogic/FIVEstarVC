@@ -536,7 +536,7 @@ namespace FIVESTARVC.Controllers
         [HttpPost]
         public ActionResult AddCampaign(string CampaignName)
         {
-            if (CampaignName == null)
+            if (string.IsNullOrEmpty(CampaignName))
             {
                 // don't add a blank campaign to the context.
                 ViewBag.ErrorMessage = "Cannot add a blank campaign name to the system.";
@@ -558,8 +558,46 @@ namespace FIVESTARVC.Controllers
         }
 
 
-       // GET: Residents/Discharge/5
-       [HttpGet]
+        // GET: Residents/AddRoom/
+        [HttpGet]
+        public ActionResult AddRoom(bool? saveRoomError = false)
+        {
+
+            Room room = new Room();
+
+            return PartialView("_NewRoom", room);
+        }
+
+        // POST: Residents/AddRoom/
+        [HttpPost]
+        public ActionResult AddRoom(string RoomNum, string WingName, bool IsOccupied)
+        {
+            if (string.IsNullOrEmpty(RoomNum))
+            {
+                // don't add a blank campaign to the context.
+                ViewBag.ErrorMessage = "Cannot add a blank Room to the system.";
+
+                return RedirectToAction("AddRoom", new { saveRoomError = true });
+
+            }
+            
+            
+
+            db.Rooms.Add(new Room
+            {
+                RoomNum = Convert.ToInt32(RoomNum),
+                WingName = WingName,
+                IsOccupied = false
+            });
+
+            db.SaveChanges();
+            TempData["UserMessage"] = "A new Room has been added.  ";
+
+            return RedirectToAction("Index");
+        }
+
+        // GET: Residents/Discharge/5
+        [HttpGet]
        public ActionResult Discharge(int? id, bool? saveChangesError = false)
         {
             if (id == null)
