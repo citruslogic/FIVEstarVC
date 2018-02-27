@@ -31,9 +31,9 @@
     &nbsp;
     <input type="button" class="btn btn-secondary" value="Add Campaign" onclick="addCampaign()" />
     &nbsp;
-    <input type="button" class="btn btn-secondary" value="Edit Campaign" onclick="editCampaign()" />
+    <input type="button" class="btn btn-secondary" value="Add Room" onclick="newRoom()" />
     &nbsp;
-    <input type="button" class="btn btn-secondary" value="New Room" onclick="newRoom" />
+    <input type="button" class="btn btn-secondary" value="Edit Campaign" onclick="editCampaign()" />
     &nbsp;
     <input type="button" class="btn btn-secondary" value="Delete Room" onclick="deleteRoom()" />
     &nbsp;
@@ -208,29 +208,28 @@
                 function newRoom() {
 
                     $.get('/Residents/AddRoom/', function (data) {
-                        $('.modal-body').html(data);
-                        $('.modal-title').html("Add New Room");
-                        $('#QuickEventModal').modal('show');
+                        $('.modal-content').html(data);
+                        $('#AddRoomModal').modal('show');
                     });
                 }
 
-                function deleteRoom() {
+                //function deleteroom() {
 
-                    $.get('/Residents/DeleteRoom/', function (data) {
-                            $('.modal-body').html(data);
-                            $('.modal-title').html("Delete Room");
-                            $('#QuickEventModal').modal('show');
-                        });
-                }
+                //    $.get('/Residents/DeleteRoom/', function (data) {
+                //            $('.modal-body').html(data);
+                //            $('.modal-title').html("Delete Room");
+                //            $('#QuickEventModal').modal('show');
+                //        });
+                //}
 
-                function editCampaign() {
+                //function editcampaign() {
 
-                    $.get('/Residents/EditCampaign/', function (data) {
-                            $('.modal-body').html(data);
-                            $('.modal-title').html("Edit Campaign");
-                            $('#QuickEventModal').modal('show');
-                        });
-                }
+                //    $.get('/Residents/EditCampaign/', function (data) {
+                //            $('.modal-body').html(data);
+                //            $('.modal-title').html("Edit Campaign");
+                //            $('#QuickEventModal').modal('show');
+                //        });
+                //}
          
             </script>
 

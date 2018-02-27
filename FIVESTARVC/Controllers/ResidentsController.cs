@@ -539,7 +539,7 @@ namespace FIVESTARVC.Controllers
             return PartialView(NewCampaign);
         }
 
-        // GET: Residents/AddCampaign/5
+        // GET: Residents/EditCampaign/5
         [HttpGet]
         public ActionResult EditCampaign(bool? saveCampaignError = false)
         {
@@ -584,7 +584,7 @@ namespace FIVESTARVC.Controllers
             return PartialView(model);
         }
 
-        // POST: Residents/AddCampaign/5
+        // POST: Residents/EditCampaign/5
         [HttpPost]
         public ActionResult EditCampaign(string CampaignName, string NewCampaign)
         {
@@ -622,10 +622,10 @@ namespace FIVESTARVC.Controllers
 
             Room room = new Room();
 
-            return PartialView("_NewRoom", room);
+            return PartialView(room);
         }
 
-        // GET: Residents/AddRoom/
+        // GET: Residents/DeleteRoom/
         [HttpGet]
         public ActionResult DeleteRoom(bool? saveRoomError = false)
         {
@@ -673,7 +673,7 @@ namespace FIVESTARVC.Controllers
             return RedirectToAction("Index");
         }
 
-        // POST: Residents/AddRoom/
+        // POST: Residents/DeleteRoom/
         [HttpPost]
         public ActionResult DeleteRoom(string RoomNum)
         {
