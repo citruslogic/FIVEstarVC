@@ -524,12 +524,12 @@ namespace FIVESTARVC.Controllers
 
         // GET: Residents/AddCampaign/5
         [HttpGet]
-        public ActionResult AddCampaign(bool? saveCampaignError = false)
+        public ActionResult AddCampaign()
         {
 
-            MilitaryCampaign militaryCampaign = new MilitaryCampaign();
+            MilitaryCampaign NewCampaign = new MilitaryCampaign();
 
-            return PartialView("_NewCampaign", militaryCampaign);
+            return PartialView(NewCampaign);
         }
 
         // GET: Residents/AddCampaign/5
@@ -554,27 +554,27 @@ namespace FIVESTARVC.Controllers
 
         // POST: Residents/AddCampaign/5
         [HttpPost]
-        public ActionResult AddCampaign(string CampaignName)
+        [ValidateAntiForgeryToken]
+        public ActionResult AddCampaign(MilitaryCampaign model)
         {
-            if (string.IsNullOrEmpty(CampaignName))
+
+            
+            if (ModelState.IsValid)
             {
-                // don't add a blank campaign to the context.
-                ViewBag.ErrorMessage = "Cannot add a blank campaign name to the system.";
+                db.MilitaryCampaigns.Add(model);              
+                db.SaveChanges();
+                TempData["UserMessage"] = "A new campaign has been added.  ";
 
-                return RedirectToAction("AddCampaign", new { saveCampaignError = true });
+                return RedirectToAction("Index");
 
+            } else
+            {
+                // Failed
+                ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
             }
 
-            db.MilitaryCampaigns.Add(new MilitaryCampaign
-            {
-                CampaignName = CampaignName,
-                Residents = new List<Resident>()
-            });
 
-            db.SaveChanges();
-            TempData["UserMessage"] = "A new campaign has been added.  ";
-
-            return RedirectToAction("Index");
+            return PartialView(model);
         }
 
         // POST: Residents/AddCampaign/5

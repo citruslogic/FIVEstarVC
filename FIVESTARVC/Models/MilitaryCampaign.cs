@@ -14,6 +14,8 @@ namespace FIVESTARVC.Models
 
         public int MilitaryCampaignID { get; set; }
         [Display(Name = "Campaign")]
+        [Required]
+        [RegularExpression("^\\s?([a-zA-Z]+\\s?){1,3}$", ErrorMessage = "Campaigns can only contain at most 3 words, with a single space between them.")]
         public string CampaignName { get; set; }
 
         public virtual ICollection<Resident> Residents { get; set; }

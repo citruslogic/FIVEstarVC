@@ -29,7 +29,7 @@
 <li class="btn-block">
     <input type="button" class="btn btn-success" value="New Resident" onclick="location.href='/Residents/Create';" />
     &nbsp;
-    <input type="button" class="btn btn-secondary" value="New Campaign" onclick="newCampaign()" />
+    <input type="button" class="btn btn-secondary" value="Add Campaign" onclick="addCampaign()" />
     &nbsp;
     <input type="button" class="btn btn-secondary" value="Edit Campaign" onclick="editCampaign()" />
     &nbsp;
@@ -43,9 +43,9 @@
 @using (Html.BeginForm("Index", "Residents", FormMethod.Get))
 {
     <p>
-        Find by name: <div class="form-group">
-            @Html.TextBox("searchString", ViewBag.CurrentFilter as string)
-            <input class="btn btn-sm btn-outline-dark" type="submit" value="Refine" />
+        Find by name: <div class="form-inline">
+            @Html.TextBox("searchString", ViewBag.CurrentFilter as string, htmlAttributes: new { @class = "form-control" })
+            &nbsp;<input class="btn btn-sm btn-dark" type="submit" value="Refine" />
         </div>
 
 
@@ -118,10 +118,13 @@
                 @if (item.IsCurrent())
                 {
 
-                    @:<input type="button" value="Discharge" class="modal-link btn btn-sm btn-danger" 
-                             @:data-toggle="modal" data-target="#QuickEventModal" onclick="showDischargeDialog(@item.ResidentID)" />
+                    @:<input type="button" value="Discharge" class="modal-link btn btn-sm btn-danger"
+                              @: data-toggle="modal" data-target="#QuickEventModal" onclick="showDischargeDialog(@item.ResidentID)" />
 
-                }               
+
+
+
+                }
             </td>
         </tr>
 
@@ -131,9 +134,9 @@
 
 <div id="QuickEventModal" class="modal fade">
     <div class="modal-dialog" role="document">
-        <div class="modal-content" >
+        <div class="modal-content">
             <div class="modal-header">
-                
+
                 <h5 class="modal-title"></h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
             </div>
@@ -143,14 +146,29 @@
         </div>
     </div>
 </div>
-        <br />
+
+<!-- Modal -->
+<div class="modal fade" id="AddCampaignModal" tabindex="-1" role="dialog" aria-labelledby="AddCampaignModal" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+        </div>
+    </div>
+</div>
+<br />
 
         Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
 
         @Html.PagedListPager(Model, page => Url.Action("Index", new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
 
         @section Scripts {
+            @Scripts.Render("~/bundles/jqueryval");
+
             <script type="text/javascript">
+
+                $('#AddCampaignModal').on('shown.bs.modal', function () {
+                    jQuery.validator.unobtrusive.parse($(this));
+                })
+
                 window.setTimeout(function () {
                     $(".alert").fadeTo(500, 0).slideUp(500, function () {
                         $(this).remove();
@@ -159,12 +177,21 @@
 
                 function showQuickEventDialog(resident) {
 
-                        $.get('/Residents/ViewQuickEvent/' + resident, function (data) {
-                            $('.modal-body').html(data);
-                            $('.modal-title').html("Quick Event");
-                            $('#QuickEventModal').modal('show');
-                        });
-                   
+                    $.get('/Residents/ViewQuickEvent/' + resident, function (data) {
+                        $('.modal-body').html(data);
+                        $('.modal-title').html("Quick Event");
+                        $('#QuickEventModal').modal('show');
+                    });
+
+                }
+
+                function addCampaign() {
+
+                    $.get('/Residents/AddCampaign/', function (data) {
+                        $('.modal-content').html(data);
+                        $('#AddCampaignModal').modal('show');
+
+                    });
                 }
 
                 function showDischargeDialog(resident) {
@@ -176,22 +203,14 @@
                     });
                 }
 
-                function newCampaign() {
-
-                    $.get('/Residents/AddCampaign/', function (data) {
-                        $('.modal-body').html(data);
-                        $('.modal-title').html("Add New Campaign");
-                        $('#QuickEventModal').modal('show');
-                    });
-                }
 
                 function newRoom() {
 
                     $.get('/Residents/AddRoom/', function (data) {
-                            $('.modal-body').html(data);
-                            $('.modal-title').html("Add New Room");
-                            $('#QuickEventModal').modal('show');
-                        });
+                        $('.modal-body').html(data);
+                        $('.modal-title').html("Add New Room");
+                        $('#QuickEventModal').modal('show');
+                    });
                 }
 
                 function deleteRoom() {
