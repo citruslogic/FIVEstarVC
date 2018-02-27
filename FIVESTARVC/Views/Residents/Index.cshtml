@@ -37,15 +37,16 @@
 <br />
 @using (Html.BeginForm("Index", "Residents", FormMethod.Get))
 {
-    <p>
-        Find by name: <div class="form-inline">
-            @Html.TextBox("searchString", ViewBag.CurrentFilter as string, htmlAttributes: new { @class = "form-control" })
-            &nbsp;<input class="btn btn-sm btn-dark" type="submit" value="Refine" />
-        </div>
-
-
-    </p>
+    <div class="form-inline">
+        
+            Find by name:&nbsp;
+        
+         @Html.TextBox("searchString", ViewBag.CurrentFilter as string, htmlAttributes: new { @class = "form-control" })
+        &nbsp;<input class="btn btn-sm btn-dark" type="submit" value="Refine" />
+    </div>
+ 
 }
+<br />
 <table class="table table-striped">
     <tr>
         <th>

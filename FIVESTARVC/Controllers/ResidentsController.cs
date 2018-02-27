@@ -86,6 +86,7 @@ namespace FIVESTARVC.Controllers
             }
             Resident resident = db.Residents
                 .Include(p => p.ProgramEvents)
+                .Include(i => i.Benefit)
                 .Where(r => r.ResidentID == id).Single();
 
             var room = db.Rooms.Find(resident.RoomID);
@@ -123,6 +124,9 @@ namespace FIVESTARVC.Controllers
         public ActionResult Create()
         {
             ResidentIncomeModel Rooms = new ResidentIncomeModel();
+
+            ViewBag.AdmissionType = new SelectList(db.ProgramTypes
+                .Where(t => t.ProgramTypeID <= 3), "ProgramTypeID", "ProgramDescription");
 
             MyRoom.Clear();
             Rooms.Rooms.Clear();
@@ -187,8 +191,11 @@ namespace FIVESTARVC.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(ResidentIncomeModel residentIncomeModel, string[] selectedCampaigns)
+        public ActionResult Create(ResidentIncomeModel residentIncomeModel, string[] selectedCampaigns, int AdmissionType)
         {
+            ViewBag.AdmissionType = new SelectList(db.ProgramTypes
+                .Where(t => t.ProgramTypeID <= 3), "ProgramTypeID", "ProgramDescription", AdmissionType);
+
             //query rooms to retrieve the room object
             var AddRooms = from y in db.Rooms
                             .Where(y => y.RoomID == residentIncomeModel.RoomID)
@@ -255,7 +262,7 @@ namespace FIVESTARVC.Controllers
                     db.Residents.Add(resident);
                     resident.ProgramEvents.Add(new ProgramEvent
                     {
-                        ProgramTypeID = 2,
+                        ProgramTypeID = AdmissionType,
                         StartDate = DateTime.Now,
                         EndDate = null
 
