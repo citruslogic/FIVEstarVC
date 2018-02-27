@@ -8,10 +8,11 @@
 
 <h2>Details for @(Model.LastName)</h2>
 
-<div>
-    <div class="row">
-        <div class="col-sm-5 table-responsive">
-            <table class="table">
+
+<div class="row">
+    <div class="container">
+        <div class="col-md-5 table-responsive">
+            <table class="table table-sm">
                 <tr class="form-row">
                     <td class="col-form-label">
                         @Html.LabelFor(model => model.LastName, htmlAttributes: new { @class = "control-label font-weight-bold" })
@@ -27,7 +28,7 @@
                         @Html.DisplayFor(model => model.FirstMidName)
 
                     </td>
-                    </tr>
+                </tr>
                 <tr class="form-row">
                     <td class="col-form-label">
                         @Html.LabelFor(model => model.RoomID, htmlAttributes: new { @class = "control-label font-weight-bold" })
@@ -54,14 +55,15 @@
                         }
                     </td>
                     <td class="col-form-label">
-                        @Html.Label("Age", htmlAttributes: new { @class = "control-label font-weight-bold"})
+                        @Html.Label("Age", htmlAttributes: new { @class = "control-label font-weight-bold" })
                     </td>
                     <td class="col-form-label">
-                        
-                        @if((Model.Age) != 0)
+
+                        @if ((Model.Age) != 0)
                         {
                             @(Model.Age)
-                        } else
+                        }
+                        else
                         {
                             <text>Not available.</text>
                         }
@@ -80,8 +82,8 @@
 
             </table>
         </div>
-        
-        <div class="col-sm-7 table-responsive">
+
+        <div class="col-md-4 table-responsive">
             <table class="table">
                 <tr class="form-row">
                     <td>
@@ -101,7 +103,7 @@
                                 if (campaign.Assigned)
                                 {
                                     campaignsExist = true;
-                                    @campaign.MilitaryCampaign@:<br/>
+                                    @campaign.MilitaryCampaign@:<br />
                                 }
 
                             }
@@ -118,43 +120,107 @@
                     <td>@Html.LabelFor(model => model.InVetCourt, htmlAttributes: new { @class = "control-label col-md-0 font-weight-bold" })</td>
                     <td>@(Model.InVetCourt ? "Yes" : "No")</td>
                 </tr>
-                
+
 
 
             </table>
-
-
+        </div>
+        <div class="col-md-4" style="position: absolute; right: 80px; top: 230px;">
+            <h4>Income </h4>
+            <table class="table table-sm table-striped">
+                <thead>
+                    <tr>
+                        <th class="col-md-2">Type</th>
+                        <th class="col-md-2">Amount</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="col-form-label">
+                            @Html.LabelFor(model => model.Benefit.DisabilityPercentage, htmlAttributes: new { @class = "control-label col-md-offset-1" })
+                        </td>
+                        <td>
+                            @Html.DisplayFor(model => model.Benefit.DisabilityPercentage)
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-form-label">
+                            @Html.LabelFor(model => model.Benefit.SSI, htmlAttributes: new { @class = "control-label col-md-offset-1" })
+                        </td>
+                        <td>
+                            @Html.DisplayFor(model => model.Benefit.SSI)
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-form-label">
+                            @Html.LabelFor(model => model.Benefit.SSDI, htmlAttributes: new { @class = "control-label col-md-offset-1" })
+                        </td>
+                        <td>
+                            @Html.DisplayFor(model => model.Benefit.SSDI)
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-form-label">
+                            @Html.LabelFor(model => model.Benefit.FoodStamp, htmlAttributes: new { @class = "control-label col-md-offset-1" })
+                        </td>
+                        <td>
+                            @Html.DisplayFor(model => model.Benefit.FoodStamp)
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-form-label">
+                            @Html.LabelFor(model => model.Benefit.OtherDescription, htmlAttributes: new { @class = "control-label col-md-offset-1" })
+                        </td>
+                        <td>
+                            @Html.DisplayFor(model => model.Benefit.Other)
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-form-label">
+                            @Html.LabelFor(model => model.Benefit.TotalBenefitAmount, htmlAttributes: new { @class = "control-label col-md-offset-1 " })
+                        </td>
+                        <td>
+                       
+                                @Html.DisplayFor(model => model.Benefit.TotalBenefitAmount)
+                            
+                        </td>
+                    </tr>
+            </table>
         </div>
     </div>
-
 </div>
+
 
 
 <h2>Events</h2>
 
-    <div style="height: 200px; overflow-y: scroll">
-        <table class="table table-striped">
-            <tr class="thead-dark">
-                <th>Program Name</th>
-                <th>Start Date</th>
-                <th>End Date</th>
-            </tr>
-            @foreach (var item in Model.ProgramEvents)
-            {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.ProgramType.ProgramDescription)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.StartDate)
-                    </td>
-                    <td>
+<div style="height: 200px; overflow-y: scroll">
+    <table class="table table-striped">
+        <tr class="thead-dark">
+            <th>Program Name</th>
+            <th>Start Date</th>
+            <th>End Date</th>
+        </tr>
+        @foreach (var item in Model.ProgramEvents)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ProgramType.ProgramDescription)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.StartDate)
+                </td>
+                <td>
+                    @if (item.EndDate.HasValue)
+                    {
                         @Html.DisplayFor(modelItem => item.EndDate)
-                    </td>
-                </tr>
-            }
-        </table>
-    </div>
+                    }
+
+                </td>
+            </tr>
+        }
+    </table>
+</div>
 
 
 
