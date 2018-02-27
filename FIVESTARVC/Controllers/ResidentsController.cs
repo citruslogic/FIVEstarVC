@@ -532,6 +532,26 @@ namespace FIVESTARVC.Controllers
             return PartialView("_NewCampaign", militaryCampaign);
         }
 
+        // GET: Residents/AddCampaign/5
+        [HttpGet]
+        public ActionResult EditCampaign(bool? saveCampaignError = false)
+        {
+
+            MilitaryCampaign militaryCampaign = new MilitaryCampaign();
+
+            militaryCampaign.militaryCampaign.Clear();
+
+            var campaignToEdit = from t in db.MilitaryCampaigns
+                               select t;
+
+            foreach (var r in campaignToEdit)
+            {
+                militaryCampaign.militaryCampaign.Add(r);
+            }
+
+            return PartialView("_EditCampaign", militaryCampaign);
+        }
+
         // POST: Residents/AddCampaign/5
         [HttpPost]
         public ActionResult AddCampaign(string CampaignName)
@@ -557,6 +577,36 @@ namespace FIVESTARVC.Controllers
             return RedirectToAction("Index");
         }
 
+        // POST: Residents/AddCampaign/5
+        [HttpPost]
+        public ActionResult EditCampaign(string CampaignName, string NewCampaign)
+        {
+            if (string.IsNullOrEmpty(CampaignName))
+            {
+                // don't add a blank campaign to the context.
+                ViewBag.ErrorMessage = "Cannot Edit a blank campaign.";
+
+                return RedirectToAction("EdietCampaign", new { saveCampaignError = true });
+
+            }
+
+            var ImputCampain = NewCampaign;
+            var campaignToEdit = from y in db.MilitaryCampaigns
+                                 .Where(c => c.CampaignName == CampaignName)
+                                 select y;
+
+            foreach(var t in campaignToEdit)
+            {
+                t.CampaignName = NewCampaign;
+            }
+
+            
+            db.SaveChanges();
+            TempData["UserMessage"] = "A new campaign has been added.  ";
+
+            return RedirectToAction("Index");
+        }
+
 
         // GET: Residents/AddRoom/
         [HttpGet]
@@ -566,6 +616,26 @@ namespace FIVESTARVC.Controllers
             Room room = new Room();
 
             return PartialView("_NewRoom", room);
+        }
+
+        // GET: Residents/AddRoom/
+        [HttpGet]
+        public ActionResult DeleteRoom(bool? saveRoomError = false)
+        {
+
+            Room room = new Room();
+            
+            room.room.Clear();
+
+            var roomToDelete = from t in db.Rooms
+                               select t;
+
+            foreach(var r in roomToDelete)
+            {
+                room.room.Add(r);
+            }
+
+            return PartialView("_DeleteRoom", room);
         }
 
         // POST: Residents/AddRoom/
@@ -591,7 +661,36 @@ namespace FIVESTARVC.Controllers
             });
 
             db.SaveChanges();
-            TempData["UserMessage"] = "A new Room has been added.  ";
+            TempData["UserMessage"] = "A new Room has been added.";
+
+            return RedirectToAction("Index");
+        }
+
+        // POST: Residents/AddRoom/
+        [HttpPost]
+        public ActionResult DeleteRoom(string RoomNum)
+        {
+            if (string.IsNullOrEmpty(RoomNum))
+            {
+                // don't add a blank campaign to the context.
+                ViewBag.ErrorMessage = "Cannot Delete a blank Room.";
+
+                return RedirectToAction("DeleteRoom", new { saveRoomError = true });
+
+            }
+
+            var delRoom = from y in db.Rooms
+                          .Where (v => v.RoomNum == Convert.ToInt32(RoomNum))
+                          select y;
+
+            foreach(var i in delRoom)
+            {
+                db.Rooms.Remove(i);
+            }
+
+            
+            db.SaveChanges();
+            TempData["UserMessage"] = "A Room has been removed.";
 
             return RedirectToAction("Index");
         }

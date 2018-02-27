@@ -753,6 +753,8 @@
     <Content Include="Views\Shared\_Discharge.cshtml" />
     <Content Include="Views\Shared\_NewCampaign.cshtml" />
     <Content Include="Views\Shared\_NewRoom.cshtml" />
+    <Content Include="Views\Shared\_DeleteRoom.cshtml" />
+    <Content Include="Views\Shared\_EditCampaign.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
