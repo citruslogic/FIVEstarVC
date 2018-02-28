@@ -11,8 +11,9 @@
 
 <div class="row">
     <div class="container">
-        <div class="col-md-5 table-responsive">
-            <table class="table table-sm">
+        <div class="col-md-12">
+        <div class="col-md-5">
+            <table class="table-sm">
                 <tr class="form-row">
                     <td class="col-form-label">
                         @Html.LabelFor(model => model.LastName, htmlAttributes: new { @class = "control-label font-weight-bold" })
@@ -84,7 +85,7 @@
         </div>
 
         <div class="col-md-4 table-responsive">
-            <table class="table">
+            <table class="table-sm">
                 <tr class="form-row">
                     <td>
                         @Html.Label("Campaigns", htmlAttributes: new { @class = "control-label col-md-0 font-weight-bold" })
@@ -125,8 +126,8 @@
 
             </table>
         </div>
-        <div class="col-md-4" style="position: absolute; right: 80px; top: 230px;">
-            <h4>Income </h4>
+        <div class="col-md-5" style="position: absolute; bottom: -135px; left: 500px;">
+            <h5>Income </h5>
             <table class="table table-sm table-striped">
                 <thead>
                     <tr>
@@ -172,6 +173,14 @@
                             @Html.LabelFor(model => model.Benefit.OtherDescription, htmlAttributes: new { @class = "control-label col-md-offset-1" })
                         </td>
                         <td>
+                            @Html.DisplayFor(model => model.Benefit.OtherDescription)
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-form-label">
+                            @Html.LabelFor(model => model.Benefit.Other, htmlAttributes: new { @class = "control-label col-md-offset-1"})
+                        </td>
+                        <td>
                             @Html.DisplayFor(model => model.Benefit.Other)
                         </td>
                     </tr>
@@ -188,13 +197,15 @@
             </table>
         </div>
     </div>
+        </div>
 </div>
 
+<br />
 
 
-<h2>Events</h2>
 
-<div style="height: 200px; overflow-y: scroll">
+<div style="margin-top: 150px; height: 200px; overflow-y: scroll">
+    <h2>Events</h2>   
     <table class="table table-striped">
         <tr class="thead-dark">
             <th>Program Name</th>

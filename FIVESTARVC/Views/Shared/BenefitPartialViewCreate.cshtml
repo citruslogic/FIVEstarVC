@@ -26,7 +26,7 @@
                             <span class="input-group-text">%</span>
                         </div>
                     </div>
-                    @Html.ValidationMessageFor(model => model.DisabilityPercentage, "", new { @class = "text-danger" })
+                    @Html.ValidationMessageFor(model => model.DisabilityPercentage, "")
                 </td>
 
             </tr>
@@ -34,7 +34,7 @@
                 <td class="col-form-label">@Html.LabelFor(model => model.SSI, htmlAttributes: new { @class = "control-label col-md-offset-1" })</td>
                 <td>
                     @Html.EditorFor(model => model.SSI, new { htmlAttributes = new { @class = "form-control income money-wide" } })
-                    @Html.ValidationMessageFor(model => model.SSI, "", new { @class = "text-danger" })
+                    @Html.ValidationMessageFor(model => model.SSI, "")
                 </td>
 
             </tr>
@@ -45,7 +45,7 @@
                 </td>
                 <td>
                     @Html.EditorFor(model => model.SSDI, new { htmlAttributes = new { @class = "form-control income money-wide" } })
-                    @Html.ValidationMessageFor(model => model.SSDI, "", new { @class = "text-danger" })
+                    @Html.ValidationMessageFor(model => model.SSDI, "")
                 </td>
 
             </tr>
@@ -55,7 +55,7 @@
                 </td>
                 <td>
                     @Html.EditorFor(model => model.FoodStamp, new { htmlAttributes = new { @class = "form-control income money-wide" } })
-                    @Html.ValidationMessageFor(model => model.FoodStamp, "", new { @class = "text-danger" })
+                    @Html.ValidationMessageFor(model => model.FoodStamp, "")
                 </td>
             </tr>
             <tr>
@@ -64,7 +64,7 @@
                 </td>
                 <td>
                     @Html.TextAreaFor(model => model.OtherDescription, htmlAttributes: new { @class = "form-control" })
-                    @Html.ValidationMessageFor(model => model.OtherDescription, "", new { @class = "text-danger" })
+                    @Html.ValidationMessageFor(model => model.OtherDescription, "")
                 </td>
             </tr>
             <tr>
@@ -73,7 +73,7 @@
                 </td>
                 <td>
                     @Html.EditorFor(model => model.Other, new { htmlAttributes = new { @class = "form-control income money-wide" } })
-                    @Html.ValidationMessageFor(model => model.Other, "", new { @class = "text-danger" })
+                    @Html.ValidationMessageFor(model => model.Other, "")
                 </td>
             </tr>
             <tr>
@@ -85,8 +85,8 @@
                         <div class="input-group-prepend">
                             <span class="input-group-text">$</span>
                         </div>
-                        @Html.EditorFor(model => model.TotalBenefitAmount, new { htmlAttributes = new { @class = "form-control" } })
-                        @Html.ValidationMessageFor(model => model.TotalBenefitAmount, "", new { @class = "text-danger" })
+                        @Html.EditorFor(model => model.TotalBenefitAmount, new { htmlAttributes = new { @class = "form-control font-weight-bold" } })
+                        @Html.ValidationMessageFor(model => model.TotalBenefitAmount, "")
 
                     </div>
                 </td>
