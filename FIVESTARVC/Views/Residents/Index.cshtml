@@ -31,11 +31,8 @@
     &nbsp;
     <input type="button" class="btn btn-secondary" value="Add Campaign" onclick="addCampaign()" />
     &nbsp;
-    <input type="button" class="btn btn-secondary" value="Add Room" onclick="newRoom()" />
-    &nbsp;
-    <input type="button" class="btn btn-secondary" value="Edit Campaign" onclick="editCampaign()" />
-    &nbsp;
-    <input type="button" class="btn btn-secondary" value="Delete Room" onclick="deleteRoom()" />
+    <input type="button" class="btn btn-secondary" value="Add Room To Database" onclick="location.href = '/Rooms/Index';" />
+   
     &nbsp;
 
 </li>
@@ -205,31 +202,7 @@
                 }
 
 
-                function newRoom() {
-
-                    $.get('/Residents/AddRoom/', function (data) {
-                        $('.modal-content').html(data);
-                        $('#AddRoomModal').modal('show');
-                    });
-                }
-
-                //function deleteroom() {
-
-                //    $.get('/Residents/DeleteRoom/', function (data) {
-                //            $('.modal-body').html(data);
-                //            $('.modal-title').html("Delete Room");
-                //            $('#QuickEventModal').modal('show');
-                //        });
-                //}
-
-                //function editcampaign() {
-
-                //    $.get('/Residents/EditCampaign/', function (data) {
-                //            $('.modal-body').html(data);
-                //            $('.modal-title').html("Edit Campaign");
-                //            $('#QuickEventModal').modal('show');
-                //        });
-                //}
+               
          
             </script>
 

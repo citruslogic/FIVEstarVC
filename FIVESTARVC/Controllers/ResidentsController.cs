@@ -539,26 +539,7 @@ namespace FIVESTARVC.Controllers
             return PartialView(NewCampaign);
         }
 
-        // GET: Residents/EditCampaign/5
-        [HttpGet]
-        public ActionResult EditCampaign(bool? saveCampaignError = false)
-        {
-
-            MilitaryCampaign militaryCampaign = new MilitaryCampaign();
-
-            militaryCampaign.militaryCampaign.Clear();
-
-            var campaignToEdit = from t in db.MilitaryCampaigns
-                               select t;
-
-            foreach (var r in campaignToEdit)
-            {
-                militaryCampaign.militaryCampaign.Add(r);
-            }
-
-            return PartialView("_EditCampaign", militaryCampaign);
-        }
-
+       
         // POST: Residents/AddCampaign/5
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -584,123 +565,7 @@ namespace FIVESTARVC.Controllers
             return PartialView(model);
         }
 
-        // POST: Residents/EditCampaign/5
-        [HttpPost]
-        public ActionResult EditCampaign(string CampaignName, string NewCampaign)
-        {
-            if (string.IsNullOrEmpty(CampaignName))
-            {
-                // don't add a blank campaign to the context.
-                ViewBag.ErrorMessage = "Cannot Edit a blank campaign.";
-
-                return RedirectToAction("EdietCampaign", new { saveCampaignError = true });
-
-            }
-
-            var ImputCampain = NewCampaign;
-            var campaignToEdit = from y in db.MilitaryCampaigns
-                                 .Where(c => c.CampaignName == CampaignName)
-                                 select y;
-
-            foreach(var t in campaignToEdit)
-            {
-                t.CampaignName = NewCampaign;
-            }
-
-            
-            db.SaveChanges();
-            TempData["UserMessage"] = "A new campaign has been added.  ";
-
-            return RedirectToAction("Index");
-        }
-
-
-        // GET: Residents/AddRoom/
-        [HttpGet]
-        public ActionResult AddRoom(bool? saveRoomError = false)
-        {
-
-            Room room = new Room();
-
-            return PartialView(room);
-        }
-
-        // GET: Residents/DeleteRoom/
-        [HttpGet]
-        public ActionResult DeleteRoom(bool? saveRoomError = false)
-        {
-
-            Room room = new Room();
-            
-            room.room.Clear();
-
-            var roomToDelete = from t in db.Rooms
-                               select t;
-
-            foreach(var r in roomToDelete)
-            {
-                room.room.Add(r);
-            }
-
-            return PartialView("_DeleteRoom", room);
-        }
-
-        // POST: Residents/AddRoom/
-        [HttpPost]
-        public ActionResult AddRoom(string RoomNum, string WingName, bool IsOccupied)
-        {
-            if (string.IsNullOrEmpty(RoomNum))
-            {
-                // don't add a blank campaign to the context.
-                ViewBag.ErrorMessage = "Cannot add a blank Room to the system.";
-
-                return RedirectToAction("AddRoom", new { saveRoomError = true });
-
-            }
-            
-            
-
-            db.Rooms.Add(new Room
-            {
-                RoomNum = Convert.ToInt32(RoomNum),
-                WingName = WingName,
-                IsOccupied = false
-            });
-
-            db.SaveChanges();
-            TempData["UserMessage"] = "A new Room has been added.";
-
-            return RedirectToAction("Index");
-        }
-
-        // POST: Residents/DeleteRoom/
-        [HttpPost]
-        public ActionResult DeleteRoom(string RoomNum)
-        {
-            if (string.IsNullOrEmpty(RoomNum))
-            {
-                // don't add a blank campaign to the context.
-                ViewBag.ErrorMessage = "Cannot Delete a blank Room.";
-
-                return RedirectToAction("DeleteRoom", new { saveRoomError = true });
-
-            }
-
-            var delRoom = from y in db.Rooms
-                          .Where (v => v.RoomNum == Convert.ToInt32(RoomNum))
-                          select y;
-
-            foreach(var i in delRoom)
-            {
-                db.Rooms.Remove(i);
-            }
-
-            
-            db.SaveChanges();
-            TempData["UserMessage"] = "A Room has been removed.";
-
-            return RedirectToAction("Index");
-        }
+       
 
         // GET: Residents/Discharge/5
         [HttpGet]

@@ -194,6 +194,7 @@
     <Compile Include="Controllers\ProgramEventsController.cs" />
     <Compile Include="Controllers\ReportsController.cs" />
     <Compile Include="Controllers\ResidentsController.cs" />
+    <Compile Include="Controllers\RoomsController.cs" />
     <Compile Include="CsvExport.cs" />
     <Compile Include="DAL\CenterInitializer.cs" />
     <Compile Include="DAL\ResidentContext.cs" />
@@ -771,6 +772,11 @@
     <Content Include="Views\Shared\AddRoom.cshtml" />
     <Content Include="Views\Shared\_DeleteRoom.cshtml" />
     <Content Include="Views\Shared\_EditCampaign.cshtml" />
+    <Content Include="Views\Rooms\Create.cshtml" />
+    <Content Include="Views\Rooms\Delete.cshtml" />
+    <Content Include="Views\Rooms\Details.cshtml" />
+    <Content Include="Views\Rooms\Edit.cshtml" />
+    <Content Include="Views\Rooms\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
