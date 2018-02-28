@@ -39,7 +39,7 @@ namespace FIVESTARVC.Controllers
                              where Resident.ServiceBranch == ServiceType.NAVY
                              select Resident).ToList();
 
-            foreach(Resident item in navyQuery)
+            foreach (Resident item in navyQuery)
             {
                 if (item.IsCurrent())
                 {
@@ -62,8 +62,8 @@ namespace FIVESTARVC.Controllers
 
             //Count current Marine Residents
             var marineQuery = (from Resident in DB.Residents
-                             where Resident.ServiceBranch == ServiceType.MARINES
-                             select Resident).ToList();
+                               where Resident.ServiceBranch == ServiceType.MARINES
+                               select Resident).ToList();
 
             foreach (Resident item in marineQuery)
             {
@@ -131,7 +131,7 @@ namespace FIVESTARVC.Controllers
 
             ViewBag.TotalCount = count;
             ViewBag.DischargeCount = dischargeCount;
-            
+
             //Finds graduation percent
             float Graduated = DB.ProgramEvents.Count(x => x.ProgramTypeID == 4);
             ViewBag.Graduated = Graduated;
@@ -141,63 +141,79 @@ namespace FIVESTARVC.Controllers
             ViewBag.Admitted = Admitted;
 
             float gradPercent = (Graduated / Admitted) * 100;
-            
+
             ViewBag.GraduatedPercent = gradPercent.ToString("n2");
 
-            //ViewBag.WorkProgram = DB.ProgramEvents.Count(x => x.ProgramTypeID == 1);
-
-            //ViewBag.MentalWellness = DB.ProgramEvents.Count(x => x.ProgramTypeID == 3);
+            ViewBag.CumulativeCount = DB.Residents.Count();
 
             ViewBag.P2I = DB.ProgramEvents.Count(x => x.ProgramTypeID == 10);
 
             ViewBag.EmergencyShelter = DB.ProgramEvents.Count(x => x.ProgramTypeID == 1);
 
-            //ViewBag.SchoolProgram = DB.ProgramEvents.Count(x => x.ProgramTypeID == 6);
-
             ViewBag.VeteransCourt = DB.Residents.Count(x => x.InVetCourt == true);
 
-            //ViewBag.FinancialProgram = DB.ProgramEvents.Count(x => x.ProgramTypeID == 10);
+            //Query to make a list of all admission and discharge events
+            var avgProg = DB.ProgramEvents;
 
-            
-            var resToCount = DB.ProgramEvents;
-            int numb = 0;
+            var avgProgStay = (from r in avgProg
+                               where r.ProgramTypeID == 1 || r.ProgramTypeID == 2 || r.ProgramTypeID == 3 ||
+                                     r.ProgramTypeID == 4 || r.ProgramTypeID == 5 || r.ProgramTypeID == 6 || r.ProgramTypeID == 7
+                               select new
+                               {
+                                   r.ResidentID,
+                                   r.ProgramTypeID,
+                                   r.StartDate,
+                                   r.EndDate
+                               }).ToList();
 
-            foreach(var e in resToCount)
+            //Variables to find average length of stay
+            double total = 0;
+            int numbCount = 0;
+            double average = 0;
+            double days = 0;
+
+            foreach (var item in avgProgStay)
             {
-                if (e.ProgramTypeID == 2 &&
-                    e.Completed == true
-                    || e.ProgramTypeID == 1 &&
-                    e.Completed == true
-                    || e.ProgramTypeID == 3 &&
-                    e.Completed == true)
+                DateTime endDate;
+                DateTime startDate;
+                int resID;
+
+                //Discharge or graduation events
+                if (item.ProgramTypeID == 4 || item.ProgramTypeID == 5 || item.ProgramTypeID == 6 || item.ProgramTypeID == 7)
                 {
-                    numb++;
-                    DateTime Start = e.StartDate;
-                   
-                    DateTime End = (DateTime)e.EndDate;
-                    
-                   
-                    // to get the total days in between
-                    var days = (End - Start).TotalDays;
-                    double total = 0;
+                    endDate = item.StartDate; //Startdate of a discharge event is the "end date" in this sense
+                    resID = item.ResidentID;
+                    numbCount++;
 
-                    total += days;
-
-                    double avgDay = total /(double)numb;
-
-                    ViewBag.Avg = avgDay;
-                    
+                    foreach (var startItem in avgProgStay)
+                    {
+                        if (resID == startItem.ResidentID)
+                        {
+                            if (startItem.ProgramTypeID == 1 || startItem.ProgramTypeID == 2 || startItem.ProgramTypeID == 3)
+                            {
+                                startDate = startItem.StartDate;
+                                days = (endDate - startDate).TotalDays;
+                                total += days;
+                            }
+                        }
+                    }
                 }
-                
+
+                average = total / numbCount;
             }
-            
+
+
+            ViewBag.AvgStay = (int)average;
+
             return View();
         }
 
         public ActionResult Historic()
         {
-            var yearlyEvents = DB.ProgramEvents;
+            HistoricData dataModel = new HistoricData();
+
             
+
 
 
             return View();
@@ -205,51 +221,52 @@ namespace FIVESTARVC.Controllers
 
 
         public ActionResult DownloadData()
-            {
-                var residents = DB.Residents;
+        {
+            var residents = DB.Residents;
 
-                var residentProgramType = (from r in residents
-                                          join pgm in DB.ProgramEvents on r.ResidentID equals pgm.ResidentID
-                                      
-                                         select new
-                                         {
-                                             r.ResidentID,
-                                             r.FirstMidName,
-                                             r.LastName,
-                                             r.Birthdate,
-                                             r.ServiceBranch,
-                                             r.InVetCourt,
-                                             r.Note,
-                                             pgm.ProgramTypeID
-                                         }).GroupBy(r => r.ResidentID).ToList();
+            var residentProgramType = (from r in residents
+                                       join pgm in DB.ProgramEvents on r.ResidentID equals pgm.ResidentID
+
+                                       select new
+                                       {
+                                           r.ResidentID,
+                                           r.FirstMidName,
+                                           r.LastName,
+                                           r.Birthdate,
+                                           r.ServiceBranch,
+                                           r.InVetCourt,
+                                           r.Note,
+                                           pgm.ProgramTypeID
+                                       }).GroupBy(r => r.ResidentID).ToList();
 
 
 
             var myExport = new CsvExport();
 
-                foreach (var r in residentProgramType)
-                {
-                    myExport.AddRow();
-                    myExport["Last Name"] = r.First().LastName;
-                    myExport["First Name"] = r.First().FirstMidName;
-                    myExport["Birthdate"] = r.First().Birthdate;
-                    //myExport["Age"] = r.First().Age;
-                    myExport["Service Branch"] = r.First().ServiceBranch;
-                    myExport["Vet Court"] = r.First().InVetCourt;
-                    myExport["Notes"] = r.First().Note;
+            foreach (var r in residentProgramType)
+            {
+                myExport.AddRow();
+                myExport["Last Name"] = r.First().LastName;
+                myExport["First Name"] = r.First().FirstMidName;
+                myExport["Birthdate"] = r.First().Birthdate;
+                //myExport["Age"] = r.First().
+                myExport["Service Branch"] = r.First().ServiceBranch;
+                myExport["Vet Court"] = r.First().InVetCourt;
+                myExport["Notes"] = r.First().Note;
 
 
 
-                    var eventids = r.Select(i => i.ProgramTypeID).ToList();
+                var eventids = r.Select(i => i.ProgramTypeID).ToList();
 
                 /* These Event IDs have changed, and the order of the columns 
                  * may not be what is expected.
                  * See CenterInitializer.cs for the ProgramTypeID order. 
                  * - Frank Butler
                  */
-                foreach(var eid in eventids)
+                foreach (var eid in eventids)
                 {
-                    switch(eid) {
+                    switch (eid)
+                    {
                         case 1:
                             myExport["Emergency Shelter"] = "1";
                             break;
@@ -292,22 +309,22 @@ namespace FIVESTARVC.Controllers
                         default:
                             //do something
                             break;
-                        
-                    }   
+
+                    }
                 }
 
-                }
-
-                string filepath = Server.MapPath(Url.Content("~/Content/CenterReport.csv"));
-
-                myExport.ExportToFile(filepath);
-
-                string filename = "~\\Content\\CenterReport.csv";
-            
-                return File(filename,"text/csv", "HistoricData.csv");
             }
+
+            string filepath = Server.MapPath(Url.Content("~/Content/CenterReport.csv"));
+
+            myExport.ExportToFile(filepath);
+
+            string filename = "~\\Content\\CenterReport.csv";
+
+            return File(filename, "text/csv", "HistoricData.csv");
+        }
         //A very naughty method
-    
+
         //public bool checkEvent(Resident res, int pgmType)
         //{
         //    var pgmEventCheck = db.ProgramEvents;
