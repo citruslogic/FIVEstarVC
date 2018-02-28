@@ -14,12 +14,12 @@
     <div class="form-horizontal">
         <h4>Program Event</h4>
         <hr />
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.ValidationSummary(true, "")
         <div class="form-group">
             @Html.LabelFor(model => model.ResidentID, "Last Name", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.DropDownList("ResidentID", null, htmlAttributes: new { @class = "form-control" })
-                @Html.ValidationMessageFor(model => model.ResidentID, "", new { @class = "text-danger" })
+                @Html.ValidationMessageFor(model => model.ResidentID, "")
             </div>
         </div>
 
@@ -27,7 +27,7 @@
             @Html.LabelFor(model => model.ProgramTypeID, "Program Category", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.DropDownList("ProgramTypeID", null, htmlAttributes: new { @class = "form-control" })
-                @Html.ValidationMessageFor(model => model.ProgramTypeID, "", new { @class = "text-danger" })
+                @Html.ValidationMessageFor(model => model.ProgramTypeID, "")
             </div>
         </div>
 
@@ -39,7 +39,7 @@
                         <span class="input-group-text fa fa-calendar fa-fw" style="width:40px;"></span>
                     </div>
                     <input type="text" id="StartDate" name="StartDate" class="form-control" style="width: auto;" />
-                    @Html.ValidationMessageFor(model => model.StartDate, "", new { @class = "text-danger" })
+                    @Html.ValidationMessageFor(model => model.StartDate, "")
                 </div>
             </div>
         </div>
@@ -52,7 +52,7 @@
                         <span class="input-group-text fa fa-calendar fa-fw" style="width:40px;"></span>
                     </div>
                     <input type="text" id="EndDate" name="EndDate" class="form-control" style="width: auto;" />
-                    @Html.ValidationMessageFor(model => model.EndDate, "", new { @class = "text-danger" })
+                    @Html.ValidationMessageFor(model => model.EndDate, "")
                 </div>
             </div>
         </div>
@@ -65,7 +65,7 @@
             <div class="col-md-10">
                 <div class="checkbox">
                     @Html.EditorFor(model => model.Completed)
-                    @Html.ValidationMessageFor(model => model.Completed, "", new { @class = "text-danger" })
+                    @Html.ValidationMessageFor(model => model.Completed, "")
                 </div>
             </div>
         </div>

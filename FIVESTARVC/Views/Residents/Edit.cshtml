@@ -10,27 +10,26 @@
     @Html.AntiForgeryToken()
 
     <div class="form-horizontal">
-        <h4>Update @(Model.LastName)</h4>
-        <br />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         @Html.HiddenFor(model => model.ResidentID)
 
         <div class="row">
 
             <div class="col-sm-5 table-responsive">
+                <h2>Update @(Model.LastName)</h2>
                 <table class="table table-sm">
 
                     <tbody>
                         <tr>
 
                             <td class="col-form-label">
-                                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                @Html.ValidationSummary(true, "")
 
                                 @Html.LabelFor(model => model.LastName, htmlAttributes: new { @class = "control-label col-md-offset-3" })
                             </td>
                             <td class="col-auto">
                                 @Html.EditorFor(model => model.LastName, new { htmlAttributes = new { @class = "form-control" } })
-                                @Html.ValidationMessageFor(model => model.LastName, "", new { @class = "text-danger" })
+                                @Html.ValidationMessageFor(model => model.LastName, "")
                             </td>
 
                         </tr>
@@ -38,7 +37,7 @@
                             <td class="col-form-label">@Html.LabelFor(model => model.FirstMidName, htmlAttributes: new { @class = "control-label col-md-offset-3" })</td>
                             <td class="col-auto">
                                 @Html.EditorFor(model => model.FirstMidName, new { htmlAttributes = new { @class = "form-control" } })
-                                @Html.ValidationMessageFor(model => model.FirstMidName, "", new { @class = "text-danger" })
+                                @Html.ValidationMessageFor(model => model.FirstMidName, "")
                             </td>
                         </tr>
                         <tr>
@@ -49,8 +48,8 @@
                                         <span class="input-group-text fa fa-calendar fa-fw" style="width:40px;"></span>
                                     </div>
                                     @Html.EditorFor(model => model.Birthdate,
-                                        new { htmlAttributes = new { @class = "form-control" } })
-                                    @Html.ValidationMessageFor(model => model.Birthdate, "", new { @class = "text-danger" })
+                                 new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.Birthdate, "")
                                 </div>
                             </td>
                         </tr>
@@ -58,7 +57,7 @@
                             <td class="col-form-label"> @Html.LabelFor(model => model.ServiceBranch, htmlAttributes: new { @class = "control-label col-md-offset-3" })</td>
                             <td class="col-auto">
                                 @Html.EnumDropDownListFor(model => model.ServiceBranch, htmlAttributes: new { @class = "form-control" })
-                                @Html.ValidationMessageFor(model => model.ServiceBranch, "", new { @class = "text-danger" })
+                                @Html.ValidationMessageFor(model => model.ServiceBranch, "")
                             </td>
                         </tr>
                         <tr>
@@ -66,7 +65,7 @@
                             <td class="col-auto">
                                 @ViewBag.room
                             </td>
-                               @ViewBag.AlertMessage
+                            @ViewBag.AlertMessage
                         </tr>
                         <tr>
                             @{
@@ -85,7 +84,7 @@
                             <td class="col-form-label">@Html.Label("in Veteran's Court?", htmlAttributes: new { @class = "control-label col-sm-offset-10" })</td>
                             <td class="col-auto">
                                 @Html.EditorFor(model => model.InVetCourt)
-                                @Html.ValidationMessageFor(model => model.InVetCourt, "", new { @class = "text-danger" })
+                                @Html.ValidationMessageFor(model => model.InVetCourt, "")
                             </td>
                         </tr>
                         <tr>
@@ -95,20 +94,21 @@
                             <td>
                                 <div class="form-check" style="overflow-y: scroll">
                                     @{
-                                        List<FIVESTARVC.ViewModels.AssignedCampaignData> campaigns = ViewBag.Campaigns;
+                            List<FIVESTARVC.ViewModels.AssignedCampaignData> campaigns = ViewBag.Campaigns;
 
-                                        foreach (var campaign in campaigns)
-                                        {
-                          
-                                            @:
+                            foreach (var campaign in campaigns)
+                            {
 
-                                            <input type="checkbox"
-                                                   class="form-check-input"
-                                                   name="selectedCampaigns"
-                                                   value="@campaign.MilitaryCampaignID"
-                                                   @(Html.Raw(campaign.Assigned ? "checked=\"checked\"" : "")) />
-                                            @campaign.MilitaryCampaign @: <br />
-                                        }
+                                @:
+
+
+                                <input type="checkbox"
+                                       class="form-check-input"
+                                       name="selectedCampaigns"
+                                       value="@campaign.MilitaryCampaignID"
+                                       @(Html.Raw(campaign.Assigned ? "checked=\"checked\"" : "")) />
+                                @campaign.MilitaryCampaign @: <br />
+                }
 
                                     }
                                 </div>
@@ -118,7 +118,7 @@
                             <td class="col-form-label">@Html.LabelFor(model => model.Note, htmlAttributes: new { @class = "control-label col-md-offset-3" }) </td>
                             <td class="col-auto">
                                 @Html.TextAreaFor(model => model.Note, htmlAttributes: new { @class = "form-control" })
-                                @Html.ValidationMessageFor(model => model.Note, "", new { @class = "text-danger" })
+                                @Html.ValidationMessageFor(model => model.Note, "")
                             </td>
                         </tr>
 

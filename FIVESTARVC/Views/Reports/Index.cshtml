@@ -1,5 +1,6 @@
 ﻿@model FIVESTARVC.Models.Resident
 @using PagedList.Mvc;
+@using FIVESTARVC.Models;
 
 <link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
 
@@ -12,6 +13,7 @@
 <button class="btn btn-default" onclick="location.href='/Reports/Historic';"> Monthly Breakdown </button>
 <br>
 <br>
+<h4>Cumulative Residents: @Html.Raw(ViewBag.CumulativeCount)</h4>
 <h4>Current Residents: @Html.Raw(ViewBag.TotalCount)</h4>
 <h4>Total Graduated: @Html.Raw(ViewBag.Graduated)</h4>
 <br>
@@ -19,25 +21,19 @@
 <br>
 
 <br>
-<h3>Event Statistics</h3>
+<h3>Center Statistics</h3>
 <table class="table">
     <tr>
         <th style="font-weight: bold; color:dodgerblue; font-size: 110%">
             Metric
         </th>
         <th style="font-weight: bold; color:dodgerblue; font-size: 110%">
-            Total?
-        </th>
-        <th style="font-weight: bold; color:dodgerblue; font-size: 110%">
-            Cumulative
+            Cumulative Total
         </th>
     </tr>
     <tr>
         <td>
             Admitted
-        </td>
-        <td>
-            @Html.Raw(ViewBag.Admitted)
         </td>
         <td>
             @{
@@ -52,11 +48,8 @@
     </tr>
     <tr>
         <td>
-            
+
             Emergency Shelter
-        </td>
-        <td>
-            @Html.Raw(ViewBag.EmergencyShelter)
         </td>
         <td>
             @{
@@ -74,9 +67,6 @@
             Discharged
         </td>
         <td>
-            @Html.Raw(ViewBag.DischargeCount)
-        </td>
-        <td>
             @{
                 if (ViewBag.DischargeCount == null)
                 { <text>0</text> }
@@ -92,9 +82,6 @@
             Graduated
         </td>
         <td>
-            @Html.Raw(ViewBag.Graduated)
-        </td>
-        <td>
             @{
                 if (ViewBag.Graduated == null)
                 { <text>0</text> }
@@ -108,9 +95,6 @@
     <tr>
         <td>
             Graduation Percent
-        </td>
-        <td>
-            @Html.Raw(ViewBag.GraduatedPercent) %
         </td>
         <td>
             @{
@@ -129,9 +113,6 @@
             Vet Court
         </td>
         <td>
-            @Html.Raw(ViewBag.VeteransCourt)
-        </td>
-        <td>
             @{
                 if (ViewBag.VeteransCourt == null)
                 { <text>0</text> }
@@ -147,9 +128,6 @@
             P2I
         </td>
         <td>
-            @Html.Raw(ViewBag.P2I)
-        </td>
-        <td>
             @{
                 if (ViewBag.P2I == null)
                 { <text>0</text> }
@@ -160,124 +138,116 @@
             }
         </td>
     </tr>
+    <tr>
+        <td>Average Length of Stay</td>
+        <td>
+            @Html.Raw(ViewBag.AvgStay) Days
+        </td>
+    </tr>
 
 </table>
 
-    <h3>Military Service Statistics</h3>
-    <table class="table">
-        <tr>
-            <th style="font-weight: bold; color:dodgerblue; font-size: 110%">
-                Service Branch
-            </th>
-            <th style="font-weight: bold; color:dodgerblue; font-size: 110%">
-                Cumulative Residents
-            </th>
-            <th style="font-weight: bold; color:dodgerblue; font-size: 110%">
-                Current Residents
-            </th>
-        </tr>
-        <tr>
-            <td>
-                Navy
-            </td>
-            <td>
-                @Html.Raw(ViewBag.NavyCount)
-            </td>
-            <td>
-                @{ 
-                    if (ViewBag.CurrentNavy == null)
-                    { <text>0</text> }
-                    else
-                    {
-                        @Html.Raw(ViewBag.CurrentNavy)
-                    }
+<h3>Military Service Statistics</h3>
+<table class="table">
+    <tr>
+        <th style="font-weight: bold; color:dodgerblue; font-size: 110%">
+            Service Branch
+        </th>
+        <th style="font-weight: bold; color:dodgerblue; font-size: 110%">
+            Cumulative Residents
+        </th>
+        <th style="font-weight: bold; color:dodgerblue; font-size: 110%">
+            Current Residents
+        </th>
+    </tr>
+    <tr>
+        <td>
+            Navy
+        </td>
+        <td>
+            @Html.Raw(ViewBag.NavyCount)
+        </td>
+        <td>
+            @{
+                if (ViewBag.CurrentNavy == null)
+                { <text>0</text> }
+                else
+                {
+                    @Html.Raw(ViewBag.CurrentNavy)
                 }
-            </td>
-        </tr>
-        <tr>
-            <td>
-                Army
-            </td>
-            <td>
-                @Html.Raw(ViewBag.ArmyCount)
-            </td>
-            <td>
-                @{
-                    if (ViewBag.CurrentArmy == null)
-                    { <text>0</text> }
-                    else
-                    {
-                        @Html.Raw(ViewBag.CurrentArmy)
-                    }
+            }
+        </td>
+    </tr>
+    <tr>
+        <td>
+            Army
+        </td>
+        <td>
+            @Html.Raw(ViewBag.ArmyCount)
+        </td>
+        <td>
+            @{
+                if (ViewBag.CurrentArmy == null)
+                { <text>0</text> }
+                else
+                {
+                    @Html.Raw(ViewBag.CurrentArmy)
                 }
-            </td>
-        </tr>
-        <tr>
-            <td>
-                Marines
-            </td>
-            <td>
-                @Html.Raw(ViewBag.MarineCount)
-            </td>
-            <td>
-                @{
-                    if (ViewBag.CurrentMarine == null)
-                    { <text>0</text> }
-                    else
-                    {
-                        @Html.Raw(ViewBag.CurrentMarine)
-                    }
+            }
+        </td>
+    </tr>
+    <tr>
+        <td>
+            Marines
+        </td>
+        <td>
+            @Html.Raw(ViewBag.MarineCount)
+        </td>
+        <td>
+            @{
+                if (ViewBag.CurrentMarine == null)
+                { <text>0</text> }
+                else
+                {
+                    @Html.Raw(ViewBag.CurrentMarine)
                 }
-            </td>
-        </tr>
-        <tr>
-            <td>
-                Air Force
-            </td>
-            <td>
-                @Html.Raw(ViewBag.AirForceCount)
-            </td>
-            <td>
-                @{
-                    if (ViewBag.CurrentAF == null)
-                    { <text>0</text> }
-                    else
-                    {
-                        @Html.Raw(ViewBag.CurrentAF)
-                    }
+            }
+        </td>
+    </tr>
+    <tr>
+        <td>
+            Air Force
+        </td>
+        <td>
+            @Html.Raw(ViewBag.AirForceCount)
+        </td>
+        <td>
+            @{
+                if (ViewBag.CurrentAF == null)
+                { <text>0</text> }
+                else
+                {
+                    @Html.Raw(ViewBag.CurrentAF)
                 }
-            </td>
-        </tr>
-        <tr>
-            <td>
-                Coast Guard
-            </td>
-            <td>
-                @Html.Raw(ViewBag.CoastGuardCount)
-            </td>
-            <td>
-                @{
-                    if (ViewBag.CurrentCG == null)
-                    { <text>0</text> }
-                    else
-                    {
-                        @Html.Raw(ViewBag.CurrentCG)
-                    }
+            }
+        </td>
+    </tr>
+    <tr>
+        <td>
+            Coast Guard
+        </td>
+        <td>
+            @Html.Raw(ViewBag.CoastGuardCount)
+        </td>
+        <td>
+            @{
+                if (ViewBag.CurrentCG == null)
+                { <text>0</text> }
+                else
+                {
+                    @Html.Raw(ViewBag.CurrentCG)
                 }
-            </td>
-        </tr>
-        <tr>
-            <td class="col-form-label"> @Html.LabelFor(model => model.ProgramEvents, htmlAttributes: new { @class = "control-label col-md-offset-3" })</td>
-            <td class="col-auto">
-                @Html.Raw(ViewBag.Avg)
-            </td>
-            
-        </tr>
-        <tr>
-            <td class="col-form-label"> @Html.LabelFor(model => model.ProgramEvents, htmlAttributes: new { @class = "control-label col-md-offset-3" })</td>
-            <td class="col-auto">
-                @Html.Raw(ViewBag.Avg)
-            </td>
-            
-        </tr>
-    </table>
+            }
+        </td>
+    </tr>
+</table>

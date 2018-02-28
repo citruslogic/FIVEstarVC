@@ -31,5 +31,19 @@ namespace FIVESTARVC.Models
         public virtual Resident Resident { get; set; }
         public virtual ProgramType ProgramType { get; set; }
        
+        public String GetLongStartDate()
+        {
+            return StartDate.ToLongDateString();
+        }
+
+        public String GetLongEndDate()
+        {
+            if (EndDate.HasValue)
+            {
+                return EndDate.Value.ToLongDateString();
+            }
+
+            return null;
+        }
     }
 }

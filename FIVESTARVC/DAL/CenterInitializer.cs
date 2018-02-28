@@ -112,14 +112,14 @@ namespace FIVESTARVC.DAL
             var events = new List<ProgramEvent>
             {
                 //adding admission event for all residents, the admission doesn't "end."
-                new ProgramEvent { StartDate=DateTime.Today, EndDate=null, Completed=false, ResidentID=1, ProgramTypeID=2},
-                new ProgramEvent { StartDate=DateTime.Today, EndDate=null, Completed=false, ResidentID=2, ProgramTypeID=2},
-                new ProgramEvent { StartDate=DateTime.Today, EndDate=null, Completed=false, ResidentID=3, ProgramTypeID=2},
-                new ProgramEvent { StartDate=DateTime.Today, EndDate=null, Completed=false, ResidentID=4, ProgramTypeID=2},
-                new ProgramEvent { StartDate=DateTime.Today, EndDate=null, Completed=false, ResidentID=5, ProgramTypeID=2},
-                new ProgramEvent { StartDate=DateTime.Today, EndDate=null, Completed=false, ResidentID=6, ProgramTypeID=2},
+                new ProgramEvent { StartDate=new DateTime(2012,05,16), EndDate=null, Completed=false, ResidentID=1, ProgramTypeID=2},
+                new ProgramEvent { StartDate=new DateTime(2014,06,14), EndDate=null, Completed=false, ResidentID=2, ProgramTypeID=2},
+                new ProgramEvent { StartDate=new DateTime(2013,07,4), EndDate=null, Completed=false, ResidentID=3, ProgramTypeID=2},
+                new ProgramEvent { StartDate=new DateTime(2012,06,20), EndDate=null, Completed=false, ResidentID=4, ProgramTypeID=2},
+                new ProgramEvent { StartDate=new DateTime(2015,07,1), EndDate=null, Completed=false, ResidentID=5, ProgramTypeID=2},
+                new ProgramEvent { StartDate=new DateTime(2016,07,13), EndDate=null, Completed=false, ResidentID=6, ProgramTypeID=2},
+
                 //Other events
-                new ProgramEvent { StartDate=DateTime.Parse("2005-09-01"), EndDate=DateTime.Parse("2005-09-25"), Completed=true, ResidentID=1, ProgramTypeID=3},
                 new ProgramEvent { StartDate=DateTime.Parse("2005-04-02"), EndDate=DateTime.Parse("2006-06-05"), Completed=true, ResidentID=4, ProgramTypeID=10},
                 new ProgramEvent { StartDate=DateTime.Parse("2004-05-05"), EndDate=DateTime.Parse("2007-06-20"), Completed=true, ResidentID=5, ProgramTypeID=8},
                 new ProgramEvent { StartDate=DateTime.Parse("2003-03-02"), EndDate=DateTime.Parse("2007-07-12"), Completed=true, ResidentID=6, ProgramTypeID=8},

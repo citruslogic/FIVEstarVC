@@ -5,21 +5,25 @@
 @{
     ViewBag.Title = "Event Log";
 }
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
 
 <h2>Event Log</h2>
-
-<p style="padding-top: 1em;">
+<hr />
+<li class="btn-block">
     <input type="button" class="btn btn-success" value="New Event Entry" onclick="location.href='/ProgramEvents/Create';" />
-</p>
+</li>
+<br />
 @using (Html.BeginForm("Index", "ProgramEvents", FormMethod.Get))
 {
-    <p>
-        Find by name: <div class="form-group">
-            @Html.TextBox("searchString", ViewBag.CurrentFilter as string)
-            <input class="btn btn-sm btn-outline-dark" type="submit" value="Search" />
-        </div>
-    </p>
+    <div class="form-inline">
+
+        Find by name:&nbsp;
+
+        @Html.TextBox("searchString", ViewBag.CurrentFilter as string, htmlAttributes: new { @class = "form-control" })
+        &nbsp;<input class="btn btn-sm btn-outline-secondary" type="submit" value="Refine" />
+    </div>
 }
+<br />
 <table class="table table-striped">
     <tr>
         <th>
