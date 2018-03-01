@@ -48,7 +48,7 @@
                                         <span class="input-group-text fa fa-calendar fa-fw" style="width:40px;"></span>
                                     </div>
                                     @Html.EditorFor(model => model.Birthdate,
-                                 new { htmlAttributes = new { @class = "form-control" } })
+                  new { htmlAttributes = new { @class = "form-control" } })
                                     @Html.ValidationMessageFor(model => model.Birthdate, "")
                                 </div>
                             </td>
@@ -66,15 +66,17 @@
                                 @*Room selector*@
                                 @if (Model.IsCurrent())
                                 {
-                                  @Html.DropDownList("RoomNumber", null, htmlAttributes: new { @class = "form-control" })
-                                  @Html.ValidationMessageFor(model => model.RoomNumber, "")
-                                } else
-                                {
-                                    <text>Readmit to change.</text>
+                                    @Html.DropDownList("RoomNumber", null, htmlAttributes: new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.RoomNumber, "")
                                 }
+                                else
+                                {
+                                @Html.DropDownList("RoomNumber", null, htmlAttributes: new { @class = "form-control", @disabled = "disabled" })
+                                @Html.ValidationMessageFor(model => model.RoomNumber, "")
 
+                                }
                             </td>
-                           
+
                         </tr>
 
                         <tr>
@@ -91,33 +93,44 @@
                             <td>
                                 <div class="form-check" style="overflow-y: scroll">
                                     @{
-                            List<FIVESTARVC.ViewModels.AssignedCampaignData> campaigns = ViewBag.Campaigns;
+                    List<FIVESTARVC.ViewModels.AssignedCampaignData> campaigns = ViewBag.Campaigns;
 
-                            foreach (var campaign in campaigns)
-                            {
+                    foreach (var campaign in campaigns)
+                    {
 
-                                @:
+                        @:
 
 
-                                <input type="checkbox"
-                                       class="form-check-input"
-                                       name="selectedCampaigns"
-                                       value="@campaign.MilitaryCampaignID"
-                                       @(Html.Raw(campaign.Assigned ? "checked=\"checked\"" : "")) />
-                                @campaign.MilitaryCampaign @: <br />
-                }
+
+
+                        <input type="checkbox"
+                               class="form-check-input"
+                               name="selectedCampaigns"
+                               value="@campaign.MilitaryCampaignID"
+                               @(Html.Raw(campaign.Assigned ? "checked=\"checked\"" : "")) />
+                        @campaign.MilitaryCampaign @: <br />
+}
 
                                     }
                                 </div>
                             </td>
                         </tr>
+                        @if (!Model.IsCurrent())
+                        {
                         <tr>
-                            <td class="col-form-label">@Html.LabelFor(model => model.Note, htmlAttributes: new { @class = "control-label col-md-offset-3" }) </td>
+                            <td class="col-form-label">@Html.Label("Readmit?")</td>
                             <td class="col-auto">
-                                @Html.TextAreaFor(model => model.Note, htmlAttributes: new { @class = "form-control" })
-                                @Html.ValidationMessageFor(model => model.Note, "")
+                                @Html.CheckBox("Readmit", false)
                             </td>
                         </tr>
+                        }
+                    <tr>
+                        <td class="col-form-label">@Html.LabelFor(model => model.Note, htmlAttributes: new { @class = "control-label col-md-offset-3" }) </td>
+                        <td class="col-auto">
+                            @Html.TextAreaFor(model => model.Note, htmlAttributes: new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.Note, "")
+                        </td>
+                    </tr>
 
                     </tbody>
                 </table>
@@ -145,8 +158,8 @@
 
 
 @section Scripts {
-    @Scripts.Render("~/bundles/jqueryval");
-    @Scripts.Render("~/bundles/jqueryui");
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/jqueryui")
     <script type="text/javascript">
 
         if (!Modernizr.inputtypes.date) {
@@ -157,6 +170,17 @@
                     dateFormat: 'mm-dd-yy'
                 });
         }
+
+        /* Disable the room dropdown if we're not readmitting the resident. */
+        $(document).ready(function () {
+            $("#Readmit").click(function () {
+                if ($(this).is(":checked")) {
+                    $("#RoomNumber").prop("disabled", false);
+                } else {
+                    $("#RoomNumber").prop("disabled", true);
+                }
+            });
+        });
 
         $('.income').on("keyup", function () {
             var total = parseFloat(0.0);
@@ -170,6 +194,8 @@
             }
             
         });
+
+        
 
 
     </script>

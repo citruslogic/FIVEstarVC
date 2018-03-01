@@ -326,7 +326,7 @@ namespace FIVESTARVC.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost, ActionName("Edit")]
         [ValidateAntiForgeryToken]
-        public ActionResult EditPost(int? id, string[] selectedCampaigns, int? RoomNumber)
+        public ActionResult EditPost(int? id, string[] selectedCampaigns, int? RoomNumber, bool? Readmit)
         {
 
             if (id == null)
@@ -347,6 +347,18 @@ namespace FIVESTARVC.Controllers
 
                     UpdateResidentCampaigns(selectedCampaigns, residentToUpdate);
 
+                    if (Readmit.HasValue)
+                    {
+                        if (Readmit == true)
+                        {
+                            residentToUpdate.ProgramEvents.Add(new ProgramEvent
+                            {
+                                ProgramTypeID = 3,
+                                StartDate = DateTime.Now
+
+                            });
+                        }
+                    }
 
                     if (RoomNumber.HasValue)
                     {
