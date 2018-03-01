@@ -64,8 +64,15 @@
                             <td class="col-form-label"> @Html.LabelFor(model => model.RoomNumber, htmlAttributes: new { @class = "control-label col-md-offset-3" })</td>
                             <td class="col-auto">
                                 @*Room selector*@
-                                @Html.DropDownList("RoomNumber", null, htmlAttributes: new { @class = "form-control" })
-                                @Html.ValidationMessageFor(model => model.RoomNumber, "")
+                                @if (Model.IsCurrent())
+                                {
+                                  @Html.DropDownList("RoomNumber", null, htmlAttributes: new { @class = "form-control" })
+                                  @Html.ValidationMessageFor(model => model.RoomNumber, "")
+                                } else
+                                {
+                                    <text>Readmit to change.</text>
+                                }
+
                             </td>
                            
                         </tr>

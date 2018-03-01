@@ -427,6 +427,40 @@ namespace FIVESTARVC.Controllers
             }
         }
 
+        // GET: Residents/AddRoom
+        [HttpGet]
+        public ActionResult AddRoom()
+        {
+            Room NewRoom = new Room();
+
+            return PartialView(NewRoom);
+        }
+
+        // POST: Residents/AddRoom
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult AddRoom(Room model)
+        {
+
+            if (ModelState.IsValid)
+            {
+                db.Rooms.Add(model);
+                db.SaveChanges();
+                TempData["UserMessage"] = "A new room has been added.  ";
+
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                // Failed
+                ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
+            }
+
+
+            return PartialView(model);
+        }
+
+
         // GET: Residents/AddCampaign/5
         [HttpGet]
         public ActionResult AddCampaign()
