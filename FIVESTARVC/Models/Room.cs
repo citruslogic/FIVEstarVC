@@ -12,11 +12,10 @@ namespace FIVESTARVC.Models
    
     public class Room
     {
-        
-        public int RoomID { get; set; }
-
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
+        [Key]
         [Display(Name = "Room Number")]
-        public int RoomNum { get; set; }
+        public int RoomNumber { get; set; }
 
         [Display(Name = "Is Occupied")]
         public bool IsOccupied { get; set; }

@@ -61,23 +61,13 @@
                             </td>
                         </tr>
                         <tr>
-                            <td class="col-form-label"> @Html.LabelFor(model => model.RoomID, htmlAttributes: new { @class = "control-label col-md-offset-3" })</td>
+                            <td class="col-form-label"> @Html.LabelFor(model => model.RoomNumber, htmlAttributes: new { @class = "control-label col-md-offset-3" })</td>
                             <td class="col-auto">
-                                @ViewBag.room
+                                @*Room selector*@
+                                @Html.DropDownList("RoomNumber", null, htmlAttributes: new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.RoomNumber, "")
                             </td>
-                            @ViewBag.AlertMessage
-                        </tr>
-                        <tr>
-                            @{
-                                <td>
-                                    <label for="EditRoom">Move Resident To:</label>
-                                </td>
-                                <td>
-                                    <input type="text" name="moveTo" />
-                                </td>
-
-                            }
-
+                           
                         </tr>
 
                         <tr>
@@ -172,12 +162,6 @@
                 $('#Benefit_TotalBenefitAmount').val(total);
             }
             
-        });
-
-        $('.moveTo').on("onload", function () {
-            if (!ViewBag.AlertMessage == null) {
-                document.getElementById('moveTo') = ViewBag.AlertMessage;
-            }
         });
 
 

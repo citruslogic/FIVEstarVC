@@ -23,12 +23,12 @@ namespace FIVESTARVC.Controllers
 
             var residents =
                     (from resident in db.Residents
-                     join room in db.Rooms on resident.RoomID equals room.RoomID
+                     join room in db.Rooms on resident.RoomNumber equals room.RoomNumber
                      select new DashboardData
                      {
                          ResidentID = resident.ResidentID,
                          Fullname = resident.FirstMidName + " " + resident.LastName,
-                         RoomNumber = room.RoomNum
+                         RoomNumber = room.RoomNumber
 
                      }).OrderByDescending(r => r.ResidentID).Take(5);
 
