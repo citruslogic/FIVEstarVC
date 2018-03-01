@@ -58,7 +58,7 @@ namespace FIVESTARVC.Controllers
             switch (sortOrder)
             {
                 case "name_desc":
-                    residents = residents.OrderByDescending(s => s.LastName);
+                    residents = residents.OrderBy(s => s.LastName);
                     break;
                 case "ServiceBranch":
                     residents = residents.OrderBy(s => s.ServiceBranch);
@@ -67,7 +67,7 @@ namespace FIVESTARVC.Controllers
                     residents = residents.OrderByDescending(s => s.ServiceBranch);
                     break;
                 default:
-                    residents = residents.OrderByDescending(s => s.ResidentID);
+                    residents = residents.OrderByDescending(s => s.LastName);
                     break;
             }
 

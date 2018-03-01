@@ -3,17 +3,20 @@
     ViewBag.Title = "Dashboard";
 }
 
-<h2> Dashboard </h2>       
+<h2> Dashboard </h2>
 <p>Residents recently admitted into your center.</p>
-
+<p>
+    Total active residents: @Html.Raw(ViewBag.pop)
+</p>
+<div class="container">
 <div class="row">
 
 
 
         @foreach (var item in Model)
         {
-            <div class="col-md-2">
-                <div class="card col-md-12">
+            <div class="col-md-3" style="margin-top: 1em;">
+                <div class="card">
                     <div class="card-body">
                         <h5 class="card-title">@item.Fullname</h5>
                         <label>Room: </label> @item.RoomNumber<br />
@@ -26,5 +29,5 @@
 
 
 </div>
-
+    </div>
 <br />

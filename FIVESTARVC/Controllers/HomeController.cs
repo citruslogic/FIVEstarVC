@@ -32,7 +32,7 @@ namespace FIVESTARVC.Controllers
 
                      }).OrderByDescending(r => r.ResidentID).Take(5);
 
-
+            ViewBag.pop = db.Residents.ToList().Where(r => r.IsCurrent()).Count();
 
             return View(residents.ToList());
         }

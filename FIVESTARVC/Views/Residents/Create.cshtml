@@ -29,7 +29,7 @@
                             </td>
                             <td>
                                 @Html.EditorFor(model => model.LastName, new { htmlAttributes = new { @class = "form-control" } })
-                                @Html.ValidationMessageFor(model => model.LastName, "", new { @class = "text-danger" })
+                                @Html.ValidationMessageFor(model => model.LastName)
                             </td>
 
                         </tr>
@@ -37,7 +37,7 @@
                             <td class="col-form-label">@Html.LabelFor(model => model.FirstMidName, htmlAttributes: new { @class = "control-label" })</td>
                             <td>
                                 @Html.EditorFor(model => model.FirstMidName, new { htmlAttributes = new { @class = "form-control" } })
-                                @Html.ValidationMessageFor(model => model.FirstMidName, "", new { @class = "text-danger" })
+                                @Html.ValidationMessageFor(model => model.FirstMidName, "")
                             </td>
                         </tr>
                         <tr>
@@ -48,7 +48,7 @@
                                         <span class="input-group-text fa fa-calendar fa-fw" style="width:40px;"></span>
                                     </div>
                                     @Html.EditorFor(model => model.Birthdate)
-                                    @Html.ValidationMessageFor(model => model.Birthdate, "", new { @class = "text-danger" })
+                                    @Html.ValidationMessageFor(model => model.Birthdate, "")
                                 </div>
                             </td>
                         </tr>
@@ -57,7 +57,7 @@
                             <td class="col-form-label"> @Html.LabelFor(model => model.ServiceBranch, htmlAttributes: new { @class = "control-label" })</td>
                             <td>
                                 @Html.EnumDropDownListFor(model => model.ServiceBranch, htmlAttributes: new { @class = "form-control" })
-                                @Html.ValidationMessageFor(model => model.ServiceBranch, "", new { @class = "text-danger" })
+                                @Html.ValidationMessageFor(model => model.ServiceBranch, "")
                             </td>
                         </tr>
                         <tr>
@@ -110,7 +110,7 @@
                             <td class="col-form-label">@Html.LabelFor(model => model.Note, htmlAttributes: new { @class = "control-label col-md-offset-3" }) </td>
                             <td>
                                 @Html.TextAreaFor(model => model.Note, htmlAttributes: new { @class = "form-control" })
-                                @Html.ValidationMessageFor(model => model.Note, "", new { @class = "text-danger" })
+                                @Html.ValidationMessageFor(model => model.Note, "")
                             </td>
                         </tr>
                     </tbody>
@@ -136,8 +136,8 @@
 }
 
 @section Scripts {
-    @Scripts.Render("~/bundles/jqueryval");
-    @Scripts.Render("~/bundles/jqueryui");
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/jqueryui")
 
 <script type="text/javascript">
 
@@ -158,7 +158,8 @@
             });
 
             $('#TotalBenefitAmount').val(total);
-        });
+    });
+
         $('.DropDownClear').on("onload", function () {
             document.getElementById('RoomID').length = 0;
 
