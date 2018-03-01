@@ -168,8 +168,12 @@
                 total += parseFloat($(this).val() || 0);
             });
 
-            $('#Benefit_TotalBenefitAmount').val(total);
+            if (total.valueOf != NaN) {
+                $('#Benefit_TotalBenefitAmount').val(total);
+            }
+            
         });
+
         $('.moveTo').on("onload", function () {
             if (!ViewBag.AlertMessage == null) {
                 document.getElementById('moveTo') = ViewBag.AlertMessage;
