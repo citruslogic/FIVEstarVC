@@ -164,7 +164,7 @@
         @Html.PagedListPager(Model, page => Url.Action("Index", new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
 
         @section Scripts {
-            @Scripts.Render("~/bundles/jqueryval");
+            @Scripts.Render("~/bundles/jqueryval")
 
             <script type="text/javascript">
 
