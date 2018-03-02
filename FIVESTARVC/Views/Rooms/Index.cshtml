@@ -1,0 +1,60 @@
+﻿@model IEnumerable<FIVESTARVC.Models.Room>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>!!CAUTION!! This page for editing the ROOMS in the database.</h2>
+<br />
+<li class="btn-block">
+    <input type="button" class="btn btn-success" value="New Room" onclick="location.href='/Rooms/Create';" />
+    &nbsp;
+    
+</li>
+@*<div class="form-inline">
+
+    Find by name:&nbsp;
+
+    @Html.TextBox("searchString", ViewBag.CurrentFilter as string, htmlAttributes: new { @class = "form-control" })
+    &nbsp;<input class="btn btn-sm btn-outline-secondary" type="submit" value="Refine" />
+</div>*@
+
+
+<br />
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.RoomNum)
+        </th>
+        @*<th>
+            @Html.DisplayNameFor(model => model.IsOccupied)
+        </th>*@
+        <th>
+            @Html.DisplayNameFor(model => model.WingName)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.RoomNum)
+        </td>
+        @*<td>
+            @Html.DisplayFor(modelItem => item.IsOccupied)
+        </td>*@
+        <td>
+            @Html.DisplayFor(modelItem => item.WingName)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.RoomID }) |
+            @Html.ActionLink("Details", "Details", new { id=item.RoomID })
+
+            @*Commented out for security reasons.*@
+            @*|
+            @Html.ActionLink("Delete", "Delete", new { id=item.RoomID })*@
+        </td>
+    </tr>
+}
+
+</table>
