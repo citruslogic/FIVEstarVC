@@ -32,9 +32,15 @@
                 </tr>
                 <tr class="form-row">
                     <td class="col-form-label">
-                        @Html.LabelFor(model => model.RoomID, htmlAttributes: new { @class = "control-label font-weight-bold" })
+                        @Html.LabelFor(model => model.RoomNumber, htmlAttributes: new { @class = "control-label font-weight-bold" })
+                        @if (Model.RoomNumber.HasValue)
+                        {
+                            @Html.DisplayFor(model => model.RoomNumber)
+                        } else
+                        {
+                            <text>NA</text>
+                        }
 
-                        @ViewBag.room
                     </td>
 
                 </tr>

@@ -18,10 +18,6 @@ namespace FIVESTARVC.Controllers
     {
         private ResidentContext db = new ResidentContext();
 
-        public static List<Room> MyRoom = new List<Room>();
-
-
-
         // GET: Residents
         public ActionResult Index(string sortOrder, string currentFilter, string searchString, int? page)
         {
@@ -67,7 +63,7 @@ namespace FIVESTARVC.Controllers
                     residents = residents.OrderByDescending(s => s.ServiceBranch);
                     break;
                 default:
-                    residents = residents.OrderByDescending(s => s.LastName);
+                    residents = residents.OrderByDescending(s => s.ResidentID);
                     break;
             }
 
@@ -89,11 +85,11 @@ namespace FIVESTARVC.Controllers
                 .Include(i => i.Benefit)
                 .Where(r => r.ResidentID == id).Single();
 
-            var room = db.Rooms.Find(resident.RoomID);
+            var room = db.Rooms.Find(resident.RoomNumber);
 
-            if (resident.RoomID != null)
+            if (resident.RoomNumber != null)
             {
-                int roomNum = room.RoomNum;
+                int roomNum = room.RoomNumber;
 
                 ViewBag.room = roomNum;
             }
@@ -123,47 +119,12 @@ namespace FIVESTARVC.Controllers
         // GET: Residents/Create
         public ActionResult Create()
         {
-            ResidentIncomeModel Rooms = new ResidentIncomeModel();
 
             ViewBag.AdmissionType = new SelectList(db.ProgramTypes
                 .Where(t => t.ProgramTypeID <= 3), "ProgramTypeID", "ProgramDescription");
 
-            MyRoom.Clear();
-            Rooms.Rooms.Clear();
+            ViewBag.RoomNumber = new SelectList(db.Rooms.Where(rm => rm.IsOccupied == false), "RoomNumber", "RoomNumber");
 
-            //Query the database and store the rooms in roomToAssign
-            var roomToAssign = from y in db.Rooms
-                        .Where(y => y.IsOccupied == false)
-                               select y;
-            
-            //Itterate the array and add it to Room MyRoom
-            foreach (Room y in roomToAssign)
-            {
-                MyRoom.Add(y);
-
-            }
-
-            //Itterate again and take it from Room.MyRoom to 
-            //ResidentIncomeModel Rooms.Rooms
-            
-            foreach (var z in MyRoom)
-            {
-                if (z.WingName == "EastSouth")
-                {
-                    Rooms.Rooms.Add(z);
-                }
-
-                else if (z.WingName == "North")
-                {
-                    Rooms.Rooms.Add(z);
-                }
-
-                else
-                {
-                    Rooms.Rooms.Add(z);
-                }
-
-            }
             var allMilitaryCampaigns = db.MilitaryCampaigns;
             var viewModel = new List<AssignedCampaignData>();
 
@@ -180,7 +141,7 @@ namespace FIVESTARVC.Controllers
 
             ViewBag.Campaigns = viewModel;
 
-            return View(Rooms);
+            return View();
 
         }
 
@@ -191,38 +152,14 @@ namespace FIVESTARVC.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(ResidentIncomeModel residentIncomeModel, string[] selectedCampaigns, int AdmissionType)
+        public ActionResult Create(ResidentIncomeModel residentIncomeModel, string[] selectedCampaigns, 
+            int AdmissionType, int RoomNumber)
         {
             ViewBag.AdmissionType = new SelectList(db.ProgramTypes
                 .Where(t => t.ProgramTypeID <= 3), "ProgramTypeID", "ProgramDescription", AdmissionType);
 
-            //query rooms to retrieve the room object
-            var AddRooms = from y in db.Rooms
-                            .Where(y => y.RoomID == residentIncomeModel.RoomID)
-                           select y;
-
-
-            //explode the room object to get the items needed.
-            foreach (var item in AddRooms)
-            {
-
-                residentIncomeModel.RoomID = item.RoomID;
-                residentIncomeModel.RoomNum = item.RoomNum;
-                residentIncomeModel.IsOccupied = item.IsOccupied = true;
-
-            }
-
-            //Save the room in the room table
-
-            var roomToUpdate = db.Rooms.Find(residentIncomeModel.RoomID);
-
-            if (TryUpdateModel(roomToUpdate))
-            {
-                roomToUpdate.IsOccupied = residentIncomeModel.IsOccupied;
-
-                db.SaveChanges();
-            }
-
+            ViewBag.RoomNumber = new SelectList(db.Rooms.Where(rm => rm.IsOccupied == false), "RoomNumber", "RoomNumber");
+            
             var allMilitaryCampaigns = db.MilitaryCampaigns;
             var viewModel = new List<AssignedCampaignData>();
 
@@ -246,7 +183,7 @@ namespace FIVESTARVC.Controllers
                 Birthdate = residentIncomeModel.Birthdate,
                 ServiceBranch = residentIncomeModel.ServiceBranch,
                 InVetCourt = residentIncomeModel.InVetCourt,
-                RoomID = residentIncomeModel.RoomID,
+                RoomNumber = RoomNumber,
                 Note = residentIncomeModel.Note,
                 MilitaryCampaigns = new List<MilitaryCampaign>(),
                 ProgramEvents = new List<ProgramEvent>(),
@@ -268,6 +205,16 @@ namespace FIVESTARVC.Controllers
 
                     });
 
+                    Room room = db.Rooms.Find(resident.RoomNumber);
+
+                    if (room.IsOccupied == false)
+                    {
+                        room.IsOccupied = true;
+                    } else
+                    {
+                        // The room was occupied.
+                        ModelState.AddModelError("", "The room is already occupied. Try to select another room.");
+                    }
                     db.SaveChanges();
 
                 }
@@ -344,7 +291,7 @@ namespace FIVESTARVC.Controllers
         }
 
         // GET: Residents/Edit/5
-        public ActionResult Edit(int? id, string moveTo)
+        public ActionResult Edit(int? id)
         {
 
             if (id == null)
@@ -362,23 +309,12 @@ namespace FIVESTARVC.Controllers
             PopulateAssignedCampaignData(resident);
 
             
-            var roomToEdit = db.Rooms.Find(resident.RoomID);
-
-            if (resident.RoomID != null)
-            {
-                int roomToDisplay = roomToEdit.RoomNum;
-                ViewBag.room = roomToDisplay;
-            }
-             else
-            {
-                ViewBag.room = "No Room Assigned";
-            }
-
             if (resident == null)
             {
                 return HttpNotFound();
             }
 
+            ViewBag.RoomNumber = new SelectList(db.Rooms.Where(rm => rm.IsOccupied == false), "RoomNumber", "RoomNumber");
 
             return View(resident);
         }
@@ -390,8 +326,9 @@ namespace FIVESTARVC.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost, ActionName("Edit")]
         [ValidateAntiForgeryToken]
-        public ActionResult EditPost(int? id, string[] selectedCampaigns, string moveTo)
+        public ActionResult EditPost(int? id, string[] selectedCampaigns, int? RoomNumber, bool? Readmit)
         {
+
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -402,61 +339,6 @@ namespace FIVESTARVC.Controllers
                 .Where(c => c.ResidentID == id)
                 .Single();
 
-            var newRoom = Convert.ToInt32(moveTo);
-            
-
-            //Get all rooms//
-             var r = (from y in db.Rooms
-                    select y.RoomNum).ToList();
-
-
-            if (!r.Contains(newRoom))
-                {
-                //post back to the textbox//
-                //ViewBag.AlertMessage = "Invalid Room";
-                return RedirectToAction("Edit");
-
-                }
-
-
-            var changeRoom = from y in db.Rooms
-                            .Where(y => y.RoomNum == newRoom)
-                             select y;
-
-            //To get the variable out of the object, I had to use a viewbag//
-            foreach (var z in changeRoom)
-            {
-                ViewBag.room = z.RoomID;
-            }
-
-            int roomTo = ViewBag.room;
-
-            var roomLookUP = from v in db.Residents
-                             select v.RoomID;
-
-
-
-            //Check to see if room is already used//
-            if (roomLookUP.Contains(roomTo))
-            {
-                //ViewBag.AlertMessage = "Room Already Assigned, Please Select Another Room.";
-                return RedirectToAction("Edit");
-
-            }
-
-            var roomToChange = db.Rooms.Find(residentToUpdate.RoomID);
-
-            roomToChange.IsOccupied = false;
-                       
-
-            foreach (var z in changeRoom)
-            {
-               
-                z.IsOccupied = true;
-                residentToUpdate.RoomID = z.RoomID;
-
-            }
-
             if (TryUpdateModel(residentToUpdate, "",
                new string[] { "LastName", "FirstMidName", "Birthdate", "ServiceBranch", "Note", "InVetCourt", "Benefit", "MilitaryCampaigns", "TotalBenefitAmount" }))
             {
@@ -464,6 +346,32 @@ namespace FIVESTARVC.Controllers
                 {
 
                     UpdateResidentCampaigns(selectedCampaigns, residentToUpdate);
+
+                    if (Readmit.HasValue)
+                    {
+                        if (Readmit == true)
+                        {
+                            residentToUpdate.ProgramEvents.Add(new ProgramEvent
+                            {
+                                ProgramTypeID = 3,
+                                StartDate = DateTime.Now
+
+                            });
+                        }
+                    }
+
+                    if (RoomNumber.HasValue)
+                    {
+                        Room room = db.Rooms.Find(RoomNumber);
+
+                        if (residentToUpdate.RoomNumber != RoomNumber)
+                        {
+                        /* Resident is changing rooms */
+                        residentToUpdate.RoomNumber = RoomNumber;
+                        room.IsOccupied = true;
+                        }
+
+                    } 
                     db.SaveChanges();
 
                     TempData["UserMessage"] = residentToUpdate.LastName + " has been updated.  ";
@@ -477,7 +385,9 @@ namespace FIVESTARVC.Controllers
                 }
             }
 
+            ViewBag.Rooms = new SelectList(db.Rooms.Where(rm => rm.IsOccupied == false), "RoomNumber", "RoomNumber", residentToUpdate.RoomNumber);
             PopulateAssignedCampaignData(residentToUpdate);
+            
             return View(residentToUpdate);
         }
 
@@ -529,6 +439,40 @@ namespace FIVESTARVC.Controllers
             }
         }
 
+        // GET: Residents/AddRoom
+        [HttpGet]
+        public ActionResult AddRoom()
+        {
+            Room NewRoom = new Room();
+
+            return PartialView(NewRoom);
+        }
+
+        // POST: Residents/AddRoom
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult AddRoom(Room model)
+        {
+
+            if (ModelState.IsValid)
+            {
+                db.Rooms.Add(model);
+                db.SaveChanges();
+                TempData["UserMessage"] = "A new room has been added.  ";
+
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                // Failed
+                ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
+            }
+
+
+            return PartialView(model);
+        }
+
+
         // GET: Residents/AddCampaign/5
         [HttpGet]
         public ActionResult AddCampaign()
@@ -565,44 +509,6 @@ namespace FIVESTARVC.Controllers
         }
 
 
-        // GET: Residents/AddRoom/
-        [HttpGet]
-        public ActionResult AddRoom(bool? saveRoomError = false)
-        {
-
-            Room room = new Room();
-
-            return PartialView("_NewRoom", room);
-        }
-
-        // POST: Residents/AddRoom/
-        [HttpPost]
-        public ActionResult AddRoom(string RoomNum, string WingName, bool IsOccupied)
-        {
-            if (string.IsNullOrEmpty(RoomNum))
-            {
-                // don't add a blank campaign to the context.
-                ViewBag.ErrorMessage = "Cannot add a blank Room to the system.";
-
-                return RedirectToAction("AddRoom", new { saveRoomError = true });
-
-            }
-            
-            
-
-            db.Rooms.Add(new Room
-            {
-                RoomNum = Convert.ToInt32(RoomNum),
-                WingName = WingName,
-                IsOccupied = false
-            });
-
-            db.SaveChanges();
-            TempData["UserMessage"] = "A new Room has been added.  ";
-
-            return RedirectToAction("Index");
-        }
-
         // GET: Residents/Discharge/5
         [HttpGet]
        public ActionResult Discharge(int? id, bool? saveChangesError = false)
@@ -622,11 +528,11 @@ namespace FIVESTARVC.Controllers
                 .Where(r => r.ResidentID == id)
                 .Single();
 
-            Room roomToRelease = db.Rooms.Find(residentToDischarge.RoomID);
+            Room roomToRelease = db.Rooms.Find(residentToDischarge.RoomNumber);
 
             if (roomToRelease != null)
             {
-                ViewBag.releaseRoom = roomToRelease.RoomNum;
+                ViewBag.releaseRoom = roomToRelease.RoomNumber;
 
             }
             // The room may not be assigned. 
@@ -655,12 +561,12 @@ namespace FIVESTARVC.Controllers
                 .Where(r => r.ResidentID == id)
                 .Single();
 
-                Room roomToRelease = db.Rooms.Find(residentToDischarge.RoomID);
+                Room roomToRelease = db.Rooms.Find(residentToDischarge.RoomNumber);
                 
                 // It is possible for the resident to not be assigned a room at this point.
                 if (roomToRelease != null)
                 {
-                    residentToDischarge.RoomID = null;
+                    residentToDischarge.RoomNumber = null;
                     roomToRelease.IsOccupied = false;
                     
                 }   

@@ -88,7 +88,14 @@
 
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Room.RoomNum)
+                @if (item.RoomNumber.HasValue)
+                {
+                    @Html.DisplayFor(modelItem => item.RoomNumber)
+
+                } else
+                {
+                    <text>NA</text>
+                }
             </td>
             <td>
                 @{
@@ -144,7 +151,7 @@
 </div>
 
 <!-- Modal -->
-<div class="modal fade" id="AddCampaignModal" tabindex="-1" role="dialog" aria-labelledby="AddCampaignModal" aria-hidden="true">
+<div class="modal fade" id="AddModal" tabindex="-1" role="dialog" aria-labelledby="AddModal" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
         </div>
@@ -157,11 +164,11 @@
         @Html.PagedListPager(Model, page => Url.Action("Index", new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
 
         @section Scripts {
-            @Scripts.Render("~/bundles/jqueryval");
+            @Scripts.Render("~/bundles/jqueryval")
 
             <script type="text/javascript">
 
-                $('#AddCampaignModal').on('shown.bs.modal', function () {
+                $('#AddModal').on('shown.bs.modal', function () {
                     jQuery.validator.unobtrusive.parse($(this));
                 })
 
@@ -185,7 +192,7 @@
 
                     $.get('/Residents/AddCampaign/', function (data) {
                         $('.modal-content').html(data);
-                        $('#AddCampaignModal').modal('show');
+                        $('#AddModal').modal('show');
 
                     });
                 }
@@ -203,9 +210,8 @@
                 function newRoom() {
 
                     $.get('/Residents/AddRoom/', function (data) {
-                        $('.modal-body').html(data);
-                        $('.modal-title').html("Add New Room");
-                        $('#QuickEventModal').modal('show');
+                        $('.modal-content').html(data);
+                        $('#AddModal').modal('show');
                     });
                 }
 

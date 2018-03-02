@@ -13,26 +13,8 @@ namespace FIVESTARVC.ViewModels
     public class ResidentIncomeModel
     {
         //Room
-
-        public List<Room> Rooms = new List<Room>();
-        public int SelectedRoomID { get; set; }
-        public int RoomID { get; set; }
-
-        public bool IsOccupied {get; set;}
-        public int RoomNum { get; set; }
-
-
-        public IEnumerable<SelectListItem> RoomIEnum
-        {
-            get
-            {
-                return new SelectList(Rooms, "RoomID", "RoomNum");
-
-            }
-
-        }
-
-        
+        [Required]
+        public int RoomNumber { get; set; }
 
         // RESIDENT
         public int ResidentID { get; set; }

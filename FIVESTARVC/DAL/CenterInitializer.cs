@@ -16,50 +16,50 @@ namespace FIVESTARVC.DAL
             {
                 //Rooms on the E/S Wing//
 
-               new Room { RoomNum=102, IsOccupied = true, WingName = "EastSouth"},
-               new Room { RoomNum=103, IsOccupied = true, WingName = "EastSouth"},
-               new Room { RoomNum=105, IsOccupied = true, WingName = "EastSouth"},
-               new Room { RoomNum=106, IsOccupied = true, WingName = "EastSouth"},
-               new Room { RoomNum=107, IsOccupied = true, WingName = "EastSouth"},
-               new Room { RoomNum=108, IsOccupied = true, WingName = "EastSouth"},
-               new Room { RoomNum=109, IsOccupied = false, WingName = "EastSouth"},
-               new Room { RoomNum=110, IsOccupied = false, WingName = "EastSouth"},
-               new Room { RoomNum=112, IsOccupied = false, WingName = "EastSouth"},
-               new Room { RoomNum=114, IsOccupied = false, WingName = "EastSouth"},
-               new Room { RoomNum=115, IsOccupied = false, WingName = "EastSouth"},
-               new Room { RoomNum=116, IsOccupied = false, WingName = "EastSouth"},
-               new Room { RoomNum=117, IsOccupied = false, WingName = "EastSouth"},
-               new Room { RoomNum=118, IsOccupied = false, WingName = "EastSouth"},
-               new Room { RoomNum=119, IsOccupied = false, WingName = "EastSouth"},
-               new Room { RoomNum=120, IsOccupied = false, WingName = "EastSouth"},
-               new Room { RoomNum=121, IsOccupied = false, WingName = "EastSouth"},
-               new Room { RoomNum=122, IsOccupied = false, WingName = "EastSouth"},
-               new Room { RoomNum=123, IsOccupied = false, WingName = "EastSouth"},
-               new Room { RoomNum=124, IsOccupied = false, WingName = "EastSouth"},
-               new Room { RoomNum=125, IsOccupied = false, WingName = "EastSouth"},
-               new Room { RoomNum=126, IsOccupied = false, WingName = "EastSouth"},
+               new Room { RoomNumber=102, IsOccupied = true, WingName = "EastSouth"},
+               new Room { RoomNumber=103, IsOccupied = true, WingName = "EastSouth"},
+               new Room { RoomNumber=105, IsOccupied = true, WingName = "EastSouth"},
+               new Room { RoomNumber=106, IsOccupied = true, WingName = "EastSouth"},
+               new Room { RoomNumber=107, IsOccupied = true, WingName = "EastSouth"},
+               new Room { RoomNumber=108, IsOccupied = true, WingName = "EastSouth"},
+               new Room { RoomNumber=109, IsOccupied = false, WingName = "EastSouth"},
+               new Room { RoomNumber=110, IsOccupied = false, WingName = "EastSouth"},
+               new Room { RoomNumber=112, IsOccupied = false, WingName = "EastSouth"},
+               new Room { RoomNumber=114, IsOccupied = false, WingName = "EastSouth"},
+               new Room { RoomNumber=115, IsOccupied = false, WingName = "EastSouth"},
+               new Room { RoomNumber=116, IsOccupied = false, WingName = "EastSouth"},
+               new Room { RoomNumber=117, IsOccupied = false, WingName = "EastSouth"},
+               new Room { RoomNumber=118, IsOccupied = false, WingName = "EastSouth"},
+               new Room { RoomNumber=119, IsOccupied = false, WingName = "EastSouth"},
+               new Room { RoomNumber=120, IsOccupied = false, WingName = "EastSouth"},
+               new Room { RoomNumber=121, IsOccupied = false, WingName = "EastSouth"},
+               new Room { RoomNumber=122, IsOccupied = false, WingName = "EastSouth"},
+               new Room { RoomNumber=123, IsOccupied = false, WingName = "EastSouth"},
+               new Room { RoomNumber=124, IsOccupied = false, WingName = "EastSouth"},
+               new Room { RoomNumber=125, IsOccupied = false, WingName = "EastSouth"},
+               new Room { RoomNumber=126, IsOccupied = false, WingName = "EastSouth"},
 
                //Rooms on the West Wing//
 
-               new Room { RoomNum=202, IsOccupied = false, WingName = "West"},
-               new Room { RoomNum=203, IsOccupied = false, WingName = "West"},
-               new Room { RoomNum=204, IsOccupied = false, WingName = "West"},
-               new Room { RoomNum=205, IsOccupied = false, WingName = "West"},
-               new Room { RoomNum=206, IsOccupied = false, WingName = "West"},
-               new Room { RoomNum=207, IsOccupied = false, WingName = "West"},
-               new Room { RoomNum=208, IsOccupied = false, WingName = "West"},
-               new Room { RoomNum=209, IsOccupied = false, WingName = "West"},
+               new Room { RoomNumber=202, IsOccupied = false, WingName = "West"},
+               new Room { RoomNumber=203, IsOccupied = false, WingName = "West"},
+               new Room { RoomNumber=204, IsOccupied = false, WingName = "West"},
+               new Room { RoomNumber=205, IsOccupied = false, WingName = "West"},
+               new Room { RoomNumber=206, IsOccupied = false, WingName = "West"},
+               new Room { RoomNumber=207, IsOccupied = false, WingName = "West"},
+               new Room { RoomNumber=208, IsOccupied = false, WingName = "West"},
+               new Room { RoomNumber=209, IsOccupied = false, WingName = "West"},
 
                //Rooms on the North Wing//
 
-               new Room { RoomNum=301, IsOccupied = false, WingName = "North"},
-               new Room { RoomNum=303, IsOccupied = false, WingName = "North"},
-               new Room { RoomNum=304, IsOccupied = false, WingName = "North"},
-               new Room { RoomNum=305, IsOccupied = false, WingName = "North"},
-               new Room { RoomNum=306, IsOccupied = false, WingName = "North"},
-               new Room { RoomNum=307, IsOccupied = false, WingName = "North"},
-               new Room { RoomNum=308, IsOccupied = false, WingName = "North"},
-               new Room { RoomNum=310, IsOccupied = false, WingName = "North"},
+               new Room { RoomNumber=301, IsOccupied = false, WingName = "North"},
+               new Room { RoomNumber=303, IsOccupied = false, WingName = "North"},
+               new Room { RoomNumber=304, IsOccupied = false, WingName = "North"},
+               new Room { RoomNumber=305, IsOccupied = false, WingName = "North"},
+               new Room { RoomNumber=306, IsOccupied = false, WingName = "North"},
+               new Room { RoomNumber=307, IsOccupied = false, WingName = "North"},
+               new Room { RoomNumber=308, IsOccupied = false, WingName = "North"},
+               new Room { RoomNumber=310, IsOccupied = false, WingName = "North"},
 
             };
 
@@ -68,12 +68,12 @@ namespace FIVESTARVC.DAL
 
             var residents = new List<Resident>
             {
-                new Resident { FirstMidName="Carson", Birthdate=DateTime.Parse("3/4/1988"), LastName="Steven", RoomID = 1, ServiceBranch=ServiceType.ARMY },
-                new Resident { FirstMidName="Naomi", Birthdate=DateTime.Parse("6/12/1979"), LastName="Wildman", RoomID = 2, ServiceBranch=ServiceType.AIRFORCE },
-                new Resident { FirstMidName="Gary", Birthdate=DateTime.Parse("6/24/1980"), LastName="Noonan", RoomID = 3, ServiceBranch=ServiceType.NAVY },
-                new Resident { FirstMidName="Steve", Birthdate=DateTime.Parse("1/15/1981"), LastName="Nash", RoomID = 4, ServiceBranch=ServiceType.MARINES },
-                new Resident { FirstMidName="Neo", Birthdate=DateTime.Parse("3/8/1974"), LastName="Anderson", RoomID = 5, ServiceBranch=ServiceType.AIRFORCE },
-                new Resident { FirstMidName="Charlie", LastName="Brown", Birthdate=DateTime.Parse("12/23/1976"), RoomID = 6, ServiceBranch=ServiceType.NAVY }
+                new Resident { FirstMidName="Carson", Birthdate=DateTime.Parse("3/4/1988"), LastName="Steven", RoomNumber = 102, ServiceBranch=ServiceType.ARMY },
+                new Resident { FirstMidName="Naomi", Birthdate=DateTime.Parse("6/12/1979"), LastName="Wildman", RoomNumber = 103, ServiceBranch=ServiceType.AIRFORCE },
+                new Resident { FirstMidName="Gary", Birthdate=DateTime.Parse("6/24/1980"), LastName="Noonan", RoomNumber = 105, ServiceBranch=ServiceType.NAVY },
+                new Resident { FirstMidName="Steve", Birthdate=DateTime.Parse("1/15/1981"), LastName="Nash", RoomNumber = 106, ServiceBranch=ServiceType.MARINES },
+                new Resident { FirstMidName="Neo", Birthdate=DateTime.Parse("3/8/1974"), LastName="Anderson", RoomNumber = 107, ServiceBranch=ServiceType.AIRFORCE },
+                new Resident { FirstMidName="Charlie", LastName="Brown", Birthdate=DateTime.Parse("12/23/1976"), RoomNumber = 108, ServiceBranch=ServiceType.NAVY }
             };
 
             residents.ForEach(r => context.Residents.Add(r));

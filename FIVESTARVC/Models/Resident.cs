@@ -34,7 +34,7 @@ namespace FIVESTARVC.Models
         public Boolean InVetCourt { get; set; }
         [Display(Name = "Room Number")]
         [ForeignKey("Room")]
-        public int? RoomID { get; set; }
+        public int? RoomNumber { get; set; }
         [Display(Name = "Note")]
         [StringLength(150)]
         public string Note { get; set; }
