@@ -210,11 +210,8 @@ namespace FIVESTARVC.Controllers
                     if (room.IsOccupied == false)
                     {
                         room.IsOccupied = true;
-                    } else
-                    {
-                        // The room was occupied.
-                        ModelState.AddModelError("", "The room is already occupied. Try to select another room.");
                     }
+            
                     db.SaveChanges();
 
                 }
@@ -366,9 +363,10 @@ namespace FIVESTARVC.Controllers
 
                         if (residentToUpdate.RoomNumber != RoomNumber)
                         {
-                        /* Resident is changing rooms */
-                        residentToUpdate.RoomNumber = RoomNumber;
-                        room.IsOccupied = true;
+                            /* Resident is changing rooms */
+                            residentToUpdate.Room.IsOccupied = false;
+                            residentToUpdate.RoomNumber = RoomNumber;
+                            room.IsOccupied = true;
                         }
 
                     } 
