@@ -5,224 +5,229 @@
     ViewBag.Title = "Details";
 }
 
+<style>
+    .events table {
+        width: 100%;
+    }
 
+    .events thead, .events tbody, .events tr, .events td, .events th {
+        display: block;
+    }
+
+        .events tr:after {
+            content: ' ';
+            display: block;
+            visibility: hidden;
+            clear: both;
+        }
+
+        .events thead th {
+            height: 50px;
+            /*text-align: left;*/
+        }
+
+    .events tbody {
+        height: 120px;
+        overflow-y: auto;
+    }
+
+    .events thead {
+        /* fallback */
+    }
+
+
+        .events tbody td, .events thead th {
+            width: 19.2%;
+            float: left;
+        }
+</style>
 <h2>Details for @(Model.LastName)</h2>
 
 
-    <div class="row">
-        <div class="col-md-12">
-            <div class="col-md-7">
-                <table class="table-sm">
-                    <tr class="form-row">
-                        <td class="col-form-label">
-                            @Html.LabelFor(model => model.LastName, htmlAttributes: new { @class = "control-label font-weight-bold" })
-                        </td>
-                        <td class="col-form-label">
-                            @Html.DisplayFor(model => model.LastName)
-                        </td>
+<div class="row">
 
-                        <td class="col-form-label">
-                            @Html.LabelFor(model => model.FirstMidName, htmlAttributes: new { @class = "control-label font-weight-bold" })
-                        </td>
-                        <td class="col-form-label">
-                            @Html.DisplayFor(model => model.FirstMidName)
+    <div class="col-sm-5">
+        <div class="col-form-label">
+            @Html.Label("Full Name", htmlAttributes: new { @class = " font-weight-bold" })
+            @Html.DisplayFor(model => model.Fullname)
+        </div>
 
-                        </td>
-                    </tr>
-                    <tr class="form-row">
-                        <td class="col-form-label">
-                            @Html.LabelFor(model => model.RoomNumber, htmlAttributes: new { @class = "control-label font-weight-bold" })
-                            @if (Model.RoomNumber.HasValue)
-                            {
-                                @Html.DisplayFor(model => model.RoomNumber)
-                            }
-                            else
-                            {
-                                <text>NA</text>
-                            }
+        <div class="col-form-label">
+            @Html.LabelFor(model => model.RoomNumber, htmlAttributes: new { @class = "font-weight-bold" })
+            @if (Model.RoomNumber.HasValue)
+            {
+                @Html.DisplayFor(model => model.RoomNumber)
+            }
+            else
+            {
+                <text>NA</text>
+            }
 
-                        </td>
+        </div>
 
-                    </tr>
-                    <tr class="form-row">
-                        <td class="col-form-label">
-                            @Html.LabelFor(model => model.Birthdate, htmlAttributes: new { @class = "control-label font-weight-bold" })
-                        </td>
-                        <td class="col-form-label">
-                            @{
-                                if (Model.Birthdate == null)
-                                {
-                                    <text>No birthdate provided.</text>
-                                }
-                                else
-                                {
-                                    @(Model.Birthdate.Value.ToLongDateString())
+        <div class="col-form-label">
+            @Html.LabelFor(model => model.Birthdate, htmlAttributes: new { @class = "font-weight-bold" })
+            @{
+                if (Model.Birthdate == null)
+                {
+                    <text>No birthdate provided.</text>
+                }
+                else
+                {
+                    @(Model.Birthdate.Value.ToLongDateString())
 
-                                }
-                            }
-                        </td>
-                        <td class="col-form-label">
-                            @Html.Label("Age", htmlAttributes: new { @class = "control-label font-weight-bold" })
-                        </td>
-                        <td class="col-form-label">
-
-                            @if ((Model.Age) != 0)
-                            {
-                                @(Model.Age)
-                            }
-                            else
-                            {
-                                <text>Not available.</text>
-                            }
-                        </td>
-                    </tr>
-                    <tr class="form-row">
-                        <td class="col-form-label">
-                            @Html.Label("First Admitted", htmlAttributes: new { @class = "control-label font-weight-bold" })
-                        </td>
-                        <td class="col-form-label">
-                            @(ViewBag.DateFirstAdmitted)
-                        </td>
-
-                    </tr>
-
-
-                </table>
-            </div>
-
-            <div class="col-md-4 table-responsive">
-                <table class="table-sm">
-                    <tr class="form-row">
-                        <td>
-                            @Html.Label("Campaigns", htmlAttributes: new { @class = "control-label col-md-0 font-weight-bold" })
-
-                        </td>
-                        <td>
-                            @{
-                                bool campaignsExist = false;
-                                List<FIVESTARVC.ViewModels.AssignedCampaignData> campaigns = ViewBag.Campaigns;
-
-
-                                foreach (var campaign in campaigns)
-                                {
-
-
-                                    if (campaign.Assigned)
-                                    {
-                                        campaignsExist = true;
-                                        @campaign.MilitaryCampaign@:<br />
-                                    }
-
-                                }
-
-                                if (!campaignsExist)
-                                {
-                                    <text>No campaigns. </text>
-                                }
-
-                            }
-                        </td>
-                    </tr>
-                    <tr class="form-row">
-                        <td>@Html.LabelFor(model => model.InVetCourt, htmlAttributes: new { @class = "control-label col-md-0 font-weight-bold" })</td>
-                        <td>@(Model.InVetCourt ? "Yes" : "No")</td>
-                    </tr>
+                }
+            }
+        </div>
 
 
 
-                </table>
-            </div>
-            <div class="col-md-5" style="position: absolute;
-                                bottom: -100px; left: 500px;
-                                box-shadow: 0 0 30px black;
-">
-                <h5>Income </h5>
-                <table class="table table-sm table-striped">
-                    <thead>
-                        <tr>
-                            <th class="col-md-2">Type</th>
-                            <th class="col-md-2">Amount</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td class="col-form-label">
-                                @Html.LabelFor(model => model.Benefit.DisabilityPercentage, htmlAttributes: new { @class = "control-label col-md-offset-1" })
-                            </td>
-                            <td>
-                                @Html.DisplayFor(model => model.Benefit.DisabilityPercentage)
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="col-form-label">
-                                @Html.LabelFor(model => model.Benefit.SSI, htmlAttributes: new { @class = "control-label col-md-offset-1" })
-                            </td>
-                            <td>
-                                @Html.DisplayFor(model => model.Benefit.SSI)
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="col-form-label">
-                                @Html.LabelFor(model => model.Benefit.SSDI, htmlAttributes: new { @class = "control-label col-md-offset-1" })
-                            </td>
-                            <td>
-                                @Html.DisplayFor(model => model.Benefit.SSDI)
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="col-form-label">
-                                @Html.LabelFor(model => model.Benefit.FoodStamp, htmlAttributes: new { @class = "control-label col-md-offset-1" })
-                            </td>
-                            <td>
-                                @Html.DisplayFor(model => model.Benefit.FoodStamp)
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="col-form-label">
-                                @Html.LabelFor(model => model.Benefit.OtherDescription, htmlAttributes: new { @class = "control-label col-md-offset-1" })
-                            </td>
-                            <td>
-                                @Html.DisplayFor(model => model.Benefit.OtherDescription)
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="col-form-label">
-                                @Html.LabelFor(model => model.Benefit.Other, htmlAttributes: new { @class = "control-label col-md-offset-1" })
-                            </td>
-                            <td>
-                                @Html.DisplayFor(model => model.Benefit.Other)
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="col-form-label">
-                                @Html.LabelFor(model => model.Benefit.TotalBenefitAmount, htmlAttributes: new { @class = "control-label col-md-offset-1 " })
-                            </td>
-                            <td>
+        <div class="col-form-label">
+            @Html.Label("Age", htmlAttributes: new { @class = "font-weight-bold" })
 
-                                @Html.DisplayFor(model => model.Benefit.TotalBenefitAmount)
+            @if ((Model.Age) != 0)
+            {
+                @(Model.Age)
+            }
+            else
+            {
+                <text>Not available.</text>
+            }
+        </div>
+        <div class="col-form-label">
+            @Html.Label("First Admitted", htmlAttributes: new { @class = "font-weight-bold" })
+            @(ViewBag.DateFirstAdmitted)
 
-                            </td>
-                        </tr>
-                </table>
+        </div>
+
+        <div class="col-form-label">
+            @Html.Label("Campaigns", htmlAttributes: new { @class = "col-md-0 font-weight-bold" })
+            <br />
+            <div style="height: 74px; width: 200px; overflow-y: scroll;">
+                @{
+                    bool campaignsExist = false;
+                    List<FIVESTARVC.ViewModels.AssignedCampaignData> campaigns = ViewBag.Campaigns;
+
+
+
+                    foreach (var campaign in campaigns)
+                    {
+
+
+                        if (campaign.Assigned)
+                        {
+                            campaignsExist = true;
+                            @campaign.MilitaryCampaign
+                            <br />
+                        }
+
+                    }
+
+                    if (!campaignsExist)
+                    {
+                        <text>No campaigns. </text>
+                    }
+
+                }
             </div>
         </div>
+        <div class="form-row">
+            @Html.LabelFor(model => model.InVetCourt, htmlAttributes: new { @class = "control-label col-md-0 font-weight-bold" })
+            @(Model.InVetCourt ? "Yes" : "No")
+        </div>
+
     </div>
+    <div class="col-sm-5 offset-2" style="box-shadow: 0 0 30px black;">
+        <h5>Income </h5>
+        <table class="table table-sm table-striped">
+            <thead>
+                <tr>
+                    <th class="col-md-2">Type</th>
+                    <th class="col-md-2">Amount</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="col-form-label">
+                        @Html.LabelFor(model => model.Benefit.DisabilityPercentage, htmlAttributes: new { @class = "control-label col-md-offset-1" })
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => model.Benefit.DisabilityPercentage)
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-form-label">
+                        @Html.LabelFor(model => model.Benefit.SSI, htmlAttributes: new { @class = "control-label col-md-offset-1" })
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => model.Benefit.SSI)
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-form-label">
+                        @Html.LabelFor(model => model.Benefit.SSDI, htmlAttributes: new { @class = "control-label col-md-offset-1" })
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => model.Benefit.SSDI)
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-form-label">
+                        @Html.LabelFor(model => model.Benefit.FoodStamp, htmlAttributes: new { @class = "control-label col-md-offset-1" })
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => model.Benefit.FoodStamp)
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-form-label">
+                        @Html.LabelFor(model => model.Benefit.OtherDescription, htmlAttributes: new { @class = "control-label col-md-offset-1" })
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => model.Benefit.OtherDescription)
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-form-label">
+                        @Html.LabelFor(model => model.Benefit.Other, htmlAttributes: new { @class = "control-label col-md-offset-1" })
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => model.Benefit.Other)
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-form-label">
+                        @Html.LabelFor(model => model.Benefit.TotalBenefitAmount, htmlAttributes: new { @class = "control-label col-md-offset-1 " })
+                    </td>
+                    <td>
+
+                        @Html.DisplayFor(model => model.Benefit.TotalBenefitAmount)
+
+                    </td>
+                </tr>
+        </table>
+    </div>
+
+</div>
+
 
 <br />
 
+<h2>Events</h2>
 
-<div style="margin-top: 80px; height: 200px; overflow-y: scroll">
-    <h2>Events</h2>
-    <table class="table table-striped">
-        <tr class="thead-dark">
-            <th>Program Name</th>
+<table class="events table table-sm table-striped" style="width: 75%">
+    <thead>
+        <tr>
+            <th style="width: 15em;">Program Name</th>
             <th>Start Date</th>
             <th>End Date</th>
         </tr>
+    </thead>
+    <tbody>
         @foreach (var item in Model.ProgramEvents)
         {
             <tr>
-                <td>
+                <td style="width: 15em;">
                     @Html.DisplayFor(modelItem => item.ProgramType.ProgramDescription)
                 </td>
                 <td>
@@ -237,12 +242,12 @@
                 </td>
             </tr>
         }
-    </table>
-</div>
+    </tbody>
+</table>
 
 
 
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.ResidentID }) |
-    @Html.ActionLink("Back to List", "Index")
+    @Html.ActionLink("Edit", "Edit", new { id = Model.ResidentID }, htmlAttributes: new { @class = "btn btn-secondary" })
+    @Html.ActionLink("Back to List", "Index", null, htmlAttributes: new { @class = "btn btn-primary" })
 </p>

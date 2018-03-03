@@ -125,14 +125,14 @@
 
 
     <br />
-    <div class="form-group form-inline">
-        <div class="col-md-offset-1 col-md-2">
-            <input type="submit" value="Admit" class="btn btn-dark" />
-        </div>
-        <div>
-            @Html.ActionLink("Back to List", "Index")
-        </div>
-    </div>
+    <p>
+
+        <input type="submit" value="Admit" class="btn btn-primary" />
+
+        @Html.ActionLink("Back to List", "Index", null, htmlAttributes: new { @class = "btn btn-secondary" })
+
+    </p>
+           
 
 }
 
