@@ -148,14 +148,14 @@ else
 
 
 
-        <div class="form-group form-inline">
-            <div class="col-md-offset-1 col-md-2">
-                <input type="submit" value="Update" class="btn btn-dark" />
-            </div>
-            <div>
-                @Html.ActionLink("Back to List", "Index")
-            </div>
-        </div>
+        
+        
+        <p>
+            <input type="submit" value="Update" class="btn btn-secondary" />
+            @Html.ActionLink("Back to List", "Index", null, htmlAttributes: new { @class = "btn btn-primary" })
+        </p>      
+                  
+        
     </div>
 }
 
