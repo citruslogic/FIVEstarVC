@@ -5,6 +5,9 @@
 
 
 <link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+@*Required for the Bootstrap dropdown.*@
+<script type="text/javascript" src="~/Scripts/umd/popper.js"></script>
+
 <style>
     .modal-content {
         width: 600px !important;
@@ -26,25 +29,31 @@
 
 <h2>Residents Listing</h2>
 <hr />
-<li class="btn-block">
-    <input type="button" class="btn btn-success" value="New Resident" onclick="location.href='/Residents/Create';" />
-    &nbsp;
-    <input type="button" class="btn btn-secondary" value="Add Campaign" onclick="addCampaign()" />
-    &nbsp;
-    <input type="button" class="btn btn-secondary" value="New Room" onclick="newRoom()" />
 
-</li>
+@*<input type="button" class="btn btn-success" value="New Resident" onclick="location.href='/Residents/Create';" />*@
+
+<div class="btn-group" style="margin-bottom: 0.5em;">
+    <button type="button" class="btn btn-success" onclick="location.href = '/Residents/Create';">Admit Resident</button>
+    <button type="button" class="btn btn-success dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <span class="sr-only">Toggle Dropdown</span>
+    </button>
+    <div class="dropdown-menu">
+        <a class="dropdown-item" href="#" onclick="addCampaign()">Add Campaign</a>
+        <a class="dropdown-item" href="#" onclick="newRoom()">Add Room</a>
+
+    </div>
+</div>
 <br />
 @using (Html.BeginForm("Index", "Residents", FormMethod.Get))
 {
     <div class="form-inline">
-        
-            Find by name:&nbsp;
-        
-         @Html.TextBox("searchString", ViewBag.CurrentFilter as string, htmlAttributes: new { @class = "form-control" })
+
+        Find by name:&nbsp;
+
+        @Html.TextBox("searchString", ViewBag.CurrentFilter as string, htmlAttributes: new { @class = "form-control" })
         &nbsp;<input class="btn btn-sm btn-outline-secondary" type="submit" value="Refine" />
     </div>
- 
+
 }
 <br />
 <table class="table table-striped">
@@ -92,7 +101,8 @@
                 {
                     @Html.DisplayFor(modelItem => item.RoomNumber)
 
-                } else
+                }
+                else
                 {
                     <text>NA</text>
                 }
@@ -123,6 +133,18 @@
 
                     @:<input type="button" value="Discharge" class="modal-link btn btn-sm btn-danger"
                               @: data-toggle="modal" data-target="#QuickEventModal" onclick="showDischargeDialog(@item.ResidentID)" />
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -209,7 +231,7 @@
 
                 function newRoom() {
 
-                    $.get('/Residents/AddRoom/', function (data) {
+                    $.get('/Rooms/AddRoom/', function (data) {
                         $('.modal-content').html(data);
                         $('#AddModal').modal('show');
                     });

@@ -19,7 +19,7 @@
 
         <div class="row">
 
-            <div class="col-sm-5 table-responsive">
+            <div class="col-sm-6 table-responsive">
                 <table class="table table-sm">
 
                     <tbody>
@@ -29,62 +29,66 @@
 
                                 @Html.LabelFor(model => model.LastName, htmlAttributes: new { @class = "control-label col-md-offset-3" })
                             </td>
-                            <td class="col-auto">
+                            <td>
                                 @(Model.LastName)
                             </td>
 
                         </tr>
                         <tr>
                             <td class="col-form-label">@Html.LabelFor(model => model.FirstMidName, htmlAttributes: new { @class = "control-label col-md-offset-3" })</td>
-                            <td class="col-auto">
+                            <td>
                                 @(Model.FirstMidName)
                             </td>
                         </tr>
                         <tr>
                             <td class="col-form-label">@Html.LabelFor(model => model.Birthdate, htmlAttributes: new { @class = "control-label col-md-offset-3" })</td>
-                            <td class="col-auto">
-                                @(Model.Birthdate)
+                            <td>
+                                @(Model.Birthdate.Value.ToLongDateString())
                             </td>
                         </tr>
                         <tr>
                             <td class="col-form-label"> @Html.LabelFor(model => model.ServiceBranch, htmlAttributes: new { @class = "control-label col-md-offset-3" })</td>
-                            <td class="col-auto">
+                            <td>
                                 @{
-                            var serviceDescription = FSEnumHelper.GetDescription(Model.ServiceBranch);
+                                    var serviceDescription = FSEnumHelper.GetDescription(Model.ServiceBranch);
 
 
-                            @Html.DisplayFor(modelItem => serviceDescription)
+                                    @Html.DisplayFor(modelItem => serviceDescription)
                                 }
                             </td>
                         </tr>
                         <tr>
                             <td class="col-form-label"> @Html.LabelFor(model => model.RoomNumber, htmlAttributes: new { @class = "control-label col-md-offset-3" })</td>
-                            <td class="col-auto">
+                            <td>
                                 @ViewBag.releaseRoom
                             </td>
                         </tr>
-                        
+
 
                     </tbody>
                 </table>
-            </div>
 
-            <div class="form-group col-md-12">
-                @Html.Label("Discharge Reason", htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-6">
-                    @Html.DropDownList("ProgramTypeID", null, htmlAttributes: new { @class = "form-control" })
-                    @Html.ValidationMessageFor(model => model.ProgramEvents, "")
-               </div>
-                @Html.LabelFor(model => model.Note, htmlAttributes: new { @class = "control-label col-md-offset-3" })
-                <div class="col-md-6">
-                    @Html.TextAreaFor(model => model.Note, htmlAttributes: new { @class = "form-control" })
-                    @Html.ValidationMessageFor(model => model.Note, "")
+
+
+                <div class="form-group">
+                    @Html.Label("Discharge Reason", htmlAttributes: new { @class = "control-label" })
+                    <div>
+                        @Html.DropDownList("ProgramTypeID", null, htmlAttributes: new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.ProgramEvents, "")
+                    </div>
+                    @Html.LabelFor(model => model.Note, htmlAttributes: new { @class = "control-label" })
+                    <div>
+                        @Html.TextAreaFor(model => model.Note, htmlAttributes: new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Note, "")
+                    </div>
                 </div>
             </div>
-             
-       
-               
-            
+
+
+
+
+
+
 
         </div>
 
@@ -93,14 +97,15 @@
 
     <div class="form-group form-inline">
         <div class="col-md-2">
-        <button type="button" class="btn btn-default"
-                data-dismiss="modal">
-            Cancel
-        </button></div>
+            <button type="button" class="btn btn-default"
+                    data-dismiss="modal">
+                Cancel
+            </button>
+        </div>
         <div class="col-md-2">
             <input type="submit" value="Discharge" class="btn btn-danger" />
         </div>
-        
+
     </div>
 
 
@@ -112,11 +117,11 @@
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
     <script type="text/javascript">
-    $(function () {
-        $('#submit-btn').click(function () {
-            $('#modal-container').modal('hide');
+        $(function () {
+            $('#submit-btn').click(function () {
+                $('#modal-container').modal('hide');
+            });
         });
-    });
     </script>
 
 }

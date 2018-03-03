@@ -4,13 +4,11 @@ using System.Data;
 using System.Data.Entity;
 using System.Linq;
 using System.Net;
-using System.Web;
 using System.Web.Mvc;
 using FIVESTARVC.DAL;
 using FIVESTARVC.Models;
 using PagedList;
 using FIVESTARVC.ViewModels;
-using System.Data.Entity.Validation;
 
 namespace FIVESTARVC.Controllers
 {
@@ -363,8 +361,12 @@ namespace FIVESTARVC.Controllers
 
                         if (residentToUpdate.RoomNumber != RoomNumber)
                         {
-                            /* Resident is changing rooms */
-                            residentToUpdate.Room.IsOccupied = false;
+                            /* Resident is changing rooms, if they have one */
+                            if (residentToUpdate.Room != null)
+                            {
+                                residentToUpdate.Room.IsOccupied = false;
+                            }
+                            
                             residentToUpdate.RoomNumber = RoomNumber;
                             room.IsOccupied = true;
                         }
@@ -437,38 +439,6 @@ namespace FIVESTARVC.Controllers
             }
         }
 
-        // GET: Residents/AddRoom
-        [HttpGet]
-        public ActionResult AddRoom()
-        {
-            Room NewRoom = new Room();
-
-            return PartialView(NewRoom);
-        }
-
-        // POST: Residents/AddRoom
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult AddRoom(Room model)
-        {
-
-            if (ModelState.IsValid)
-            {
-                db.Rooms.Add(model);
-                db.SaveChanges();
-                TempData["UserMessage"] = "A new room has been added.  ";
-
-                return RedirectToAction("Index");
-            }
-            else
-            {
-                // Failed
-                ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
-            }
-
-
-            return PartialView(model);
-        }
 
 
         // GET: Residents/AddCampaign/5

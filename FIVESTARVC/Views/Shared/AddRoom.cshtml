@@ -5,14 +5,14 @@
 
     AjaxOptions options = new AjaxOptions();
     options.HttpMethod = "POST";
-    options.Url = Url.Action("AddRoom", "Residents");
+    options.Url = Url.Action("AddRoom", "Rooms");
     options.UpdateTargetId = "modalFormRoom";
     options.InsertionMode = InsertionMode.Replace;
 }
 
 
 
-@using (Ajax.BeginForm("AddRoom", "Residents", options, new { @class = "form-horizontal", role = "form" }))
+@using (Ajax.BeginForm("AddRoom", "Rooms", options, new { @class = "form-horizontal", role = "form" }))
 {
 <div id="modalFormRoom">
     <div class="modal-header">

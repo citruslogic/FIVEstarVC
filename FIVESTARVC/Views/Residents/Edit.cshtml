@@ -40,6 +40,15 @@
                                 @Html.ValidationMessageFor(model => model.FirstMidName, "")
                             </td>
                         </tr>
+                        @if (!Model.IsCurrent())
+                        {
+                        <tr>
+                            <td class="col-form-label">@Html.Label("Readmit?")</td>
+                            <td class="col-auto">
+                            @Html.CheckBox("Readmit", false)
+                            </td>
+                        </tr>
+                        }
                         <tr>
                             <td class="col-form-label">@Html.LabelFor(model => model.Birthdate, htmlAttributes: new { @class = "control-label col-md-offset-3" })</td>
                             <td class="col-auto">
@@ -48,7 +57,7 @@
                                         <span class="input-group-text fa fa-calendar fa-fw" style="width:40px;"></span>
                                     </div>
                                     @Html.EditorFor(model => model.Birthdate,
-                  new { htmlAttributes = new { @class = "form-control" } })
+                         new { htmlAttributes = new { @class = "form-control" } })
                                     @Html.ValidationMessageFor(model => model.Birthdate, "")
                                 </div>
                             </td>
@@ -65,16 +74,15 @@
                             <td class="col-auto">
                                 @*Room selector*@
                                 @if (Model.IsCurrent())
-                                {
-                                    @Html.DropDownList("RoomNumber", null, htmlAttributes: new { @class = "form-control" })
-                                    @Html.ValidationMessageFor(model => model.RoomNumber, "")
-                                }
-                                else
-                                {
-                                @Html.DropDownList("RoomNumber", null, htmlAttributes: new { @class = "form-control", @disabled = "disabled" })
-                                @Html.ValidationMessageFor(model => model.RoomNumber, "")
-
-                                }
+            {
+                    @Html.DropDownList("RoomNumber", null, htmlAttributes: new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.RoomNumber, "")
+}
+else
+{
+                    @Html.DropDownList("RoomNumber", null, htmlAttributes: new { @class = "form-control", @disabled = "disabled" })
+                    @Html.ValidationMessageFor(model => model.RoomNumber, "")
+}
                             </td>
 
                         </tr>
@@ -103,6 +111,10 @@
 
 
 
+
+
+
+
                         <input type="checkbox"
                                class="form-check-input"
                                name="selectedCampaigns"
@@ -115,22 +127,14 @@
                                 </div>
                             </td>
                         </tr>
-                        @if (!Model.IsCurrent())
-                        {
+
                         <tr>
-                            <td class="col-form-label">@Html.Label("Readmit?")</td>
+                            <td class="col-form-label">@Html.LabelFor(model => model.Note, htmlAttributes: new { @class = "control-label col-md-offset-3" }) </td>
                             <td class="col-auto">
-                                @Html.CheckBox("Readmit", false)
+                                @Html.TextAreaFor(model => model.Note, htmlAttributes: new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.Note, "")
                             </td>
                         </tr>
-                        }
-                    <tr>
-                        <td class="col-form-label">@Html.LabelFor(model => model.Note, htmlAttributes: new { @class = "control-label col-md-offset-3" }) </td>
-                        <td class="col-auto">
-                            @Html.TextAreaFor(model => model.Note, htmlAttributes: new { @class = "form-control" })
-                            @Html.ValidationMessageFor(model => model.Note, "")
-                        </td>
-                    </tr>
 
                     </tbody>
                 </table>

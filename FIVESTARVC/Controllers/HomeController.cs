@@ -33,6 +33,7 @@ namespace FIVESTARVC.Controllers
                      }).OrderByDescending(r => r.ResidentID).Take(5);
 
             ViewBag.pop = db.Residents.ToList().Where(r => r.IsCurrent()).Count();
+            ViewBag.roomCap = db.Rooms.Where(rm => rm.IsOccupied == false).Count() + " / " + db.Rooms.Count();
 
             return View(residents.ToList());
         }

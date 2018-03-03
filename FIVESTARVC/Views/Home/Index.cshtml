@@ -4,12 +4,16 @@
 }
 
 <h2> Dashboard </h2>
-<p>Residents recently admitted into your center.</p>
 <p>
     Total active residents: @Html.Raw(ViewBag.pop)
 </p>
+<p>
+    Room availability: @Html.Raw(ViewBag.roomCap)
+</p>        
+<p>Residents recently admitted into your center.</p>
+
 <div class="container">
-<div class="row">
+    <div class="row">
 
 
 
@@ -28,6 +32,6 @@
 
 
 
-</div>
     </div>
+</div>
 <br />
