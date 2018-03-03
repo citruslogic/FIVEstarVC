@@ -9,7 +9,7 @@ using FIVESTARVC.Models;
 using FIVESTARVC.ViewModels;
 using Jitbit.Utils;
 using DelegateDecompiler;
-
+using System.Web.Helpers;
 
 namespace FIVESTARVC.Controllers
 {
@@ -20,6 +20,9 @@ namespace FIVESTARVC.Controllers
         // GET: Reports
         public ActionResult Index()
         {
+
+           
+
             //Variables used in counting current residents
             int nvyCount = 0;
             int armyCount = 0;
@@ -323,25 +326,27 @@ namespace FIVESTARVC.Controllers
 
             return File(filename, "text/csv", "HistoricData.csv");
         }
-        //A very naughty method
+       
 
-        //public bool checkEvent(Resident res, int pgmType)
-        //{
-        //    var pgmEventCheck = db.ProgramEvents;
+        public ActionResult RenderCampaignGraph()
+        {
+            var BarChartData = from mc in DB.MilitaryCampaigns
+                               select new
+                               {
+                                   MilitaryCampaign = mc.CampaignName,
+                                   ResidentCount = mc.Residents.Count()
+                               };
 
-        //    foreach (var ProgramEvent in pgmEventCheck)
-        //    {
-        //        if (ProgramEvent.ResidentID == res.ResidentID)
-        //        {
+            var CampaignChart = new Chart(width: 600, height: 400)
+                .AddTitle("Campaign Participants")
+                .AddSeries(chartType: "bar", 
+                            legend: "Campaign",
+                            xValue: BarChartData.Select(cn => cn.MilitaryCampaign).ToArray(),
+                            yValues: BarChartData.Select(c => c.ResidentCount).ToArray())
+                            .Write();
 
-        //            if (ProgramEvent.ProgramTypeID == pgmType)
-        //            {
-        //                return true;
-        //            }
-        //        }
-        //    }
-
-        //    return false;
-        //}
+            return null;
+        }
     }
+
 }
