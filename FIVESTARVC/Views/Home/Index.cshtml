@@ -31,32 +31,45 @@
                          aria-valuemax=@ViewBag.Admitted>@ViewBag.Graduated/@ViewBag.Admitted</div>
                     </div>
                 </div>
-        </div>
-    
+            </div>
+    <br />
+            <div class="row">
+                <div class="col-md-3">
+                <p><span class="fa fa-birthday-cake fa-fw"></span> Birthdays coming up:</p>
+                </div>
+                @foreach (var resident in ViewBag.NearestResidents)
+                {
+                    <div class="col-md-2" style="margin-top: 0.5em;">
+                        @resident.FirstMidName @resident.LastName<br />
+                        @resident.BDateMonthName @resident.Birthdate.Day
+                    </div>
+                }
+            </div>
+    <br />
+            <div class="row" style="margin-top: 0.9em">
+                <h4>Residents recently admitted into your center.</h4>
 
-        <div class="row" style="margin-top: 0.9em">
-            <h4>Residents recently admitted into your center.</h4>
-
-        </div>
-        <div class="row">
+            </div>
+            <div class="row">
 
 
 
-            @foreach (var item in Model)
-            {
-                <div class="col-md-3" style="margin-top: 0.9em;">
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title">@item.Fullname</h5>
-                            <label>Room: </label> @item.RoomNumber<br />
-                            <input type="button" class="btn btn-default" value="See more" onclick="location.href='/Residents/Details/@item.ResidentID/';" />
+                @foreach (var item in Model)
+                {
+                    <div class="col-md-3" style="margin-top: 0.9em;">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">@item.Fullname</h5>
+                                <label>Room: </label> @item.RoomNumber<br />
+                                <input type="button" class="btn btn-default" value="See more" onclick="location.href='/Residents/Details/@item.ResidentID/';" />
+                            </div>
                         </div>
                     </div>
-                </div>
-            }
+                }
 
 
+
+            </div>
+    <br />
 
         </div>
-    </div>
-<br />
