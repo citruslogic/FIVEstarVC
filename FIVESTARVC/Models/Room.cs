@@ -12,28 +12,16 @@ namespace FIVESTARVC.Models
    
     public class Room
     {
-        public List<Room> room = new List<Room>();
-
-        public int RoomID { get; set; }
-
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
+        [Key]
         [Display(Name = "Room Number")]
-        public int RoomNum { get; set; }
+        public int RoomNumber { get; set; }
 
-        [Display(Name = "Is Occupied")]
+        [Display(Name = "Occupied?")]
         public bool IsOccupied { get; set; }
         [Display(Name = "Wing")]
         public string WingName { get; set; }
-
-        public IEnumerable<SelectListItem> RoomIEnum
-        {
-            get
-            {
-                return new SelectList(room, "RoomID", "RoomNum");
-
-            }
-
-        }
-
+        
     }
 }
 

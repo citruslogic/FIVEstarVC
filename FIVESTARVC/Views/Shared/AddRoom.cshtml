@@ -1,59 +1,62 @@
 ﻿@model FIVESTARVC.Models.Room
-@using FIVESTARVC.Models;
 
 @{
     Layout = null;
 
     AjaxOptions options = new AjaxOptions();
     options.HttpMethod = "POST";
-    options.Url = Url.Action("AddRoom", "Residents");
-    options.UpdateTargetId = "modalForm";
+    options.Url = Url.Action("AddRoom", "Rooms");
+    options.UpdateTargetId = "modalFormRoom";
     options.InsertionMode = InsertionMode.Replace;
 }
 
 
 
-@using (Ajax.BeginForm("AddRoom", "Residents", options, new { @class = "form-horizontal", role = "form" }))
+@using (Ajax.BeginForm("AddRoom", "Rooms", options, new { @class = "form-horizontal", role = "form" }))
 {
-    <div id="modalForm">
-        <div class="modal-header">
-            <h4 class="modal-title" id="AddRoomLAbel">Add Room</h4>
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+<div id="modalFormRoom">
+    <div class="modal-header">
+        <h4 class="modal-title" id="AddRoomLabel">Add Room to Center</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 
-        </div>
-        <div class="modal-body">
+    </div>
+    <div class="modal-body">
 
-            <p> Type in the Room you would like to add.</p>
+        @Html.AntiForgeryToken()
+
+        <div class="form-horizontal">
+
+            <p> Type in the information for the room and then click Add.</p>
             <br />
-            @Html.AntiForgeryToken()
-            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
 
-            <div class="form-inline col-md-2">
-                @Html.LabelFor(Model => Model.RoomNum, htmlAttributes: new { @class = "control-label" })
-                @Html.TextBoxFor(Model => Model.RoomNum, htmlAttributes: new { @class = "form-control offset-1" })
-
-                @Html.ValidationMessageFor(Model => Model.RoomNum, "", new { @class = "text-danger" })
-
+            <div class="form-group form-inline">
+                @Html.LabelFor(model => model.RoomNumber, htmlAttributes: new { @class = "control-label" })
+                @Html.TextBoxFor(model => model.RoomNumber, htmlAttributes: new { @class = "form-control offset-1" })
             </div>
-            <div class="form-inline col-md-2">
-                @Html.LabelFor(Model => Model.WingName, htmlAttributes: new { @class = "control-label" })
-                @Html.TextBoxFor(Model => Model.WingName, htmlAttributes: new { @class = "form-control offset-2" })
-            </div>
-                <br />
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">Add</button>
-                </div>
+            <div class="form-group form-inline">
 
+                @Html.LabelFor(model => model.WingName, htmlAttributes: new { @class = "control-label" })
+                @Html.TextBoxFor(model => model.WingName, htmlAttributes: new { @class = "form-control offset-2" })
             </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary">Add</button>
+            </div>
+
         </div>
-}
+    </div>
+</div>
+ }
+            
+
 
 @section Scripts {
-    <script type="text/javascript">
+@Scripts.Render("~/bundles/jqueryval")
+<script type="text/javascript">
 
-        $.validator.unobtrusive.parse($("form"));
-    </script>
+    $.validator.unobtrusive.parse($("form"));
+</script>
 
 }

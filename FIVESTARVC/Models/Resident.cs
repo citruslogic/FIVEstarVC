@@ -8,6 +8,7 @@ using System.Web;
 using FIVESTARVC.DAL;
 using FIVESTARVC.Validators;
 using DelegateDecompiler;
+using System.Globalization;
 
 namespace FIVESTARVC.Models
 {
@@ -27,6 +28,8 @@ namespace FIVESTARVC.Models
         [Birthdate(ErrorMessage = "Birthdate must not be in the future.")]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public DateTime? Birthdate { get; set; }
+        
+
         [Display(Name = "Service Branch")]
         public ServiceType ServiceBranch { get; set; }
 
@@ -34,7 +37,7 @@ namespace FIVESTARVC.Models
         public Boolean InVetCourt { get; set; }
         [Display(Name = "Room Number")]
         [ForeignKey("Room")]
-        public int? RoomID { get; set; }
+        public int? RoomNumber { get; set; }
         [Display(Name = "Note")]
         [StringLength(150)]
         public string Note { get; set; }
@@ -65,6 +68,40 @@ namespace FIVESTARVC.Models
         {
             get { return FirstMidName + " " + LastName; }
         }
+
+        /* Remaining days until birthday */
+        public int RemainingDays
+        {
+            get 
+            {
+
+                DateTime today = DateTime.Today;
+                if (Birthdate.HasValue)
+                {
+                    DateTime nextBirthday = Birthdate.Value.AddYears(Age + 1);
+
+                    TimeSpan difference = nextBirthday - DateTime.Today;
+
+                    return Convert.ToInt32(difference.TotalDays);
+                }
+
+                return 0;
+            }
+        }
+        public string BDateMonthName
+        {
+            get
+            {
+                CultureInfo ci = new CultureInfo("en-US");
+                if (Birthdate.HasValue)
+                {
+                    return Birthdate.Value.ToString("MMMM", ci);
+                }
+
+                return null;
+            }
+        }
+        
 
         //[Computed]
         public Boolean IsCurrent()

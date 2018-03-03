@@ -62,9 +62,10 @@
                         </tr>
                         <tr>
                             
-                            <td class="col-form-label"> @Html.LabelFor(model => model.Rooms, htmlAttributes: new { @class = "control-label col-md-offset-3" })</td>
+                            <td class="col-form-label"> @Html.Label("Room", htmlAttributes: new { @class = "control-label col-md-offset-3" })</td>
                             <td>
-                                @Html.DropDownListFor(p => p.RoomID, Model.RoomIEnum, "Select Room")
+                                @Html.DropDownList("RoomNumber", null, htmlAttributes: new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.RoomNumber, "")
                             </td>
                         </tr>
                         <tr>
@@ -124,14 +125,14 @@
 
 
     <br />
-    <div class="form-group form-inline">
-        <div class="col-md-offset-1 col-md-2">
-            <input type="submit" value="Admit" class="btn btn-dark" />
-        </div>
-        <div>
-            @Html.ActionLink("Back to List", "Index")
-        </div>
-    </div>
+    <p>
+
+        <input type="submit" value="Admit" class="btn btn-primary" />
+
+        @Html.ActionLink("Back to List", "Index", null, htmlAttributes: new { @class = "btn btn-secondary" })
+
+    </p>
+           
 
 }
 
