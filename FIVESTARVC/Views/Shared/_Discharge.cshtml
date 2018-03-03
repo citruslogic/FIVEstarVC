@@ -10,16 +10,16 @@
 {
     @Html.AntiForgeryToken()
 
-    <div class="form-horizontal">
-        <h4>Discharge @Model.Fullname</h4>
-        <p> Are you sure you want to discharge this resident from your center?</p>
-        <br />
-        @Html.ValidationSummary(true, "")
-        @Html.HiddenFor(model => model.ResidentID)
+    <h4>Discharge @Model.Fullname</h4>
+    <p> Are you sure you want to discharge this resident from your center?</p>
+    <br />
+    @Html.ValidationSummary(true, "")
+    @Html.HiddenFor(model => model.ResidentID)
 
+    <div class="container">
         <div class="row">
 
-            <div class="col-sm-6 table-responsive">
+            <div class="table-responsive">
                 <table class="table table-sm">
 
                     <tbody>
@@ -27,7 +27,7 @@
 
                             <td class="col-form-label">
 
-                                @Html.LabelFor(model => model.LastName, htmlAttributes: new { @class = "control-label col-md-offset-3" })
+                                @Html.LabelFor(model => model.LastName, htmlAttributes: new { @class = "control-label" })
                             </td>
                             <td>
                                 @(Model.LastName)
@@ -35,19 +35,19 @@
 
                         </tr>
                         <tr>
-                            <td class="col-form-label">@Html.LabelFor(model => model.FirstMidName, htmlAttributes: new { @class = "control-label col-md-offset-3" })</td>
+                            <td class="col-form-label">@Html.LabelFor(model => model.FirstMidName, htmlAttributes: new { @class = "control-label" })</td>
                             <td>
                                 @(Model.FirstMidName)
                             </td>
                         </tr>
                         <tr>
-                            <td class="col-form-label">@Html.LabelFor(model => model.Birthdate, htmlAttributes: new { @class = "control-label col-md-offset-3" })</td>
+                            <td class="col-form-label">@Html.LabelFor(model => model.Birthdate, htmlAttributes: new { @class = "control-label" })</td>
                             <td>
                                 @(Model.Birthdate.Value.ToLongDateString())
                             </td>
                         </tr>
                         <tr>
-                            <td class="col-form-label"> @Html.LabelFor(model => model.ServiceBranch, htmlAttributes: new { @class = "control-label col-md-offset-3" })</td>
+                            <td class="col-form-label"> @Html.LabelFor(model => model.ServiceBranch, htmlAttributes: new { @class = "control-label" })</td>
                             <td>
                                 @{
                                     var serviceDescription = FSEnumHelper.GetDescription(Model.ServiceBranch);
@@ -58,7 +58,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <td class="col-form-label"> @Html.LabelFor(model => model.RoomNumber, htmlAttributes: new { @class = "control-label col-md-offset-3" })</td>
+                            <td class="col-form-label"> @Html.LabelFor(model => model.RoomNumber, htmlAttributes: new { @class = "control-label" })</td>
                             <td>
                                 @ViewBag.releaseRoom
                             </td>
@@ -84,32 +84,26 @@
                 </div>
             </div>
 
+        </div>
 
 
+    <div class="row">
+        <div class="form-group form-inline">
+            <div class="btn-toolbar mr-1">
+                <button type="button" class="btn btn-default"
+                        data-dismiss="modal">
+                    Cancel
+                </button>
+            
+                <input type="submit" value="Discharge" 
+                       class="btn btn-danger"
+                       style="margin-left: 5px;"/>
+            </div>
 
-
-
-
+        </div>
         </div>
 
     </div>
-
-
-    <div class="form-group form-inline">
-        <div class="col-md-2">
-            <button type="button" class="btn btn-default"
-                    data-dismiss="modal">
-                Cancel
-            </button>
-        </div>
-        <div class="col-md-2">
-            <input type="submit" value="Discharge" class="btn btn-danger" />
-        </div>
-
-    </div>
-
-
-
 }
 
 

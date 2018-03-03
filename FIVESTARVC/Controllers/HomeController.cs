@@ -16,8 +16,6 @@ namespace FIVESTARVC.Controllers
     {
         private ResidentContext db = new ResidentContext();
 
-        public static List<Room> MyRoom = new List<Room>();
-
         public ActionResult Index()
         {
 
@@ -28,6 +26,7 @@ namespace FIVESTARVC.Controllers
                      {
                          ResidentID = resident.ResidentID,
                          Fullname = resident.FirstMidName + " " + resident.LastName,
+
                          RoomNumber = room.RoomNumber
 
                      }).OrderByDescending(r => r.ResidentID).Take(5);
@@ -38,18 +37,6 @@ namespace FIVESTARVC.Controllers
             return View(residents.ToList());
         }
 
-        public ActionResult Reports()
-        {
-            ViewBag.Message = "Your application description page.";
-
-            return View();
-        }
-
-        public ActionResult Contact()
-        {
-            ViewBag.Message = "Your contact page.";
-
-            return View();
-        }
+       
     }
 }

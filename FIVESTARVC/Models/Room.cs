@@ -17,7 +17,7 @@ namespace FIVESTARVC.Models
         [Display(Name = "Room Number")]
         public int RoomNumber { get; set; }
 
-        [Display(Name = "Is Occupied")]
+        [Display(Name = "Occupied?")]
         public bool IsOccupied { get; set; }
         [Display(Name = "Wing")]
         public string WingName { get; set; }
