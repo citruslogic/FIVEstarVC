@@ -6,74 +6,86 @@
 }
 
 <!-- Modal -->
+<div class="container">
+    
 
-    @using (Html.BeginForm("ViewQuickEvent", "Residents"))
+        @using (Html.BeginForm("ViewQuickEvent", "Residents"))
     {
         @Html.AntiForgeryToken()
 
-
+    <div class="row">
         <input type="hidden" name="ResidentID" value="@ViewBag.ResidentID" />
-        <p> @ViewBag.Fullname is starting a new program, or their status in the center is changing.</p>
+        <p>
+            @ViewBag.Fullname is starting a new program. Provide an <code>End Date</code> if
+            the program's end date for the resident is known.
+        </p>
         <div class="form-group">
-            @Html.LabelFor(model => model.ProgramTypeID, "Program name", htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
+            @Html.LabelFor(model => model.ProgramTypeID, "Program name", htmlAttributes: new { @class = "control-label" })
+            <div>
                 @Html.DropDownList("ProgramTypeID", null, htmlAttributes: new { @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.ProgramTypeID, "")
             </div>
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.StartDate, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
+            @Html.LabelFor(model => model.StartDate, htmlAttributes: new { @class = "control-label" })
+            <div>
                 @Html.EditorFor(model => model.StartDate, new { htmlAttributes = new { @class = "form-control" } })
                 @Html.ValidationMessageFor(model => model.StartDate, "")
             </div>
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.EndDate, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
+            @Html.LabelFor(model => model.EndDate, htmlAttributes: new { @class = "control-label" })
+            <div>
                 @Html.EditorFor(model => model.EndDate, new { htmlAttributes = new { @class = "form-control" } })
                 @Html.ValidationMessageFor(model => model.EndDate, "")
             </div>
         </div>
+
+        </div>
+        <div class="row">
         <div class="form-group">
-            @Html.LabelFor(model => model.Completed, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
+            @Html.LabelFor(model => model.Completed, htmlAttributes: new { @class = "control-label" })
+            <div>
                 <div class="checkbox">
-                    @Html.EditorFor(model => model.Completed)
+                    @Html.EditorFor(model => model.Completed, new { htmlAtributes = new { @class = "form-control" } })
                     @Html.ValidationMessageFor(model => model.Completed, "")
                 </div>
             </div>
         </div>
-        <div class="row">
-            &nbsp;
-        </div>
-        <div class="row">
-            <div class="col-md-2">
-                <button type="button" class="btn btn-default"
-                        data-dismiss="modal">
-                    Cancel
-                </button>
+    </div>
+    
+    <div class="row">
+            <div class="form-group form-inline">
+                <div class="btn-toolbar mr-1">
+                    <button type="button" class="btn btn-default"
+                            data-dismiss="modal">
+                        Cancel
+                    </button>
+
+                    <button type="submit" id="submit-btn"
+                            class="btn btn-primary"
+                            style="margin-left: 5px;">
+                        Save Event
+                    </button>
                 </div>
-            <div class="col-md-2">
-                <button type="submit" id="submit-btn"
-                        class="btn btn-primary">
-                    Save Event
-                </button>
             </div>
-        </div>
+   </div>
 
-    }
+        }
+
+</div>
+ 
 
 
-@section scripts {
-    <script type="text/javascript">
-    $(function () {
-        $('#submit-btn').click(function () {
-            $('#modal-container').modal('hide');
-        });
-    });
-    </script>
-}
+        @section scripts {
+            <script type="text/javascript">
+                $(function () {
+                    $('#submit-btn').click(function () {
+                        $('#modal-container').modal('hide');
+                    });
+                });
+            </script>
+        }
 

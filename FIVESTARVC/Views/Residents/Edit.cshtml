@@ -40,6 +40,15 @@
                                 @Html.ValidationMessageFor(model => model.FirstMidName, "")
                             </td>
                         </tr>
+                        @if (!Model.IsCurrent())
+                        {
+                        <tr>
+                            <td class="col-form-label">@Html.Label("Readmit?")</td>
+                            <td class="col-auto">
+                            @Html.CheckBox("Readmit", false)
+                            </td>
+                        </tr>
+                        }
                         <tr>
                             <td class="col-form-label">@Html.LabelFor(model => model.Birthdate, htmlAttributes: new { @class = "control-label col-md-offset-3" })</td>
                             <td class="col-auto">
@@ -48,7 +57,7 @@
                                         <span class="input-group-text fa fa-calendar fa-fw" style="width:40px;"></span>
                                     </div>
                                     @Html.EditorFor(model => model.Birthdate,
-                                 new { htmlAttributes = new { @class = "form-control" } })
+                         new { htmlAttributes = new { @class = "form-control" } })
                                     @Html.ValidationMessageFor(model => model.Birthdate, "")
                                 </div>
                             </td>
@@ -61,22 +70,20 @@
                             </td>
                         </tr>
                         <tr>
-                            <td class="col-form-label"> @Html.LabelFor(model => model.RoomID, htmlAttributes: new { @class = "control-label col-md-offset-3" })</td>
+                            <td class="col-form-label"> @Html.LabelFor(model => model.RoomNumber, htmlAttributes: new { @class = "control-label col-md-offset-3" })</td>
                             <td class="col-auto">
-                                @ViewBag.room
+                                @*Room selector*@
+                                @if (Model.IsCurrent())
+            {
+                    @Html.DropDownList("RoomNumber", null, htmlAttributes: new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.RoomNumber, "")
+}
+else
+{
+                    @Html.DropDownList("RoomNumber", null, htmlAttributes: new { @class = "form-control", @disabled = "disabled" })
+                    @Html.ValidationMessageFor(model => model.RoomNumber, "")
+}
                             </td>
-                            @ViewBag.AlertMessage
-                        </tr>
-                        <tr>
-                            @{
-                                <td>
-                                    <label for="EditRoom">Move Resident To:</label>
-                                </td>
-                                <td>
-                                    <input type="text" name="moveTo" />
-                                </td>
-
-                            }
 
                         </tr>
 
@@ -94,26 +101,33 @@
                             <td>
                                 <div class="form-check" style="overflow-y: scroll">
                                     @{
-                            List<FIVESTARVC.ViewModels.AssignedCampaignData> campaigns = ViewBag.Campaigns;
+                    List<FIVESTARVC.ViewModels.AssignedCampaignData> campaigns = ViewBag.Campaigns;
 
-                            foreach (var campaign in campaigns)
-                            {
+                    foreach (var campaign in campaigns)
+                    {
 
-                                @:
+                        @:
 
 
-                                <input type="checkbox"
-                                       class="form-check-input"
-                                       name="selectedCampaigns"
-                                       value="@campaign.MilitaryCampaignID"
-                                       @(Html.Raw(campaign.Assigned ? "checked=\"checked\"" : "")) />
-                                @campaign.MilitaryCampaign @: <br />
-                }
+
+
+
+
+
+
+                        <input type="checkbox"
+                               class="form-check-input"
+                               name="selectedCampaigns"
+                               value="@campaign.MilitaryCampaignID"
+                               @(Html.Raw(campaign.Assigned ? "checked=\"checked\"" : "")) />
+                        @campaign.MilitaryCampaign @: <br />
+}
 
                                     }
                                 </div>
                             </td>
                         </tr>
+
                         <tr>
                             <td class="col-form-label">@Html.LabelFor(model => model.Note, htmlAttributes: new { @class = "control-label col-md-offset-3" }) </td>
                             <td class="col-auto">
@@ -134,22 +148,22 @@
 
 
 
-        <div class="form-group form-inline">
-            <div class="col-md-offset-1 col-md-2">
-                <input type="submit" value="Update" class="btn btn-dark" />
-            </div>
-            <div>
-                @Html.ActionLink("Back to List", "Index")
-            </div>
-        </div>
+        
+        
+        <p>
+            <input type="submit" value="Update" class="btn btn-secondary" />
+            @Html.ActionLink("Back to List", "Index", null, htmlAttributes: new { @class = "btn btn-primary" })
+        </p>      
+                  
+        
     </div>
 }
 
 
 
 @section Scripts {
-    @Scripts.Render("~/bundles/jqueryval");
-    @Scripts.Render("~/bundles/jqueryui");
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/jqueryui")
     <script type="text/javascript">
 
         if (!Modernizr.inputtypes.date) {
@@ -161,6 +175,17 @@
                 });
         }
 
+        /* Disable the room dropdown if we're not readmitting the resident. */
+        $(document).ready(function () {
+            $("#Readmit").click(function () {
+                if ($(this).is(":checked")) {
+                    $("#RoomNumber").prop("disabled", false);
+                } else {
+                    $("#RoomNumber").prop("disabled", true);
+                }
+            });
+        });
+
         $('.income').on("keyup", function () {
             var total = parseFloat(0.0);
 
@@ -168,13 +193,13 @@
                 total += parseFloat($(this).val() || 0);
             });
 
-            $('#Benefit_TotalBenefitAmount').val(total);
-        });
-        $('.moveTo').on("onload", function () {
-            if (!ViewBag.AlertMessage == null) {
-                document.getElementById('moveTo') = ViewBag.AlertMessage;
+            if (total.valueOf != NaN) {
+                $('#Benefit_TotalBenefitAmount').val(total);
             }
+            
         });
+
+        
 
 
     </script>

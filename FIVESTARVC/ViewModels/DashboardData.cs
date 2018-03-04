@@ -10,5 +10,6 @@ namespace FIVESTARVC.ViewModels
         public int ResidentID { get; set; }
         public string Fullname { get; set; }
         public int RoomNumber { get; set; }
+
     }
 }

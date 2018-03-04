@@ -9,8 +9,25 @@
     @Styles.Render("~/Content/fontawesome")
     @Styles.Render("~/Content/themes/base/css")
 
+<style>
+    #content {
+        min-height: calc(100% - 285px);
+        /* 285 should be the height of your header + height of footer. */
+    }
 
+    footer {
+        margin: 0;
+        padding: 1px; /* tweaked from 0 to 1px */
+    }
+
+    .progress {
+        background-color: #aaa;
+        -webkit-box-shadow: none;
+        box-shadow: none;
+    }        
+</style>
 </head>
+
 <body style="background-color: whitesmoke">
     <div style="background-color: white; margin-top: -50px;"><img src="~/Content/fivestar_logo.jpg" /></div>
     <nav class="navbar navbar-dark" style="background-image: url('../../Content/flag_bg.jpg')">
@@ -26,9 +43,9 @@
             </div>
         </div>
     </nav>
-    <div class="container body-content">
+    <div class="container body-content" style="padding-bottom: 0px;">
        
-        <br />
+   
         @RenderBody()
 
 
