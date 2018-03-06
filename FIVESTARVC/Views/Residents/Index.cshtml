@@ -120,7 +120,7 @@
                 @Html.ActionLink("Edit", "Edit", new { id = item.ResidentID }, htmlAttributes: new { @class = "btn btn-sm btn-outline-secondary btn-light" }) &nbsp;
 
                 @*Trigger the modal with a button*@
-                <input type="button" value="Quick Event" class="modal-link btn btn-sm btn-outline-secondary btn-light"
+                <input type="button" value="+ Program" class="modal-link btn btn-sm btn-outline-secondary btn-light"
                        data-toggle="modal" data-target="#QuickEventModal" onclick="showQuickEventDialog(@item.ResidentID)" />
 
                 @Html.ActionLink("Details", "Details", new { id = item.ResidentID }, htmlAttributes: new { @class = "btn btn-sm btn-outline-secondary btn-light" }) &nbsp;
