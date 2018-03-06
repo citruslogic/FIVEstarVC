@@ -12,6 +12,6 @@ namespace FIVESTARVC.ViewModels
         public ProgramEvent program = new ProgramEvent();
 
         public int totalAdmitted { get; set; }
-
+        public int Year { get; set; }
     }
 }
