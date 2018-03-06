@@ -249,6 +249,7 @@ namespace FIVESTARVC.Controllers
             object[] Graduate = gradRates().Cast<object>().ToArray();
             object[] Emergency = emergRates().Cast<object>().ToArray();
             object[] Discharge = dischargeRates().Cast<object>().ToArray();
+            object[] vetCourt = vetCourtRates().Cast<object>().ToArray();
             string[] years = gradYears().ToArray();
 
             columnChart.SetXAxis(new XAxis()
@@ -316,6 +317,12 @@ namespace FIVESTARVC.Controllers
                     Data = new Data(Discharge)
                 },
 
+                new Series{
+
+                    Name = "Vet Court",
+                    Data = new Data(vetCourt)
+                }
+
             }
             );
 
@@ -367,58 +374,6 @@ namespace FIVESTARVC.Controllers
             }
 
             return rates;
-        }
-
-        public List<int> vetCourtRates()
-        {
-            var residents = DB.Residents;
-
-            var events = DB.ProgramEvents;
-
-            var eventsQuery = (from admt in events
-                               where admt.ProgramTypeID == 1 || admt.ProgramTypeID == 2 || admt.ProgramTypeID == 3
-                               select admt);
-
-            List<int> vcRates = new List<int>();
-
-            int currentYear = System.DateTime.Now.Year;
-
-            int num = currentYear - 2011;
-
-            int year = 2012;
-
-            var vcQuery = (from y in residents
-                            where y.InVetCourt == true
-                            select y);
-
-            for (int x = 0; x < num; x++)
-            {
-                int vc = 0;
-
-                foreach (var v in vcQuery)
-                {
-                    int ID = v.ResidentID;
-
-                    foreach(var e in eventsQuery)
-                    {
-                        if(e.ResidentID == ID)
-                        {
-                            if(e.StartDate.Year <= year)
-                            {
-                                vc++;
-                            }
-                        }
-                    }
-
-
-                }
-
-                vcRates.Add(vc);
-
-                year++;
-            }
-
-            return vcRates;
         }
 
         public List<int> admittedRates()
@@ -536,6 +491,29 @@ namespace FIVESTARVC.Controllers
             return rates;
         }
 
+        public List<int> vetCourtRates()
+        {
+            var events = DB.ProgramEvents;
+            var queryResults = (from y in events
+                                join resident in DB.Residents on y.ResidentID equals resident.ResidentID
+                                where y.ProgramTypeID == 2 || y.ProgramTypeID == 1 || y.ProgramTypeID == 3 && resident.InVetCourt.Equals(true)
+                                group y by y.StartDate.Year into typeGroup
+                                select new
+                                {
+                                    VetCourt = typeGroup.Count(),
+                                    admtYear = typeGroup.Key
+                                }).ToList();
+
+            List<int> rates = new List<int>();
+
+           foreach(var r in queryResults)
+            {
+                rates.Add(r.VetCourt);
+            }
+
+            return rates;
+        }
+
         public ActionResult DownloadData()
         {
             var residents = DB.Residents;
@@ -641,84 +619,84 @@ namespace FIVESTARVC.Controllers
         }
 
 
-        //public ActionResult allData()
-        //{
-        //    var BarChartData = from mc in DB.MilitaryCampaigns
-        //                       select new
-        //                       {
-        //                           MilitaryCampaign = mc.CampaignName,
-        //                           ResidentCount = mc.Residents.Count()
-        //                       };
+        public ActionResult allData()
+        {
+            var BarChartData = from mc in DB.MilitaryCampaigns
+                               select new
+                               {
+                                   MilitaryCampaign = mc.CampaignName,
+                                   ResidentCount = mc.Residents.Count()
+                               };
 
-        //    Highcharts columnChart = new Highcharts("columnchart");
+            Highcharts columnChart = new Highcharts("columnchart");
 
-        //    columnChart.InitChart(new Chart()
-        //    {
-        //        Type = DotNet.Highcharts.Enums.ChartTypes.Bar,
-        //        BackgroundColor = new BackColorOrGradient(System.Drawing.Color.AliceBlue),
-        //        Style = "fontWeight: 'bold', fontSize: '17px'",
-        //        BorderColor = System.Drawing.Color.LightBlue,
-        //        BorderRadius = 0,
-        //        BorderWidth = 2
+            columnChart.InitChart(new Chart()
+            {
+                Type = DotNet.Highcharts.Enums.ChartTypes.Bar,
+                BackgroundColor = new BackColorOrGradient(System.Drawing.Color.AliceBlue),
+                Style = "fontWeight: 'bold', fontSize: '17px'",
+                BorderColor = System.Drawing.Color.LightBlue,
+                BorderRadius = 0,
+                BorderWidth = 2
 
-        //    });
+            });
 
-        //    columnChart.SetTitle(new Title()
-        //    {
-        //        Text = "Historic Data"
-        //    });
+            columnChart.SetTitle(new Title()
+            {
+                Text = "Historic Data"
+            });
 
-        //    //columnChart.SetSubtitle(new Subtitle()
-        //    //{
-        //    //    Text = "Played 9 Years Together From 2004 To 2012"
-        //    //});
+            //columnChart.SetSubtitle(new Subtitle()
+            //{
+            //    Text = "Played 9 Years Together From 2004 To 2012"
+            //});
+            List<int> counts = BarChartData.Select(c => c.ResidentCount).ToList();
+            object[] resCount = counts.Cast<object>().ToArray();
+            string[] Campaigns = BarChartData.Select(cn => cn.MilitaryCampaign).ToArray();
 
-        //    object[] P2I = BarChartData.Select(c => c.ResidentCount).Cast<object>().ToArray();
-        //    string[] years = BarChartData.Select(cn => cn.MilitaryCampaign).ToArray();
+            columnChart.SetXAxis(new XAxis()
+            {
+                Type = AxisTypes.Category,
+                Title = new XAxisTitle() { Text = "Years", Style = "fontWeight: 'bold', fontSize: '17px'" },
+                Categories = Campaigns
+            });
 
-        //    columnChart.SetXAxis(new XAxis()
-        //    {
-        //        Type = AxisTypes.Category,
-        //        Title = new XAxisTitle() { Text = "Years", Style = "fontWeight: 'bold', fontSize: '17px'" },
-        //        Categories = years
-        //    });
+            columnChart.SetYAxis(new YAxis()
+            {
+                Title = new YAxisTitle()
+                {
+                    Text = "Number of Residents",
+                    Style = "fontWeight: 'bold', fontSize: '17px'"
+                },
+                ShowFirstLabel = true,
+                ShowLastLabel = true,
+                Min = 0
+            });
 
-        //    columnChart.SetYAxis(new YAxis()
-        //    {
-        //        Title = new YAxisTitle()
-        //        {
-        //            Text = "Number of Residents",
-        //            Style = "fontWeight: 'bold', fontSize: '17px'"
-        //        },
-        //        ShowFirstLabel = true,
-        //        ShowLastLabel = true,
-        //        Min = 0
-        //    });
+            columnChart.SetLegend(new Legend
+            {
+                Enabled = true,
+                BorderColor = System.Drawing.Color.CornflowerBlue,
+                BorderRadius = 6,
+                BackgroundColor = new BackColorOrGradient(ColorTranslator.FromHtml("#FFADD8E6"))
+            });
 
-        //    columnChart.SetLegend(new Legend
-        //    {
-        //        Enabled = true,
-        //        BorderColor = System.Drawing.Color.CornflowerBlue,
-        //        BorderRadius = 6,
-        //        BackgroundColor = new BackColorOrGradient(ColorTranslator.FromHtml("#FFADD8E6"))
-        //    });
+            columnChart.SetSeries(new Series[]
+            {
+                new Series{
 
-        //    columnChart.SetSeries(new Series[]
-        //    {
-        //        new Series{
-
-        //            Name = "P2I",
-        //            Data = new Data(P2I)
-        //        },
+                    Name = "P2I",
+                    Data = new Data(resCount)
+                },
 
                 
 
-        //    }
-        //    );
+            }
+            );
 
-        //    return View(columnChart);
+            return View(columnChart);
 
-        //}
+        }
 
 
 
