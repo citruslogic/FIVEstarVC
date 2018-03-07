@@ -805,7 +805,7 @@
     <Content Include="Views\Rooms\Edit.cshtml" />
     <Content Include="Views\Rooms\Index.cshtml" />
     <Content Include="Views\Shared\CampaignChart.cshtml" />
-    <Content Include="Views\Reports\allData.cshtml" />
+    <Content Include="Views\Reports\campaigns.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
