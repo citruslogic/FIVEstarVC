@@ -619,7 +619,7 @@ namespace FIVESTARVC.Controllers
         }
 
 
-        public ActionResult allData()
+        public ActionResult campaigns()
         {
             var BarChartData = from mc in DB.MilitaryCampaigns
                                select new
@@ -627,6 +627,19 @@ namespace FIVESTARVC.Controllers
                                    MilitaryCampaign = mc.CampaignName,
                                    ResidentCount = mc.Residents.Count()
                                };
+
+            List<string> campaignNames = new List<string>();
+            List<int> resCounts = new List<int>();
+
+            foreach(var x in BarChartData)
+            {
+                campaignNames.Add(x.MilitaryCampaign);
+            }
+
+            foreach (var y in BarChartData)
+            {
+                resCounts.Add(y.ResidentCount);
+            }
 
             Highcharts columnChart = new Highcharts("columnchart");
 
@@ -643,21 +656,20 @@ namespace FIVESTARVC.Controllers
 
             columnChart.SetTitle(new Title()
             {
-                Text = "Historic Data"
+                Text = "Resident Campaign Data"
             });
 
             //columnChart.SetSubtitle(new Subtitle()
             //{
             //    Text = "Played 9 Years Together From 2004 To 2012"
             //});
-            List<int> counts = BarChartData.Select(c => c.ResidentCount).ToList();
-            object[] resCount = counts.Cast<object>().ToArray();
-            string[] Campaigns = BarChartData.Select(cn => cn.MilitaryCampaign).ToArray();
+            object[] residentCount = resCounts.Cast<object>().ToArray();
+            string[] Campaigns = campaignNames.ToArray();
 
             columnChart.SetXAxis(new XAxis()
             {
                 Type = AxisTypes.Category,
-                Title = new XAxisTitle() { Text = "Years", Style = "fontWeight: 'bold', fontSize: '17px'" },
+                Title = new XAxisTitle() { Text = "Campaign", Style = "fontWeight: 'bold', fontSize: '17px'" },
                 Categories = Campaigns
             });
 
@@ -685,8 +697,8 @@ namespace FIVESTARVC.Controllers
             {
                 new Series{
 
-                    Name = "P2I",
-                    Data = new Data(resCount)
+                    Name = "Residents",
+                    Data = new Data(residentCount)
                 },
 
                 
