@@ -806,6 +806,7 @@
     <Content Include="Views\Rooms\Index.cshtml" />
     <Content Include="Views\Shared\CampaignChart.cshtml" />
     <Content Include="Views\Reports\campaigns.cshtml" />
+    <Content Include="Views\Reports\CumulativeHistoric.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
