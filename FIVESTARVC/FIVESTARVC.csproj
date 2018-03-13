@@ -198,7 +198,6 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Helpers\Encryptor.cs" />
     <Compile Include="Models\Benefit.cs" />
     <Compile Include="Models\EnumServiceType.cs" />
     <Compile Include="Models\FSEnumHelper.cs" />

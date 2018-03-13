@@ -106,7 +106,7 @@ namespace FIVESTARVC.Controllers
 
             ViewBag.DateFirstAdmitted = db.ProgramEvents
                                             .Include(r => r.Resident).Where(r => r.ResidentID == id)
-                                            .Include(t => t.ProgramType).Where(p => p.ProgramTypeID == 1 || p.ProgramTypeID == 2)
+                                            .Include(t => t.ProgramType).Where(p => p.ProgramTypeID == 2)
                                             .OrderBy(d => d.StartDate)
                                             .Select(s => s.StartDate)
                                             .FirstOrDefault().ToLongDateString();
