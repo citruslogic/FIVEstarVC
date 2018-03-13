@@ -329,6 +329,117 @@ namespace FIVESTARVC.Controllers
             return View(columnChart);
         }
 
+        public ActionResult CumulativeHistoric()
+        {
+
+            Highcharts columnChart = new Highcharts("columnchart");
+
+            columnChart.InitChart(new Chart()
+            {
+                Type = DotNet.Highcharts.Enums.ChartTypes.Line,
+                BackgroundColor = new BackColorOrGradient(System.Drawing.Color.AliceBlue),
+                Style = "fontWeight: 'bold', fontSize: '17px'",
+                BorderColor = System.Drawing.Color.LightBlue,
+                BorderRadius = 0,
+                BorderWidth = 2
+
+            });
+
+            columnChart.SetTitle(new Title()
+            {
+                Text = "Cumulative Historic Data"
+            });
+
+            //columnChart.SetSubtitle(new Subtitle()
+            //{
+            //    Text = "Played 9 Years Together From 2004 To 2012"
+            //});
+
+            object[] P2I = p2iRatesCum().Cast<object>().ToArray();
+            object[] Admit = admittedRatesCum().Cast<object>().ToArray();
+            object[] reAdmit = readmittedRatesCum().Cast<object>().ToArray();
+            object[] Graduate = gradRatesCum().Cast<object>().ToArray();
+            object[] Emergency = emergRatesCum().Cast<object>().ToArray();
+            object[] Discharge = dischargeRatesCum().Cast<object>().ToArray();
+            object[] vetCourt = vetCourtRatesCum().Cast<object>().ToArray();
+            string[] years = gradYears().ToArray();
+
+            columnChart.SetXAxis(new XAxis()
+            {
+                Type = AxisTypes.Category,
+                Title = new XAxisTitle() { Text = "Years", Style = "fontWeight: 'bold', fontSize: '17px'" },
+                Categories = years
+            });
+
+            columnChart.SetYAxis(new YAxis()
+            {
+                Title = new YAxisTitle()
+                {
+                    Text = "Number of Residents",
+                    Style = "fontWeight: 'bold', fontSize: '17px'"
+                },
+                ShowFirstLabel = true,
+                ShowLastLabel = true,
+                Min = 0
+            });
+
+            columnChart.SetLegend(new Legend
+            {
+                Enabled = true,
+                BorderColor = System.Drawing.Color.CornflowerBlue,
+                BorderRadius = 6,
+                BackgroundColor = new BackColorOrGradient(ColorTranslator.FromHtml("#FFADD8E6"))
+            });
+
+            columnChart.SetSeries(new Series[]
+            {
+                new Series{
+
+                    Name = "P2I",
+                    Data = new Data(P2I)
+                },
+
+                new Series{
+
+                    Name = "Admitted",
+                    Data = new Data(Admit)
+                },
+
+                new Series{
+
+                    Name = "Re-Admitted",
+                    Data = new Data(reAdmit)
+                },
+
+                new Series{
+
+                    Name = "Graduated",
+                    Data = new Data(Graduate)
+                },
+
+                new Series{
+
+                    Name = "Emergency Shelter",
+                    Data = new Data(Emergency)
+                },
+
+                new Series{
+
+                    Name = "Discharged",
+                    Data = new Data(Discharge)
+                },
+
+                new Series{
+
+                    Name = "Vet Court",
+                    Data = new Data(vetCourt)
+                }
+
+            }
+            );
+
+            return View(columnChart);
+        }
 
         public List<string> gradYears()
         {
@@ -376,6 +487,33 @@ namespace FIVESTARVC.Controllers
             return rates;
         }
 
+        public List<int> gradRatesCum()
+        {
+            var events = DB.ProgramEvents;
+
+            int runningTotal = 0;
+
+            var Query = (from y in events
+                         where y.ProgramTypeID == 4
+                         group y by y.StartDate.Year into typeGroup
+                         select new
+                         {
+                             StartDate = typeGroup.Key,
+                             Count = typeGroup.Count(),
+                         }).ToList();
+
+            List<int> rates = new List<int>();
+
+            foreach (var t in Query)
+            {
+                runningTotal = runningTotal + t.Count;
+
+                rates.Add(runningTotal);
+            }
+
+            return rates;
+        }
+
         public List<int> admittedRates()
         {
             var events = DB.ProgramEvents;
@@ -394,6 +532,33 @@ namespace FIVESTARVC.Controllers
             foreach (var t in gradQuery)
             {
                 rates.Add(t.Count);
+            }
+
+            return rates;
+        }
+
+        public List<int> admittedRatesCum()
+        {
+            var events = DB.ProgramEvents;
+
+            int runningTotal = 0;
+
+            var gradQuery = (from y in events
+                             where y.ProgramTypeID == 2
+                             group y by y.StartDate.Year into typeGroup
+                             select new
+                             {
+                                 StartDate = typeGroup.Key,
+                                 Count = typeGroup.Count(),
+                             }).ToList();
+
+            List<int> rates = new List<int>();
+
+            foreach (var t in gradQuery)
+            {
+                runningTotal = runningTotal + t.Count;
+
+                rates.Add(runningTotal);
             }
 
             return rates;
@@ -422,9 +587,38 @@ namespace FIVESTARVC.Controllers
             return rates;
         }
 
-        public List<double> p2iRates()
+        public List<int> readmittedRatesCum()
         {
             var events = DB.ProgramEvents;
+
+            int runningTotal = 0;
+
+            var Query = (from y in events
+                         where y.ProgramTypeID == 3
+                         group y by y.StartDate.Year into typeGroup
+                         select new
+                         {
+                             StartDate = typeGroup.Key,
+                             Count = typeGroup.Count(),
+                         }).ToList();
+
+            List<int> rates = new List<int>();
+
+            foreach (var t in Query)
+            {
+                runningTotal = runningTotal + t.Count;
+
+                rates.Add(runningTotal);
+            }
+
+            return rates;
+        }
+
+        public List<int> p2iRates()
+        {
+            var events = DB.ProgramEvents;
+
+            int runningTotal = 0;
 
             var gradQuery = (from y in events
                              where y.ProgramTypeID == 10
@@ -433,9 +627,10 @@ namespace FIVESTARVC.Controllers
                              {
                                  StartDate = typeGroup.Key,
                                  Count = typeGroup.Count(),
+                                 runningTotal = runningTotal + typeGroup.Count()
                              }).ToList();
 
-            List<double> rates = new List<double>();
+            List<int> rates = new List<int>();
 
             foreach(var t in gradQuery)
             {
@@ -443,6 +638,34 @@ namespace FIVESTARVC.Controllers
             }
 
             return rates;
+        }
+
+        public List<int> p2iRatesCum()
+        {
+            var events = DB.ProgramEvents;
+
+            int runningTotal = 0;
+
+            var gradQuery = (from y in events
+                             where y.ProgramTypeID == 10
+                             group y by y.StartDate.Year into typeGroup
+                             select new
+                             {
+                                 StartDate = typeGroup.Key,
+                                 Count = typeGroup.Count(),
+                                 runningTotal = runningTotal + typeGroup.Count()
+                             }).ToList();
+
+            List<int> cumRates = new List<int>();
+
+            foreach (var t in gradQuery)
+            {
+                runningTotal = runningTotal + t.Count;
+
+                cumRates.Add(runningTotal);
+            }
+
+            return cumRates;
         }
 
         public List<int> emergRates()
@@ -463,6 +686,33 @@ namespace FIVESTARVC.Controllers
             foreach (var t in Query)
             {
                 rates.Add(t.Count);
+            }
+
+            return rates;
+        }
+
+        public List<int> emergRatesCum()
+        {
+            var events = DB.ProgramEvents;
+
+            int runningTotal = 0;
+
+            var Query = (from y in events
+                         where y.ProgramTypeID == 1
+                         group y by y.StartDate.Year into typeGroup
+                         select new
+                         {
+                             StartDate = typeGroup.Key,
+                             Count = typeGroup.Count(),
+                         }).ToList();
+
+            List<int> rates = new List<int>();
+
+            foreach (var t in Query)
+            {
+                runningTotal = runningTotal + t.Count;
+
+                rates.Add(runningTotal);
             }
 
             return rates;
@@ -491,6 +741,33 @@ namespace FIVESTARVC.Controllers
             return rates;
         }
 
+        public List<int> dischargeRatesCum()
+        {
+            var events = DB.ProgramEvents;
+
+            int runningTotal = 0;
+
+            var Query = (from y in events
+                         where y.ProgramTypeID == 5 || y.ProgramTypeID == 6 || y.ProgramTypeID == 7
+                         group y by y.StartDate.Year into typeGroup
+                         select new
+                         {
+                             StartDate = typeGroup.Key,
+                             Count = typeGroup.Count(),
+                         }).ToList();
+
+            List<int> rates = new List<int>();
+
+            foreach (var t in Query)
+            {
+                runningTotal = runningTotal + t.Count;
+
+                rates.Add(runningTotal);
+            }
+
+            return rates;
+        }
+
         public List<int> vetCourtRates()
         {
             var events = DB.ProgramEvents;
@@ -509,6 +786,34 @@ namespace FIVESTARVC.Controllers
            foreach(var r in queryResults)
             {
                 rates.Add(r.VetCourt);
+            }
+
+            return rates;
+        }
+
+        public List<int> vetCourtRatesCum()
+        {
+            var events = DB.ProgramEvents;
+
+            int runningTotal = 0;
+
+            var queryResults = (from y in events
+                                join resident in DB.Residents on y.ResidentID equals resident.ResidentID
+                                where y.ProgramTypeID == 2 || y.ProgramTypeID == 1 || y.ProgramTypeID == 3 && resident.InVetCourt.Equals(true)
+                                group y by y.StartDate.Year into typeGroup
+                                select new
+                                {
+                                    VetCourt = typeGroup.Count(),
+                                    admtYear = typeGroup.Key
+                                }).ToList();
+
+            List<int> rates = new List<int>();
+
+            foreach (var r in queryResults)
+            {
+                runningTotal = runningTotal + r.VetCourt;
+
+                rates.Add(runningTotal);
             }
 
             return rates;
