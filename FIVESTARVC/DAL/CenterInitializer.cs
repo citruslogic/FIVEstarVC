@@ -118,9 +118,15 @@ namespace FIVESTARVC.DAL
                 new ProgramEvent { StartDate=new DateTime(2012,06,20), EndDate=null, Completed=false, ResidentID=4, ProgramTypeID=2},
                 new ProgramEvent { StartDate=new DateTime(2015,07,1), EndDate=null, Completed=false, ResidentID=5, ProgramTypeID=2},
                 new ProgramEvent { StartDate=new DateTime(2016,07,13), EndDate=null, Completed=false, ResidentID=6, ProgramTypeID=2},
+                //Graduated
+                new ProgramEvent { StartDate=new DateTime(2013,05,16), EndDate=null, Completed=false, ResidentID=1, ProgramTypeID=4},
+                new ProgramEvent { StartDate=new DateTime(2015,06,14), EndDate=null, Completed=false, ResidentID=2, ProgramTypeID=4},
+                new ProgramEvent { StartDate=new DateTime(2014,07,4), EndDate=null, Completed=false, ResidentID=3, ProgramTypeID=4},
+                new ProgramEvent { StartDate=new DateTime(2013,06,20), EndDate=null, Completed=false, ResidentID=4, ProgramTypeID=4},
+                new ProgramEvent { StartDate=new DateTime(2016,07,1), EndDate=null, Completed=false, ResidentID=5, ProgramTypeID=4},
+                new ProgramEvent { StartDate=new DateTime(2017,07,13), EndDate=null, Completed=false, ResidentID=6, ProgramTypeID=4},
 
                 //Other events
-                new ProgramEvent { StartDate=DateTime.Parse("2005-04-02"), EndDate=DateTime.Parse("2006-06-05"), Completed=true, ResidentID=4, ProgramTypeID=10},
                 new ProgramEvent { StartDate=DateTime.Parse("2004-05-05"), EndDate=DateTime.Parse("2007-06-20"), Completed=true, ResidentID=5, ProgramTypeID=8},
                 new ProgramEvent { StartDate=DateTime.Parse("2003-03-02"), EndDate=DateTime.Parse("2007-07-12"), Completed=true, ResidentID=6, ProgramTypeID=8},
                 new ProgramEvent { StartDate=DateTime.Parse("2006-03-22"), EndDate=DateTime.Parse("2008-07-12"), Completed=true, ResidentID=1, ProgramTypeID=13},

@@ -9,7 +9,13 @@ using FIVESTARVC.Models;
 using FIVESTARVC.ViewModels;
 using Jitbit.Utils;
 using DelegateDecompiler;
-
+using System.Globalization;
+using System.Threading;
+using DotNet.Highcharts;
+using DotNet.Highcharts.Enums;
+using DotNet.Highcharts.Helpers;
+using DotNet.Highcharts.Options;
+using System.Drawing;
 
 namespace FIVESTARVC.Controllers
 {
@@ -20,6 +26,8 @@ namespace FIVESTARVC.Controllers
         // GET: Reports
         public ActionResult Index()
         {
+           
+
             //Variables used in counting current residents
             int nvyCount = 0;
             int armyCount = 0;
@@ -142,7 +150,8 @@ namespace FIVESTARVC.Controllers
 
             float gradPercent = (Graduated / Admitted) * 100;
 
-            ViewBag.GraduatedPercent = gradPercent.ToString("n2");
+            ViewBag.GraduatedPercent = gradPercent.ToString("n2"); //Graduation Percentage
+
 
             ViewBag.CumulativeCount = DB.Residents.Count();
 
@@ -210,15 +219,300 @@ namespace FIVESTARVC.Controllers
 
         public ActionResult Historic()
         {
-            HistoricData dataModel = new HistoricData();
 
-            
+            Highcharts columnChart = new Highcharts("columnchart");
 
+            columnChart.InitChart(new Chart()
+            {
+                Type = DotNet.Highcharts.Enums.ChartTypes.Line,
+                BackgroundColor = new BackColorOrGradient(System.Drawing.Color.AliceBlue),
+                Style = "fontWeight: 'bold', fontSize: '17px'",
+                BorderColor = System.Drawing.Color.LightBlue,
+                BorderRadius = 0,
+                BorderWidth = 2
 
+            });
 
-            return View();
+            columnChart.SetTitle(new Title()
+            {
+                Text = "Historic Data"
+            });
+
+            //columnChart.SetSubtitle(new Subtitle()
+            //{
+            //    Text = "Played 9 Years Together From 2004 To 2012"
+            //});
+
+            object[] P2I = p2iRates().Cast<object>().ToArray();
+            object[] Admit = admittedRates().Cast<object>().ToArray();
+            object[] reAdmit = readmittedRates().Cast<object>().ToArray();
+            object[] Graduate = gradRates().Cast<object>().ToArray();
+            object[] Emergency = emergRates().Cast<object>().ToArray();
+            object[] Discharge = dischargeRates().Cast<object>().ToArray();
+            object[] vetCourt = vetCourtRates().Cast<object>().ToArray();
+            string[] years = gradYears().ToArray();
+
+            columnChart.SetXAxis(new XAxis()
+            {
+                Type = AxisTypes.Category,
+                Title = new XAxisTitle() { Text = "Years", Style = "fontWeight: 'bold', fontSize: '17px'" },
+                Categories = years
+            });
+
+            columnChart.SetYAxis(new YAxis()
+            {
+                Title = new YAxisTitle()
+                {
+                    Text = "Number of Residents",
+                    Style = "fontWeight: 'bold', fontSize: '17px'"
+                },
+                ShowFirstLabel = true,
+                ShowLastLabel = true,
+                Min = 0
+            });
+
+            columnChart.SetLegend(new Legend
+            {
+                Enabled = true,
+                BorderColor = System.Drawing.Color.CornflowerBlue,
+                BorderRadius = 6,
+                BackgroundColor = new BackColorOrGradient(ColorTranslator.FromHtml("#FFADD8E6"))
+            });
+
+            columnChart.SetSeries(new Series[]
+            {
+                new Series{
+
+                    Name = "P2I",
+                    Data = new Data(P2I)
+                },
+
+                new Series{
+
+                    Name = "Admitted",
+                    Data = new Data(Admit)
+                },
+
+                new Series{
+
+                    Name = "Re-Admitted",
+                    Data = new Data(reAdmit)
+                },
+
+                new Series{
+
+                    Name = "Graduated",
+                    Data = new Data(Graduate)
+                },
+
+                new Series{
+
+                    Name = "Emergency Shelter",
+                    Data = new Data(Emergency)
+                },
+
+                new Series{
+
+                    Name = "Discharged",
+                    Data = new Data(Discharge)
+                },
+
+                new Series{
+
+                    Name = "Vet Court",
+                    Data = new Data(vetCourt)
+                }
+
+            }
+            );
+
+            return View(columnChart);
         }
 
+
+        public List<string> gradYears()
+        {
+            List<string> gradPercent = new List<string>();
+
+            DateTime currentDate = System.DateTime.Now;
+
+            int currentYear = currentDate.Year;
+
+            int num = currentYear - 2011;
+
+            int year = 2012;
+
+            for(int x = 0; x < num; x++)
+            {
+                gradPercent.Add(year.ToString());
+                year++;
+            }
+
+            gradPercent.ToString().ToArray();
+
+            return gradPercent;
+        }
+
+        public List<int> gradRates()
+        {
+            var events = DB.ProgramEvents;
+
+            var Query = (from y in events
+                         where y.ProgramTypeID == 4
+                         group y by y.StartDate.Year into typeGroup
+                         select new
+                         {
+                             StartDate = typeGroup.Key,
+                             Count = typeGroup.Count(),
+                         }).ToList();
+
+            List<int> rates = new List<int>();
+
+            foreach (var t in Query)
+            {
+                rates.Add(t.Count);
+            }
+
+            return rates;
+        }
+
+        public List<int> admittedRates()
+        {
+            var events = DB.ProgramEvents;
+
+            var gradQuery = (from y in events
+                             where y.ProgramTypeID == 2
+                             group y by y.StartDate.Year into typeGroup
+                             select new
+                             {
+                                 StartDate = typeGroup.Key,
+                                 Count = typeGroup.Count(),
+                             }).ToList();
+
+            List<int> rates = new List<int>();
+
+            foreach (var t in gradQuery)
+            {
+                rates.Add(t.Count);
+            }
+
+            return rates;
+        }
+
+        public List<int> readmittedRates()
+        {
+            var events = DB.ProgramEvents;
+
+            var Query = (from y in events
+                             where y.ProgramTypeID == 3
+                             group y by y.StartDate.Year into typeGroup
+                             select new
+                             {
+                                 StartDate = typeGroup.Key,
+                                 Count = typeGroup.Count(),
+                             }).ToList();
+
+            List<int> rates = new List<int>();
+
+            foreach (var t in Query)
+            {
+                rates.Add(t.Count);
+            }
+
+            return rates;
+        }
+
+        public List<double> p2iRates()
+        {
+            var events = DB.ProgramEvents;
+
+            var gradQuery = (from y in events
+                             where y.ProgramTypeID == 10
+                             group y by y.StartDate.Year into typeGroup
+                             select new
+                             {
+                                 StartDate = typeGroup.Key,
+                                 Count = typeGroup.Count(),
+                             }).ToList();
+
+            List<double> rates = new List<double>();
+
+            foreach(var t in gradQuery)
+            {
+                rates.Add(t.Count);
+            }
+
+            return rates;
+        }
+
+        public List<int> emergRates()
+        {
+            var events = DB.ProgramEvents;
+
+            var Query = (from y in events
+                         where y.ProgramTypeID == 1
+                         group y by y.StartDate.Year into typeGroup
+                         select new
+                         {
+                             StartDate = typeGroup.Key,
+                             Count = typeGroup.Count(),
+                         }).ToList();
+
+            List<int> rates = new List<int>();
+
+            foreach (var t in Query)
+            {
+                rates.Add(t.Count);
+            }
+
+            return rates;
+        }
+
+        public List<int> dischargeRates()
+        {
+            var events = DB.ProgramEvents;
+
+            var Query = (from y in events
+                         where y.ProgramTypeID == 5 || y.ProgramTypeID == 6 || y.ProgramTypeID ==7
+                         group y by y.StartDate.Year into typeGroup
+                         select new
+                         {
+                             StartDate = typeGroup.Key,
+                             Count = typeGroup.Count(),
+                         }).ToList();
+
+            List<int> rates = new List<int>();
+
+            foreach (var t in Query)
+            {
+                rates.Add(t.Count);
+            }
+
+            return rates;
+        }
+
+        public List<int> vetCourtRates()
+        {
+            var events = DB.ProgramEvents;
+            var queryResults = (from y in events
+                                join resident in DB.Residents on y.ResidentID equals resident.ResidentID
+                                where y.ProgramTypeID == 2 || y.ProgramTypeID == 1 || y.ProgramTypeID == 3 && resident.InVetCourt.Equals(true)
+                                group y by y.StartDate.Year into typeGroup
+                                select new
+                                {
+                                    VetCourt = typeGroup.Count(),
+                                    admtYear = typeGroup.Key
+                                }).ToList();
+
+            List<int> rates = new List<int>();
+
+           foreach(var r in queryResults)
+            {
+                rates.Add(r.VetCourt);
+            }
+
+            return rates;
+        }
 
         public ActionResult DownloadData()
         {
@@ -323,25 +617,100 @@ namespace FIVESTARVC.Controllers
 
             return File(filename, "text/csv", "HistoricData.csv");
         }
-        //A very naughty method
 
-        //public bool checkEvent(Resident res, int pgmType)
-        //{
-        //    var pgmEventCheck = db.ProgramEvents;
 
-        //    foreach (var ProgramEvent in pgmEventCheck)
-        //    {
-        //        if (ProgramEvent.ResidentID == res.ResidentID)
-        //        {
+        public ActionResult campaigns()
+        {
+            var BarChartData = from mc in DB.MilitaryCampaigns
+                               select new
+                               {
+                                   MilitaryCampaign = mc.CampaignName,
+                                   ResidentCount = mc.Residents.Count()
+                               };
 
-        //            if (ProgramEvent.ProgramTypeID == pgmType)
-        //            {
-        //                return true;
-        //            }
-        //        }
-        //    }
+            List<string> campaignNames = new List<string>();
+            List<int> resCounts = new List<int>();
 
-        //    return false;
-        //}
+            foreach(var x in BarChartData)
+            {
+                campaignNames.Add(x.MilitaryCampaign);
+            }
+
+            foreach (var y in BarChartData)
+            {
+                resCounts.Add(y.ResidentCount);
+            }
+
+            Highcharts columnChart = new Highcharts("columnchart");
+
+            columnChart.InitChart(new Chart()
+            {
+                Type = DotNet.Highcharts.Enums.ChartTypes.Bar,
+                BackgroundColor = new BackColorOrGradient(System.Drawing.Color.AliceBlue),
+                Style = "fontWeight: 'bold', fontSize: '17px'",
+                BorderColor = System.Drawing.Color.LightBlue,
+                BorderRadius = 0,
+                BorderWidth = 2
+
+            });
+
+            columnChart.SetTitle(new Title()
+            {
+                Text = "Resident Campaign Data"
+            });
+
+            //columnChart.SetSubtitle(new Subtitle()
+            //{
+            //    Text = "Played 9 Years Together From 2004 To 2012"
+            //});
+            object[] residentCount = resCounts.Cast<object>().ToArray();
+            string[] Campaigns = campaignNames.ToArray();
+
+            columnChart.SetXAxis(new XAxis()
+            {
+                Type = AxisTypes.Category,
+                Title = new XAxisTitle() { Text = "Campaign", Style = "fontWeight: 'bold', fontSize: '17px'" },
+                Categories = Campaigns
+            });
+
+            columnChart.SetYAxis(new YAxis()
+            {
+                Title = new YAxisTitle()
+                {
+                    Text = "Number of Residents",
+                    Style = "fontWeight: 'bold', fontSize: '17px'"
+                },
+                ShowFirstLabel = true,
+                ShowLastLabel = true,
+                Min = 0
+            });
+
+            columnChart.SetLegend(new Legend
+            {
+                Enabled = true,
+                BorderColor = System.Drawing.Color.CornflowerBlue,
+                BorderRadius = 6,
+                BackgroundColor = new BackColorOrGradient(ColorTranslator.FromHtml("#FFADD8E6"))
+            });
+
+            columnChart.SetSeries(new Series[]
+            {
+                new Series{
+
+                    Name = "Residents",
+                    Data = new Data(residentCount)
+                },
+
+                
+
+            }
+            );
+
+            return View(columnChart);
+
+        }
+
+
+
     }
-}
+    }

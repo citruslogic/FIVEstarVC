@@ -1,0 +1,21 @@
+﻿@model DotNet.Highcharts.Highcharts
+
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+
+
+@{
+    ViewBag.Title = "Cumulative Graduation Rates";
+}
+
+<div class="row">
+    <div>
+        <br>
+        <br>
+        <div class="col-md-12 col-md-6">
+            @(Model)
+        </div>
+    </div>
+</div>
+<br>
+<button class="btn btn-default" onclick="location.href='/Reports/Index';" style="background-color: lightsteelblue"> Return to Reports </button><br>
+<br>
