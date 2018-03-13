@@ -85,7 +85,8 @@
                         <div class="input-group-prepend">
                             <span class="input-group-text">$</span>
                         </div>
-                        @Html.EditorFor(model => model.TotalBenefitAmount, new { htmlAttributes = new { @class = "form-control font-weight-bold" } })
+                        <input type="text" class="form-control" id="DisplayTotal" disabled />
+                        @Html.HiddenFor(model => model.TotalBenefitAmount)
                         @Html.ValidationMessageFor(model => model.TotalBenefitAmount, "")
 
                     </div>
