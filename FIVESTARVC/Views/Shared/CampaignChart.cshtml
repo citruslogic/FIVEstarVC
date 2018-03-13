@@ -1,0 +1,9 @@
+﻿
+
+@{ 
+    var CampaignChart = new Chart(width: 600, height: 400)
+        .AddTitle("Product Sales")
+        .AddSeries("Campaigns", "Column", xValue: ViewBag.BarChartData, xField: "Campaign",
+                                                yValues: ViewBag.BarChartData, yFields: "Count");
+}
+

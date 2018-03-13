@@ -10,7 +10,9 @@
 
 <h2>Center Summary</h2>
 <hr />
-<button class="btn btn-default" onclick="location.href='/Reports/Historic';"> Monthly Breakdown </button>
+<button class="btn btn-default" onclick="location.href='/Reports/Historic';"style="background-color: lightsteelblue"> Historic Chart </button> <button class="btn btn-default" onclick="location.href='/Reports/campaigns';" style="background-color: lightsteelblue"> Campaign Data Chart </button>
+
+
 <br>
 <br>
 <h4>Cumulative Residents: @Html.Raw(ViewBag.CumulativeCount)</h4>
@@ -20,7 +22,6 @@
 @Html.ActionLink("Download Data", "DownloadData")
 <br>
 
-<br>
 <h3>Center Statistics</h3>
 <table class="table">
     <tr>
@@ -39,10 +40,10 @@
             @{
                 if (ViewBag.Admitted == null)
                 { <text>0</text> }
-                else
-                {
-                    @Html.Raw(ViewBag.Admitted)
-                }
+            else
+            {
+                @Html.Raw(ViewBag.Admitted)
+            }
             }
         </td>
     </tr>
@@ -55,10 +56,10 @@
             @{
                 if (ViewBag.EmergencyShelter == null)
                 { <text>0</text> }
-                else
-                {
-                    @Html.Raw(ViewBag.EmergencyShelter)
-                }
+            else
+            {
+                @Html.Raw(ViewBag.EmergencyShelter)
+            }
             }
         </td>
     </tr>
@@ -70,10 +71,10 @@
             @{
                 if (ViewBag.DischargeCount == null)
                 { <text>0</text> }
-                else
-                {
-                    @Html.Raw(ViewBag.DischargeCount)
-                }
+            else
+            {
+                @Html.Raw(ViewBag.DischargeCount)
+            }
             }
         </td>
     </tr>
@@ -85,10 +86,10 @@
             @{
                 if (ViewBag.Graduated == null)
                 { <text>0</text> }
-                else
-                {
-                    @Html.Raw(ViewBag.Graduated)
-                }
+            else
+            {
+                @Html.Raw(ViewBag.Graduated)
+            }
             }
         </td>
     </tr>
@@ -100,10 +101,10 @@
             @{
                 if (ViewBag.GraduatedPercent == null)
                 { <text>0</text> }
-                else
-                {
-                    @Html.Raw(ViewBag.GraduatedPercent)
-                }
+            else
+            {
+                @Html.Raw(ViewBag.GraduatedPercent)
+            }
             }
             %
         </td>
@@ -116,10 +117,10 @@
             @{
                 if (ViewBag.VeteransCourt == null)
                 { <text>0</text> }
-                else
-                {
-                    @Html.Raw(ViewBag.VeteransCourt)
-                }
+            else
+            {
+                @Html.Raw(ViewBag.VeteransCourt)
+            }
             }
         </td>
     </tr>
@@ -131,10 +132,10 @@
             @{
                 if (ViewBag.P2I == null)
                 { <text>0</text> }
-                else
-                {
-                    @Html.Raw(ViewBag.P2I)
-                }
+            else
+            {
+                @Html.Raw(ViewBag.P2I)
+            }
             }
         </td>
     </tr>
@@ -171,10 +172,10 @@
             @{
                 if (ViewBag.CurrentNavy == null)
                 { <text>0</text> }
-                else
-                {
-                    @Html.Raw(ViewBag.CurrentNavy)
-                }
+            else
+            {
+                @Html.Raw(ViewBag.CurrentNavy)
+            }
             }
         </td>
     </tr>
@@ -189,10 +190,10 @@
             @{
                 if (ViewBag.CurrentArmy == null)
                 { <text>0</text> }
-                else
-                {
-                    @Html.Raw(ViewBag.CurrentArmy)
-                }
+            else
+            {
+                @Html.Raw(ViewBag.CurrentArmy)
+            }
             }
         </td>
     </tr>
@@ -207,10 +208,10 @@
             @{
                 if (ViewBag.CurrentMarine == null)
                 { <text>0</text> }
-                else
-                {
-                    @Html.Raw(ViewBag.CurrentMarine)
-                }
+            else
+            {
+                @Html.Raw(ViewBag.CurrentMarine)
+            }
             }
         </td>
     </tr>
@@ -225,10 +226,10 @@
             @{
                 if (ViewBag.CurrentAF == null)
                 { <text>0</text> }
-                else
-                {
-                    @Html.Raw(ViewBag.CurrentAF)
-                }
+            else
+            {
+                @Html.Raw(ViewBag.CurrentAF)
+            }
             }
         </td>
     </tr>
@@ -243,10 +244,10 @@
             @{
                 if (ViewBag.CurrentCG == null)
                 { <text>0</text> }
-                else
-                {
-                    @Html.Raw(ViewBag.CurrentCG)
-                }
+            else
+            {
+                @Html.Raw(ViewBag.CurrentCG)
+            }
             }
         </td>
     </tr>
