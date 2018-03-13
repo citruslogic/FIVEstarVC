@@ -215,20 +215,19 @@
 
 <h2>Events</h2>
 
-<table class="events table table-striped">
+<table class="events table table-sm table-striped" style="width: 70%">
     <thead>
         <tr>
-            <th>Program Name</th>
+            <th style="width: 17.7em;">Program Name</th>
             <th>Start Date</th>
             <th>End Date</th>
-            <th></th>
         </tr>
     </thead>
-    <tbody>
+    <tbody style="width:75%">
         @foreach (var item in Model.ProgramEvents)
         {
             <tr>
-                <td>
+                <td style="width: 15em;">
                     @Html.DisplayFor(modelItem => item.ProgramType.ProgramDescription)
                 </td>
                 <td>
