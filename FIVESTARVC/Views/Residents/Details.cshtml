@@ -139,7 +139,7 @@
     </div>
     <div class="col-sm-5 offset-2" style="box-shadow: 0 0 30px black;">
         <h5>Income </h5>
-        <table class="table table-sm table-striped">
+        <table class="table table-bordered table-striped">
             <thead>
                 <tr>
                     <th class="col-md-2">Type</th>
@@ -223,11 +223,11 @@
             <th>End Date</th>
         </tr>
     </thead>
-    <tbody style="width:75%">
+    <tbody>
         @foreach (var item in Model.ProgramEvents)
         {
             <tr>
-                <td style="width: 15em;">
+                <td style="width: 17.7em">
                     @Html.DisplayFor(modelItem => item.ProgramType.ProgramDescription)
                 </td>
                 <td>
