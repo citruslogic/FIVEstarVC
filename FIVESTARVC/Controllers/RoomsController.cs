@@ -50,7 +50,7 @@ namespace FIVESTARVC.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "RoomNum,WingName")] Room room)
+        public ActionResult Create([Bind(Include = "RoomNumber,WingName")] Room room)
         {
             if (ModelState.IsValid)
             {
@@ -85,7 +85,8 @@ namespace FIVESTARVC.Controllers
                 db.SaveChanges();
                 TempData["UserMessage"] = "A new room has been added.  ";
 
-                return RedirectToAction("Index");
+                // Take the user back to the Residents listing, if they arrived from there.
+                return RedirectToAction("Index", "Residents");
             }
             else
             {
@@ -117,7 +118,7 @@ namespace FIVESTARVC.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "RoomID,RoomNum,IsOccupied,WingName")] Room room)
+        public ActionResult Edit([Bind(Include = "RoomNumber,IsOccupied,WingName")] Room room)
         {
             if (ModelState.IsValid)
             {
