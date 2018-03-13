@@ -11,11 +11,11 @@
     <hr />
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.RoomNum)
+            @Html.DisplayNameFor(model => model.RoomNumber)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.RoomNum)
+            @Html.DisplayFor(model => model.RoomNumber)
         </dd>
 
         @*Disabled.  This field is for database purposes only.  It is used to assign and release rooms*@
@@ -39,6 +39,6 @@
     </dl>
 </div>
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.RoomID }) |
+    @Html.ActionLink("Edit", "Edit", new { id = Model.RoomNumber }) |
     @Html.ActionLink("Back to List", "Index")
 </p>
