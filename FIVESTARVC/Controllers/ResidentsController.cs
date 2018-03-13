@@ -12,6 +12,7 @@ using FIVESTARVC.ViewModels;
 
 namespace FIVESTARVC.Controllers
 {
+    [Authorize]
     public class ResidentsController : Controller
     {
         private ResidentContext db = new ResidentContext();
