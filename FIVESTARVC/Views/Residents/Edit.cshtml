@@ -174,9 +174,17 @@ else
                     dateFormat: 'mm-dd-yy'
                 });
         }
-
-        /* Disable the room dropdown if we're not readmitting the resident. */
+        
         $(document).ready(function () {
+
+
+            if (document.getElementById("Benefit_TotalBenefitAmount").value) {
+                document.getElementById("DisplayTotal").value = parseFloat(document.getElementById("Benefit_TotalBenefitAmount").value);
+
+            }
+
+            /* Disable the room dropdown if we're not readmitting the resident. */
+
             $("#Readmit").click(function () {
                 if ($(this).is(":checked")) {
                     $("#RoomNumber").prop("disabled", false);
@@ -185,6 +193,8 @@ else
                 }
             });
         });
+
+       
 
         $('.income').on("keyup", function () {
             var total = parseFloat(0.0);
@@ -195,6 +205,7 @@ else
 
             if (total.valueOf != NaN) {
                 $('#Benefit_TotalBenefitAmount').val(total);
+                $('#DisplayTotal').val(total);
             }
             
         });
