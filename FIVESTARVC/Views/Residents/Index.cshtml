@@ -30,16 +30,21 @@
 <h2>Residents Listing</h2>
 <br />
 <div class="btn-group" style="margin-bottom: 1em;">
-    <button type="button" class="btn btn-success" onclick="location.href = '/Residents/Create';">Admit Resident</button>
-    <button type="button" class="btn btn-success dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        <span class="sr-only">Toggle Dropdown</span>
-    </button>
-    <div class="dropdown-menu">
-        <a class="dropdown-item" href="#" onclick="addCampaign()">Add Campaign</a>
-        <a class="dropdown-item" href="#" onclick="newRoom()">Add Room</a>
 
+    <button type="button" style="margin-right: 10px;" class="btn btn-success" onclick="location.href = '/Residents/Create';">Admit Resident</button>
+    <div class="dropdown">
+        <button style="margin-right: 10px;" class="btn btn-warning dropdown-toggle" type="button" data-toggle="dropdown">
+        <i class="fa fa-wrench fa-fw"></i> Maintenance
+            <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu">
+            <li><button class="dropdown-item" onclick="addCampaign()">Add Campaign</button></li>
+            <li><button class="dropdown-item" onclick="location.href = '/Rooms/Create';">Add Room</button></li>
+            
+        </ul>
     </div>
 </div>
+
 <br />
 @using (Html.BeginForm("Index", "Residents", FormMethod.Get))
 {
@@ -224,16 +229,6 @@
                         $('#QuickEventModal').modal('show');
                     });
                 }
-
-
-                function newRoom() {
-
-                    $.get('/Rooms/AddRoom/', function (data) {
-                        $('.modal-content').html(data);
-                        $('#AddModal').modal('show');
-                    });
-                }
-
 
             </script>
 

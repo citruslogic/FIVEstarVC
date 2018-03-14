@@ -28,6 +28,6 @@
 else
 {
     <ul class="nav navbar-nav navbar-right">
-        <li>@Html.ActionLink("Log in", "Index", "Login", null, new { id = "loginLink" })</li>
+        <li>@Html.ActionLink("Sign in", "Index", "Login", routeValues: null, htmlAttributes: new { id = "loginLink", @class = "btn btn-lg btn-light" })</li>
     </ul>
 }

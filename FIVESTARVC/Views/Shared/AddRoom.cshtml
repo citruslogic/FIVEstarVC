@@ -5,11 +5,9 @@
 
     AjaxOptions options = new AjaxOptions();
     options.HttpMethod = "POST";
-    options.Url = Url.Action("AddRoom", "Rooms");
     options.UpdateTargetId = "modalFormRoom";
     options.InsertionMode = InsertionMode.Replace;
 }
-
 
 
 @using (Ajax.BeginForm("AddRoom", "Rooms", options, new { @class = "form-horizontal", role = "form" }))
@@ -23,40 +21,45 @@
     <div class="modal-body">
 
         @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
         <div class="form-horizontal">
-
+            <div class="text-danger" id="ErrorMessage"></div>
             <p> Type in the information for the room and then click Add.</p>
             <br />
 
 
             <div class="form-group form-inline">
-                @Html.LabelFor(model => model.RoomNumber, htmlAttributes: new { @class = "control-label" })
-                @Html.TextBoxFor(model => model.RoomNumber, htmlAttributes: new { @class = "form-control offset-1" })
-            </div>
-            <div class="form-group form-inline">
+                    @Html.LabelFor(model => model.RoomNumber, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.RoomNumber, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.RoomNumber, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="form-group form-inline">
 
-                @Html.LabelFor(model => model.WingName, htmlAttributes: new { @class = "control-label" })
-                @Html.TextBoxFor(model => model.WingName, htmlAttributes: new { @class = "form-control offset-2" })
-            </div>
+                        @Html.LabelFor(model => model.WingName, htmlAttributes: new { @class = "control-label" })
+                        @Html.TextBoxFor(model => model.WingName, htmlAttributes: new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.WingName)
+                    </div>
 
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="submit" class="btn btn-primary">Add</button>
-            </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Add</button>
+                    </div>
 
+                </div>
+            </div>
         </div>
     </div>
-</div>
- }
-            
+        }
 
 
-@section Scripts {
-@Scripts.Render("~/bundles/jqueryval")
-<script type="text/javascript">
 
-    $.validator.unobtrusive.parse($("form"));
-</script>
+        @section Scripts {
+            @Scripts.Render("~/bundles/jqueryval")
+            <script type="text/javascript">
 
-}
+                $.validator.unobtrusive.parse($("form"));
+            </script>
+
+        }
