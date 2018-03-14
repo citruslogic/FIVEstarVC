@@ -3,15 +3,26 @@
     using (Html.BeginForm("Logoff", "Login", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
     {
         @Html.AntiForgeryToken()
-
-        <ul class="nav navbar-nav navbar-right dropdown">
-            <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown">@User.Identity.Name<span class="caret"></span></a>
-                <ul class="dropdown-menu" role="menu">
-                    <li><a href="javascript:document.getElementById('logoutForm').submit()">Log off</a></li>
-                </ul>
+<div class="nav navbar-nav navbar-right">
+    <div class="dropdown">
+        <button class="btn btn-lg btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+            @User.Identity.Name
+            <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" style="position: absolute; z-index: 2; width: auto">
+            <li>
+                <a class="dropdown-item" href="javascript:document.getElementById('logoutForm').submit()"><i class="fa fa-sign-out fa-fw"></i> Log off</a>
             </li>
+
         </ul>
+    </div>
+
+
+
+
+
+</div>
+
     }
 }
 else
