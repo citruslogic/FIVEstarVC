@@ -18,10 +18,11 @@ namespace FIVESTARVC.Controllers
 
 
         // GET: Rooms
-        public ActionResult Index(int? page)
+        public ActionResult Index()
         {
+           
             
-            return View(db.Rooms.ToList());
+            return View();
         }
 
         // GET: Rooms/Details/5
