@@ -120,7 +120,7 @@ namespace FIVESTARVC.Controllers
         {
 
             ViewBag.AdmissionType = new SelectList(db.ProgramTypes
-                .Where(t => t.ProgramTypeID <= 3), "ProgramTypeID", "ProgramDescription");
+                .Where(t => t.ProgramTypeID <= 3), "ProgramTypeID", "ProgramDescription", 2);
 
             ViewBag.RoomNumber = new SelectList(db.Rooms.Where(rm => rm.IsOccupied == false), "RoomNumber", "RoomNumber");
 
@@ -154,6 +154,7 @@ namespace FIVESTARVC.Controllers
         public ActionResult Create(ResidentIncomeModel residentIncomeModel, string[] selectedCampaigns, 
             int AdmissionType, int RoomNumber)
         {
+            TempData["Duplicate"] = null;
             ViewBag.AdmissionType = new SelectList(db.ProgramTypes
                 .Where(t => t.ProgramTypeID <= 3), "ProgramTypeID", "ProgramDescription", AdmissionType);
 
@@ -195,6 +196,8 @@ namespace FIVESTARVC.Controllers
             {
                 if (ModelState.IsValid)
                 {
+                    
+
                     db.Residents.Add(resident);
                     resident.ProgramEvents.Add(new ProgramEvent
                     {
@@ -280,10 +283,24 @@ namespace FIVESTARVC.Controllers
             }
 
 
-
-
-
             return View(residentIncomeModel);
+        }
+
+        public ActionResult ConfirmCreate(Resident resident)
+        {
+
+            /* Check for the possible pre-existence of the resident in the system. */
+            if (db.Residents.Any(r => r.FirstMidName.Contains(resident.FirstMidName)
+                && r.LastName.Contains(resident.LastName)
+                && r.Birthdate.GetValueOrDefault().Date == resident.Birthdate.GetValueOrDefault().Date
+                && r.ServiceBranch == resident.ServiceBranch))
+            {
+
+                // Found a match.
+                
+            }
+            
+            return RedirectToAction("Create");
         }
 
         // GET: Residents/Edit/5

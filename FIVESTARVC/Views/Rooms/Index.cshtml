@@ -24,7 +24,7 @@
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.RoomNum)
+            @Html.DisplayNameFor(model => model.RoomNumber)
         </th>
         @*<th>
             @Html.DisplayNameFor(model => model.IsOccupied)
@@ -38,7 +38,7 @@
 @foreach (var item in Model) {
     <tr>
         <td>
-            @Html.DisplayFor(modelItem => item.RoomNum)
+            @Html.DisplayFor(modelItem => item.RoomNumber)
         </td>
         @*<td>
             @Html.DisplayFor(modelItem => item.IsOccupied)
@@ -47,8 +47,8 @@
             @Html.DisplayFor(modelItem => item.WingName)
         </td>
         <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.RoomID }) |
-            @Html.ActionLink("Details", "Details", new { id=item.RoomID })
+            @Html.ActionLink("Edit", "Edit", new { id=item.RoomNumber }) |
+            @Html.ActionLink("Details", "Details", new { id=item.RoomNumber })
 
             @*Commented out for security reasons.*@
             @*|

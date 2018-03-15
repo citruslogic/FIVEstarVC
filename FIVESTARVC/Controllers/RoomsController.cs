@@ -50,52 +50,32 @@ namespace FIVESTARVC.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "RoomNum,WingName")] Room room)
+        public ActionResult Create([Bind(Include = "RoomNumber,WingName")] Room room)
         {
             if (ModelState.IsValid)
             {
                 room.IsOccupied = false;
-                db.Rooms.Add(room);
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                if (db.Rooms.Where(rm => rm.RoomNumber == room.RoomNumber).Any())
+                {
+                    ModelState.AddModelError("RoomNumber", "The room already exists in the system. Choose a new room number.");
+                    return View(room);
+
+                }
+                else
+                {
+                    db.Rooms.Add(room);
+                    db.SaveChanges();
+                    TempData["UserMessage"] = "A new room has been added.  ";
+
+                    return RedirectToAction("Index");
+                }
             }
 
             return View(room);
         }
 
 
-        // GET: Residents/AddRoom
-        [HttpGet]
-        public ActionResult AddRoom()
-        {
-            Room NewRoom = new Room();
-
-            return PartialView(NewRoom);
-        }
-
-        // POST: Residents/AddRoom
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult AddRoom(Room model)
-        {
-
-            if (ModelState.IsValid)
-            {
-                db.Rooms.Add(model);
-                db.SaveChanges();
-                TempData["UserMessage"] = "A new room has been added.  ";
-
-                return RedirectToAction("Index");
-            }
-            else
-            {
-                // Failed
-                ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
-            }
-
-
-            return PartialView(model);
-        }
+        
 
         // GET: Rooms/Edit/5
         public ActionResult Edit(int? id)
@@ -117,7 +97,7 @@ namespace FIVESTARVC.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "RoomID,RoomNum,IsOccupied,WingName")] Room room)
+        public ActionResult Edit([Bind(Include = "RoomNumber,IsOccupied,WingName")] Room room)
         {
             if (ModelState.IsValid)
             {

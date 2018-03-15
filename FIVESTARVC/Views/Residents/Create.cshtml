@@ -151,6 +151,16 @@
             });
     }
 
+    $(document).ready(function () {
+
+
+        if (document.getElementById("TotalBenefitAmount").val) {
+            document.getElementById("DisplayTotal").value = parseFloat(document.getElementById("TotalBenefitAmount").value);
+
+        }
+
+    });
+
         $('.income').on("keyup", function () {
             var total = parseFloat(0.0);
 
@@ -158,7 +168,11 @@
                 total += parseFloat($(this).val() || 0);
             });
 
-            $('#TotalBenefitAmount').val(total);
+            if (total.valueOf != NaN) {
+                $('#TotalBenefitAmount').val(total);
+                $('#DisplayTotal').val(total);
+            }
+
     });
 
         $('.DropDownClear').on("onload", function () {
@@ -183,5 +197,6 @@
             });
         }
 
+        
 </script>
 }

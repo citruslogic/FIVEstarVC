@@ -10,10 +10,10 @@
     <div class="row col-md-10">
         <div class="col-md-3">
             <p>
-                <em>Active</em> residents: @Html.Raw(ViewBag.pop)
+                <em>Current</em> residents: @Html.Raw(ViewBag.pop)
             </p>
             <p>
-                Total residents: @Html.Raw(ViewBag.allpop)
+                All-time residents: @Html.Raw(ViewBag.allpop)
             </p>
         </div>
         <div class="col-md-4">
@@ -32,10 +32,11 @@
                     </div>
                 </div>
             </div>
-    <br />
-            <div class="row">
+    <hr />
+
+            <div class="row col-md-10">
                 <div class="col-md-3">
-                <p><span class="fa fa-birthday-cake fa-fw"></span> Birthdays coming up:</p>
+                <p> Birthdays coming up:</p>
                 </div>
                 @foreach (var resident in ViewBag.NearestResidents)
                 {
@@ -45,7 +46,7 @@
                     </div>
                 }
             </div>
-    <br />
+    <hr />
             <div class="row" style="margin-top: 0.9em">
                 <h4>Residents recently admitted into your center.</h4>
 

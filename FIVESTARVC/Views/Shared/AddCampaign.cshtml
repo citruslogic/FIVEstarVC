@@ -6,7 +6,6 @@
 
     AjaxOptions options = new AjaxOptions();
     options.HttpMethod = "POST";
-    options.Url = Url.Action("AddCampaign", "Residents");
     options.UpdateTargetId = "modalForm";
     options.InsertionMode = InsertionMode.Replace;
 }
@@ -24,6 +23,8 @@
         <div class="modal-body">
 
             <p> Type in the name of the new campaign in the text box below and then click Add.</p>
+            <p class="bg-info"> Note: campaigns are at most 3 words separated by a single space and 
+            usually do not contain numbers.</p>
             <br />
             @Html.AntiForgeryToken()
             @Html.ValidationSummary(true, "", new { @class = "text-danger" })

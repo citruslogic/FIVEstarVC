@@ -26,11 +26,15 @@
         -webkit-box-shadow: none;
         box-shadow: none;
     }        
+
+    .fa {
+        display: inline;
+    }
 </style>
 </head>
 
-<body style="background-color: whitesmoke">
-    <div style="background-color: white; margin-top: -50px;"><img src="~/Content/fivestar_logo.jpg" /></div>
+<body>
+    <img src="~/Content/fivestar_logo.jpg" style="margin-top: -50px;"/>
     <nav class="navbar navbar-dark" style="background-image: url('../../Content/flag_bg.jpg')">
         <div class="container">
 
@@ -41,9 +45,10 @@
                     <li class="nav-item" style="padding-right: 1em"><a href="/ProgramEvents/Index" class="btn btn-lg btn-dark"><i class="fa fa-bolt fa-fw"></i> Programs</a></li>
                     <li class="nav-item" style="padding-right: 1em"><a href="/Reports/Index" class="btn btn-lg btn-dark"><i class="fa fa-book fa-fw"></i> Reports</a></li>
                 </ul>
-                @*TODO: Prettify this later.*@
-                @Html.Partial("_LoginPartial")
+
             </div>
+            @*TODO: Prettify this later.*@
+            @Html.Partial("_LoginPartial")
         </div>
     </nav>
     <div class="container body-content" style="padding-bottom: 0px;">
