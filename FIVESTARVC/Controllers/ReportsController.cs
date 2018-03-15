@@ -836,6 +836,7 @@ namespace FIVESTARVC.Controllers
                                            r.InVetCourt,
                                            r.Note,
                                            pgm.ProgramTypeID
+                                           
                                        }).GroupBy(r => r.ResidentID).ToList();
 
 
