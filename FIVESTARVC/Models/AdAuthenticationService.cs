@@ -48,23 +48,18 @@ namespace FIVESTARVC.Models
             UserPrincipal userPrincipal = null;
             try
             {
-                isAuthenticated = principalContext.ValidateCredentials(username, password, ContextOptions.Negotiate);
-                if (isAuthenticated)
+                userPrincipal = UserPrincipal.FindByIdentity(principalContext, username);
+                if (userPrincipal != null)
                 {
-                    userPrincipal = UserPrincipal.FindByIdentity(principalContext, username);
+                    isAuthenticated = principalContext.ValidateCredentials(username, password, ContextOptions.Negotiate);
                 }
             }
             catch (Exception)
             {
-                isAuthenticated = false;
-                userPrincipal = null;
-            }
-
-            if (!isAuthenticated || userPrincipal == null)
-            {
+                //TODO log exception in your ELMAH like this:
+                //Elmah.ErrorSignal.FromCurrentContext().Raise(exception);
                 return new AuthenticationResult("Username or Password is not correct");
             }
-
             if (userPrincipal.IsAccountLockedOut())
             {
                 // here can be a security related discussion weather it is worth 
@@ -98,6 +93,12 @@ namespace FIVESTARVC.Models
             if (!String.IsNullOrEmpty(userPrincipal.EmailAddress))
             {
                 identity.AddClaim(new Claim(ClaimTypes.Email, userPrincipal.EmailAddress));
+            }
+
+            var groups = userPrincipal.GetAuthorizationGroups();
+            foreach (var @group in groups)
+            {
+                identity.AddClaim(new Claim(ClaimTypes.Role, @group.Name));
             }
 
             // add your own claims if you need to add more information stored on the cookie

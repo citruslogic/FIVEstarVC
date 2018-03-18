@@ -21,7 +21,7 @@
 @if (TempData["UserMessage"] != null)
 {
     var message = TempData["UserMessage"];
-    <div class="alert alert-dark alert-dismissable" style="position: absolute; right: 80px;">
+    <div class="alert alert-dark alert-dismissable" style="position: absolute; right: 80px; top: 30px;">
         <a href="#" class="close" data-dismiss="alert" aria-label="close"> &times;</a>
         @message &nbsp;
     </div>
@@ -30,16 +30,21 @@
 <h2>Residents Listing</h2>
 <br />
 <div class="btn-group" style="margin-bottom: 1em;">
-    <button type="button" class="btn btn-success" onclick="location.href = '/Residents/Create';">Admit Resident</button>
-    <button type="button" class="btn btn-success dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        <span class="sr-only">Toggle Dropdown</span>
-    </button>
-    <div class="dropdown-menu">
-        <a class="dropdown-item" href="#" onclick="addCampaign()">Add Campaign</a>
-        <a class="dropdown-item" href="#" onclick="location.href = '/Rooms/Index'">Add Room</a>
 
+    <button type="button" style="margin-right: 10px;" class="btn btn-success" onclick="location.href = '/Residents/Create';"><i class="fa fa-pencil-square fa-fw"></i> Admit Resident</button>
+    <div class="dropdown">
+        <button style="margin-right: 10px;" class="btn btn-warning dropdown-toggle" type="button" data-toggle="dropdown">
+        <i class="fa fa-gears fa-fw"></i> Maintenance
+            <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu">
+            <li><button class="dropdown-item" onclick="addCampaign()"><i class="fa fa-plus fa-fw"></i> Campaign</button></li>
+            <li><button class="dropdown-item" onclick="location.href = '/Rooms/Index';"><i class="fa fa-wrench fa-fw"></i> Room Config</button></li>
+            
+        </ul>
     </div>
 </div>
+
 <br />
 @using (Html.BeginForm("Index", "Residents", FormMethod.Get))
 {
@@ -120,8 +125,8 @@
                 @Html.ActionLink("Edit", "Edit", new { id = item.ResidentID }, htmlAttributes: new { @class = "btn btn-sm btn-outline-secondary btn-light" }) &nbsp;
 
                 @*Trigger the modal with a button*@
-                <input type="button" value="+ Program" class="modal-link btn btn-sm btn-outline-secondary btn-light"
-                       data-toggle="modal" data-target="#QuickEventModal" onclick="showQuickEventDialog(@item.ResidentID)" />
+                <button type="button" class="modal-link btn btn-sm btn-outline-secondary btn-light"
+                       data-toggle="modal" data-target="#QuickEventModal" onclick="showQuickEventDialog(@item.ResidentID)"><i class="fa fa-plus fa-fw"></i> Program</button>
 
                 @Html.ActionLink("Details", "Details", new { id = item.ResidentID }, htmlAttributes: new { @class = "btn btn-sm btn-outline-secondary btn-light" }) &nbsp;
 
@@ -224,16 +229,6 @@
                         $('#QuickEventModal').modal('show');
                     });
                 }
-
-
-                function newRoom() {
-
-                    $.get('/Rooms/AddRoom/', function (data) {
-                        $('.modal-content').html(data);
-                        $('#AddModal').modal('show');
-                    });
-                }
-
 
             </script>
 

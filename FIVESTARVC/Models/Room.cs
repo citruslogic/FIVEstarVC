@@ -13,7 +13,8 @@ namespace FIVESTARVC.Models
     public class Room
     {
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
-        [Key]
+        [Key, Required]
+        [Index("RoomNumber")]
         [Display(Name = "Room Number")]
         public int RoomNumber { get; set; }
 

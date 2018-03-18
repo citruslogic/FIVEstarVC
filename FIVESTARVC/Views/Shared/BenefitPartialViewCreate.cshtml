@@ -3,7 +3,11 @@
 @{
     Layout = null;
 }
-
+<style>
+    .money-wide {
+        width: 150px;
+    }
+</style>
 <div class="col-sm-5 table-responsive">
     <h4>Income </h4>
     <table class="table table-sm table-striped">
@@ -16,7 +20,7 @@
         <tbody>
             <tr>
                 <td class="col-form-label">
-                    @Html.LabelFor(model => model.DisabilityPercentage, htmlAttributes: new { @class = "control-label col-md-offset-1" })
+                    @Html.LabelFor(model => model.DisabilityPercentage, htmlAttributes: new { @class = "control-label" })
                 </td>
                 <td>
                     <div class="input-group money-wide mb-2">
@@ -31,7 +35,7 @@
 
             </tr>
             <tr>
-                <td class="col-form-label">@Html.LabelFor(model => model.SSI, htmlAttributes: new { @class = "control-label col-md-offset-1" })</td>
+                <td class="col-form-label">@Html.LabelFor(model => model.SSI, htmlAttributes: new { @class = "control-label" })</td>
                 <td>
                     @Html.EditorFor(model => model.SSI, new { htmlAttributes = new { @class = "form-control income money-wide" } })
                     @Html.ValidationMessageFor(model => model.SSI, "")
@@ -40,7 +44,7 @@
             </tr>
             <tr>
                 <td class="col-form-label">
-                    @Html.LabelFor(model => model.SSDI, htmlAttributes: new { @class = "control-label col-md-offset-1" })
+                    @Html.LabelFor(model => model.SSDI, htmlAttributes: new { @class = "control-label" })
 
                 </td>
                 <td>
@@ -51,7 +55,7 @@
             </tr>
             <tr>
                 <td class="col-form-label">
-                    @Html.LabelFor(model => model.FoodStamp, htmlAttributes: new { @class = "control-label col-md-offset-1" })
+                    @Html.LabelFor(model => model.FoodStamp, htmlAttributes: new { @class = "control-label" })
                 </td>
                 <td>
                     @Html.EditorFor(model => model.FoodStamp, new { htmlAttributes = new { @class = "form-control income money-wide" } })

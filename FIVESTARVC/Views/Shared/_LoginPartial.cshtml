@@ -6,7 +6,7 @@
 <div class="nav navbar-nav navbar-right">
     <div class="dropdown">
         <button class="btn btn-lg btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
-            @User.Identity.Name
+            <i class="fa fa-user fa-fw"></i> @User.Identity.Name
             <span class="caret"></span>
         </button>
         <ul class="dropdown-menu" style="position: absolute; z-index: 2; width: auto">
@@ -28,6 +28,7 @@
 else
 {
     <ul class="nav navbar-nav navbar-right">
-        <li>@Html.ActionLink("Log in", "Index", "Login", null, new { id = "loginLink" })</li>
+        <li><button class="btn btn-lg btn-light" id="loginLink" type="button" onclick="location.href = '/Login/Index'"><i class="fa fa-sign-in fa-fw"></i> Login</button> </li>
+        
     </ul>
 }
