@@ -26,7 +26,7 @@ namespace FIVESTARVC.Controllers
         // GET: Reports
         public ActionResult Index()
         {
-           
+
 
             //Variables used in counting current residents
             int nvyCount = 0;
@@ -215,6 +215,24 @@ namespace FIVESTARVC.Controllers
             ViewBag.AvgStay = (int)average;
 
             return View();
+        }
+        /* Get the age of all residents that have been in the center. */
+        public IEnumerable<ReportingResidentViewModel> GetResidentsAge()
+        {
+
+            IEnumerable<ReportingResidentViewModel> residentListing = DB.Residents.ToList().Select(r => new ReportingResidentViewModel { ID = r.ID, Age = r.Age.Computed() });
+
+            return residentListing;
+        }
+        /* Get the average age of all residents that have been in the center.
+         * If you want only the current residents, use IsCurrent() in a Where
+           LINQ method. */
+        public double GetAverageAge()
+        {
+
+            IEnumerable<ReportingResidentViewModel> residentListing = DB.Residents.ToList().Select(r => new ReportingResidentViewModel { ID = r.ID, Age = r.Age.Computed() });
+
+            return residentListing.Average(r => r.Age);
         }
 
         public ActionResult Historic()
@@ -453,7 +471,7 @@ namespace FIVESTARVC.Controllers
 
             int year = 2012;
 
-            for(int x = 0; x < num; x++)
+            for (int x = 0; x < num; x++)
             {
                 gradPercent.Add(year.ToString());
                 year++;
@@ -569,13 +587,13 @@ namespace FIVESTARVC.Controllers
             var events = DB.ProgramEvents;
 
             var Query = (from y in events
-                             where y.ProgramTypeID == 3
-                             group y by y.StartDate.Year into typeGroup
-                             select new
-                             {
-                                 StartDate = typeGroup.Key,
-                                 Count = typeGroup.Count(),
-                             }).ToList();
+                         where y.ProgramTypeID == 3
+                         group y by y.StartDate.Year into typeGroup
+                         select new
+                         {
+                             StartDate = typeGroup.Key,
+                             Count = typeGroup.Count(),
+                         }).ToList();
 
             List<int> rates = new List<int>();
 
@@ -632,7 +650,7 @@ namespace FIVESTARVC.Controllers
 
             List<int> rates = new List<int>();
 
-            foreach(var t in gradQuery)
+            foreach (var t in gradQuery)
             {
                 rates.Add(t.Count);
             }
@@ -723,7 +741,7 @@ namespace FIVESTARVC.Controllers
             var events = DB.ProgramEvents;
 
             var Query = (from y in events
-                         where y.ProgramTypeID == 5 || y.ProgramTypeID == 6 || y.ProgramTypeID ==7
+                         where y.ProgramTypeID == 5 || y.ProgramTypeID == 6 || y.ProgramTypeID == 7
                          group y by y.StartDate.Year into typeGroup
                          select new
                          {
@@ -772,7 +790,7 @@ namespace FIVESTARVC.Controllers
         {
             var events = DB.ProgramEvents;
             var queryResults = (from y in events
-                                join resident in DB.Residents on y.ResidentID equals resident.ResidentID
+                                join resident in DB.Residents on y.ResidentID equals resident.ID
                                 where y.ProgramTypeID == 2 || y.ProgramTypeID == 1 || y.ProgramTypeID == 3 && resident.InVetCourt.Equals(true)
                                 group y by y.StartDate.Year into typeGroup
                                 select new
@@ -783,7 +801,7 @@ namespace FIVESTARVC.Controllers
 
             List<int> rates = new List<int>();
 
-           foreach(var r in queryResults)
+            foreach (var r in queryResults)
             {
                 rates.Add(r.VetCourt);
             }
@@ -798,7 +816,7 @@ namespace FIVESTARVC.Controllers
             int runningTotal = 0;
 
             var queryResults = (from y in events
-                                join resident in DB.Residents on y.ResidentID equals resident.ResidentID
+                                join resident in DB.Residents on y.ResidentID equals resident.ID
                                 where y.ProgramTypeID == 2 || y.ProgramTypeID == 1 || y.ProgramTypeID == 3 && resident.InVetCourt.Equals(true)
                                 group y by y.StartDate.Year into typeGroup
                                 select new
@@ -823,20 +841,20 @@ namespace FIVESTARVC.Controllers
         {
             var residents = DB.Residents;
 
-            var residentProgramType = (from r in residents
-                                       join pgm in DB.ProgramEvents on r.ResidentID equals pgm.ResidentID
+            var residentProgramType = DB.Residents.Include(p => p.ProgramEvents).ToList().Select(r => new ReportingResidentViewModel
+            {
+                ID = r.ID,
+                FirstName = r.FirstMidName,
+                LastName = r.LastName,
+                Birthdate = r.Birthdate.GetValueOrDefault(),
+                Age = r.Age.Computed(),
+                ServiceType = r.ServiceBranch,
+                InVetCourt = r.InVetCourt,
+                Note = r.Note,
+                ProgramTypeID = r.ProgramEvents.Select(t => t.ProgramTypeID.GetValueOrDefault())
 
-                                       select new
-                                       {
-                                           r.ResidentID,
-                                           r.FirstMidName,
-                                           r.LastName,
-                                           r.Birthdate,
-                                           r.ServiceBranch,
-                                           r.InVetCourt,
-                                           r.Note,
-                                           pgm.ProgramTypeID
-                                       }).GroupBy(r => r.ResidentID).ToList();
+            }).GroupBy(r => r.ID);
+
 
 
 
@@ -846,16 +864,16 @@ namespace FIVESTARVC.Controllers
             {
                 myExport.AddRow();
                 myExport["Last Name"] = r.First().LastName;
-                myExport["First Name"] = r.First().FirstMidName;
+                myExport["First Name"] = r.First().FirstName;
                 myExport["Birthdate"] = r.First().Birthdate;
-                //myExport["Age"] = r.First().
-                myExport["Service Branch"] = r.First().ServiceBranch;
+                myExport["Age"] = r.First().Age;
+                myExport["Service Branch"] = FSEnumHelper.GetDescription(r.First().ServiceType);
                 myExport["Vet Court"] = r.First().InVetCourt;
                 myExport["Notes"] = r.First().Note;
 
 
 
-                var eventids = r.Select(i => i.ProgramTypeID).ToList();
+                var eventids = r.SelectMany(i => i.ProgramTypeID).ToList();
 
                 /* These Event IDs have changed, and the order of the columns 
                  * may not be what is expected.
@@ -936,7 +954,7 @@ namespace FIVESTARVC.Controllers
             List<string> campaignNames = new List<string>();
             List<int> resCounts = new List<int>();
 
-            foreach(var x in BarChartData)
+            foreach (var x in BarChartData)
             {
                 campaignNames.Add(x.MilitaryCampaign);
             }
@@ -1006,7 +1024,7 @@ namespace FIVESTARVC.Controllers
                     Data = new Data(residentCount)
                 },
 
-                
+
 
             }
             );
@@ -1018,4 +1036,4 @@ namespace FIVESTARVC.Controllers
 
 
     }
-    }
+}

@@ -30,6 +30,19 @@ namespace FIVESTARVC.ViewModels
         [Display(Name = "Service Branch")]
         public ServiceType ServiceBranch { get; set; }
 
+        /* March changes to the model - 3/15/2018 */
+        [Display(Name = "Gender")]
+        public GenderType Gender { get; set; }
+        [Display(Name = "Ethnicity")]
+        public EthnicityType Ethnicity { get; set; }
+        [Display(Name = "Religion")]
+        public ReligionType Religion { get; set; }
+
+        [Display(Name = "Home of Record")]
+        [ForeignKey("StateTerritory")]
+        public int StateTerritoryID { get; set; }
+        public virtual StateTerritory StateTerritory { get; set; }
+
         [Display(Name = "In Veterans Court?")]
         public Boolean InVetCourt { get; set; }
         [Display(Name = "Note")]
