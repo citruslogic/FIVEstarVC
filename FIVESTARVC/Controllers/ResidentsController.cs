@@ -9,6 +9,7 @@ using FIVESTARVC.DAL;
 using FIVESTARVC.Models;
 using PagedList;
 using FIVESTARVC.ViewModels;
+using System.Data.Entity.Validation;
 
 namespace FIVESTARVC.Controllers
 {
@@ -62,7 +63,7 @@ namespace FIVESTARVC.Controllers
                     residents = residents.OrderByDescending(s => s.ServiceBranch);
                     break;
                 default:
-                    residents = residents.OrderByDescending(s => s.ResidentID);
+                    residents = residents.OrderByDescending(s => s.ID);
                     break;
             }
 
@@ -82,7 +83,7 @@ namespace FIVESTARVC.Controllers
             Resident resident = db.Residents
                 .Include(p => p.ProgramEvents)
                 .Include(i => i.Benefit)
-                .Where(r => r.ResidentID == id).Single();
+                .Where(r => r.ID == id).Single();
 
             var room = db.Rooms.Find(resident.RoomNumber);
 
@@ -118,6 +119,9 @@ namespace FIVESTARVC.Controllers
         // GET: Residents/Create
         public ActionResult Create()
         {
+            ResidentIncomeModel residentIncomeModel = new ResidentIncomeModel();
+
+            ViewBag.StateTerritoryID = new SelectList(db.States, "StateTerritoryID", "State", residentIncomeModel.StateTerritoryID);
 
             ViewBag.AdmissionType = new SelectList(db.ProgramTypes
                 .Where(t => t.ProgramTypeID <= 3), "ProgramTypeID", "ProgramDescription", 2);
@@ -159,7 +163,9 @@ namespace FIVESTARVC.Controllers
                 .Where(t => t.ProgramTypeID <= 3), "ProgramTypeID", "ProgramDescription", AdmissionType);
 
             ViewBag.RoomNumber = new SelectList(db.Rooms.Where(rm => rm.IsOccupied == false), "RoomNumber", "RoomNumber");
-            
+            ViewBag.StateTerritoryID = new SelectList(db.States, "StateTerritoryID", "State", residentIncomeModel.StateTerritoryID);
+
+
             var allMilitaryCampaigns = db.MilitaryCampaigns;
             var viewModel = new List<AssignedCampaignData>();
 
@@ -180,14 +186,18 @@ namespace FIVESTARVC.Controllers
             {
                 FirstMidName = residentIncomeModel.FirstMidName,
                 LastName = residentIncomeModel.LastName,
+                Gender = residentIncomeModel.Gender,
+                Ethnicity = residentIncomeModel.Ethnicity,
+                Religion = residentIncomeModel.Religion,
                 Birthdate = residentIncomeModel.Birthdate,
                 ServiceBranch = residentIncomeModel.ServiceBranch,
                 InVetCourt = residentIncomeModel.InVetCourt,
                 RoomNumber = RoomNumber,
+                StateTerritoryID = residentIncomeModel.StateTerritoryID,
                 Note = residentIncomeModel.Note,
                 MilitaryCampaigns = new List<MilitaryCampaign>(),
                 ProgramEvents = new List<ProgramEvent>(),
-                Benefit = new Benefit()
+                Benefit = new Benefit(),
 
 
             };
@@ -196,8 +206,8 @@ namespace FIVESTARVC.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    
 
+                    
                     db.Residents.Add(resident);
                     resident.ProgramEvents.Add(new ProgramEvent
                     {
@@ -213,21 +223,30 @@ namespace FIVESTARVC.Controllers
                     {
                         room.IsOccupied = true;
                     }
-            
+
                     db.SaveChanges();
 
                 }
 
 
             }
-            catch (DataException /* dex */)
+            catch (DbEntityValidationException e)
             {
-                //Log the error (uncomment dex variable name and add a line here to write a log.
-                ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
-            }
-        
+                foreach (var eve in e.EntityValidationErrors)
+                {
+                    Console.WriteLine("Entity of type \"{0}\" in state \"{1}\" has the following validation errors:",
+                        eve.Entry.Entity.GetType().Name, eve.Entry.State);
+                    foreach (var ve in eve.ValidationErrors)
+                    {
+                        Console.WriteLine("- Property: \"{0}\", Error: \"{1}\"",
+                            ve.PropertyName, ve.ErrorMessage);
+                    }
+                }
+                throw;
 
-            Benefit benefit = new Benefit
+            }
+
+                Benefit benefit = new Benefit
             {
                 DisabilityPercentage = residentIncomeModel.DisabilityPercentage,
                 SSI = residentIncomeModel.SSI,
@@ -261,7 +280,8 @@ namespace FIVESTARVC.Controllers
 
 
             if (TryUpdateModel(residentIncomeModel, "",
-                 new string[] { "LastName", "FirstMidName", "Birthdate", "ServiceBranch", "Note", "InVetCourt", "Benefit", "MilitaryCampaigns", "TotalBenefitAmount" }))
+                 new string[] { "LastName", "FirstMidName", "Ethnicity", "StateTerritoryID", "Gender", "Religion", "Birthdate", "ServiceBranch", "Note", "InVetCourt",
+                     "Benefit", "MilitaryCampaigns", "TotalBenefitAmount" }))
             {
                 try
                 {
@@ -315,7 +335,8 @@ namespace FIVESTARVC.Controllers
             Resident resident = db.Residents
             .Include(c => c.MilitaryCampaigns)
             .Include(b => b.Benefit)
-            .Where(c => c.ResidentID == id)
+            .Include(s => s.StateTerritory)
+            .Where(c => c.ID == id)
             .Single();
 
 
@@ -327,7 +348,10 @@ namespace FIVESTARVC.Controllers
                 return HttpNotFound();
             }
 
-            ViewBag.RoomNumber = new SelectList(db.Rooms.Where(rm => rm.IsOccupied == false), "RoomNumber", "RoomNumber");
+            ViewBag.RoomNumber = new SelectList(db.Rooms.Where(rm => rm.IsOccupied == false 
+            || rm.RoomNumber == resident.RoomNumber), "RoomNumber", "RoomNumber", resident.RoomNumber.GetValueOrDefault().ToString());
+            ViewBag.StateTerritoryID = new SelectList(db.States, "StateTerritoryID", "State", resident.StateTerritoryID);
+
 
             return View(resident);
         }
@@ -349,11 +373,12 @@ namespace FIVESTARVC.Controllers
             var residentToUpdate = db.Residents
                 .Include(c => c.MilitaryCampaigns)
                 .Include(b => b.Benefit)
-                .Where(c => c.ResidentID == id)
+                .Where(c => c.ID == id)
                 .Single();
 
             if (TryUpdateModel(residentToUpdate, "",
-               new string[] { "LastName", "FirstMidName", "Birthdate", "ServiceBranch", "Note", "InVetCourt", "Benefit", "MilitaryCampaigns", "TotalBenefitAmount" }))
+               new string[] { "LastName", "FirstMidName", "Gender", "Religion", "Ethnicity", "StateTerritoryID", "Birthdate",
+                   "ServiceBranch", "Note", "InVetCourt", "Benefit", "MilitaryCampaigns", "TotalBenefitAmount" }))
             {
                 try
                 {
@@ -404,6 +429,8 @@ namespace FIVESTARVC.Controllers
             }
 
             ViewBag.Rooms = new SelectList(db.Rooms.Where(rm => rm.IsOccupied == false), "RoomNumber", "RoomNumber", residentToUpdate.RoomNumber);
+            ViewBag.StateTerritoryID = new SelectList(db.States, "StateTerritoryID", "State", residentToUpdate.StateTerritoryID);
+
             PopulateAssignedCampaignData(residentToUpdate);
             
             return View(residentToUpdate);
@@ -511,7 +538,7 @@ namespace FIVESTARVC.Controllers
 
             var residentToDischarge = db.Residents
                 .Include(p => p.ProgramEvents)
-                .Where(r => r.ResidentID == id)
+                .Where(r => r.ID == id)
                 .Single();
 
             Room roomToRelease = db.Rooms.Find(residentToDischarge.RoomNumber);
@@ -544,7 +571,7 @@ namespace FIVESTARVC.Controllers
             {
                 Resident residentToDischarge = db.Residents
                 .Include(p => p.ProgramEvents)
-                .Where(r => r.ResidentID == id)
+                .Where(r => r.ID == id)
                 .Single();
 
                 Room roomToRelease = db.Rooms.Find(residentToDischarge.RoomNumber);
@@ -620,6 +647,15 @@ namespace FIVESTARVC.Controllers
 
             return RedirectToAction("Index");
 
+        }
+
+
+        [HttpGet]
+        public ActionResult GetRegionName(string id)
+        {
+            var RegionName = db.States.Find(Int32.Parse(id)).Region;
+
+            return Json(RegionName, JsonRequestBehavior.AllowGet);
         }
 
       

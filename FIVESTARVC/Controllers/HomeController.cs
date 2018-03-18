@@ -26,7 +26,7 @@ namespace FIVESTARVC.Controllers
                      join room in db.Rooms on resident.RoomNumber equals room.RoomNumber
                      select new DashboardData
                      {
-                         ResidentID = resident.ResidentID,
+                         ResidentID = resident.ID,
                          Fullname = resident.FirstMidName + " " + resident.LastName,
 
                          RoomNumber = room.RoomNumber

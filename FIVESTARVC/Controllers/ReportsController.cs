@@ -216,6 +216,24 @@ namespace FIVESTARVC.Controllers
 
             return View();
         }
+        /* Get the age of all residents that have been in the center. */
+        public IEnumerable<ReportingResidentViewModel> GetResidentsAge()
+        {
+
+            IEnumerable<ReportingResidentViewModel> residentListing = DB.Residents.ToList().Select(r => new ReportingResidentViewModel { ID = r.ID, Age = r.Age.Computed() });
+
+            return residentListing;
+        }
+        /* Get the average age of all residents that have been in the center.
+         * If you want only the current residents, use IsCurrent() in a Where
+           LINQ method. */
+        public double GetAverageAge()
+        {
+
+            IEnumerable<ReportingResidentViewModel> residentListing = DB.Residents.ToList().Select(r => new ReportingResidentViewModel { ID = r.ID, Age = r.Age.Computed() });
+
+            return residentListing.Average(r => r.Age);
+        }
 
         public ActionResult Historic()
         {
@@ -772,7 +790,7 @@ namespace FIVESTARVC.Controllers
         {
             var events = DB.ProgramEvents;
             var queryResults = (from y in events
-                                join resident in DB.Residents on y.ResidentID equals resident.ResidentID
+                                join resident in DB.Residents on y.ResidentID equals resident.ID
                                 where y.ProgramTypeID == 2 || y.ProgramTypeID == 1 || y.ProgramTypeID == 3 && resident.InVetCourt.Equals(true)
                                 group y by y.StartDate.Year into typeGroup
                                 select new
@@ -798,7 +816,7 @@ namespace FIVESTARVC.Controllers
             int runningTotal = 0;
 
             var queryResults = (from y in events
-                                join resident in DB.Residents on y.ResidentID equals resident.ResidentID
+                                join resident in DB.Residents on y.ResidentID equals resident.ID
                                 where y.ProgramTypeID == 2 || y.ProgramTypeID == 1 || y.ProgramTypeID == 3 && resident.InVetCourt.Equals(true)
                                 group y by y.StartDate.Year into typeGroup
                                 select new
@@ -823,20 +841,20 @@ namespace FIVESTARVC.Controllers
         {
             var residents = DB.Residents;
 
-            var residentProgramType = (from r in residents
-                                       join pgm in DB.ProgramEvents on r.ResidentID equals pgm.ResidentID
-
-                                       select new
+            var residentProgramType = DB.Residents.Include(p => p.ProgramEvents).ToList().Select(r => new ReportingResidentViewModel
                                        {
-                                           r.ResidentID,
-                                           r.FirstMidName,
-                                           r.LastName,
-                                           r.Birthdate,
-                                           r.ServiceBranch,
-                                           r.InVetCourt,
-                                           r.Note,
-                                           pgm.ProgramTypeID
-                                       }).GroupBy(r => r.ResidentID).ToList();
+                                           ID = r.ID,
+                                           FirstName = r.FirstMidName,
+                                           LastName = r.LastName,
+                                           Birthdate = r.Birthdate.GetValueOrDefault(),
+                                           Age = r.Age.Computed(),
+                                           ServiceType = r.ServiceBranch,
+                                           InVetCourt = r.InVetCourt,
+                                           Note = r.Note,
+                                           ProgramEvents = r.ProgramEvents
+                                           
+                                       }).GroupBy(r => r.ID);
+
 
 
 
@@ -846,16 +864,16 @@ namespace FIVESTARVC.Controllers
             {
                 myExport.AddRow();
                 myExport["Last Name"] = r.First().LastName;
-                myExport["First Name"] = r.First().FirstMidName;
+                myExport["First Name"] = r.First().FirstName;
                 myExport["Birthdate"] = r.First().Birthdate;
-                //myExport["Age"] = r.First().
-                myExport["Service Branch"] = r.First().ServiceBranch;
+                myExport["Age"] = r.First().Age;
+                myExport["Service Branch"] = r.First().ServiceType;
                 myExport["Vet Court"] = r.First().InVetCourt;
                 myExport["Notes"] = r.First().Note;
 
 
 
-                var eventids = r.Select(i => i.ProgramTypeID).ToList();
+                var eventids = r.Select(i => i.ProgramEvents.Select(p => p.ProgramTypeID)).ToList();
 
                 /* These Event IDs have changed, and the order of the columns 
                  * may not be what is expected.
