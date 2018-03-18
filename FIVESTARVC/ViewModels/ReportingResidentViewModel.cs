@@ -20,7 +20,7 @@ namespace FIVESTARVC.ViewModels
         public string Note { get; set; }
 
 
-        // PROGRAM EVENTS
-        public virtual ICollection<ProgramEvent> ProgramEvents { get; set; }
+        // PROGRAM TYPE ID
+        public IEnumerable<int> ProgramTypeID { get; set; }
     }
 }

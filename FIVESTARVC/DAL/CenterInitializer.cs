@@ -202,6 +202,7 @@ namespace FIVESTARVC.DAL
             events.ForEach(e => context.ProgramEvents.Add(e));
             context.SaveChanges();
 
+           
 
             var militaryCampaigns = new List<MilitaryCampaign>
             {
