@@ -18,12 +18,12 @@ namespace FIVESTARVC.Controllers
 
 
         // GET: Rooms
-        public ActionResult Index()
+        public ActionResult Index(int? page)
         {
-            var rooms = from y in db.Rooms
-                        select y;
+            //var rooms = from y in db.Rooms
+            //            select y;
 
-            return View();
+            return View(db.Rooms.ToList());
         }
 
         // GET: Rooms/Details/5
