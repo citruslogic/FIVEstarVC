@@ -20,9 +20,10 @@ namespace FIVESTARVC.Controllers
         // GET: Rooms
         public ActionResult Index()
         {
-           
-            
-            return View();
+            var rooms = from y in db.Rooms
+                        select y;
+
+            return View(rooms);
         }
 
         // GET: Rooms/Details/5
