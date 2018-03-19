@@ -63,7 +63,7 @@ namespace FIVESTARVC.Controllers
                     residents = residents.OrderByDescending(s => s.ServiceBranch);
                     break;
                 default:
-                    residents = residents.OrderByDescending(s => s.ID);
+                    residents = residents.OrderByDescending(s => s.ResidentID);
                     break;
             }
 
@@ -83,7 +83,7 @@ namespace FIVESTARVC.Controllers
             Resident resident = db.Residents
                 .Include(p => p.ProgramEvents)
                 .Include(i => i.Benefit)
-                .Where(r => r.ID == id).Single();
+                .Where(r => r.ResidentID == id).Single();
 
             var room = db.Rooms.Find(resident.RoomNumber);
 
@@ -336,7 +336,7 @@ namespace FIVESTARVC.Controllers
             .Include(c => c.MilitaryCampaigns)
             .Include(b => b.Benefit)
             .Include(s => s.StateTerritory)
-            .Where(c => c.ID == id)
+            .Where(c => c.ResidentID == id)
             .Single();
 
 
@@ -373,7 +373,7 @@ namespace FIVESTARVC.Controllers
             var residentToUpdate = db.Residents
                 .Include(c => c.MilitaryCampaigns)
                 .Include(b => b.Benefit)
-                .Where(c => c.ID == id)
+                .Where(c => c.ResidentID == id)
                 .Single();
 
             if (TryUpdateModel(residentToUpdate, "",
@@ -538,7 +538,7 @@ namespace FIVESTARVC.Controllers
 
             var residentToDischarge = db.Residents
                 .Include(p => p.ProgramEvents)
-                .Where(r => r.ID == id)
+                .Where(r => r.ResidentID == id)
                 .Single();
 
             Room roomToRelease = db.Rooms.Find(residentToDischarge.RoomNumber);
@@ -571,7 +571,7 @@ namespace FIVESTARVC.Controllers
             {
                 Resident residentToDischarge = db.Residents
                 .Include(p => p.ProgramEvents)
-                .Where(r => r.ID == id)
+                .Where(r => r.ResidentID == id)
                 .Single();
 
                 Room roomToRelease = db.Rooms.Find(residentToDischarge.RoomNumber);
