@@ -52,6 +52,9 @@ namespace FIVESTARVC.Models
                 if (userPrincipal != null)
                 {
                     isAuthenticated = principalContext.ValidateCredentials(username, password, ContextOptions.Negotiate);
+                } else
+                {
+                    return new AuthenticationResult("Username or Password is not correct");
                 }
             }
             catch (Exception)
