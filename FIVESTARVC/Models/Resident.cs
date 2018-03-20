@@ -42,7 +42,7 @@ namespace FIVESTARVC.Models
         {
                 var current = db.ProgramEvents;
 
-                int ID = base.ID;
+                int ID = base.ResidentID;
 
                 Boolean internalBool = false;
 

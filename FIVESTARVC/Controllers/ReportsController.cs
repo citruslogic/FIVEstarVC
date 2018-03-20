@@ -220,7 +220,7 @@ namespace FIVESTARVC.Controllers
         public IEnumerable<ReportingResidentViewModel> GetResidentsAge()
         {
 
-            IEnumerable<ReportingResidentViewModel> residentListing = DB.Residents.ToList().Select(r => new ReportingResidentViewModel { ID = r.ID, Age = r.Age.Computed() });
+            IEnumerable<ReportingResidentViewModel> residentListing = DB.Residents.ToList().Select(r => new ReportingResidentViewModel { ID = r.ResidentID, Age = r.Age.Computed() });
 
             return residentListing;
         }
@@ -230,7 +230,7 @@ namespace FIVESTARVC.Controllers
         public double GetAverageAge()
         {
 
-            IEnumerable<ReportingResidentViewModel> residentListing = DB.Residents.ToList().Select(r => new ReportingResidentViewModel { ID = r.ID, Age = r.Age.Computed() });
+            IEnumerable<ReportingResidentViewModel> residentListing = DB.Residents.ToList().Select(r => new ReportingResidentViewModel { ID = r.ResidentID, Age = r.Age.Computed() });
 
             return residentListing.Average(r => r.Age);
         }
@@ -790,7 +790,7 @@ namespace FIVESTARVC.Controllers
         {
             var events = DB.ProgramEvents;
             var queryResults = (from y in events
-                                join resident in DB.Residents on y.ResidentID equals resident.ID
+                                join resident in DB.Residents on y.ResidentID equals resident.ResidentID
                                 where y.ProgramTypeID == 2 || y.ProgramTypeID == 1 || y.ProgramTypeID == 3 && resident.InVetCourt.Equals(true)
                                 group y by y.StartDate.Year into typeGroup
                                 select new
@@ -816,7 +816,7 @@ namespace FIVESTARVC.Controllers
             int runningTotal = 0;
 
             var queryResults = (from y in events
-                                join resident in DB.Residents on y.ResidentID equals resident.ID
+                                join resident in DB.Residents on y.ResidentID equals resident.ResidentID
                                 where y.ProgramTypeID == 2 || y.ProgramTypeID == 1 || y.ProgramTypeID == 3 && resident.InVetCourt.Equals(true)
                                 group y by y.StartDate.Year into typeGroup
                                 select new
@@ -843,7 +843,7 @@ namespace FIVESTARVC.Controllers
 
             var residentProgramType = DB.Residents.Include(p => p.ProgramEvents).ToList().Select(r => new ReportingResidentViewModel
             {
-                ID = r.ID,
+                ID = r.ResidentID,
                 FirstName = r.FirstMidName,
                 LastName = r.LastName,
                 Birthdate = r.Birthdate.GetValueOrDefault(),

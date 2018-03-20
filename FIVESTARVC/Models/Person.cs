@@ -16,7 +16,8 @@ namespace FIVESTARVC.Models
     {
         protected ResidentContext db = new ResidentContext();
 
-        public int ID { get; set; }
+        [Key]
+        public int ResidentID { get; set; }
         
         [Display(Name = "Last Name")]
         public string LastName { get; set; }
