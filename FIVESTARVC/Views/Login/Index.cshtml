@@ -19,7 +19,7 @@
                 <hr />
                 <p> Enter your username and password below. If you do not know this information, please contact your
                 system administrator.</p>
-                @Html.ValidationSummary(true, "")
+                @Html.ValidationSummary(true, "", htmlAttributes: new { @class = "alert-danger" })
                 <div class="form-group">
                     @Html.LabelFor(m => m.Username, new { @class = "col-md-2 control-label" })
                     <div class="col-md-5">
