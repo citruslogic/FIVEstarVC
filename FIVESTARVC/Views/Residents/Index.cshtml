@@ -122,19 +122,19 @@
                 }
             </td>
             <td>
-                @Html.ActionLink("Edit", "Edit", new { id = item.ID }, htmlAttributes: new { @class = "btn btn-sm btn-outline-secondary btn-light" }) &nbsp;
+                @Html.ActionLink("Edit", "Edit", new { id = item.ResidentID }, htmlAttributes: new { @class = "btn btn-sm btn-outline-secondary btn-light" }) &nbsp;
 
                 @*Trigger the modal with a button*@
                 <button type="button" class="modal-link btn btn-sm btn-outline-secondary btn-light"
-                       data-toggle="modal" data-target="#QuickEventModal" onclick="showQuickEventDialog(@item.ID)"><i class="fa fa-plus fa-fw"></i> Program</button>
+                       data-toggle="modal" data-target="#QuickEventModal" onclick="showQuickEventDialog(@item.ResidentID)"><i class="fa fa-plus fa-fw"></i> Program</button>
 
-                @Html.ActionLink("Details", "Details", new { id = item.ID }, htmlAttributes: new { @class = "btn btn-sm btn-outline-secondary btn-light" }) &nbsp;
+                @Html.ActionLink("Details", "Details", new { id = item.ResidentID }, htmlAttributes: new { @class = "btn btn-sm btn-outline-secondary btn-light" }) &nbsp;
 
                 @if (item.IsCurrent())
                 {
 
                     @:<input type="button" value="Discharge" class="modal-link btn btn-sm btn-danger"
-                              @: data-toggle="modal" data-target="#QuickEventModal" onclick="showDischargeDialog(@item.ID)" />
+                              @: data-toggle="modal" data-target="#QuickEventModal" onclick="showDischargeDialog(@item.ResidentID)" />
 
 
                 }
