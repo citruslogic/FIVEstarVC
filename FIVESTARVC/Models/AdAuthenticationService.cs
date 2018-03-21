@@ -54,6 +54,16 @@ namespace FIVESTARVC.Models
                     isAuthenticated = principalContext.ValidateCredentials(username, password, ContextOptions.Negotiate);
                 }
 
+                if (isAuthenticated)
+                {
+
+                    var identity = CreateIdentity(userPrincipal);
+
+                    authenticationManager.SignOut(FIVESTARAuthentication.ApplicationCookie);
+                    authenticationManager.SignIn(new AuthenticationProperties() { IsPersistent = false }, identity);
+                    return new AuthenticationResult();
+                }
+
                 if (userPrincipal.IsAccountLockedOut())
                 {
                     // here can be a security related discussion weather it is worth 
@@ -68,13 +78,9 @@ namespace FIVESTARVC.Models
                     return new AuthenticationResult("Your account is disabled.");
                 }
 
-                var identity = CreateIdentity(userPrincipal);
-
-                authenticationManager.SignOut(FIVESTARAuthentication.ApplicationCookie);
-                authenticationManager.SignIn(new AuthenticationProperties() { IsPersistent = false }, identity);
 
 
-                return new AuthenticationResult();
+                return new AuthenticationResult("Username or Password is not correct.");
             }
             catch (Exception)
             {
