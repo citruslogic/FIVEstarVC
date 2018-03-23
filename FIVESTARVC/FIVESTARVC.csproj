@@ -200,6 +200,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\Encryptor.cs" />
     <Compile Include="Models\AdAuthenticationService.cs" />
     <Compile Include="Models\Benefit.cs" />
     <Compile Include="Models\EnumReligionType.cs" />
@@ -821,7 +822,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Helpers\" />
     <Folder Include="Views\Shared\EditorTemplates\" />
   </ItemGroup>
   <ItemGroup>
