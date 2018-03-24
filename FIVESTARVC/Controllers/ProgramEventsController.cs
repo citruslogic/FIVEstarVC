@@ -40,14 +40,14 @@ namespace FIVESTARVC.Controllers
 
             if (!String.IsNullOrEmpty(searchString))
             {
-                programEvents = programEvents.Where(p => p.Resident.LastName.Contains(searchString)
+                programEvents = programEvents.Where(p => p.Resident.ClearLastName.Contains(searchString)
                                        || p.Resident.FirstMidName.Contains(searchString));
             }
 
             switch (sortOrder)
             {
                 case "name_desc":
-                    programEvents = programEvents.OrderByDescending(p => p.Resident.LastName);
+                    programEvents = programEvents.OrderByDescending(p => p.Resident.ClearLastName);
                     break;
                 case "ProgramDescription":
                     programEvents = programEvents.OrderBy(p => p.ProgramTypeID);

@@ -10,6 +10,7 @@ using FIVESTARVC.Models;
 using PagedList;
 using FIVESTARVC.ViewModels;
 using System.Data.Entity.Validation;
+using DelegateDecompiler;
 
 namespace FIVESTARVC.Controllers
 {
@@ -47,14 +48,14 @@ namespace FIVESTARVC.Controllers
 
             if (!String.IsNullOrEmpty(searchString))
             {
-                    residents = residents.Where(s => s.LastName.Contains(searchString)
+                    residents = residents.Where(s => s.ClearLastName.Contains(searchString)
                                        || s.FirstMidName.Contains(searchString));
             }
 
             switch (sortOrder)
             {
                 case "name_desc":
-                    residents = residents.OrderBy(s => s.LastName);
+                    residents = residents.OrderBy(s => s.ClearLastName);
                     break;
                 case "ServiceBranch":
                     residents = residents.OrderBy(s => s.ServiceBranch);
@@ -108,9 +109,9 @@ namespace FIVESTARVC.Controllers
 
             ViewBag.DateFirstAdmitted = db.ProgramEvents
                                             .Include(r => r.Resident).Where(r => r.ResidentID == id)
-                                            .Include(t => t.ProgramType).Where(p => p.ProgramTypeID == 2)
-                                            .OrderBy(d => d.StartDate)
-                                            .Select(s => s.StartDate)
+                                            .Include(t => t.ProgramType).Where(p => p.ProgramTypeID == 2).ToList()
+                                            .OrderBy(d => d.ClearStartDate.Computed())
+                                            .Select(s => s.ClearStartDate.Computed())
                                             .FirstOrDefault().ToLongDateString();
 
             return View(resident);
@@ -185,11 +186,11 @@ namespace FIVESTARVC.Controllers
             Resident resident = new Resident
             {
                 FirstMidName = residentIncomeModel.FirstMidName,
-                LastName = residentIncomeModel.LastName,
+                ClearLastName = residentIncomeModel.LastName,
                 Gender = residentIncomeModel.Gender,
                 Ethnicity = residentIncomeModel.Ethnicity,
                 Religion = residentIncomeModel.Religion,
-                Birthdate = residentIncomeModel.Birthdate,
+                ClearBirthdate = residentIncomeModel.Birthdate,
                 ServiceBranch = residentIncomeModel.ServiceBranch,
                 InVetCourt = residentIncomeModel.InVetCourt,
                 RoomNumber = RoomNumber,
@@ -212,8 +213,8 @@ namespace FIVESTARVC.Controllers
                     resident.ProgramEvents.Add(new ProgramEvent
                     {
                         ProgramTypeID = AdmissionType,
-                        StartDate = DateTime.Now,
-                        EndDate = null
+                        ClearStartDate = DateTime.Now,
+                        ClearEndDate = null
 
                     });
 
@@ -311,8 +312,8 @@ namespace FIVESTARVC.Controllers
 
             /* Check for the possible pre-existence of the resident in the system. */
             if (db.Residents.Any(r => r.FirstMidName.Contains(resident.FirstMidName)
-                && r.LastName.Contains(resident.LastName)
-                && r.Birthdate.GetValueOrDefault().Date == resident.Birthdate.GetValueOrDefault().Date
+                && r.ClearLastName.Contains(resident.ClearLastName)
+                && r.ClearBirthdate.Date == resident.ClearBirthdate.Date
                 && r.ServiceBranch == resident.ServiceBranch))
             {
 
@@ -392,7 +393,7 @@ namespace FIVESTARVC.Controllers
                             residentToUpdate.ProgramEvents.Add(new ProgramEvent
                             {
                                 ProgramTypeID = 3,
-                                StartDate = DateTime.Now
+                                ClearStartDate = DateTime.Now
 
                             });
                         }
@@ -417,7 +418,7 @@ namespace FIVESTARVC.Controllers
                     } 
                     db.SaveChanges();
 
-                    TempData["UserMessage"] = residentToUpdate.LastName + " has been updated.  ";
+                    TempData["UserMessage"] = residentToUpdate.ClearLastName + " has been updated.  ";
 
                     return RedirectToAction("Index");
                 }
@@ -588,13 +589,13 @@ namespace FIVESTARVC.Controllers
                 residentToDischarge.ProgramEvents.Add(new ProgramEvent
                 {
                     ProgramTypeID = ProgramTypeID,
-                    StartDate = DateTime.Now,
-                    EndDate = DateTime.Now
+                    ClearStartDate = DateTime.Now,
+                    ClearEndDate = DateTime.Now
 
                 });
 
                 db.SaveChanges();
-                TempData["UserMessage"] = residentToDischarge.LastName + " has been discharged from your center.  ";
+                TempData["UserMessage"] = residentToDischarge.ClearLastName + " has been discharged from your center.  ";
             }
             catch (DataException/* dex */)
             {

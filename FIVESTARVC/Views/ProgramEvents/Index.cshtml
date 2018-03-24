@@ -52,13 +52,13 @@
                 @Html.DisplayFor(modelItem => item.ProgramType.ProgramDescription)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Resident.LastName)
+                @Html.DisplayFor(modelItem => item.Resident.ClearLastName)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.StartDate)
+                @Html.DisplayFor(modelItem => item.ClearStartDate)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.EndDate)
+                @Html.DisplayFor(modelItem => item.ClearEndDate)
             </td>
             <td>
                 @(item.Completed ? "Yes" : "No")

@@ -9,6 +9,8 @@ using FIVESTARVC.DAL;
 using FIVESTARVC.Validators;
 using DelegateDecompiler;
 using System.Globalization;
+using FIVESTARVC.Helpers;
+using System.Data.Entity.ModelConfiguration;
 
 namespace FIVESTARVC.Models
 {
@@ -19,8 +21,27 @@ namespace FIVESTARVC.Models
         [Key]
         public int ResidentID { get; set; }
         
+        private string LastName { get; set; }
+
+        private string Birthdate { get; set; }
         [Display(Name = "Last Name")]
-        public string LastName { get; set; }
+        [NotMapped]
+        public string ClearLastName {
+
+            get {
+
+                return Encryptor.Decrypt(LastName);
+
+
+            }
+                
+            set {
+
+                LastName = Encryptor.Encrypt(value);
+
+            }
+        }
+
         [Required]
         [Display(Name = "First Name")]
         public string FirstMidName { get; set; }
@@ -29,7 +50,22 @@ namespace FIVESTARVC.Models
         [DataType(DataType.Date)]
         [Birthdate(ErrorMessage = "Birthdate must not be in the future.")]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
-        public DateTime? Birthdate { get; set; }
+        [NotMapped]
+        public DateTime ClearBirthdate {
+            get
+            {
+                return DateTime.Parse(Encryptor.Decrypt(Birthdate.ToString()));
+
+            }
+
+            set
+            {
+                Birthdate = Encryptor.Encrypt(value.ToString());
+            }
+
+        }
+
+
 
         [Display(Name = "Gender")]
         public GenderType Gender { get; set; }
@@ -48,7 +84,7 @@ namespace FIVESTARVC.Models
         {
             get
             {
-                TimeSpan span = DateTime.Now - Birthdate.GetValueOrDefault(DateTime.Now);
+                TimeSpan span = DateTime.Now - ClearBirthdate.Date;
                 DateTime age = DateTime.MinValue + span;
 
                 return age.Year - 1;
@@ -57,7 +93,7 @@ namespace FIVESTARVC.Models
 
         public string Fullname
         {
-            get { return FirstMidName + " " + LastName; }
+            get { return FirstMidName + " " + ClearLastName; }
         }
 
         /* Remaining days until birthday */
@@ -67,16 +103,13 @@ namespace FIVESTARVC.Models
             {
 
                 DateTime today = DateTime.Today;
-                if (Birthdate.HasValue)
-                {
-                    DateTime nextBirthday = Birthdate.Value.AddYears(Age + 1);
 
-                    TimeSpan difference = nextBirthday - DateTime.Today;
 
-                    return Convert.ToInt32(difference.TotalDays);
-                }
+                DateTime nextBirthday = ClearBirthdate.AddYears(Age + 1);
 
-                return 0;
+                TimeSpan difference = nextBirthday - DateTime.Today;
+
+                return Convert.ToInt32(difference.TotalDays);
             }
         }
         public string BDateMonthName
@@ -84,13 +117,20 @@ namespace FIVESTARVC.Models
             get
             {
                 CultureInfo ci = new CultureInfo("en-US");
-                if (Birthdate.HasValue)
-                {
-                    return Birthdate.Value.ToString("MMMM", ci);
-                }
+                
+                return ClearBirthdate.ToString("MMMM", ci);
+                
 
-                return null;
+                
             }
+        }
+
+        public class ModelConfiguration : EntityTypeConfiguration<Person>
+        {
+            public ModelConfiguration()
+            {
+                Property(p => p.LastName);
+                Property(p => p.Birthdate);            }
         }
     }
 }

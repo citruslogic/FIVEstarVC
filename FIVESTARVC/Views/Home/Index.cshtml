@@ -41,8 +41,8 @@
                 @foreach (var resident in ViewBag.NearestResidents)
                 {
                     <div class="col-md-2" style="margin-top: 0.5em;">
-                        @resident.FirstMidName @resident.LastName<br />
-                        @resident.BDateMonthName @resident.Birthdate.Day
+                        @resident.FirstMidName @resident.ClearLastName<br />
+                        @resident.BDateMonthName @resident.ClearBirthdate.Day
                     </div>
                 }
             </div>
@@ -60,7 +60,7 @@
                     <div class="col-md-3" style="margin-top: 0.9em;">
                         <div class="card">
                             <div class="card-body">
-                                <h5 class="card-title">@item.Fullname</h5>
+                                <h5 class="card-title">@item.FirstMidName @item.LastName</h5>
                                 <label>Room: </label> @item.RoomNumber<br />
                                 @Html.ActionLink("See more", "Details", "Residents", new { id = @item.ResidentID }, htmlAttributes: new { @class = "btn btn-sm btn-outline-secondary btn-light" }) &nbsp;
                             </div>

@@ -8,7 +8,8 @@ namespace FIVESTARVC.ViewModels
     public class DashboardData
     {
         public int ResidentID { get; set; }
-        public string Fullname { get; set; }
+        public string FirstMidName { get; set; }
+        public string LastName { get; set; }
         public int RoomNumber { get; set; }
 
     }
