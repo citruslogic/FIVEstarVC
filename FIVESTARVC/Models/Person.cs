@@ -130,7 +130,9 @@ namespace FIVESTARVC.Models
             public ModelConfiguration()
             {
                 Property(p => p.LastName);
-                Property(p => p.Birthdate);            }
+                Property(p => p.Birthdate);
+            }
+
         }
     }
 }

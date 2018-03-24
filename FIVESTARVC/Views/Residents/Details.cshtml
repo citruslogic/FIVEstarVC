@@ -219,8 +219,7 @@
     <thead>
         <tr>
             <th style="width: 17.7em;">Program Name</th>
-            <th>Start Date</th>
-            <th>End Date</th>
+            <th> Date</th>
         </tr>
     </thead>
     <tbody>
@@ -233,13 +232,7 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.ClearStartDate)
                 </td>
-                <td>
-                    @if (item.ClearEndDate.HasValue)
-                    {
-                        @Html.DisplayFor(modelItem => item.ClearEndDate)
-                    }
-
-                </td>
+                
             </tr>
         }
     </tbody>

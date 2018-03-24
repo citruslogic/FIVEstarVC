@@ -20,7 +20,6 @@ namespace FIVESTARVC.Models
         public int? ProgramTypeID { get; set; }
 
         private string StartDate { get; set; }
-        private string EndDate { get; set; }
 
         [Display(Name = "Start Date")]
         [DataType(DataType.Date)]
@@ -29,6 +28,7 @@ namespace FIVESTARVC.Models
         public DateTime ClearStartDate {
             get
             {
+               
                 return DateTime.Parse(Encryptor.Decrypt(StartDate.ToString()));
 
             }
@@ -39,32 +39,7 @@ namespace FIVESTARVC.Models
             }
         }
 
-        [Display(Name = "End Date")]
-        [DataType(DataType.Date)]
-        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
-        [NotMapped]
-        public DateTime? ClearEndDate {
-            get
-            { 
-                if (EndDate == null)
-                {
-                    return null;
-                }
-
-                return DateTime.Parse(Encryptor.Decrypt(EndDate.ToString()));
-
-            }
-
-            set
-            {
-                if (value == null)
-                {
-                    EndDate = null;
-                }
-
-                EndDate = Encryptor.Encrypt(value.ToString());
-            }
-        }
+       
 
         public Boolean Completed { get; set; }
 
@@ -76,22 +51,13 @@ namespace FIVESTARVC.Models
             return ClearStartDate.ToLongDateString();
         }
 
-        public String GetLongEndDate()
-        {
-            if (ClearEndDate.HasValue)
-            {
-                return ClearEndDate.Value.ToLongDateString();
-            }
-
-            return null;
-        }
+       
 
         public class ModelConfiguration : EntityTypeConfiguration<ProgramEvent>
         {
             public ModelConfiguration()
             {
                 Property(p => p.StartDate);
-                Property(p => p.EndDate);
             }
         }
     }

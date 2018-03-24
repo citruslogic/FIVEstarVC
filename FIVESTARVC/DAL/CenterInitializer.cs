@@ -176,26 +176,19 @@ namespace FIVESTARVC.DAL
             var events = new List<ProgramEvent>
             {
                 //adding admission event for all residents, the admission doesn't "end."
-                new ProgramEvent { ClearStartDate=DateTime.Parse("2012-05-12"), Completed=false, ResidentID=1, ProgramTypeID=2},
+                new ProgramEvent { ClearStartDate=DateTime.Parse("2012-05-16"), Completed=false, ResidentID=1, ProgramTypeID=2},
                 new ProgramEvent { ClearStartDate=DateTime.Parse("2014-06-14"), Completed=false, ResidentID=2, ProgramTypeID=2},
-                new ProgramEvent { ClearStartDate=DateTime.Parse("2013-07-04"),  Completed=false, ResidentID=3, ProgramTypeID=2},
+                new ProgramEvent { ClearStartDate=DateTime.Parse("2013-07-4"), Completed=false, ResidentID=3, ProgramTypeID=2},
                 new ProgramEvent { ClearStartDate=DateTime.Parse("2012-06-20"), Completed=false, ResidentID=4, ProgramTypeID=2},
-                new ProgramEvent { ClearStartDate=DateTime.Parse("2015-07-01"),  Completed=false, ResidentID=5, ProgramTypeID=2},
+                new ProgramEvent { ClearStartDate=DateTime.Parse("2015-07-15"), Completed=false, ResidentID=5, ProgramTypeID=2},
                 new ProgramEvent { ClearStartDate=DateTime.Parse("2016-07-13"), Completed=false, ResidentID=6, ProgramTypeID=2},
-                //Graduated
-                new ProgramEvent { ClearStartDate=DateTime.Parse("2013-05-16"), Completed=false, ResidentID=1, ProgramTypeID=4},
-                new ProgramEvent { ClearStartDate=DateTime.Parse("2015-06-14"), Completed=false, ResidentID=2, ProgramTypeID=4},
-                new ProgramEvent { ClearStartDate=DateTime.Parse("2014-07-04"),  Completed=false, ResidentID=3, ProgramTypeID=4},
-                new ProgramEvent { ClearStartDate=DateTime.Parse("2013-06-20"), Completed=false, ResidentID=4, ProgramTypeID=4},
-                new ProgramEvent { ClearStartDate=DateTime.Parse("2016-07-01"),  Completed=false, ResidentID=5, ProgramTypeID=4},
-                new ProgramEvent { ClearStartDate=DateTime.Parse("2017-07-13"), Completed=false, ResidentID=6, ProgramTypeID=4},
 
                 //Other events
-                new ProgramEvent { ClearStartDate=DateTime.Parse("2004-05-05"), ClearEndDate=DateTime.Parse("2007-06-20"), Completed=true, ResidentID=5, ProgramTypeID=8},
-                new ProgramEvent { ClearStartDate=DateTime.Parse("2003-03-02"), ClearEndDate=DateTime.Parse("2007-07-12"), Completed=true, ResidentID=6, ProgramTypeID=8},
-                new ProgramEvent { ClearStartDate=DateTime.Parse("2006-03-22"), ClearEndDate=DateTime.Parse("2008-07-12"), Completed=true, ResidentID=1, ProgramTypeID=13},
-                new ProgramEvent { ClearStartDate=DateTime.Parse("2006-03-22"), ClearEndDate=DateTime.Parse("2008-07-12"), Completed=true, ResidentID=2, ProgramTypeID=8},
-                new ProgramEvent { ClearStartDate=DateTime.Parse("2005-10-05"), ClearEndDate=DateTime.Parse("2005-10-15"), ResidentID=2},
+                new ProgramEvent { ClearStartDate=DateTime.Parse("2004-05-05"), Completed=true, ResidentID=5, ProgramTypeID=8},
+                new ProgramEvent { ClearStartDate=DateTime.Parse("2003-03-02"), Completed=true, ResidentID=6, ProgramTypeID=8},
+                new ProgramEvent { ClearStartDate=DateTime.Parse("2006-03-22"), Completed=true, ResidentID=1, ProgramTypeID=13},
+                new ProgramEvent { ClearStartDate=DateTime.Parse("2006-03-22"), Completed=true, ResidentID=2, ProgramTypeID=8},
+                new ProgramEvent { ClearStartDate=DateTime.Parse("2005-10-05"), ResidentID=2},
                 new ProgramEvent { ClearStartDate=DateTime.Parse("2005-11-19"), ResidentID=3}
             };
 

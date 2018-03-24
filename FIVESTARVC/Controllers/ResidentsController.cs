@@ -214,7 +214,6 @@ namespace FIVESTARVC.Controllers
                     {
                         ProgramTypeID = AdmissionType,
                         ClearStartDate = DateTime.Now,
-                        ClearEndDate = null
 
                     });
 
@@ -281,7 +280,7 @@ namespace FIVESTARVC.Controllers
 
 
             if (TryUpdateModel(residentIncomeModel, "",
-                 new string[] { "LastName", "FirstMidName", "Ethnicity", "StateTerritoryID", "Gender", "Religion", "Birthdate", "ServiceBranch", "Note", "InVetCourt",
+                 new string[] { "LastName", "FirstMidName", "Ethnicity", "StateTerritoryID", "Gender", "Religion", "ClearBirthdate", "ServiceBranch", "Note", "InVetCourt",
                      "Benefit", "MilitaryCampaigns", "TotalBenefitAmount" }))
             {
                 try
@@ -378,7 +377,7 @@ namespace FIVESTARVC.Controllers
                 .Single();
 
             if (TryUpdateModel(residentToUpdate, "",
-               new string[] { "LastName", "FirstMidName", "Gender", "Religion", "Ethnicity", "StateTerritoryID", "Birthdate",
+               new string[] { "LastName", "FirstMidName", "Gender", "Religion", "Ethnicity", "StateTerritoryID", "ClearBirthdate",
                    "ServiceBranch", "Note", "InVetCourt", "Benefit", "MilitaryCampaigns", "TotalBenefitAmount" }))
             {
                 try
@@ -590,7 +589,6 @@ namespace FIVESTARVC.Controllers
                 {
                     ProgramTypeID = ProgramTypeID,
                     ClearStartDate = DateTime.Now,
-                    ClearEndDate = DateTime.Now
 
                 });
 

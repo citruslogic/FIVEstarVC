@@ -172,7 +172,7 @@ namespace FIVESTARVC.Controllers
                                    r.ResidentID,
                                    r.ProgramTypeID,
                                    r.ClearStartDate,
-                                   r.ClearEndDate
+                                  
                                }).ToList();
 
             //Variables to find average length of stay

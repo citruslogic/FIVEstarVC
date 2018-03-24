@@ -9,6 +9,11 @@ namespace FIVESTARVC.Helpers
     {
         internal static string Decrypt(string cipherText)
         {
+            if (cipherText == null)
+            {
+                return null;
+            }
+
             byte[] cipherBytes = Convert.FromBase64String(cipherText);
             Rfc2898DeriveBytes pdb = new Rfc2898DeriveBytes(_Pwd, _Salt);
             byte[] decryptedData = Decrypt(cipherBytes, pdb.GetBytes(32), pdb.GetBytes(16));
@@ -41,6 +46,10 @@ namespace FIVESTARVC.Helpers
 
         public static string Encrypt(string clearText)
         {
+            if (clearText == null)
+            {
+                return null;
+            }
             byte[] clearBytes = System.Text.Encoding.Unicode.GetBytes(clearText);
             Rfc2898DeriveBytes pdb = new Rfc2898DeriveBytes(_Pwd, _Salt);
             byte[] encryptedData = Encrypt(clearBytes, pdb.GetBytes(32), pdb.GetBytes(16));

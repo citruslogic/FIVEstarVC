@@ -219,6 +219,7 @@
     <Compile Include="Validators\CheckBirthdate.cs" />
     <Compile Include="ViewModels\AssignedCampaignData.cs" />
     <Compile Include="ViewModels\AssignedRoom.cs" />
+    <Compile Include="ViewModels\CustomEvent.cs" />
     <Compile Include="ViewModels\ReportingResidentViewModel.cs" />
     <Compile Include="ViewModels\DashboardData.cs" />
     <Compile Include="ViewModels\HistoricData.cs" />
