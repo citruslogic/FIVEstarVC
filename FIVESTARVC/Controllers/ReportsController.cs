@@ -161,34 +161,26 @@ namespace FIVESTARVC.Controllers
 
             ViewBag.VeteransCourt = DB.Residents.Count(x => x.InVetCourt == true);
 
-            //Query to make a list of all admission and discharge events
-            var avgProg = DB.ProgramEvents;
-
-            var avgProgStay = (from r in avgProg
-                               where r.ProgramTypeID == 1 || r.ProgramTypeID == 2 || r.ProgramTypeID == 3 ||
-                                     r.ProgramTypeID == 4 || r.ProgramTypeID == 5 || r.ProgramTypeID == 6 || r.ProgramTypeID == 7
-                               select new
-                               {
-                                   r.ResidentID,
-                                   r.ProgramTypeID,
-                                   r.ClearStartDate,
-                                  
-                               }).ToList();
+            
 
             //Variables to find average length of stay
             double total = 0;
-            int numbCount = 0;
-            double average = 0;
-            double days = 0;
+            //int numbCount = 0;
+            //double average = 0;
+            //double days = 0;
 
-            foreach (var item in avgProgStay)
+            var residents = DB.Residents.Include(p => p.ProgramEvents).ToList();
+
+            foreach (Resident resident in residents)
             {
-                DateTime endDate;
-                DateTime startDate;
-                int resID;
+                total += resident.DaysInCenter();
+            }
 
+            ViewBag.AvgStay = (int) total / residents.Count();
+                /*
+                 * (p => p.ProgramTypeID == 4 || item.ProgramTypeID == 5 || item.ProgramTypeID == 6 || item.ProgramTypeID == 7) 
                 //Discharge or graduation events
-                if (item.ProgramTypeID == 4 || item.ProgramTypeID == 5 || item.ProgramTypeID == 6 || item.ProgramTypeID == 7)
+                if (item.
                 {
                     endDate = item.ClearStartDate; //Startdate of a discharge event is the "end date" in this sense
                     resID = item.ResidentID;
@@ -211,13 +203,13 @@ namespace FIVESTARVC.Controllers
                 average = total / numbCount;
             }
 
-
-            ViewBag.AvgStay = (int)average;
+                */
+             
 
             return View();
         }
         /* Get the age of all residents that have been in the center. */
-        public IEnumerable<ReportingResidentViewModel> GetResidentsAge()
+                public IEnumerable<ReportingResidentViewModel> GetResidentsAge()
         {
 
             IEnumerable<ReportingResidentViewModel> residentListing = DB.Residents.ToList().Select(r => new ReportingResidentViewModel { ID = r.ResidentID, Age = r.Age.Computed() });

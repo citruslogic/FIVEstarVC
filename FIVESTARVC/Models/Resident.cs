@@ -68,7 +68,44 @@ namespace FIVESTARVC.Models
                 }
                 return internalBool;
             }
+
+        public DateTime? GetAdmitDate()
+        {
+
+            foreach (ProgramEvent ev in ProgramEvents)
+            {
+                if (ev.ProgramTypeID == 1 || ev.ProgramTypeID == 2 || ev.ProgramTypeID == 3)
+                {
+                    return ev.ClearStartDate;
+                }
+            }
+
+            return null;
+        }
+
+        public DateTime? GetDischargeDate()
+        {
+
+            foreach (ProgramEvent ev in ProgramEvents)
+            {
+                if (ev.ProgramTypeID == 4 || ev.ProgramTypeID == 5
+                    || ev.ProgramTypeID == 6 || ev.ProgramTypeID == 7)
+                {
+                    return ev.ClearStartDate;
+                }
+            }
+
+            return null;
+        }
+
+        public double DaysInCenter()
+        {
+
+            return (GetDischargeDate().GetValueOrDefault() - GetAdmitDate().GetValueOrDefault()).TotalDays;
         }
 
     }
+}
+
+   
 
