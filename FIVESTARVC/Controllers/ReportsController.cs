@@ -164,7 +164,7 @@ namespace FIVESTARVC.Controllers
             
 
             //Variables to find average length of stay
-            double total = 0;
+            int total = 0;
             //int numbCount = 0;
             //double average = 0;
             //double days = 0;
@@ -176,7 +176,7 @@ namespace FIVESTARVC.Controllers
                 total += resident.DaysInCenter();
             }
 
-            ViewBag.AvgStay = (int) total / residents.Count();
+            ViewBag.AvgStay = total / residents.Count();
                 /*
                  * (p => p.ProgramTypeID == 4 || item.ProgramTypeID == 5 || item.ProgramTypeID == 6 || item.ProgramTypeID == 7) 
                 //Discharge or graduation events

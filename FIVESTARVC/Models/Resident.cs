@@ -71,8 +71,9 @@ namespace FIVESTARVC.Models
 
         public DateTime? GetAdmitDate()
         {
+            var events = db.ProgramEvents.ToList();
 
-            foreach (ProgramEvent ev in ProgramEvents)
+            foreach (ProgramEvent ev in events)
             {
                 if (ev.ProgramTypeID == 1 || ev.ProgramTypeID == 2 || ev.ProgramTypeID == 3)
                 {
@@ -85,8 +86,9 @@ namespace FIVESTARVC.Models
 
         public DateTime? GetDischargeDate()
         {
+            var events = db.ProgramEvents.ToList();
 
-            foreach (ProgramEvent ev in ProgramEvents)
+            foreach (ProgramEvent ev in events)
             {
                 if (ev.ProgramTypeID == 4 || ev.ProgramTypeID == 5
                     || ev.ProgramTypeID == 6 || ev.ProgramTypeID == 7)
@@ -98,10 +100,12 @@ namespace FIVESTARVC.Models
             return null;
         }
 
-        public double DaysInCenter()
+        public int DaysInCenter()
         {
+            TimeSpan span = GetDischargeDate().GetValueOrDefault().Subtract(GetAdmitDate().GetValueOrDefault());
 
-            return (GetDischargeDate().GetValueOrDefault() - GetAdmitDate().GetValueOrDefault()).TotalDays;
+            return (int) Math.Abs(span.TotalDays);
+
         }
 
     }
