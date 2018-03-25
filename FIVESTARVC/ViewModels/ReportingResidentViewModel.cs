@@ -9,7 +9,7 @@ namespace FIVESTARVC.ViewModels
     public class ReportingResidentViewModel
     {
         public int ID { get; set; }
-        
+
         public string LastName { get; set; }
         public string FirstName { get; set; }
         public DateTime Birthdate { get; set; }
@@ -20,7 +20,15 @@ namespace FIVESTARVC.ViewModels
         public string Note { get; set; }
 
 
-        // PROGRAM TYPE ID
+
         public IEnumerable<int> ProgramTypeID { get; set; }
+        public IEnumerable<ProgramEvent> ProgramEvents { get; set; }
+        public IEnumerable<DateTime> StartDate { get; set; }
+
+
+
     }
+
+    
+
 }
