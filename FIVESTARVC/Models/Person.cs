@@ -24,6 +24,7 @@ namespace FIVESTARVC.Models
         private string LastName { get; set; }
 
         private string Birthdate { get; set; }
+
         [Display(Name = "Last Name")]
         [NotMapped]
         public string ClearLastName {
@@ -84,10 +85,18 @@ namespace FIVESTARVC.Models
         {
             get
             {
-                TimeSpan span = DateTime.Now - ClearBirthdate.Date;
-                DateTime age = DateTime.MinValue + span;
+                try
+                {
+                    TimeSpan span = DateTime.Now - ClearBirthdate.Date;
+                    DateTime age = DateTime.MinValue + span;
 
-                return age.Year - 1;
+                    return age.Year - 1;
+
+                } catch (ArgumentOutOfRangeException /* ex */)
+                {
+                    return 0;
+                }
+              
             }
         }
 
