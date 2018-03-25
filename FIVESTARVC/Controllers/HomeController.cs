@@ -28,7 +28,8 @@ namespace FIVESTARVC.Controllers
                 ResidentID = data.ResidentID,
                 FirstMidName = data.FirstMidName,
                 LastName = data.ClearLastName.Computed(),
-                RoomNumber = data.Room.RoomNumber
+                RoomNumber = data.RoomNumber.GetValueOrDefault()
+
             }).OrderByDescending(r => r.ResidentID).Take(5);
 
             ViewBag.pop = db.Residents.ToList().Where(r => r.IsCurrent()).Count();
