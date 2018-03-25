@@ -8,8 +8,10 @@
 <br />
 <li class="btn-block">
     <input type="button" class="btn btn-success" value="New Room" onclick="location.href='/Rooms/Create';" />
+
+    <input type="button" class="btn btn-success" value="Return To Resident" onclick="location.href='/Residents/Index';" />
     &nbsp;
-    
+
 </li>
 @*<div class="form-inline">
 
@@ -27,34 +29,39 @@
             @Html.DisplayNameFor(model => model.RoomNumber)
         </th>
         @*<th>
-            @Html.DisplayNameFor(model => model.IsOccupied)
-        </th>*@
+                @Html.DisplayNameFor(model => model.IsOccupied)
+            </th>*@
         <th>
             @Html.DisplayNameFor(model => model.WingName)
         </th>
         <th></th>
     </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.RoomNumber)
-        </td>
-        @*<td>
-            @Html.DisplayFor(modelItem => item.IsOccupied)
-        </td>*@
-        <td>
-            @Html.DisplayFor(modelItem => item.WingName)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.RoomNumber }) |
-            @Html.ActionLink("Details", "Details", new { id=item.RoomNumber })
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.RoomNumber)
+            </td>
+            @*<td>
+                    @Html.DisplayFor(modelItem => item.IsOccupied)
+                </td>*@
+            <td>
+                @Html.DisplayFor(modelItem => item.WingName)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.RoomNumber }) |
+                @Html.ActionLink("Details", "Details", new { id = item.RoomNumber })
 
-            @*Commented out for security reasons.*@
-            @*|
-            @Html.ActionLink("Delete", "Delete", new { id=item.RoomID })*@
-        </td>
-    </tr>
-}
+                @*Commented out for security reasons.*@
+                @*|
+                    @Html.ActionLink("Delete", "Delete", new { id=item.RoomID })*@
+            </td>
+        </tr>
+    }
+        
+    </table>
 
-</table>
+<p>
+    <input type="button" class="btn btn-success" value="Return To Resident" onclick="location.href='/Residents/Index';" />
+</p>
