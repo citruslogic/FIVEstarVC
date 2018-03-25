@@ -171,8 +171,8 @@ namespace FIVESTARVC.Controllers
                                {
                                    r.ResidentID,
                                    r.ProgramTypeID,
-                                   r.StartDate,
-                                   r.EndDate
+                                   r.ClearStartDate,
+                                  
                                }).ToList();
 
             //Variables to find average length of stay
@@ -190,7 +190,7 @@ namespace FIVESTARVC.Controllers
                 //Discharge or graduation events
                 if (item.ProgramTypeID == 4 || item.ProgramTypeID == 5 || item.ProgramTypeID == 6 || item.ProgramTypeID == 7)
                 {
-                    endDate = item.StartDate; //Startdate of a discharge event is the "end date" in this sense
+                    endDate = item.ClearStartDate; //Startdate of a discharge event is the "end date" in this sense
                     resID = item.ResidentID;
                     numbCount++;
 
@@ -200,7 +200,7 @@ namespace FIVESTARVC.Controllers
                         {
                             if (startItem.ProgramTypeID == 1 || startItem.ProgramTypeID == 2 || startItem.ProgramTypeID == 3)
                             {
-                                startDate = startItem.StartDate;
+                                startDate = startItem.ClearStartDate;
                                 days = (endDate - startDate).TotalDays;
                                 total += days;
                             }
@@ -488,7 +488,7 @@ namespace FIVESTARVC.Controllers
 
             var Query = (from y in events
                          where y.ProgramTypeID == 4
-                         group y by y.StartDate.Year into typeGroup
+                         group y by y.ClearStartDate.Year into typeGroup
                          select new
                          {
                              StartDate = typeGroup.Key,
@@ -513,7 +513,7 @@ namespace FIVESTARVC.Controllers
 
             var Query = (from y in events
                          where y.ProgramTypeID == 4
-                         group y by y.StartDate.Year into typeGroup
+                         group y by y.ClearStartDate.Year into typeGroup
                          select new
                          {
                              StartDate = typeGroup.Key,
@@ -538,7 +538,7 @@ namespace FIVESTARVC.Controllers
 
             var gradQuery = (from y in events
                              where y.ProgramTypeID == 2
-                             group y by y.StartDate.Year into typeGroup
+                             group y by y.ClearStartDate.Year into typeGroup
                              select new
                              {
                                  StartDate = typeGroup.Key,
@@ -563,7 +563,7 @@ namespace FIVESTARVC.Controllers
 
             var gradQuery = (from y in events
                              where y.ProgramTypeID == 2
-                             group y by y.StartDate.Year into typeGroup
+                             group y by y.ClearStartDate.Year into typeGroup
                              select new
                              {
                                  StartDate = typeGroup.Key,
@@ -588,7 +588,7 @@ namespace FIVESTARVC.Controllers
 
             var Query = (from y in events
                          where y.ProgramTypeID == 3
-                         group y by y.StartDate.Year into typeGroup
+                         group y by y.ClearStartDate.Year into typeGroup
                          select new
                          {
                              StartDate = typeGroup.Key,
@@ -613,7 +613,7 @@ namespace FIVESTARVC.Controllers
 
             var Query = (from y in events
                          where y.ProgramTypeID == 3
-                         group y by y.StartDate.Year into typeGroup
+                         group y by y.ClearStartDate.Year into typeGroup
                          select new
                          {
                              StartDate = typeGroup.Key,
@@ -640,7 +640,7 @@ namespace FIVESTARVC.Controllers
 
             var gradQuery = (from y in events
                              where y.ProgramTypeID == 10
-                             group y by y.StartDate.Year into typeGroup
+                             group y by y.ClearStartDate.Year into typeGroup
                              select new
                              {
                                  StartDate = typeGroup.Key,
@@ -666,7 +666,7 @@ namespace FIVESTARVC.Controllers
 
             var gradQuery = (from y in events
                              where y.ProgramTypeID == 10
-                             group y by y.StartDate.Year into typeGroup
+                             group y by y.ClearStartDate.Year into typeGroup
                              select new
                              {
                                  StartDate = typeGroup.Key,
@@ -692,7 +692,7 @@ namespace FIVESTARVC.Controllers
 
             var Query = (from y in events
                          where y.ProgramTypeID == 1
-                         group y by y.StartDate.Year into typeGroup
+                         group y by y.ClearStartDate.Year into typeGroup
                          select new
                          {
                              StartDate = typeGroup.Key,
@@ -717,7 +717,7 @@ namespace FIVESTARVC.Controllers
 
             var Query = (from y in events
                          where y.ProgramTypeID == 1
-                         group y by y.StartDate.Year into typeGroup
+                         group y by y.ClearStartDate.Year into typeGroup
                          select new
                          {
                              StartDate = typeGroup.Key,
@@ -742,7 +742,7 @@ namespace FIVESTARVC.Controllers
 
             var Query = (from y in events
                          where y.ProgramTypeID == 5 || y.ProgramTypeID == 6 || y.ProgramTypeID == 7
-                         group y by y.StartDate.Year into typeGroup
+                         group y by y.ClearStartDate.Year into typeGroup
                          select new
                          {
                              StartDate = typeGroup.Key,
@@ -767,7 +767,7 @@ namespace FIVESTARVC.Controllers
 
             var Query = (from y in events
                          where y.ProgramTypeID == 5 || y.ProgramTypeID == 6 || y.ProgramTypeID == 7
-                         group y by y.StartDate.Year into typeGroup
+                         group y by y.ClearStartDate.Year into typeGroup
                          select new
                          {
                              StartDate = typeGroup.Key,
@@ -792,7 +792,7 @@ namespace FIVESTARVC.Controllers
             var queryResults = (from y in events
                                 join resident in DB.Residents on y.ResidentID equals resident.ResidentID
                                 where y.ProgramTypeID == 2 || y.ProgramTypeID == 1 || y.ProgramTypeID == 3 && resident.InVetCourt.Equals(true)
-                                group y by y.StartDate.Year into typeGroup
+                                group y by y.ClearStartDate.Year into typeGroup
                                 select new
                                 {
                                     VetCourt = typeGroup.Count(),
@@ -818,7 +818,7 @@ namespace FIVESTARVC.Controllers
             var queryResults = (from y in events
                                 join resident in DB.Residents on y.ResidentID equals resident.ResidentID
                                 where y.ProgramTypeID == 2 || y.ProgramTypeID == 1 || y.ProgramTypeID == 3 && resident.InVetCourt.Equals(true)
-                                group y by y.StartDate.Year into typeGroup
+                                group y by y.ClearStartDate.Year into typeGroup
                                 select new
                                 {
                                     VetCourt = typeGroup.Count(),
@@ -845,8 +845,8 @@ namespace FIVESTARVC.Controllers
             {
                 ID = r.ResidentID,
                 FirstName = r.FirstMidName,
-                LastName = r.LastName,
-                Birthdate = r.Birthdate.GetValueOrDefault(),
+                LastName = r.ClearLastName,
+                Birthdate = r.ClearBirthdate,
                 Age = r.Age.Computed(),
                 ServiceType = r.ServiceBranch,
                 InVetCourt = r.InVetCourt,

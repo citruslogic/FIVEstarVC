@@ -26,7 +26,7 @@ namespace FIVESTARVC.ViewModels
         [Display(Name = "Birthdate")]
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:MM/dd/yyyy}", ApplyFormatInEditMode = true)]
-        public DateTime? Birthdate { get; set; }
+        public DateTime Birthdate { get; set; }
         [Display(Name = "Service Branch")]
         public ServiceType ServiceBranch { get; set; }
 

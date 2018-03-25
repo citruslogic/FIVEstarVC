@@ -9,6 +9,7 @@ using System.Web.Mvc;
 using PagedList;
 using FIVESTARVC.DAL;
 using FIVESTARVC.Models;
+using FIVESTARVC.ViewModels;
 
 namespace FIVESTARVC.Controllers
 {
@@ -40,14 +41,14 @@ namespace FIVESTARVC.Controllers
 
             if (!String.IsNullOrEmpty(searchString))
             {
-                programEvents = programEvents.Where(p => p.Resident.LastName.Contains(searchString)
+                programEvents = programEvents.Where(p => p.Resident.ClearLastName.Contains(searchString)
                                        || p.Resident.FirstMidName.Contains(searchString));
             }
 
             switch (sortOrder)
             {
                 case "name_desc":
-                    programEvents = programEvents.OrderByDescending(p => p.Resident.LastName);
+                    programEvents = programEvents.OrderByDescending(p => p.Resident.ClearLastName);
                     break;
                 case "ProgramDescription":
                     programEvents = programEvents.OrderBy(p => p.ProgramTypeID);
@@ -85,7 +86,7 @@ namespace FIVESTARVC.Controllers
         public ActionResult Create()
         {
             ViewBag.ProgramTypeID = new SelectList(db.ProgramTypes, "ProgramTypeID", "ProgramDescription");
-            ViewBag.ResidentID = new SelectList(db.Residents, "ResidentID", "LastName");
+            ViewBag.ResidentID = new SelectList(db.Residents, "ResidentID", "ClearLastName");
             return View();
         }
 
@@ -94,17 +95,25 @@ namespace FIVESTARVC.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ProgramEventID,ResidentID,ProgramTypeID,StartDate,EndDate,Completed")] ProgramEvent programEvent)
+        public ActionResult Create(CustomEvent programEvent)
         {
             if (ModelState.IsValid)
             {
-                db.ProgramEvents.Add(programEvent);
+                
+                db.ProgramEvents.Add(new ProgramEvent {
+
+                    ResidentID = programEvent.ResidentID,
+                    ProgramTypeID = programEvent.ProgramTypeID,
+                    ClearStartDate = programEvent.ClearStartDate,
+                    Completed = programEvent.Completed
+
+                });
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
             ViewBag.ProgramTypeID = new SelectList(db.ProgramTypes, "ProgramTypeID", "ProgramDescription", programEvent.ProgramTypeID);
-            ViewBag.ResidentID = new SelectList(db.Residents, "ResidentID", "LastName", programEvent.ResidentID);
+            ViewBag.ResidentID = new SelectList(db.Residents, "ResidentID", "ClearLastName", programEvent.ResidentID);
             return View(programEvent);
         }
 
@@ -121,26 +130,39 @@ namespace FIVESTARVC.Controllers
                 return HttpNotFound();
             }
             ViewBag.ProgramTypeID = new SelectList(db.ProgramTypes, "ProgramTypeID", "ProgramDescription", programEvent.ProgramTypeID);
-            ViewBag.ResidentID = new SelectList(db.Residents, "ResidentID", "LastName", programEvent.ResidentID);
+            ViewBag.ResidentID = new SelectList(db.Residents, "ResidentID", "ClearLastName", programEvent.ResidentID);
             return View(programEvent);
         }
 
         // POST: ProgramEvents/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
+        [HttpPost, ActionName("Edit")]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ProgramEventID,ResidentID,ProgramTypeID,StartDate,EndDate,Completed")] ProgramEvent programEvent)
+        public ActionResult EditPost(int? id)
         {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            var eventToUpdate = db.ProgramEvents
+                .Include(c => c.Resident)
+                 .Where(c => c.ProgramEventID == id)
+                .Single();
+
             if (ModelState.IsValid)
             {
-                db.Entry(programEvent).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                if (TryUpdateModel(eventToUpdate, "",
+               new string[] { "ProgramEventID", "ProgramTypeID", "ResidentID", "ClearStartDate", "Completed" }))
+                {
+
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
             }
-            ViewBag.ProgramTypeID = new SelectList(db.ProgramTypes, "ProgramTypeID", "ProgramDescription", programEvent.ProgramTypeID);
-            ViewBag.ResidentID = new SelectList(db.Residents, "ResidentID", "LastName", programEvent.ResidentID);
-            return View(programEvent);
+            ViewBag.ProgramTypeID = new SelectList(db.ProgramTypes, "ProgramTypeID", "ProgramDescription", db.ProgramTypes);
+            ViewBag.ResidentID = new SelectList(db.Residents, "ResidentID", "ClearLastName", db.Residents);
+            return View(eventToUpdate);
         }
 
         // GET: ProgramEvents/Delete/5

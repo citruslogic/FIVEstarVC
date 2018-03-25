@@ -27,6 +27,8 @@ namespace FIVESTARVC.DAL
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
+            modelBuilder.Configurations.Add(new Person.ModelConfiguration());
+            modelBuilder.Configurations.Add(new ProgramEvent.ModelConfiguration());
 
             modelBuilder.Entity<MilitaryCampaign>()
             .HasMany(r => r.Residents).WithMany(m => m.MilitaryCampaigns)

@@ -132,12 +132,12 @@ namespace FIVESTARVC.DAL
 
             var residents = new List<Resident>
             {
-                new Resident { FirstMidName="Carson", StateTerritoryID=14, Birthdate=DateTime.Parse("3/4/1988"), LastName="Steven", RoomNumber = 102, ServiceBranch=ServiceType.ARMY },
-                new Resident { FirstMidName="Naomi", StateTerritoryID=25, Birthdate=DateTime.Parse("6/12/1979"), LastName="Wildman", RoomNumber = 103, ServiceBranch=ServiceType.AIRFORCE },
-                new Resident { FirstMidName="Gary", StateTerritoryID=8, Birthdate=DateTime.Parse("6/24/1980"), LastName="Noonan", RoomNumber = 105, ServiceBranch=ServiceType.NAVY },
-                new Resident { FirstMidName="Steve", StateTerritoryID=40, Birthdate=DateTime.Parse("1/15/1981"), LastName="Nash", RoomNumber = 106, ServiceBranch=ServiceType.MARINES },
-                new Resident { FirstMidName="Neo", StateTerritoryID=15, Birthdate=DateTime.Parse("3/8/1974"), LastName="Anderson", RoomNumber = 107, ServiceBranch=ServiceType.AIRFORCE },
-                new Resident { FirstMidName="Charlie", StateTerritoryID=22, LastName="Brown", Birthdate=DateTime.Parse("12/23/1976"), RoomNumber = 108, ServiceBranch=ServiceType.NAVY }
+                new Resident { FirstMidName="Carson", StateTerritoryID=14, ClearBirthdate=DateTime.Parse("3/4/1988"), ClearLastName="Steven", RoomNumber = 102, ServiceBranch=ServiceType.ARMY },
+                new Resident { FirstMidName="Naomi", StateTerritoryID=25, ClearBirthdate=DateTime.Parse("6/12/1979"), ClearLastName="Wildman", RoomNumber = 103, ServiceBranch=ServiceType.AIRFORCE },
+                new Resident { FirstMidName="Gary", StateTerritoryID=8, ClearBirthdate=DateTime.Parse("6/24/1980"), ClearLastName="Noonan", RoomNumber = 105, ServiceBranch=ServiceType.NAVY },
+                new Resident { FirstMidName="Steve", StateTerritoryID=40, ClearBirthdate=DateTime.Parse("1/15/1981"), ClearLastName="Nash", RoomNumber = 106, ServiceBranch=ServiceType.MARINES },
+                new Resident { FirstMidName="Neo", StateTerritoryID=15, ClearBirthdate=DateTime.Parse("3/8/1974"), ClearLastName="Anderson", RoomNumber = 107, ServiceBranch=ServiceType.AIRFORCE },
+                new Resident { FirstMidName="Charlie", StateTerritoryID=22, ClearLastName="Brown", ClearBirthdate=DateTime.Parse("12/23/1976"), RoomNumber = 108, ServiceBranch=ServiceType.NAVY }
             };
 
             residents.ForEach(r => context.Residents.Add(r));
@@ -176,27 +176,20 @@ namespace FIVESTARVC.DAL
             var events = new List<ProgramEvent>
             {
                 //adding admission event for all residents, the admission doesn't "end."
-                new ProgramEvent { StartDate=new DateTime(2012,05,16), EndDate=null, Completed=false, ResidentID=1, ProgramTypeID=2},
-                new ProgramEvent { StartDate=new DateTime(2014,06,14), EndDate=null, Completed=false, ResidentID=2, ProgramTypeID=2},
-                new ProgramEvent { StartDate=new DateTime(2013,07,4), EndDate=null, Completed=false, ResidentID=3, ProgramTypeID=2},
-                new ProgramEvent { StartDate=new DateTime(2012,06,20), EndDate=null, Completed=false, ResidentID=4, ProgramTypeID=2},
-                new ProgramEvent { StartDate=new DateTime(2015,07,1), EndDate=null, Completed=false, ResidentID=5, ProgramTypeID=2},
-                new ProgramEvent { StartDate=new DateTime(2016,07,13), EndDate=null, Completed=false, ResidentID=6, ProgramTypeID=2},
-                //Graduated
-                new ProgramEvent { StartDate=new DateTime(2013,05,16), EndDate=null, Completed=false, ResidentID=1, ProgramTypeID=4},
-                new ProgramEvent { StartDate=new DateTime(2015,06,14), EndDate=null, Completed=false, ResidentID=2, ProgramTypeID=4},
-                new ProgramEvent { StartDate=new DateTime(2014,07,4), EndDate=null, Completed=false, ResidentID=3, ProgramTypeID=4},
-                new ProgramEvent { StartDate=new DateTime(2013,06,20), EndDate=null, Completed=false, ResidentID=4, ProgramTypeID=4},
-                new ProgramEvent { StartDate=new DateTime(2016,07,1), EndDate=null, Completed=false, ResidentID=5, ProgramTypeID=4},
-                new ProgramEvent { StartDate=new DateTime(2017,07,13), EndDate=null, Completed=false, ResidentID=6, ProgramTypeID=4},
+                new ProgramEvent { ClearStartDate=DateTime.Parse("2012-05-16"), Completed=false, ResidentID=1, ProgramTypeID=2},
+                new ProgramEvent { ClearStartDate=DateTime.Parse("2014-06-14"), Completed=false, ResidentID=2, ProgramTypeID=2},
+                new ProgramEvent { ClearStartDate=DateTime.Parse("2013-07-4"), Completed=false, ResidentID=3, ProgramTypeID=2},
+                new ProgramEvent { ClearStartDate=DateTime.Parse("2012-06-20"), Completed=false, ResidentID=4, ProgramTypeID=2},
+                new ProgramEvent { ClearStartDate=DateTime.Parse("2015-07-15"), Completed=false, ResidentID=5, ProgramTypeID=2},
+                new ProgramEvent { ClearStartDate=DateTime.Parse("2016-07-13"), Completed=false, ResidentID=6, ProgramTypeID=2},
 
                 //Other events
-                new ProgramEvent { StartDate=DateTime.Parse("2004-05-05"), EndDate=DateTime.Parse("2007-06-20"), Completed=true, ResidentID=5, ProgramTypeID=8},
-                new ProgramEvent { StartDate=DateTime.Parse("2003-03-02"), EndDate=DateTime.Parse("2007-07-12"), Completed=true, ResidentID=6, ProgramTypeID=8},
-                new ProgramEvent { StartDate=DateTime.Parse("2006-03-22"), EndDate=DateTime.Parse("2008-07-12"), Completed=true, ResidentID=1, ProgramTypeID=13},
-                new ProgramEvent { StartDate=DateTime.Parse("2006-03-22"), EndDate=DateTime.Parse("2008-07-12"), Completed=true, ResidentID=2, ProgramTypeID=8},
-                new ProgramEvent { StartDate=DateTime.Parse("2005-10-05"), EndDate=DateTime.Parse("2005-10-15"), ResidentID=2},
-                new ProgramEvent { StartDate=DateTime.Parse("2005-11-19"), EndDate = null, ResidentID=3}
+                new ProgramEvent { ClearStartDate=DateTime.Parse("2004-05-05"), Completed=true, ResidentID=5, ProgramTypeID=8},
+                new ProgramEvent { ClearStartDate=DateTime.Parse("2003-03-02"), Completed=true, ResidentID=6, ProgramTypeID=8},
+                new ProgramEvent { ClearStartDate=DateTime.Parse("2006-03-22"), Completed=true, ResidentID=1, ProgramTypeID=13},
+                new ProgramEvent { ClearStartDate=DateTime.Parse("2006-03-22"), Completed=true, ResidentID=2, ProgramTypeID=8},
+                new ProgramEvent { ClearStartDate=DateTime.Parse("2005-10-05"), ResidentID=2},
+                new ProgramEvent { ClearStartDate=DateTime.Parse("2005-11-19"), ResidentID=3}
             };
 
             events.ForEach(e => context.ProgramEvents.Add(e));
