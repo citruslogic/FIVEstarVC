@@ -50,6 +50,7 @@ namespace FIVESTARVC.Models
         [Display(Name = "Birthdate")]
         [DataType(DataType.Date)]
         [Birthdate(ErrorMessage = "Birthdate must not be in the future.")]
+        [Age(ErrorMessage = "Applicant must be 18 years or older.")]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         [NotMapped]
         public DateTime ClearBirthdate {
