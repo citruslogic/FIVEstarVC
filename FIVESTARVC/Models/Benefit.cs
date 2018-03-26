@@ -15,6 +15,7 @@ namespace FIVESTARVC.Models
 
         [Display(Name = "Disability Rating")]
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:#}")]
+        [Range(0,100, ErrorMessage = "Disability rating must be a minimum of 0 and cannot exceed 100.")]
         public double? DisabilityPercentage { get; set; }
 
         [DataType(DataType.Currency)]

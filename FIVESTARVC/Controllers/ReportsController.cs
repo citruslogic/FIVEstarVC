@@ -161,7 +161,7 @@ namespace FIVESTARVC.Controllers
 
             ViewBag.VeteransCourt = DB.Residents.Count(x => x.InVetCourt == true);
 
-            
+
 
             //Variables to find average length of stay
             int total = 0;
@@ -177,42 +177,43 @@ namespace FIVESTARVC.Controllers
             }
 
             ViewBag.AvgStay = total / residents.Count();
-                /*
-                 * (p => p.ProgramTypeID == 4 || item.ProgramTypeID == 5 || item.ProgramTypeID == 6 || item.ProgramTypeID == 7) 
-                //Discharge or graduation events
-                if (item.
-                {
-                    endDate = item.ClearStartDate; //Startdate of a discharge event is the "end date" in this sense
-                    resID = item.ResidentID;
-                    numbCount++;
+            /*
+             * (p => p.ProgramTypeID == 4 || item.ProgramTypeID == 5 || item.ProgramTypeID == 6 || item.ProgramTypeID == 7) 
+            //Discharge or graduation events
+            if (item.
+            {
+                endDate = item.ClearStartDate; //Startdate of a discharge event is the "end date" in this sense
+                resID = item.ResidentID;
+                numbCount++;
 
-                    foreach (var startItem in avgProgStay)
+                foreach (var startItem in avgProgStay)
+                {
+                    if (resID == startItem.ResidentID)
                     {
-                        if (resID == startItem.ResidentID)
+                        if (startItem.ProgramTypeID == 1 || startItem.ProgramTypeID == 2 || startItem.ProgramTypeID == 3)
                         {
-                            if (startItem.ProgramTypeID == 1 || startItem.ProgramTypeID == 2 || startItem.ProgramTypeID == 3)
-                            {
-                                startDate = startItem.ClearStartDate;
-                                days = (endDate - startDate).TotalDays;
-                                total += days;
-                            }
+                            startDate = startItem.ClearStartDate;
+                            days = (endDate - startDate).TotalDays;
+                            total += days;
                         }
                     }
                 }
-
-                average = total / numbCount;
             }
 
-                */
-             
+            average = total / numbCount;
+        }
+
+            */
+
 
             return View();
         }
         /* Get the age of all residents that have been in the center. */
-                public IEnumerable<ReportingResidentViewModel> GetResidentsAge()
+        public IEnumerable<ReportingResidentViewModel> GetResidentsAge()
         {
 
-            IEnumerable<ReportingResidentViewModel> residentListing = DB.Residents.ToList().Select(r => new ReportingResidentViewModel { ID = r.ResidentID, Age = r.Age.Computed() });
+            IEnumerable<ReportingResidentViewModel> residentListing = DB.Residents.ToList()
+                .Select(r => new ReportingResidentViewModel { ID = r.ResidentID, Age = r.Age.Computed() });
 
             return residentListing;
         }
@@ -222,7 +223,8 @@ namespace FIVESTARVC.Controllers
         public double GetAverageAge()
         {
 
-            IEnumerable<ReportingResidentViewModel> residentListing = DB.Residents.ToList().Select(r => new ReportingResidentViewModel { ID = r.ResidentID, Age = r.Age.Computed() });
+            IEnumerable<ReportingResidentViewModel> residentListing = DB.Residents.ToList()
+                .Select(r => new ReportingResidentViewModel { ID = r.ResidentID, Age = r.Age.Computed() });
 
             return residentListing.Average(r => r.Age);
         }
@@ -455,7 +457,7 @@ namespace FIVESTARVC.Controllers
         {
             List<string> gradPercent = new List<string>();
 
-            DateTime currentDate = System.DateTime.Now;
+            DateTime currentDate = DateTime.Now;
 
             int currentYear = currentDate.Year;
 
@@ -476,16 +478,16 @@ namespace FIVESTARVC.Controllers
 
         public List<int> gradRates()
         {
-            var events = DB.ProgramEvents;
+            var events = DB.ProgramEvents.ToList();
 
             var Query = (from y in events
                          where y.ProgramTypeID == 4
-                         group y by y.ClearStartDate.Year into typeGroup
+                         group y by y.ClearStartDate.Computed().Year into typeGroup
                          select new
                          {
                              StartDate = typeGroup.Key,
                              Count = typeGroup.Count(),
-                         }).ToList();
+                         });
 
             List<int> rates = new List<int>();
 
@@ -499,18 +501,18 @@ namespace FIVESTARVC.Controllers
 
         public List<int> gradRatesCum()
         {
-            var events = DB.ProgramEvents;
+            var events = DB.ProgramEvents.ToList();
 
             int runningTotal = 0;
 
             var Query = (from y in events
                          where y.ProgramTypeID == 4
-                         group y by y.ClearStartDate.Year into typeGroup
+                         group y by y.ClearStartDate.Computed().Year into typeGroup
                          select new
                          {
                              StartDate = typeGroup.Key,
                              Count = typeGroup.Count(),
-                         }).ToList();
+                         });
 
             List<int> rates = new List<int>();
 
@@ -526,16 +528,16 @@ namespace FIVESTARVC.Controllers
 
         public List<int> admittedRates()
         {
-            var events = DB.ProgramEvents;
+            var events = DB.ProgramEvents.ToList();
 
             var gradQuery = (from y in events
                              where y.ProgramTypeID == 2
-                             group y by y.ClearStartDate.Year into typeGroup
+                             group y by y.ClearStartDate.Computed().Year into typeGroup
                              select new
                              {
                                  StartDate = typeGroup.Key,
                                  Count = typeGroup.Count(),
-                             }).ToList();
+                             });
 
             List<int> rates = new List<int>();
 
@@ -549,18 +551,18 @@ namespace FIVESTARVC.Controllers
 
         public List<int> admittedRatesCum()
         {
-            var events = DB.ProgramEvents;
+            var events = DB.ProgramEvents.ToList();
 
             int runningTotal = 0;
 
             var gradQuery = (from y in events
                              where y.ProgramTypeID == 2
-                             group y by y.ClearStartDate.Year into typeGroup
+                             group y by y.ClearStartDate.Computed().Year into typeGroup
                              select new
                              {
                                  StartDate = typeGroup.Key,
                                  Count = typeGroup.Count(),
-                             }).ToList();
+                             });
 
             List<int> rates = new List<int>();
 
@@ -576,16 +578,16 @@ namespace FIVESTARVC.Controllers
 
         public List<int> readmittedRates()
         {
-            var events = DB.ProgramEvents;
+            var events = DB.ProgramEvents.ToList();
 
             var Query = (from y in events
                          where y.ProgramTypeID == 3
-                         group y by y.ClearStartDate.Year into typeGroup
+                         group y by y.ClearStartDate.Computed().Year into typeGroup
                          select new
                          {
                              StartDate = typeGroup.Key,
                              Count = typeGroup.Count(),
-                         }).ToList();
+                         });
 
             List<int> rates = new List<int>();
 
@@ -599,18 +601,18 @@ namespace FIVESTARVC.Controllers
 
         public List<int> readmittedRatesCum()
         {
-            var events = DB.ProgramEvents;
+            var events = DB.ProgramEvents.ToList();
 
             int runningTotal = 0;
 
             var Query = (from y in events
                          where y.ProgramTypeID == 3
-                         group y by y.ClearStartDate.Year into typeGroup
+                         group y by y.ClearStartDate.Computed().Year into typeGroup
                          select new
                          {
                              StartDate = typeGroup.Key,
                              Count = typeGroup.Count(),
-                         }).ToList();
+                         });
 
             List<int> rates = new List<int>();
 
@@ -626,19 +628,19 @@ namespace FIVESTARVC.Controllers
 
         public List<int> p2iRates()
         {
-            var events = DB.ProgramEvents;
+            var events = DB.ProgramEvents.ToList();
 
             int runningTotal = 0;
 
             var gradQuery = (from y in events
                              where y.ProgramTypeID == 10
-                             group y by y.ClearStartDate.Year into typeGroup
+                             group y by y.ClearStartDate.Computed().Year into typeGroup
                              select new
                              {
                                  StartDate = typeGroup.Key,
                                  Count = typeGroup.Count(),
                                  runningTotal = runningTotal + typeGroup.Count()
-                             }).ToList();
+                             });
 
             List<int> rates = new List<int>();
 
@@ -652,19 +654,19 @@ namespace FIVESTARVC.Controllers
 
         public List<int> p2iRatesCum()
         {
-            var events = DB.ProgramEvents;
+            var events = DB.ProgramEvents.ToList();
 
             int runningTotal = 0;
 
             var gradQuery = (from y in events
                              where y.ProgramTypeID == 10
-                             group y by y.ClearStartDate.Year into typeGroup
+                             group y by y.ClearStartDate.Computed().Year into typeGroup
                              select new
                              {
                                  StartDate = typeGroup.Key,
                                  Count = typeGroup.Count(),
                                  runningTotal = runningTotal + typeGroup.Count()
-                             }).ToList();
+                             });
 
             List<int> cumRates = new List<int>();
 
@@ -680,16 +682,16 @@ namespace FIVESTARVC.Controllers
 
         public List<int> emergRates()
         {
-            var events = DB.ProgramEvents;
+            var events = DB.ProgramEvents.ToList();
 
             var Query = (from y in events
                          where y.ProgramTypeID == 1
-                         group y by y.ClearStartDate.Year into typeGroup
+                         group y by y.ClearStartDate.Computed().Year into typeGroup
                          select new
                          {
                              StartDate = typeGroup.Key,
                              Count = typeGroup.Count(),
-                         }).ToList();
+                         });
 
             List<int> rates = new List<int>();
 
@@ -703,18 +705,18 @@ namespace FIVESTARVC.Controllers
 
         public List<int> emergRatesCum()
         {
-            var events = DB.ProgramEvents;
+            var events = DB.ProgramEvents.ToList();
 
             int runningTotal = 0;
 
             var Query = (from y in events
                          where y.ProgramTypeID == 1
-                         group y by y.ClearStartDate.Year into typeGroup
+                         group y by y.ClearStartDate.Computed().Year into typeGroup
                          select new
                          {
                              StartDate = typeGroup.Key,
                              Count = typeGroup.Count(),
-                         }).ToList();
+                         });
 
             List<int> rates = new List<int>();
 
@@ -730,16 +732,16 @@ namespace FIVESTARVC.Controllers
 
         public List<int> dischargeRates()
         {
-            var events = DB.ProgramEvents;
+            var events = DB.ProgramEvents.ToList();
 
             var Query = (from y in events
                          where y.ProgramTypeID == 5 || y.ProgramTypeID == 6 || y.ProgramTypeID == 7
-                         group y by y.ClearStartDate.Year into typeGroup
+                         group y by y.ClearStartDate.Computed().Year into typeGroup
                          select new
                          {
                              StartDate = typeGroup.Key,
                              Count = typeGroup.Count(),
-                         }).ToList();
+                         });
 
             List<int> rates = new List<int>();
 
@@ -753,18 +755,18 @@ namespace FIVESTARVC.Controllers
 
         public List<int> dischargeRatesCum()
         {
-            var events = DB.ProgramEvents;
+            var events = DB.ProgramEvents.ToList();
 
             int runningTotal = 0;
 
             var Query = (from y in events
                          where y.ProgramTypeID == 5 || y.ProgramTypeID == 6 || y.ProgramTypeID == 7
-                         group y by y.ClearStartDate.Year into typeGroup
+                         group y by y.ClearStartDate.Computed().Year into typeGroup
                          select new
                          {
                              StartDate = typeGroup.Key,
                              Count = typeGroup.Count(),
-                         }).ToList();
+                         });
 
             List<int> rates = new List<int>();
 
@@ -780,16 +782,16 @@ namespace FIVESTARVC.Controllers
 
         public List<int> vetCourtRates()
         {
-            var events = DB.ProgramEvents;
+            var events = DB.ProgramEvents.ToList();
             var queryResults = (from y in events
                                 join resident in DB.Residents on y.ResidentID equals resident.ResidentID
                                 where y.ProgramTypeID == 2 || y.ProgramTypeID == 1 || y.ProgramTypeID == 3 && resident.InVetCourt.Equals(true)
-                                group y by y.ClearStartDate.Year into typeGroup
+                                group y by y.ClearStartDate.Computed().Year into typeGroup
                                 select new
                                 {
                                     VetCourt = typeGroup.Count(),
                                     admtYear = typeGroup.Key
-                                }).ToList();
+                                });
 
             List<int> rates = new List<int>();
 
@@ -803,14 +805,14 @@ namespace FIVESTARVC.Controllers
 
         public List<int> vetCourtRatesCum()
         {
-            var events = DB.ProgramEvents;
+            var events = DB.ProgramEvents.ToList();
 
             int runningTotal = 0;
 
             var queryResults = (from y in events
                                 join resident in DB.Residents on y.ResidentID equals resident.ResidentID
                                 where y.ProgramTypeID == 2 || y.ProgramTypeID == 1 || y.ProgramTypeID == 3 && resident.InVetCourt.Equals(true)
-                                group y by y.ClearStartDate.Year into typeGroup
+                                group y by y.ClearStartDate.Computed().Year into typeGroup
                                 select new
                                 {
                                     VetCourt = typeGroup.Count(),
@@ -833,19 +835,20 @@ namespace FIVESTARVC.Controllers
         {
             var residents = DB.Residents;
 
-            var residentProgramType = DB.Residents.Include(p => p.ProgramEvents).ToList().Select(r => new ReportingResidentViewModel
-            {
-                ID = r.ResidentID,
-                FirstName = r.FirstMidName,
-                LastName = r.ClearLastName,
-                Birthdate = r.ClearBirthdate,
-                Age = r.Age.Computed(),
-                ServiceType = r.ServiceBranch,
-                InVetCourt = r.InVetCourt,
-                Note = r.Note,
-                ProgramTypeID = r.ProgramEvents.Select(t => t.ProgramTypeID.GetValueOrDefault())
+            var residentProgramType = DB.Residents.Include(p => p.ProgramEvents).ToList()
+                .Select(r => new ReportingResidentViewModel
+                {
+                    ID = r.ResidentID,
+                    FirstName = r.FirstMidName,
+                    LastName = r.ClearLastName,
+                    Birthdate = r.ClearBirthdate,
+                    Age = r.Age.Computed(),
+                    ServiceType = r.ServiceBranch,
+                    InVetCourt = r.InVetCourt,
+                    Note = r.Note,
+                    ProgramTypeID = r.ProgramEvents.Select(t => t.ProgramTypeID.GetValueOrDefault())
 
-            }).GroupBy(r => r.ID);
+                }).GroupBy(r => r.ID);
 
 
 

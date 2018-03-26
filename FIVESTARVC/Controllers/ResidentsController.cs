@@ -348,7 +348,7 @@ namespace FIVESTARVC.Controllers
                 return HttpNotFound();
             }
 
-            ViewBag.RoomNumber = new SelectList(db.Rooms.Where(rm => rm.IsOccupied == false 
+            ViewBag.Rooms = new SelectList(db.Rooms.Where(rm => rm.IsOccupied == false 
             || rm.RoomNumber == resident.RoomNumber), "RoomNumber", "RoomNumber", resident.RoomNumber.GetValueOrDefault().ToString());
             ViewBag.StateTerritoryID = new SelectList(db.States, "StateTerritoryID", "State", resident.StateTerritoryID);
 
@@ -370,14 +370,15 @@ namespace FIVESTARVC.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var residentToUpdate = db.Residents
+
+            Resident residentToUpdate = db.Residents
                 .Include(c => c.MilitaryCampaigns)
                 .Include(b => b.Benefit)
                 .Where(c => c.ResidentID == id)
                 .Single();
 
             if (TryUpdateModel(residentToUpdate, "",
-               new string[] { "LastName", "FirstMidName", "Gender", "Religion", "Ethnicity", "StateTerritoryID", "ClearBirthdate",
+               new string[] { "ClearLastName", "ClearFirstMidName", "Gender", "Religion", "Ethnicity", "StateTerritoryID", "ClearBirthdate",
                    "ServiceBranch", "Note", "InVetCourt", "Benefit", "MilitaryCampaigns", "TotalBenefitAmount" }))
             {
                 try
