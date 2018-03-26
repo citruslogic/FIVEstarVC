@@ -4,9 +4,9 @@ using System.ComponentModel.DataAnnotations;
 
 namespace FIVESTARVC.Validators
 {
-    public class AgeAttribute : ValidationAttribute
+    public class BirthdateAttribute : ValidationAttribute
     {
-        public AgeAttribute()
+        public BirthdateAttribute()
         {
         }
 
