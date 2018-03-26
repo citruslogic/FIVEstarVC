@@ -348,7 +348,7 @@ namespace FIVESTARVC.Controllers
                 return HttpNotFound();
             }
 
-            ViewBag.Rooms = new SelectList(db.Rooms.Where(rm => rm.IsOccupied == false 
+            ViewBag.RoomNumber = new SelectList(db.Rooms.Where(rm => rm.IsOccupied == false 
             || rm.RoomNumber == resident.RoomNumber), "RoomNumber", "RoomNumber", resident.RoomNumber.GetValueOrDefault().ToString());
             ViewBag.StateTerritoryID = new SelectList(db.States, "StateTerritoryID", "State", resident.StateTerritoryID);
 
@@ -429,7 +429,7 @@ namespace FIVESTARVC.Controllers
                 }
             }
 
-            ViewBag.Rooms = new SelectList(db.Rooms.Where(rm => rm.IsOccupied == false), "RoomNumber", "RoomNumber", residentToUpdate.RoomNumber);
+            ViewBag.RoomNumber = new SelectList(db.Rooms.Where(rm => rm.IsOccupied == false), "RoomNumber", "RoomNumber", residentToUpdate.RoomNumber);
             ViewBag.StateTerritoryID = new SelectList(db.States, "StateTerritoryID", "State", residentToUpdate.StateTerritoryID);
 
             PopulateAssignedCampaignData(residentToUpdate);

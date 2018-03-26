@@ -113,12 +113,12 @@
                             @*Room selector*@
                             @if (Model.IsCurrent())
                             {
-                                @Html.DropDownList("Rooms", null, htmlAttributes: new { @class = "form-control" })
+                                @Html.DropDownList("RoomNumber", null, htmlAttributes: new { @class = "form-control" })
                                 @Html.ValidationMessageFor(model => model.RoomNumber, "")
                             }
                             else
                             {
-                                @Html.DropDownList("Rooms", null, htmlAttributes: new { @class = "form-control", @disabled = "disabled" })
+                                @Html.DropDownList("RoomNumber", null, htmlAttributes: new { @class = "form-control", @disabled = "disabled" })
                                 @Html.ValidationMessageFor(model => model.RoomNumber, "")
                             }
                         </td>
