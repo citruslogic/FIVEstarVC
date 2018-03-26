@@ -8,12 +8,12 @@
 <div class="container">
 
     <div class="row col-md-10">
-        <div class="col-md-3">
+        <div class="col-md-3 align-items-md-end">
             <p>
                 <em>Current</em> residents: @Html.Raw(ViewBag.pop)
             </p>
             <p>
-                All-time residents: @Html.Raw(ViewBag.allpop)
+                Cumulative residents: @Html.Raw(ViewBag.allpop)
             </p>
         </div>
         <div class="col-md-4">
@@ -61,7 +61,15 @@
                         <div class="card">
                             <div class="card-body">
                                 <h5 class="card-title">@item.FirstMidName @item.LastName</h5>
-                                <label>Room: </label> @item.RoomNumber<br />
+                                <label>Room: </label> 
+                                @if (item.RoomNumber != 0)
+                                {
+                                        @item.RoomNumber
+                                }
+                                else
+                                {
+                                    <text>NA</text>
+                                }<br />
                                 @Html.ActionLink("See more", "Details", "Residents", new { id = @item.ResidentID }, htmlAttributes: new { @class = "btn btn-sm btn-outline-secondary btn-light" }) &nbsp;
                             </div>
                         </div>

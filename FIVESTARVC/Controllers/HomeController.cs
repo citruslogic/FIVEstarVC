@@ -45,13 +45,13 @@ namespace FIVESTARVC.Controllers
 
             /* David Thompson's (dthompson) grad count */
             //Finds graduation percent
-            double Graduated = db.ProgramEvents.Count(x => x.ProgramTypeID == 4);
+            int Graduated = db.ProgramEvents.Where(t => t.ProgramTypeID == 4).Count();
             ViewBag.Graduated = Graduated;
 
             //Finds number admitted
-            double Admitted = db.ProgramEvents.Count(x => x.ProgramTypeID == 2);
-            ViewBag.Admitted = Admitted;
-            ViewBag.gradPercent = Graduated / (double)Admitted * 100;
+            int CurrentResidents = db.Residents.ToList().Count();
+            ViewBag.Admitted = CurrentResidents;
+            ViewBag.gradPercent = Graduated / (double)CurrentResidents * 100;
 
 
             /*******************************************/
