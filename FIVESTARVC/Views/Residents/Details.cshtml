@@ -152,7 +152,11 @@
                         @Html.LabelFor(model => model.Benefit.DisabilityPercentage, htmlAttributes: new { @class = "control-label col-md-offset-1" })
                     </td>
                     <td>
-                        @Html.DisplayFor(model => model.Benefit.DisabilityPercentage)<text>%</text>
+
+                        @if (Model.Benefit.DisabilityPercentage.HasValue)
+                        {
+                            @Html.DisplayFor(model => model.Benefit.DisabilityPercentage)<text>%</text>
+                        } 
                     </td>
                 </tr>
                 <tr>
@@ -220,6 +224,7 @@
         <tr>
             <th style="width: 17.7em;">Program Name</th>
             <th> Date</th>
+            <th> Completed?</th>
         </tr>
     </thead>
     <tbody>
@@ -232,7 +237,15 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.ClearStartDate)
                 </td>
-                
+                <td>
+                    @if (item.Completed == true)
+                    {
+                        <text>Yes</text>
+                    } else
+                    {
+                        <text>No</text>
+                    }
+                </td>
             </tr>
         }
     </tbody>

@@ -631,18 +631,27 @@ namespace FIVESTARVC.Controllers
          */
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult ViewQuickEvent([Bind(Include = "ProgramEventID,ResidentID,ProgramTypeID,StartDate,EndDate,Completed")] int id, ProgramEvent programEvent)
+        public ActionResult ViewQuickEvent([Bind(Include = "ProgramEventID,ResidentID,ProgramTypeID,ClearStartDate,Completed")] int id, CustomEvent customEvent)
         {
+            ProgramEvent ev = new ProgramEvent()
+            {
+                ProgramEventID = customEvent.ProgramEventID,
+                ResidentID = customEvent.ResidentID,
+                ProgramTypeID = customEvent.ProgramTypeID,
+                ClearStartDate = customEvent.ClearStartDate,
+                Completed = customEvent.Completed
+            };
+
             if (ModelState.IsValid)
             {
-                db.ProgramEvents.Add(programEvent);
+                db.ProgramEvents.Add(ev);
                 db.SaveChanges();
                 TempData["UserMessage"] = db.Residents.Find(id).Fullname + " has a new event.  ";
 
             }
 
             ViewBag.ProgramTypeID = new SelectList(db.ProgramTypes
-                .Where(t => t.ProgramTypeID >= 8), "ProgramTypeID", "ProgramDescription", programEvent.ProgramTypeID);
+                .Where(t => t.ProgramTypeID >= 8), "ProgramTypeID", "ProgramDescription", ev.ProgramTypeID);
             ViewBag.ResidentID = id;
 
             return RedirectToAction("Index");
