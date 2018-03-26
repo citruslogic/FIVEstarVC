@@ -28,6 +28,7 @@ namespace FIVESTARVC.ViewModels
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:MM/dd/yyyy}", ApplyFormatInEditMode = true)]
         [Birthdate(ErrorMessage = "Birthdate must not be in the future.")]
+        [Age(ErrorMessage = "Applicant must be 18 years or older.")]
         public DateTime Birthdate { get; set; }
 
         [Display(Name = "Service Branch")]

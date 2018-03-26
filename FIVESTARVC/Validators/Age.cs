@@ -4,9 +4,9 @@ using System.ComponentModel.DataAnnotations;
 
 namespace FIVESTARVC.Validators
 {
-    public class AgeAttribute : ValidationAttribute
+    public class BirthdateAttribute : ValidationAttribute
     {
-        public AgeAttribute()
+        public BirthdateAttribute()
         {
         }
 
@@ -19,8 +19,12 @@ namespace FIVESTARVC.Validators
                  if (DateTime.TryParse(dt.ToString(), out DateTime date))
                 {
 
-                  
-                    return date <= DateTime.Now;
+                    TimeSpan span = DateTime.Now - date.Date;
+                    DateTime age = DateTime.MinValue + span;
+
+
+                    return (age.Year - 1) >= 18;
+
                 }
             }
           
