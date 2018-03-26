@@ -7,6 +7,7 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Web.Mvc;
+using FIVESTARVC.Validators;
 
 namespace FIVESTARVC.ViewModels
 {
@@ -26,7 +27,9 @@ namespace FIVESTARVC.ViewModels
         [Display(Name = "Birthdate")]
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:MM/dd/yyyy}", ApplyFormatInEditMode = true)]
+        [Birthdate(ErrorMessage = "Birthdate must not be in the future.")]
         public DateTime Birthdate { get; set; }
+
         [Display(Name = "Service Branch")]
         public ServiceType ServiceBranch { get; set; }
 

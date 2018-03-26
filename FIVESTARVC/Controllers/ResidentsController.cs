@@ -242,7 +242,7 @@ namespace FIVESTARVC.Controllers
                             ve.PropertyName, ve.ErrorMessage);
                     }
                 }
-                throw;
+                
 
             }
 
