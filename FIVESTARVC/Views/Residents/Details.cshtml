@@ -52,6 +52,11 @@
             @Html.DisplayFor(model => model.Fullname)
         </div>
 
+        <div class=" col-form-label">
+            @Html.Label("Home of Record", htmlAttributes: new { @class = "font-weight-bold" })
+            @Html.DisplayFor(model => model.StateTerritory.State)
+            @{<text>(</text>}@Html.DisplayFor(model => model.StateTerritory.Region)@{<text>)</text>}
+        </div>
         <div class="col-form-label">
             @Html.LabelFor(model => model.RoomNumber, htmlAttributes: new { @class = "font-weight-bold" })
             @if (Model.RoomNumber.HasValue)
@@ -160,10 +165,10 @@
                     </td>
                     <td>
 
-                        @if (Model.Benefit.DisabilityPercentage.HasValue)
-                        {
-                            @Html.DisplayFor(model => model.Benefit.DisabilityPercentage)<text>%</text>
-                        } 
+                     
+                            @Html.DisplayFor(model => model.Benefit.DisabilityPercentage)
+              
+
                     </td>
                 </tr>
                 <tr>
