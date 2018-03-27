@@ -13,8 +13,8 @@
 
         <div class="row">
 
-        <div class="col-sm-5 table-responsive">
-            <h2> New Resident </h2>
+        <div class="table">
+            <h2> Admit Resident </h2>
             
                 <table class="table table-sm">
 
@@ -31,16 +31,29 @@
                                 @Html.EditorFor(model => model.LastName, new { htmlAttributes = new { @class = "form-control" } })
                                 @Html.ValidationMessageFor(model => model.LastName)
                             </td>
-
-                        </tr>
-                        <tr>
                             <td class="col-form-label">@Html.LabelFor(model => model.FirstMidName, htmlAttributes: new { @class = "control-label" })</td>
                             <td>
                                 @Html.EditorFor(model => model.FirstMidName, new { htmlAttributes = new { @class = "form-control" } })
                                 @Html.ValidationMessageFor(model => model.FirstMidName, "")
                             </td>
+                            <td class="col-form-label">
+                                @Html.LabelFor(model => model.Gender, htmlAttributes: new { @class = "control-label" })
+                                @Html.ValidationMessageFor(model => model.Gender)
+                            </td>
+                            <td>
+                                @Html.EnumDropDownListFor(model => model.Gender, htmlAttributes: new { @class = "form-control" })
+                            </td>
+                            
                         </tr>
+ 
                         <tr>
+                            <td>
+                                @Html.LabelFor(model => model.Ethnicity, htmlAttributes: new { @class = "control-label" })
+                                @Html.ValidationMessageFor(model => model.Ethnicity)
+                            </td>
+                            <td>
+                                @Html.EnumDropDownListFor(model => model.Ethnicity, htmlAttributes: new { @class = "form-control" })
+                            </td>
                             <td class="col-form-label">@Html.LabelFor(model => model.Birthdate, htmlAttributes: new { @class = "control-label" })</td>
                             <td>
                                 <div class="input-group mb-2">
@@ -51,9 +64,28 @@
                                     @Html.ValidationMessageFor(model => model.Birthdate, "")
                                 </div>
                             </td>
+                            <td class="col-form-label">
+                                @Html.LabelFor(model => model.Religion)
+                                @Html.ValidationMessageFor(model => model.Religion)
+                            </td>
+
+                            <td>
+                                @Html.EnumDropDownListFor(model => model.Religion, htmlAttributes: new { @class = "form-control" })
+                            </td>
                         </tr>
 
                         <tr>
+                            <td class="col-form-label">
+                                @Html.LabelFor(model => model.StateTerritoryID) 
+                                <p>Region </p>
+                            </td>
+                            <td>
+                                @Html.DropDownList("StateTerritoryID", null, htmlAttributes: new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.StateTerritory)
+                               <div id="Region">
+
+                                </div>
+                            </td>
                             <td class="col-form-label"> @Html.LabelFor(model => model.ServiceBranch, htmlAttributes: new { @class = "control-label" })</td>
                             <td>
                                 @Html.EnumDropDownListFor(model => model.ServiceBranch, htmlAttributes: new { @class = "form-control" })
@@ -77,25 +109,39 @@
                         </tr>
                         <tr>
                             <td class="col-form-label">
+                                @Html.LabelFor(model => model.IsNoncombat, htmlAttributes: new { @class = "control-label col-md-offset-3" })
+                                
                                 @Html.Label("Campaigns", htmlAttributes: new { @class = "control-label col-md-offset-3" })
+
+
+
                             </td>
+                           
+                            
+                                
+                            
+
                             <td>
+                                @Html.EditorFor(model => model.IsNoncombat)
+                                @Html.ValidationMessageFor(model => model.IsNoncombat, "", new { @class = "text-danger" })
+                                <br />
                                 <div class="form-check" style="height: 100px; overflow-y: scroll;">
                                     @{
-                                List<FIVESTARVC.ViewModels.AssignedCampaignData> campaigns = ViewBag.Campaigns;
+            List<FIVESTARVC.ViewModels.AssignedCampaignData> campaigns = ViewBag.Campaigns;
 
-                                foreach (var campaign in campaigns)
-                                {
-                             
+            foreach (var campaign in campaigns)
+            {
+
                             @:
 
+
                             <input type="checkbox"
-                                    class="form-check-input"
+                                   class="form-check-input campaign"
                                    name="selectedCampaigns"
                                    value="@campaign.MilitaryCampaignID"
                                    @(Html.Raw(campaign.Assigned ? "checked=\"checked\"" : "")) />
-                            @campaign.MilitaryCampaign @:<br /> 
-                            }
+                            @campaign.MilitaryCampaign @:<br />
+}
 
                                     }
                                 </div>
@@ -159,6 +205,27 @@
 
         }
 
+        $("#IsNoncombat").click(function () {
+            if ($(this).is(":checked")) {
+                $(".campaign").prop('checked', false);
+                $(".campaign").attr("disabled", true);
+                
+            } else {
+                $(".campaign").attr("disabled", false);
+            }
+        });
+
+        $.ajax({
+            "url": "/Residents/GetRegionName/" + $("#StateTerritoryID").val(),
+            "type": "get",
+            "dataType": "json",
+            "success": function (data) {
+                $('#Region').text(data);
+            }
+        });
+
+       
+
     });
 
         $('.income').on("keyup", function () {
@@ -174,6 +241,20 @@
             }
 
     });
+
+        $('#StateTerritoryID').on("change", function () {
+
+            $.ajax({
+                "url": "/Residents/GetRegionName/" + $("#StateTerritoryID").val(),
+                "type": "get",
+                "dataType": "json",
+                "success": function (data) {
+                    $('#Region').text(data);
+                }
+            });
+
+        });
+    
 
         $('.DropDownClear').on("onload", function () {
             document.getElementById('RoomID').length = 0;

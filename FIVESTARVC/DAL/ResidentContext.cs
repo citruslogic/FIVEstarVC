@@ -15,16 +15,20 @@ namespace FIVESTARVC.DAL
 
         }
 
+        public DbSet<Person> People { get; set; }
         public DbSet<Resident> Residents { get; set; }
         public DbSet<MilitaryCampaign> MilitaryCampaigns { get; set; }
         public DbSet<ProgramEvent> ProgramEvents { get; set; }
         public DbSet<ProgramType> ProgramTypes { get; set; }
         public DbSet<Benefit> Benefits { get; set; }
         public DbSet<Room> Rooms { get; set; }
+        public DbSet<StateTerritory> States { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
+            modelBuilder.Configurations.Add(new Person.ModelConfiguration());
+            modelBuilder.Configurations.Add(new ProgramEvent.ModelConfiguration());
 
             modelBuilder.Entity<MilitaryCampaign>()
             .HasMany(r => r.Residents).WithMany(m => m.MilitaryCampaigns)

@@ -13,26 +13,13 @@ using System.Globalization;
 namespace FIVESTARVC.Models
 {
    
-    public class Resident
+    public class Resident : Person
     {
-        private ResidentContext db = new ResidentContext();
-
-        public int ResidentID { get; set; }
-        [Required]
-        [Display(Name = "Last Name")]
-        public string LastName { get; set; }
-        [Display(Name = "First Name")]
-        public string FirstMidName { get; set; }
-        [Display(Name = "Birthdate")]
-        [DataType(DataType.Date)]
-        [Birthdate(ErrorMessage = "Birthdate must not be in the future.")]
-        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
-        public DateTime? Birthdate { get; set; }
-        
 
         [Display(Name = "Service Branch")]
         public ServiceType ServiceBranch { get; set; }
-
+        [Display(Name = "Non-combat?")]
+        public Boolean IsNoncombat { get; set; }
         [Display(Name = "In Veterans Court?")]
         public Boolean InVetCourt { get; set; }
         [Display(Name = "Room Number")]
@@ -50,57 +37,6 @@ namespace FIVESTARVC.Models
         public int? BenefitID { get; set; }
 
         public virtual Benefit Benefit { get; set; }
-
-
-        /* return the age of a veteran (in years) and do not store in the database. */
-        public int Age
-        { 
-            get
-            {
-                TimeSpan span = DateTime.Now - Birthdate.GetValueOrDefault(DateTime.Now);
-                DateTime age = DateTime.MinValue + span;
-
-                return age.Year - 1;
-            }
-        }
-
-        public string Fullname
-        {
-            get { return FirstMidName + " " + LastName; }
-        }
-
-        /* Remaining days until birthday */
-        public int RemainingDays
-        {
-            get 
-            {
-
-                DateTime today = DateTime.Today;
-                if (Birthdate.HasValue)
-                {
-                    DateTime nextBirthday = Birthdate.Value.AddYears(Age + 1);
-
-                    TimeSpan difference = nextBirthday - DateTime.Today;
-
-                    return Convert.ToInt32(difference.TotalDays);
-                }
-
-                return 0;
-            }
-        }
-        public string BDateMonthName
-        {
-            get
-            {
-                CultureInfo ci = new CultureInfo("en-US");
-                if (Birthdate.HasValue)
-                {
-                    return Birthdate.Value.ToString("MMMM", ci);
-                }
-
-                return null;
-            }
-        }
         
 
         //[Computed]
@@ -108,7 +44,7 @@ namespace FIVESTARVC.Models
         {
                 var current = db.ProgramEvents;
 
-                int ID = ResidentID;
+                int ID = base.ResidentID;
 
                 Boolean internalBool = false;
 
@@ -134,7 +70,48 @@ namespace FIVESTARVC.Models
                 }
                 return internalBool;
             }
+
+        public DateTime? GetAdmitDate()
+        {
+            var events = db.ProgramEvents.ToList();
+
+            foreach (ProgramEvent ev in events)
+            {
+                if (ev.ProgramTypeID == 1 || ev.ProgramTypeID == 2 || ev.ProgramTypeID == 3)
+                {
+                    return ev.ClearStartDate;
+                }
+            }
+
+            return null;
+        }
+
+        public DateTime? GetDischargeDate()
+        {
+            var events = db.ProgramEvents.ToList();
+
+            foreach (ProgramEvent ev in events)
+            {
+                if (ev.ProgramTypeID == 4 || ev.ProgramTypeID == 5
+                    || ev.ProgramTypeID == 6 || ev.ProgramTypeID == 7)
+                {
+                    return ev.ClearStartDate;
+                }
+            }
+
+            return null;
+        }
+
+        public int DaysInCenter()
+        {
+            TimeSpan span = GetDischargeDate().GetValueOrDefault().Subtract(GetAdmitDate().GetValueOrDefault());
+
+            return (int) Math.Abs(span.TotalDays);
+
         }
 
     }
+}
+
+   
 

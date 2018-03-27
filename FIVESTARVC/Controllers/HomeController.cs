@@ -8,6 +8,7 @@ using System.Web.Mvc;
 using FIVESTARVC.Models;
 using FIVESTARVC.DAL;
 using FIVESTARVC.ViewModels;
+using DelegateDecompiler;
 
 namespace FIVESTARVC.Controllers
 {
@@ -21,17 +22,15 @@ namespace FIVESTARVC.Controllers
         public ActionResult Index()
         {
 
-            var residents =
-                    (from resident in db.Residents
-                     join room in db.Rooms on resident.RoomNumber equals room.RoomNumber
-                     select new DashboardData
-                     {
-                         ResidentID = resident.ResidentID,
-                         Fullname = resident.FirstMidName + " " + resident.LastName,
 
-                         RoomNumber = room.RoomNumber
+            var residents = db.Residents.Include(r => r.Room).ToList().Select(data => new DashboardData
+            {
+                ResidentID = data.ResidentID,
+                FirstMidName = data.FirstMidName,
+                LastName = data.ClearLastName.Computed(),
+                RoomNumber = data.RoomNumber.GetValueOrDefault()
 
-                     }).OrderByDescending(r => r.ResidentID).Take(5);
+            }).OrderByDescending(r => r.ResidentID).Take(5);
 
             ViewBag.pop = db.Residents.ToList().Where(r => r.IsCurrent()).Count();
             ViewBag.allpop = db.Residents.ToList().Count();
@@ -46,13 +45,13 @@ namespace FIVESTARVC.Controllers
 
             /* David Thompson's (dthompson) grad count */
             //Finds graduation percent
-            double Graduated = db.ProgramEvents.Count(x => x.ProgramTypeID == 4);
+            int Graduated = db.ProgramEvents.Where(t => t.ProgramTypeID == 4).Count();
             ViewBag.Graduated = Graduated;
 
             //Finds number admitted
-            double Admitted = db.ProgramEvents.Count(x => x.ProgramTypeID == 2);
-            ViewBag.Admitted = Admitted;
-            ViewBag.gradPercent = Graduated / (double)Admitted * 100;
+            int CurrentResidents = db.Residents.ToList().Count();
+            ViewBag.Admitted = CurrentResidents;
+            ViewBag.gradPercent = Graduated / (double)CurrentResidents * 100;
 
 
             /*******************************************/
@@ -61,7 +60,7 @@ namespace FIVESTARVC.Controllers
             FindNearest();
             ViewBag.NearestResidents = NearestResidents;
 
-            return View(residents.ToList());
+            return View(residents);
         }
 
         /* Get the resident with the nearest birthday. */

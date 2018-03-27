@@ -12,6 +12,70 @@ namespace FIVESTARVC.DAL
         protected override void Seed(ResidentContext context)
         {
 
+            var States = new List<StateTerritory>
+            {
+                new StateTerritory { State = "AL", Region = "East South Central" },
+                new StateTerritory { State = "AK", Region = "Pacific" },
+                new StateTerritory { State = "AZ", Region = "Mountain" },
+                new StateTerritory { State = "AR", Region = "West South Central" },
+                new StateTerritory { State = "CA", Region = "Pacific" },
+                new StateTerritory { State = "CO", Region = "Mountain" },
+                new StateTerritory { State = "CT", Region = "New England" },
+                new StateTerritory { State = "DE", Region = "South Atlantic" },
+                new StateTerritory { State = "FL", Region = "South Atlantic" },
+                new StateTerritory { State = "GA", Region = "South Atlantic" },
+                new StateTerritory { State = "HI", Region = "Pacific" },
+                new StateTerritory { State = "ID", Region = "Mountain" },
+                new StateTerritory { State = "IL", Region = "East South Central" },
+                new StateTerritory { State = "IN", Region = "East North Central" },
+                new StateTerritory { State = "IA", Region = "West North Central" },
+                new StateTerritory { State = "KS", Region = "West North Central" },
+                new StateTerritory { State = "KY", Region = "East South Central" },
+                new StateTerritory { State = "LA", Region = "West South Central" },
+                new StateTerritory { State = "ME", Region = "New England" },
+                new StateTerritory { State = "MD", Region = "South Atlantic" },
+                new StateTerritory { State = "MA", Region = "New England" },
+                new StateTerritory { State = "MI", Region = "East North Central" },
+                new StateTerritory { State = "MN", Region = "West North Central" },
+                new StateTerritory { State = "MS", Region = "East South Central" },
+                new StateTerritory { State = "MO", Region = "West North Central" },
+                new StateTerritory { State = "MT", Region = "Mountain" },
+                new StateTerritory { State = "NE", Region = "West North Central" },
+                new StateTerritory { State = "NV", Region = "Mountain" },
+                new StateTerritory { State = "NH", Region = "New England" },
+                new StateTerritory { State = "NJ", Region = "Middle Atlantic" },
+                new StateTerritory { State = "NM", Region = "Mountain" },
+                new StateTerritory { State = "NY", Region = "Middle Atlantic" },
+                new StateTerritory { State = "NC", Region = "South Atlantic" },
+                new StateTerritory { State = "ND", Region = "West North Central" },
+                new StateTerritory { State = "OH", Region = "East North Central" },
+                new StateTerritory { State = "OK", Region = "West South Central" },
+                new StateTerritory { State = "OR", Region = "Pacific" },
+                new StateTerritory { State = "PA", Region = "Middle Atlantic" },
+                new StateTerritory { State = "RI", Region = "New England" },
+                new StateTerritory { State = "SC", Region = "South Atlantic" },
+                new StateTerritory { State = "SD", Region = "West North Central" },
+                new StateTerritory { State = "TN", Region = "East South Central" },
+                new StateTerritory { State = "TX", Region = "West South Central" },
+                new StateTerritory { State = "UT", Region = "Mountain" },
+                new StateTerritory { State = "VT", Region = "New England" },
+                new StateTerritory { State = "VA", Region = "South Atlantic" },
+                new StateTerritory { State = "WA", Region = "Pacific" },
+                new StateTerritory { State = "WV", Region = "South Atlantic" },
+                new StateTerritory { State = "WI", Region = "East North Central" },
+                new StateTerritory { State = "WY", Region = "Mountain" },
+
+                new StateTerritory { State = "American Samoa", Region = "Polynesia" },
+                new StateTerritory { State = "Guam", Region = "Micronesia" },
+                new StateTerritory { State = "Northern Mariana Islands", Region = "Micronesia"},
+                new StateTerritory { State = "Puerto Rico", Region = "Caribbean" },
+                new StateTerritory { State = "US Virgin Islands", Region = "Caribbean" }
+            };
+
+            States.ForEach(s => context.States.Add(s));
+            context.SaveChanges();
+
+
             var Rooms = new List<Room>
             {
                 //Rooms on the E/S Wing//
@@ -68,12 +132,12 @@ namespace FIVESTARVC.DAL
 
             var residents = new List<Resident>
             {
-                new Resident { FirstMidName="Carson", Birthdate=DateTime.Parse("3/4/1988"), LastName="Steven", RoomNumber = 102, ServiceBranch=ServiceType.ARMY },
-                new Resident { FirstMidName="Naomi", Birthdate=DateTime.Parse("6/12/1979"), LastName="Wildman", RoomNumber = 103, ServiceBranch=ServiceType.AIRFORCE },
-                new Resident { FirstMidName="Gary", Birthdate=DateTime.Parse("6/24/1980"), LastName="Noonan", RoomNumber = 105, ServiceBranch=ServiceType.NAVY },
-                new Resident { FirstMidName="Steve", Birthdate=DateTime.Parse("1/15/1981"), LastName="Nash", RoomNumber = 106, ServiceBranch=ServiceType.MARINES },
-                new Resident { FirstMidName="Neo", Birthdate=DateTime.Parse("3/8/1974"), LastName="Anderson", RoomNumber = 107, ServiceBranch=ServiceType.AIRFORCE },
-                new Resident { FirstMidName="Charlie", LastName="Brown", Birthdate=DateTime.Parse("12/23/1976"), RoomNumber = 108, ServiceBranch=ServiceType.NAVY }
+                new Resident { FirstMidName="Carson", StateTerritoryID=14, ClearBirthdate=DateTime.Parse("3/4/1988"), ClearLastName="Steven", RoomNumber = 102, ServiceBranch=ServiceType.ARMY },
+                new Resident { FirstMidName="Naomi", StateTerritoryID=25, ClearBirthdate=DateTime.Parse("6/12/1979"), ClearLastName="Wildman", RoomNumber = 103, ServiceBranch=ServiceType.AIRFORCE },
+                new Resident { FirstMidName="Gary", StateTerritoryID=8, ClearBirthdate=DateTime.Parse("6/24/1980"), ClearLastName="Noonan", RoomNumber = 105, ServiceBranch=ServiceType.NAVY },
+                new Resident { FirstMidName="Steve", StateTerritoryID=40, ClearBirthdate=DateTime.Parse("1/15/1981"), ClearLastName="Nash", RoomNumber = 106, ServiceBranch=ServiceType.MARINES },
+                new Resident { FirstMidName="Neo", StateTerritoryID=15, ClearBirthdate=DateTime.Parse("3/8/1974"), ClearLastName="Anderson", RoomNumber = 107, ServiceBranch=ServiceType.AIRFORCE },
+                new Resident { FirstMidName="Charlie", StateTerritoryID=22, ClearLastName="Brown", ClearBirthdate=DateTime.Parse("12/23/1976"), RoomNumber = 108, ServiceBranch=ServiceType.NAVY }
             };
 
             residents.ForEach(r => context.Residents.Add(r));
@@ -112,36 +176,29 @@ namespace FIVESTARVC.DAL
             var events = new List<ProgramEvent>
             {
                 //adding admission event for all residents, the admission doesn't "end."
-                new ProgramEvent { StartDate=new DateTime(2012,05,16), EndDate=null, Completed=false, ResidentID=1, ProgramTypeID=2},
-                new ProgramEvent { StartDate=new DateTime(2014,06,14), EndDate=null, Completed=false, ResidentID=2, ProgramTypeID=2},
-                new ProgramEvent { StartDate=new DateTime(2013,07,4), EndDate=null, Completed=false, ResidentID=3, ProgramTypeID=2},
-                new ProgramEvent { StartDate=new DateTime(2012,06,20), EndDate=null, Completed=false, ResidentID=4, ProgramTypeID=2},
-                new ProgramEvent { StartDate=new DateTime(2015,07,1), EndDate=null, Completed=false, ResidentID=5, ProgramTypeID=2},
-                new ProgramEvent { StartDate=new DateTime(2016,07,13), EndDate=null, Completed=false, ResidentID=6, ProgramTypeID=2},
-                //Graduated
-                new ProgramEvent { StartDate=new DateTime(2013,05,16), EndDate=null, Completed=false, ResidentID=1, ProgramTypeID=4},
-                new ProgramEvent { StartDate=new DateTime(2015,06,14), EndDate=null, Completed=false, ResidentID=2, ProgramTypeID=4},
-                new ProgramEvent { StartDate=new DateTime(2014,07,4), EndDate=null, Completed=false, ResidentID=3, ProgramTypeID=4},
-                new ProgramEvent { StartDate=new DateTime(2013,06,20), EndDate=null, Completed=false, ResidentID=4, ProgramTypeID=4},
-                new ProgramEvent { StartDate=new DateTime(2016,07,1), EndDate=null, Completed=false, ResidentID=5, ProgramTypeID=4},
-                new ProgramEvent { StartDate=new DateTime(2017,07,13), EndDate=null, Completed=false, ResidentID=6, ProgramTypeID=4},
+                new ProgramEvent { ClearStartDate=DateTime.Parse("2012-05-16"), Completed=false, ResidentID=1, ProgramTypeID=2},
+                new ProgramEvent { ClearStartDate=DateTime.Parse("2014-06-14"), Completed=false, ResidentID=2, ProgramTypeID=2},
+                new ProgramEvent { ClearStartDate=DateTime.Parse("2013-07-4"), Completed=false, ResidentID=3, ProgramTypeID=2},
+                new ProgramEvent { ClearStartDate=DateTime.Parse("2012-06-20"), Completed=false, ResidentID=4, ProgramTypeID=2},
+                new ProgramEvent { ClearStartDate=DateTime.Parse("2015-07-15"), Completed=false, ResidentID=5, ProgramTypeID=2},
+                new ProgramEvent { ClearStartDate=DateTime.Parse("2016-07-13"), Completed=false, ResidentID=6, ProgramTypeID=2},
 
                 //Other events
-                new ProgramEvent { StartDate=DateTime.Parse("2004-05-05"), EndDate=DateTime.Parse("2007-06-20"), Completed=true, ResidentID=5, ProgramTypeID=8},
-                new ProgramEvent { StartDate=DateTime.Parse("2003-03-02"), EndDate=DateTime.Parse("2007-07-12"), Completed=true, ResidentID=6, ProgramTypeID=8},
-                new ProgramEvent { StartDate=DateTime.Parse("2006-03-22"), EndDate=DateTime.Parse("2008-07-12"), Completed=true, ResidentID=1, ProgramTypeID=13},
-                new ProgramEvent { StartDate=DateTime.Parse("2006-03-22"), EndDate=DateTime.Parse("2008-07-12"), Completed=true, ResidentID=2, ProgramTypeID=8},
-                new ProgramEvent { StartDate=DateTime.Parse("2005-10-05"), EndDate=DateTime.Parse("2005-10-15"), ResidentID=2},
-                new ProgramEvent { StartDate=DateTime.Parse("2005-11-19"), EndDate = null, ResidentID=3}
+                new ProgramEvent { ClearStartDate=DateTime.Parse("2004-05-05"), Completed=true, ResidentID=5, ProgramTypeID=8},
+                new ProgramEvent { ClearStartDate=DateTime.Parse("2003-03-02"), Completed=true, ResidentID=6, ProgramTypeID=8},
+                new ProgramEvent { ClearStartDate=DateTime.Parse("2006-03-22"), Completed=true, ResidentID=1, ProgramTypeID=13},
+                new ProgramEvent { ClearStartDate=DateTime.Parse("2006-03-22"), Completed=true, ResidentID=2, ProgramTypeID=8},
+                new ProgramEvent { ClearStartDate=DateTime.Parse("2005-10-05"), ResidentID=2},
+                new ProgramEvent { ClearStartDate=DateTime.Parse("2005-11-19"), ResidentID=3}
             };
 
             events.ForEach(e => context.ProgramEvents.Add(e));
             context.SaveChanges();
 
+           
 
             var militaryCampaigns = new List<MilitaryCampaign>
             {
-                new MilitaryCampaign { CampaignName="Noncombat", Residents = new List<Resident>() },
                 new MilitaryCampaign { CampaignName="Persian Gulf", Residents = new List<Resident>() },
                 new MilitaryCampaign { CampaignName="OEF", Residents = new List<Resident>() },
                 new MilitaryCampaign { CampaignName="Vietnam", Residents = new List<Resident>() },

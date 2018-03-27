@@ -9,6 +9,8 @@ using FIVESTARVC.DAL;
 using FIVESTARVC.Models;
 using PagedList;
 using FIVESTARVC.ViewModels;
+using System.Data.Entity.Validation;
+using DelegateDecompiler;
 
 namespace FIVESTARVC.Controllers
 {
@@ -38,31 +40,31 @@ namespace FIVESTARVC.Controllers
 
             ViewBag.CurrentFilter = searchString;
 
-            var residents = from s in db.Residents
-                            select s;
+            var residents = (from s in db.Residents
+                            select s).ToList();
 
 
 
 
             if (!String.IsNullOrEmpty(searchString))
             {
-                    residents = residents.Where(s => s.LastName.Contains(searchString)
-                                       || s.FirstMidName.Contains(searchString));
+                    residents = residents.Where(s => s.ClearLastName.Computed().Contains(searchString)
+                                       || s.FirstMidName.Contains(searchString)).ToList();
             }
 
             switch (sortOrder)
             {
                 case "name_desc":
-                    residents = residents.OrderBy(s => s.LastName);
+                    residents = residents.OrderBy(s => s.ClearLastName.Computed()).ToList();
                     break;
                 case "ServiceBranch":
-                    residents = residents.OrderBy(s => s.ServiceBranch);
+                    residents = residents.OrderBy(s => s.ServiceBranch).ToList();
                     break;
                 case "ServiceBranch_desc":
-                    residents = residents.OrderByDescending(s => s.ServiceBranch);
+                    residents = residents.OrderByDescending(s => s.ServiceBranch).ToList();
                     break;
                 default:
-                    residents = residents.OrderByDescending(s => s.ResidentID);
+                    residents = residents.OrderByDescending(s => s.ResidentID).ToList();
                     break;
             }
 
@@ -107,9 +109,9 @@ namespace FIVESTARVC.Controllers
 
             ViewBag.DateFirstAdmitted = db.ProgramEvents
                                             .Include(r => r.Resident).Where(r => r.ResidentID == id)
-                                            .Include(t => t.ProgramType).Where(p => p.ProgramTypeID == 2)
-                                            .OrderBy(d => d.StartDate)
-                                            .Select(s => s.StartDate)
+                                            .Include(t => t.ProgramType).Where(p => p.ProgramTypeID == 2).ToList()
+                                            .OrderBy(d => d.ClearStartDate.Computed())
+                                            .Select(s => s.ClearStartDate.Computed())
                                             .FirstOrDefault().ToLongDateString();
 
             return View(resident);
@@ -118,6 +120,9 @@ namespace FIVESTARVC.Controllers
         // GET: Residents/Create
         public ActionResult Create()
         {
+            ResidentIncomeModel residentIncomeModel = new ResidentIncomeModel();
+
+            ViewBag.StateTerritoryID = new SelectList(db.States, "StateTerritoryID", "State", residentIncomeModel.StateTerritoryID);
 
             ViewBag.AdmissionType = new SelectList(db.ProgramTypes
                 .Where(t => t.ProgramTypeID <= 3), "ProgramTypeID", "ProgramDescription", 2);
@@ -159,7 +164,9 @@ namespace FIVESTARVC.Controllers
                 .Where(t => t.ProgramTypeID <= 3), "ProgramTypeID", "ProgramDescription", AdmissionType);
 
             ViewBag.RoomNumber = new SelectList(db.Rooms.Where(rm => rm.IsOccupied == false), "RoomNumber", "RoomNumber");
-            
+            ViewBag.StateTerritoryID = new SelectList(db.States, "StateTerritoryID", "State", residentIncomeModel.StateTerritoryID);
+
+
             var allMilitaryCampaigns = db.MilitaryCampaigns;
             var viewModel = new List<AssignedCampaignData>();
 
@@ -179,15 +186,20 @@ namespace FIVESTARVC.Controllers
             Resident resident = new Resident
             {
                 FirstMidName = residentIncomeModel.FirstMidName,
-                LastName = residentIncomeModel.LastName,
-                Birthdate = residentIncomeModel.Birthdate,
+                ClearLastName = residentIncomeModel.LastName,
+                Gender = residentIncomeModel.Gender,
+                Ethnicity = residentIncomeModel.Ethnicity,
+                Religion = residentIncomeModel.Religion,
+                ClearBirthdate = residentIncomeModel.Birthdate,
                 ServiceBranch = residentIncomeModel.ServiceBranch,
                 InVetCourt = residentIncomeModel.InVetCourt,
+                IsNoncombat = residentIncomeModel.IsNoncombat,
                 RoomNumber = RoomNumber,
+                StateTerritoryID = residentIncomeModel.StateTerritoryID,
                 Note = residentIncomeModel.Note,
                 MilitaryCampaigns = new List<MilitaryCampaign>(),
                 ProgramEvents = new List<ProgramEvent>(),
-                Benefit = new Benefit()
+                Benefit = new Benefit(),
 
 
             };
@@ -196,14 +208,13 @@ namespace FIVESTARVC.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    
 
+                    
                     db.Residents.Add(resident);
                     resident.ProgramEvents.Add(new ProgramEvent
                     {
                         ProgramTypeID = AdmissionType,
-                        StartDate = DateTime.Now,
-                        EndDate = null
+                        ClearStartDate = DateTime.Now,
 
                     });
 
@@ -213,21 +224,30 @@ namespace FIVESTARVC.Controllers
                     {
                         room.IsOccupied = true;
                     }
-            
+
                     db.SaveChanges();
 
                 }
 
 
             }
-            catch (DataException /* dex */)
+            catch (DbEntityValidationException e)
             {
-                //Log the error (uncomment dex variable name and add a line here to write a log.
-                ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
-            }
-        
+                foreach (var eve in e.EntityValidationErrors)
+                {
+                    Console.WriteLine("Entity of type \"{0}\" in state \"{1}\" has the following validation errors:",
+                        eve.Entry.Entity.GetType().Name, eve.Entry.State);
+                    foreach (var ve in eve.ValidationErrors)
+                    {
+                        Console.WriteLine("- Property: \"{0}\", Error: \"{1}\"",
+                            ve.PropertyName, ve.ErrorMessage);
+                    }
+                }
+                
 
-            Benefit benefit = new Benefit
+            }
+
+                Benefit benefit = new Benefit
             {
                 DisabilityPercentage = residentIncomeModel.DisabilityPercentage,
                 SSI = residentIncomeModel.SSI,
@@ -261,7 +281,8 @@ namespace FIVESTARVC.Controllers
 
 
             if (TryUpdateModel(residentIncomeModel, "",
-                 new string[] { "LastName", "FirstMidName", "Birthdate", "ServiceBranch", "Note", "InVetCourt", "Benefit", "MilitaryCampaigns", "TotalBenefitAmount" }))
+                 new string[] { "LastName", "FirstMidName", "Ethnicity", "StateTerritoryID", "Gender", "Religion", "ClearBirthdate", "ServiceBranch", "Note", "IsNoncombat", "InVetCourt",
+                     "Benefit", "MilitaryCampaigns", "TotalBenefitAmount" }))
             {
                 try
                 {
@@ -291,8 +312,8 @@ namespace FIVESTARVC.Controllers
 
             /* Check for the possible pre-existence of the resident in the system. */
             if (db.Residents.Any(r => r.FirstMidName.Contains(resident.FirstMidName)
-                && r.LastName.Contains(resident.LastName)
-                && r.Birthdate.GetValueOrDefault().Date == resident.Birthdate.GetValueOrDefault().Date
+                && r.ClearLastName.Contains(resident.ClearLastName)
+                && r.ClearBirthdate.Date == resident.ClearBirthdate.Date
                 && r.ServiceBranch == resident.ServiceBranch))
             {
 
@@ -315,6 +336,7 @@ namespace FIVESTARVC.Controllers
             Resident resident = db.Residents
             .Include(c => c.MilitaryCampaigns)
             .Include(b => b.Benefit)
+            .Include(s => s.StateTerritory)
             .Where(c => c.ResidentID == id)
             .Single();
 
@@ -327,7 +349,10 @@ namespace FIVESTARVC.Controllers
                 return HttpNotFound();
             }
 
-            ViewBag.RoomNumber = new SelectList(db.Rooms.Where(rm => rm.IsOccupied == false), "RoomNumber", "RoomNumber");
+            ViewBag.RoomNumber = new SelectList(db.Rooms.Where(rm => rm.IsOccupied == false 
+            || rm.RoomNumber == resident.RoomNumber), "RoomNumber", "RoomNumber", resident.RoomNumber.GetValueOrDefault().ToString());
+            ViewBag.StateTerritoryID = new SelectList(db.States, "StateTerritoryID", "State", resident.StateTerritoryID);
+
 
             return View(resident);
         }
@@ -346,14 +371,16 @@ namespace FIVESTARVC.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var residentToUpdate = db.Residents
+
+            Resident residentToUpdate = db.Residents
                 .Include(c => c.MilitaryCampaigns)
                 .Include(b => b.Benefit)
                 .Where(c => c.ResidentID == id)
                 .Single();
 
             if (TryUpdateModel(residentToUpdate, "",
-               new string[] { "LastName", "FirstMidName", "Birthdate", "ServiceBranch", "Note", "InVetCourt", "Benefit", "MilitaryCampaigns", "TotalBenefitAmount" }))
+               new string[] { "ClearLastName", "ClearFirstMidName", "Gender", "Religion", "Ethnicity", "StateTerritoryID", "ClearBirthdate",
+                   "ServiceBranch", "Note", "InVetCourt", "IsNoncombat", "Benefit", "MilitaryCampaigns", "TotalBenefitAmount" }))
             {
                 try
                 {
@@ -367,7 +394,7 @@ namespace FIVESTARVC.Controllers
                             residentToUpdate.ProgramEvents.Add(new ProgramEvent
                             {
                                 ProgramTypeID = 3,
-                                StartDate = DateTime.Now
+                                ClearStartDate = DateTime.Now
 
                             });
                         }
@@ -392,7 +419,7 @@ namespace FIVESTARVC.Controllers
                     } 
                     db.SaveChanges();
 
-                    TempData["UserMessage"] = residentToUpdate.LastName + " has been updated.  ";
+                    TempData["UserMessage"] = residentToUpdate.ClearLastName + " has been updated.  ";
 
                     return RedirectToAction("Index");
                 }
@@ -403,7 +430,9 @@ namespace FIVESTARVC.Controllers
                 }
             }
 
-            ViewBag.Rooms = new SelectList(db.Rooms.Where(rm => rm.IsOccupied == false), "RoomNumber", "RoomNumber", residentToUpdate.RoomNumber);
+            ViewBag.RoomNumber = new SelectList(db.Rooms.Where(rm => rm.IsOccupied == false), "RoomNumber", "RoomNumber", residentToUpdate.RoomNumber);
+            ViewBag.StateTerritoryID = new SelectList(db.States, "StateTerritoryID", "State", residentToUpdate.StateTerritoryID);
+
             PopulateAssignedCampaignData(residentToUpdate);
             
             return View(residentToUpdate);
@@ -561,13 +590,12 @@ namespace FIVESTARVC.Controllers
                 residentToDischarge.ProgramEvents.Add(new ProgramEvent
                 {
                     ProgramTypeID = ProgramTypeID,
-                    StartDate = DateTime.Now,
-                    EndDate = DateTime.Now
+                    ClearStartDate = DateTime.Now,
 
                 });
 
                 db.SaveChanges();
-                TempData["UserMessage"] = residentToDischarge.LastName + " has been discharged from your center.  ";
+                TempData["UserMessage"] = residentToDischarge.ClearLastName + " has been discharged from your center.  ";
             }
             catch (DataException/* dex */)
             {
@@ -604,22 +632,40 @@ namespace FIVESTARVC.Controllers
          */
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult ViewQuickEvent([Bind(Include = "ProgramEventID,ResidentID,ProgramTypeID,StartDate,EndDate,Completed")] int id, ProgramEvent programEvent)
+        public ActionResult ViewQuickEvent([Bind(Include = "ProgramEventID,ResidentID,ProgramTypeID,ClearStartDate,Completed")] int id, CustomEvent customEvent)
         {
+            ProgramEvent ev = new ProgramEvent()
+            {
+                ProgramEventID = customEvent.ProgramEventID,
+                ResidentID = customEvent.ResidentID,
+                ProgramTypeID = customEvent.ProgramTypeID,
+                ClearStartDate = customEvent.ClearStartDate,
+                Completed = customEvent.Completed
+            };
+
             if (ModelState.IsValid)
             {
-                db.ProgramEvents.Add(programEvent);
+                db.ProgramEvents.Add(ev);
                 db.SaveChanges();
                 TempData["UserMessage"] = db.Residents.Find(id).Fullname + " has a new event.  ";
 
             }
 
             ViewBag.ProgramTypeID = new SelectList(db.ProgramTypes
-                .Where(t => t.ProgramTypeID >= 8), "ProgramTypeID", "ProgramDescription", programEvent.ProgramTypeID);
+                .Where(t => t.ProgramTypeID >= 8), "ProgramTypeID", "ProgramDescription", ev.ProgramTypeID);
             ViewBag.ResidentID = id;
 
             return RedirectToAction("Index");
 
+        }
+
+
+        [HttpGet]
+        public ActionResult GetRegionName(string id)
+        {
+            var RegionName = db.States.Find(Int32.Parse(id)).Region;
+
+            return Json(RegionName, JsonRequestBehavior.AllowGet);
         }
 
       

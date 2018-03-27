@@ -1,4 +1,4 @@
-﻿@model FIVESTARVC.Models.ProgramEvent
+﻿@model FIVESTARVC.ViewModels.CustomEvent
 @using FIVESTARVC.Models
 
 @{
@@ -28,20 +28,14 @@
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.StartDate, htmlAttributes: new { @class = "control-label" })
+            @Html.LabelFor(model => model.ClearStartDate, htmlAttributes: new { @class = "control-label" })
             <div>
-                @Html.EditorFor(model => model.StartDate, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.StartDate, "")
+                @Html.EditorFor(model => model.ClearStartDate, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.ClearStartDate, "")
             </div>
         </div>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.EndDate, htmlAttributes: new { @class = "control-label" })
-            <div>
-                @Html.EditorFor(model => model.EndDate, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.EndDate, "")
-            </div>
-        </div>
+        
 
         </div>
         <div class="row">
@@ -81,11 +75,21 @@
 
         @section scripts {
             <script type="text/javascript">
+                if (!Modernizr.inputtypes.date) {
+                    $('input[type=date]')
+                        .attr('type', 'text')
+                        .datepicker({
+                            // Consistent format with the HTML5 picker
+                            dateFormat: 'mm-dd-yy'
+                        });
+                }
+
                 $(function () {
                     $('#submit-btn').click(function () {
                         $('#modal-container').modal('hide');
                     });
                 });
+
             </script>
         }
 

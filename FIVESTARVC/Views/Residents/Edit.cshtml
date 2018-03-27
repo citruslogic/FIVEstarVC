@@ -15,147 +15,200 @@
 
         <div class="row">
 
-            <div class="col-sm-5 table-responsive">
-                <h2>Update @(Model.LastName)</h2>
-                <table class="table table-sm">
 
-                    <tbody>
-                        <tr>
+            <h2>Update @(Model.ClearLastName)</h2>
+            <table class="table table-sm">
 
-                            <td class="col-form-label">
-                                @Html.ValidationSummary(true, "")
+                <tbody>
+                    <tr>
 
-                                @Html.LabelFor(model => model.LastName, htmlAttributes: new { @class = "control-label col-md-offset-3" })
-                            </td>
-                            <td class="col-auto">
-                                @Html.EditorFor(model => model.LastName, new { htmlAttributes = new { @class = "form-control" } })
-                                @Html.ValidationMessageFor(model => model.LastName, "")
-                            </td>
+                    <tr>
 
-                        </tr>
-                        <tr>
-                            <td class="col-form-label">@Html.LabelFor(model => model.FirstMidName, htmlAttributes: new { @class = "control-label col-md-offset-3" })</td>
-                            <td class="col-auto">
-                                @Html.EditorFor(model => model.FirstMidName, new { htmlAttributes = new { @class = "form-control" } })
-                                @Html.ValidationMessageFor(model => model.FirstMidName, "")
-                            </td>
-                        </tr>
-                        @if (!Model.IsCurrent())
-                        {
+                        <td class="col-form-label">
+                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                            @Html.LabelFor(model => model.ClearLastName, htmlAttributes: new { @class = "control-label" })
+                        </td>
+                        <td>
+                            @Html.EditorFor(model => model.ClearLastName, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.ClearLastName)
+                        </td>
+                        <td class="col-form-label">@Html.LabelFor(model => model.FirstMidName, htmlAttributes: new { @class = "control-label" })</td>
+                        <td>
+                            @Html.EditorFor(model => model.FirstMidName, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.FirstMidName, "")
+                        </td>
+                        <td class="col-form-label">
+                            @Html.LabelFor(model => model.Gender, htmlAttributes: new { @class = "control-label" })
+                            @Html.ValidationMessageFor(model => model.Gender)
+                        </td>
+                        <td>
+                            @Html.EnumDropDownListFor(model => model.Gender, htmlAttributes: new { @class = "form-control" })
+                        </td>
+
+                    </tr>
+
+                    <tr>
+                        <td>
+                            @Html.LabelFor(model => model.Ethnicity, htmlAttributes: new { @class = "control-label" })
+                            @Html.ValidationMessageFor(model => model.Ethnicity)
+                        </td>
+                        <td>
+                            @Html.EnumDropDownListFor(model => model.Ethnicity, htmlAttributes: new { @class = "form-control" })
+                        </td>
+                        <td class="col-form-label">@Html.LabelFor(model => model.ClearBirthdate, htmlAttributes: new { @class = "control-label" })</td>
+                        <td>
+                            <div class="input-group mb-2">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text fa fa-calendar fa-fw" style="width:40px;"></span>
+                                </div>
+                                @Html.EditorFor(model => model.ClearBirthdate)
+                                @Html.ValidationMessageFor(model => model.ClearBirthdate, "")
+                            </div>
+                        </td>
+                        <td class="col-form-label">
+                            @Html.LabelFor(model => model.Religion)
+                            @Html.ValidationMessageFor(model => model.Religion)
+                        </td>
+
+                        <td>
+                            @Html.EnumDropDownListFor(model => model.Religion, htmlAttributes: new { @class = "form-control" })
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td class="col-form-label">
+                            @Html.LabelFor(model => model.StateTerritoryID)
+                            <p>Region </p>
+                        </td>
+                        <td>
+                            @Html.DropDownList("StateTerritoryID", null, htmlAttributes: new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.StateTerritory)
+                            <div id="Region">
+
+                            </div>
+                        </td>
+
+                    </tr>
+                    @if (!Model.IsCurrent())
+                    {
                         <tr>
                             <td class="col-form-label">@Html.Label("Readmit?")</td>
                             <td class="col-auto">
-                            @Html.CheckBox("Readmit", false)
+                                @Html.CheckBox("Readmit", false)
                             </td>
                         </tr>
-                        }
-                        <tr>
-                            <td class="col-form-label">@Html.LabelFor(model => model.Birthdate, htmlAttributes: new { @class = "control-label col-md-offset-3" })</td>
-                            <td class="col-auto">
-                                <div class="input-group mb-2">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text fa fa-calendar fa-fw" style="width:40px;"></span>
-                                    </div>
-                                    @Html.EditorFor(model => model.Birthdate,
-                         new { htmlAttributes = new { @class = "form-control" } })
-                                    @Html.ValidationMessageFor(model => model.Birthdate, "")
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="col-form-label"> @Html.LabelFor(model => model.ServiceBranch, htmlAttributes: new { @class = "control-label col-md-offset-3" })</td>
-                            <td class="col-auto">
-                                @Html.EnumDropDownListFor(model => model.ServiceBranch, htmlAttributes: new { @class = "form-control" })
-                                @Html.ValidationMessageFor(model => model.ServiceBranch, "")
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="col-form-label"> @Html.LabelFor(model => model.RoomNumber, htmlAttributes: new { @class = "control-label col-md-offset-3" })</td>
-                            <td class="col-auto">
-                                @*Room selector*@
-                                @if (Model.IsCurrent())
-            {
-                    @Html.DropDownList("RoomNumber", null, htmlAttributes: new { @class = "form-control" })
-                    @Html.ValidationMessageFor(model => model.RoomNumber, "")
+                    }
+
+                    <tr>
+                        <td class="col-form-label"> @Html.LabelFor(model => model.ServiceBranch, htmlAttributes: new { @class = "control-label col-md-offset-3" })</td>
+                        <td class="col-auto">
+                            @Html.EnumDropDownListFor(model => model.ServiceBranch, htmlAttributes: new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.ServiceBranch, "")
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-form-label"> @Html.LabelFor(model => model.RoomNumber, htmlAttributes: new { @class = "control-label col-md-offset-3" })</td>
+                        <td class="col-auto">
+                            @*Room selector*@
+                            @if (Model.IsCurrent())
+                            {
+                                @Html.DropDownList("RoomNumber", null, htmlAttributes: new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.RoomNumber, "")
+                            }
+                            else
+                            {
+                                @Html.DropDownList("RoomNumber", null, htmlAttributes: new { @class = "form-control", @disabled = "disabled" })
+                                @Html.ValidationMessageFor(model => model.RoomNumber, "")
+                            }
+                        </td>
+
+                    </tr>
+
+                    <tr>
+                        <td class="col-form-label">@Html.Label("in Veteran's Court?", htmlAttributes: new { @class = "control-label col-sm-offset-10" })</td>
+                        <td class="col-auto">
+                            @Html.EditorFor(model => model.InVetCourt)
+                            @Html.ValidationMessageFor(model => model.InVetCourt, "")
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-form-label">
+                            @Html.LabelFor(model => model.IsNoncombat, htmlAttributes: new { @class = "control-label col-md-offset-3" })
+
+                            @Html.Label("Campaigns", htmlAttributes: new { @class = "control-label col-md-offset-3" })
+
+
+
+                        </td>
+
+
+
+
+
+                        <td>
+                            @Html.EditorFor(model => model.IsNoncombat)
+                            @Html.ValidationMessageFor(model => model.IsNoncombat, "", new { @class = "text-danger" })
+                            <br />
+                        
+                            <div class="form-check" style="overflow-y: scroll">
+                                @{
+                List<FIVESTARVC.ViewModels.AssignedCampaignData> campaigns = ViewBag.Campaigns;
+
+                foreach (var campaign in campaigns)
+                {
+
+                    @:
+
+
+
+
+                    <input type="checkbox"
+                           class="form-check-input campaign"
+                           name="selectedCampaigns"
+                           value="@campaign.MilitaryCampaignID"
+                           @if (Model.IsNoncombat)
+                           { 
+                              @(Html.Raw("disabled=\"disabled\""))
+
+                           }
+                           @(Html.Raw(campaign.Assigned ? "checked=\"checked\"" : ""))  />
+                    @campaign.MilitaryCampaign @: <br />
 }
-else
-{
-                    @Html.DropDownList("RoomNumber", null, htmlAttributes: new { @class = "form-control", @disabled = "disabled" })
-                    @Html.ValidationMessageFor(model => model.RoomNumber, "")
-}
-                            </td>
 
-                        </tr>
+                                }
+                            </div>
+                        </td>
+                    </tr>
 
-                        <tr>
-                            <td class="col-form-label">@Html.Label("in Veteran's Court?", htmlAttributes: new { @class = "control-label col-sm-offset-10" })</td>
-                            <td class="col-auto">
-                                @Html.EditorFor(model => model.InVetCourt)
-                                @Html.ValidationMessageFor(model => model.InVetCourt, "")
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="col-form-label">
-                                @Html.Label("Campaigns", htmlAttributes: new { @class = "control-label col-md-offset-3" })
-                            </td>
-                            <td>
-                                <div class="form-check" style="overflow-y: scroll">
-                                    @{
-                    List<FIVESTARVC.ViewModels.AssignedCampaignData> campaigns = ViewBag.Campaigns;
+                    <tr>
+                        <td class="col-form-label">@Html.LabelFor(model => model.Note, htmlAttributes: new { @class = "control-label col-md-offset-3" }) </td>
+                        <td class="col-auto">
+                            @Html.TextAreaFor(model => model.Note, htmlAttributes: new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.Note, "")
+                        </td>
+                    </tr>
 
-                    foreach (var campaign in campaigns)
-                    {
-
-                        @:
-
-
-
-
-
-
-
-
-                        <input type="checkbox"
-                               class="form-check-input"
-                               name="selectedCampaigns"
-                               value="@campaign.MilitaryCampaignID"
-                               @(Html.Raw(campaign.Assigned ? "checked=\"checked\"" : "")) />
-                        @campaign.MilitaryCampaign @: <br />
-}
-
-                                    }
-                                </div>
-                            </td>
-                        </tr>
-
-                        <tr>
-                            <td class="col-form-label">@Html.LabelFor(model => model.Note, htmlAttributes: new { @class = "control-label col-md-offset-3" }) </td>
-                            <td class="col-auto">
-                                @Html.TextAreaFor(model => model.Note, htmlAttributes: new { @class = "form-control" })
-                                @Html.ValidationMessageFor(model => model.Note, "")
-                            </td>
-                        </tr>
-
-                    </tbody>
-                </table>
-
-            </div>
-
+                </tbody>
+            </table>
             @Html.Partial("BenefitPartialViewEdit")
+
+
+
 
         </div>
 
 
 
 
-        
-        
+
+
         <p>
             <input type="submit" value="Update" class="btn btn-secondary" />
             @Html.ActionLink("Back to List", "Index", null, htmlAttributes: new { @class = "btn btn-primary" })
-        </p>      
-                  
-        
+        </p>
+
+
     </div>
 }
 
@@ -174,7 +227,7 @@ else
                     dateFormat: 'mm-dd-yy'
                 });
         }
-        
+
         $(document).ready(function () {
 
 
@@ -183,6 +236,24 @@ else
 
             }
 
+            $("#IsNoncombat").click(function () {
+                if ($(this).is(":checked")) {
+                    $(".campaign").prop('checked', false);
+                    $(".campaign").attr("disabled", true);
+
+                } else {
+                    $(".campaign").attr("disabled", false);
+                }
+            });
+
+            $.ajax({
+                "url": "/Residents/GetRegionName/" + $("#StateTerritoryID").val(),
+                "type": "get",
+                "dataType": "json",
+                "success": function (data) {
+                    $('#Region').text(data);
+                }
+            });
             /* Disable the room dropdown if we're not readmitting the resident. */
 
             $("#Readmit").click(function () {
@@ -194,7 +265,18 @@ else
             });
         });
 
-       
+        $('#StateTerritoryID').on("change", function () {
+
+            $.ajax({
+                "url": "/Residents/GetRegionName/" + $("#StateTerritoryID").val(),
+                "type": "get",
+                "dataType": "json",
+                "success": function (data) {
+                    $('#Region').text(data);
+                }
+            });
+
+        });
 
         $('.income').on("keyup", function () {
             var total = parseFloat(0.0);
@@ -207,10 +289,10 @@ else
                 $('#Benefit_TotalBenefitAmount').val(total);
                 $('#DisplayTotal').val(total);
             }
-            
+
         });
 
-        
+
 
 
     </script>

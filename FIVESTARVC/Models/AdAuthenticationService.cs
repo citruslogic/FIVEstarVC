@@ -53,34 +53,42 @@ namespace FIVESTARVC.Models
                 {
                     isAuthenticated = principalContext.ValidateCredentials(username, password, ContextOptions.Negotiate);
                 }
+
+                if (isAuthenticated)
+                {
+
+                    var identity = CreateIdentity(userPrincipal);
+
+                    authenticationManager.SignOut(FIVESTARAuthentication.ApplicationCookie);
+                    authenticationManager.SignIn(new AuthenticationProperties() { IsPersistent = false }, identity);
+                    return new AuthenticationResult();
+                }
+
+                if (userPrincipal.IsAccountLockedOut())
+                {
+                    // here can be a security related discussion weather it is worth 
+                    // revealing this information
+                    return new AuthenticationResult("Your account is locked.");
+                }
+
+                if (userPrincipal.Enabled.HasValue && userPrincipal.Enabled.Value == false)
+                {
+                    // here can be a security related discussion weather it is worth 
+                    // revealing this information
+                    return new AuthenticationResult("Your account is disabled.");
+                }
+
+
+
+                return new AuthenticationResult("Username or Password is not correct.");
             }
             catch (Exception)
             {
                 //TODO log exception in your ELMAH like this:
                 //Elmah.ErrorSignal.FromCurrentContext().Raise(exception);
-                return new AuthenticationResult("Username or Password is not correct");
-            }
-            if (userPrincipal.IsAccountLockedOut())
-            {
-                // here can be a security related discussion weather it is worth 
-                // revealing this information
-                return new AuthenticationResult("Your account is locked.");
+                return new AuthenticationResult("Username or Password is not correct.");
             }
 
-            if (userPrincipal.Enabled.HasValue && userPrincipal.Enabled.Value == false)
-            {
-                // here can be a security related discussion weather it is worth 
-                // revealing this information
-                return new AuthenticationResult("Your account is disabled");
-            }
-
-            var identity = CreateIdentity(userPrincipal);
-
-            authenticationManager.SignOut(FIVESTARAuthentication.ApplicationCookie);
-            authenticationManager.SignIn(new AuthenticationProperties() { IsPersistent = false }, identity);
-
-
-            return new AuthenticationResult();
         }
 
 

@@ -32,30 +32,19 @@
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.StartDate, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.ClearStartDate, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 <div class="input-group mb-2">
                     <div class="input-group-prepend">
                         <span class="input-group-text fa fa-calendar fa-fw" style="width:40px;"></span>
                     </div>
-                    <input type="text" id="StartDate" name="StartDate" class="form-control" style="width: auto;" />
-                    @Html.ValidationMessageFor(model => model.StartDate, "")
+                    @Html.EditorFor(model => model.ClearStartDate)
+                    @Html.ValidationMessageFor(model => model.ClearStartDate, "")
                 </div>
             </div>
         </div>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.EndDate, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                <div class="input-group mb-2">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text fa fa-calendar fa-fw" style="width:40px;"></span>
-                    </div>
-                    <input type="text" id="EndDate" name="EndDate" class="form-control" style="width: auto;" />
-                    @Html.ValidationMessageFor(model => model.EndDate, "")
-                </div>
-            </div>
-        </div>
+       
   </div>
   
   <div class="row">
@@ -93,8 +82,14 @@
     <script type="text/javascript">
 
         $(document).ready(function () {
-            $('#StartDate').datepicker({ dateFormat: 'mm/dd/yy' });
-            $('#EndDate').datepicker({ dateFormat: 'mm/dd/yy' });
+            if (!Modernizr.inputtypes.date) {
+                $('input[type=date]')
+                    .attr('type', 'text')
+                    .datepicker({
+                        // Consistent format with the HTML5 picker
+                        dateFormat: 'mm-dd-yy'
+                    });
+            }
         });
 
     </script>

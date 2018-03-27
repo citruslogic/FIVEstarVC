@@ -27,10 +27,10 @@
 
                             <td class="col-form-label">
 
-                                @Html.LabelFor(model => model.LastName, htmlAttributes: new { @class = "control-label" })
+                                @Html.LabelFor(model => model.ClearLastName, htmlAttributes: new { @class = "control-label" })
                             </td>
                             <td>
-                                @(Model.LastName)
+                                @(Model.ClearLastName)
                             </td>
 
                         </tr>
@@ -41,9 +41,9 @@
                             </td>
                         </tr>
                         <tr>
-                            <td class="col-form-label">@Html.LabelFor(model => model.Birthdate, htmlAttributes: new { @class = "control-label" })</td>
+                            <td class="col-form-label">@Html.LabelFor(model => model.ClearBirthdate, htmlAttributes: new { @class = "control-label" })</td>
                             <td>
-                                @(Model.Birthdate.Value.ToLongDateString())
+                                @(Model.ClearBirthdate.ToLongDateString())
                             </td>
                         </tr>
                         <tr>

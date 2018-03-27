@@ -41,7 +41,7 @@
             float: left;
         }
 </style>
-<h2>Details for @(Model.LastName)</h2>
+<h2>Details for @(Model.ClearLastName)</h2>
 
 
 <div class="row">
@@ -52,6 +52,11 @@
             @Html.DisplayFor(model => model.Fullname)
         </div>
 
+        <div class=" col-form-label">
+            @Html.Label("Home of Record", htmlAttributes: new { @class = "font-weight-bold" })
+            @Html.DisplayFor(model => model.StateTerritory.State)
+            @{<text>(</text>}@Html.DisplayFor(model => model.StateTerritory.Region)@{<text>)</text>}
+        </div>
         <div class="col-form-label">
             @Html.LabelFor(model => model.RoomNumber, htmlAttributes: new { @class = "font-weight-bold" })
             @if (Model.RoomNumber.HasValue)
@@ -66,15 +71,15 @@
         </div>
 
         <div class="col-form-label">
-            @Html.LabelFor(model => model.Birthdate, htmlAttributes: new { @class = "font-weight-bold" })
+            @Html.LabelFor(model => model.ClearBirthdate, htmlAttributes: new { @class = "font-weight-bold" })
             @{
-                if (Model.Birthdate == null)
+                if (Model.ClearBirthdate == null)
                 {
                     <text>No birthdate provided.</text>
                 }
                 else
                 {
-                    @(Model.Birthdate.Value.ToLongDateString())
+                    @(Model.ClearBirthdate.ToLongDateString())
 
                 }
             }
@@ -123,10 +128,17 @@
 
                     }
 
+                    if (Model.IsNoncombat)
+                    {
+                        <text>Non-combat.</text>
+                    }
+
                     if (!campaignsExist)
                     {
                         <text>No campaigns. </text>
                     }
+
+                    
 
                 }
             </div>
@@ -152,7 +164,11 @@
                         @Html.LabelFor(model => model.Benefit.DisabilityPercentage, htmlAttributes: new { @class = "control-label col-md-offset-1" })
                     </td>
                     <td>
-                        @Html.DisplayFor(model => model.Benefit.DisabilityPercentage)
+
+                     
+                            @Html.DisplayFor(model => model.Benefit.DisabilityPercentage)
+              
+
                     </td>
                 </tr>
                 <tr>
@@ -215,30 +231,32 @@
 
 <h2>Events</h2>
 
-<table class="events table table-sm table-striped" style="width: 70%">
-    <thead>
+<table class="events table table-sm" style="width: 60%">
+    <thead class="table-dark">
         <tr>
-            <th style="width: 17.7em;">Program Name</th>
-            <th>Start Date</th>
-            <th>End Date</th>
+            <th style="width: 21.2em;">Program Name</th>
+            <th> Date</th>
+            <th> Completed?</th>
         </tr>
     </thead>
     <tbody>
         @foreach (var item in Model.ProgramEvents)
         {
             <tr>
-                <td style="width: 17.7em">
+                <td style="width: 21.2em">
                     @Html.DisplayFor(modelItem => item.ProgramType.ProgramDescription)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.StartDate)
+                    @Html.DisplayFor(modelItem => item.ClearStartDate)
                 </td>
                 <td>
-                    @if (item.EndDate.HasValue)
+                    @if (item.Completed == true)
                     {
-                        @Html.DisplayFor(modelItem => item.EndDate)
+                        <text>Yes</text>
+                    } else
+                    {
+                        <text>No</text>
                     }
-
                 </td>
             </tr>
         }

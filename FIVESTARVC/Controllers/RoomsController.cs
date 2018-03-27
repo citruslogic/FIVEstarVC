@@ -20,7 +20,9 @@ namespace FIVESTARVC.Controllers
         // GET: Rooms
         public ActionResult Index(int? page)
         {
-            
+            //var rooms = from y in db.Rooms
+            //            select y;
+
             return View(db.Rooms.ToList());
         }
 

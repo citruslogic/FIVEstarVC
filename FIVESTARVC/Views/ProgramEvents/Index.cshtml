@@ -33,11 +33,9 @@
             @Html.ActionLink("Last Name", "Index", new { sortOrder = ViewBag.NameSortParm, currentFilter = ViewBag.CurrentFilter })
         </th>
         <th>
-            Start Date
+             Date
         </th>
-        <th>
-            End Date
-        </th>
+       
         <th>
             Completed?
         </th>
@@ -52,14 +50,12 @@
                 @Html.DisplayFor(modelItem => item.ProgramType.ProgramDescription)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Resident.LastName)
+                @Html.DisplayFor(modelItem => item.Resident.ClearLastName)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.StartDate)
+                @Html.DisplayFor(modelItem => item.ClearStartDate)
             </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.EndDate)
-            </td>
+            
             <td>
                 @(item.Completed ? "Yes" : "No")
             </td>

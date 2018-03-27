@@ -7,6 +7,7 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Web.Mvc;
+using FIVESTARVC.Validators;
 
 namespace FIVESTARVC.ViewModels
 {
@@ -26,12 +27,30 @@ namespace FIVESTARVC.ViewModels
         [Display(Name = "Birthdate")]
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:MM/dd/yyyy}", ApplyFormatInEditMode = true)]
-        public DateTime? Birthdate { get; set; }
+        [Birthdate(ErrorMessage = "Birthdate must not be in the future.")]
+        [Age(ErrorMessage = "Applicant must be 18 years or older.")]
+        public DateTime Birthdate { get; set; }
+
         [Display(Name = "Service Branch")]
         public ServiceType ServiceBranch { get; set; }
 
+        /* March changes to the model - 3/15/2018 */
+        [Display(Name = "Gender")]
+        public GenderType Gender { get; set; }
+        [Display(Name = "Ethnicity")]
+        public EthnicityType Ethnicity { get; set; }
+        [Display(Name = "Religion")]
+        public ReligionType Religion { get; set; }
+
+        [Display(Name = "Home of Record")]
+        [ForeignKey("StateTerritory")]
+        public int StateTerritoryID { get; set; }
+        public virtual StateTerritory StateTerritory { get; set; }
+
         [Display(Name = "In Veterans Court?")]
         public Boolean InVetCourt { get; set; }
+        [Display(Name = "Non-combat?")]
+        public Boolean IsNoncombat { get; set; }
         [Display(Name = "Note")]
         [StringLength(150)]
         public string Note { get; set; }
