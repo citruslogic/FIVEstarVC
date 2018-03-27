@@ -40,31 +40,31 @@ namespace FIVESTARVC.Controllers
 
             ViewBag.CurrentFilter = searchString;
 
-            var residents = from s in db.Residents
-                            select s;
+            var residents = (from s in db.Residents
+                            select s).ToList();
 
 
 
 
             if (!String.IsNullOrEmpty(searchString))
             {
-                    residents = residents.Where(s => s.ClearLastName.Contains(searchString)
-                                       || s.FirstMidName.Contains(searchString));
+                    residents = residents.Where(s => s.ClearLastName.Computed().Contains(searchString)
+                                       || s.FirstMidName.Contains(searchString)).ToList();
             }
 
             switch (sortOrder)
             {
                 case "name_desc":
-                    residents = residents.OrderBy(s => s.ClearLastName);
+                    residents = residents.OrderBy(s => s.ClearLastName.Computed()).ToList();
                     break;
                 case "ServiceBranch":
-                    residents = residents.OrderBy(s => s.ServiceBranch);
+                    residents = residents.OrderBy(s => s.ServiceBranch).ToList();
                     break;
                 case "ServiceBranch_desc":
-                    residents = residents.OrderByDescending(s => s.ServiceBranch);
+                    residents = residents.OrderByDescending(s => s.ServiceBranch).ToList();
                     break;
                 default:
-                    residents = residents.OrderByDescending(s => s.ResidentID);
+                    residents = residents.OrderByDescending(s => s.ResidentID).ToList();
                     break;
             }
 
