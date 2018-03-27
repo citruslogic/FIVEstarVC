@@ -134,26 +134,47 @@
                     </tr>
                     <tr>
                         <td class="col-form-label">
+                            @Html.LabelFor(model => model.IsNoncombat, htmlAttributes: new { @class = "control-label col-md-offset-3" })
+
                             @Html.Label("Campaigns", htmlAttributes: new { @class = "control-label col-md-offset-3" })
+
+
+
                         </td>
+
+
+
+
+
                         <td>
+                            @Html.EditorFor(model => model.IsNoncombat)
+                            @Html.ValidationMessageFor(model => model.IsNoncombat, "", new { @class = "text-danger" })
+                            <br />
+                        
                             <div class="form-check" style="overflow-y: scroll">
                                 @{
-                                    List<FIVESTARVC.ViewModels.AssignedCampaignData> campaigns = ViewBag.Campaigns;
+                List<FIVESTARVC.ViewModels.AssignedCampaignData> campaigns = ViewBag.Campaigns;
 
-                                    foreach (var campaign in campaigns)
-                                    {
+                foreach (var campaign in campaigns)
+                {
 
-                                        @:
+                    @:
 
 
-                                        <input type="checkbox"
-                                               class="form-check-input"
-                                               name="selectedCampaigns"
-                                               value="@campaign.MilitaryCampaignID"
-                                               @(Html.Raw(campaign.Assigned ? "checked=\"checked\"" : "")) />
-                                        @campaign.MilitaryCampaign @: <br />
-                    }
+
+
+                    <input type="checkbox"
+                           class="form-check-input campaign"
+                           name="selectedCampaigns"
+                           value="@campaign.MilitaryCampaignID"
+                           @if (Model.IsNoncombat)
+                           { 
+                              @(Html.Raw("disabled=\"disabled\""))
+
+                           }
+                           @(Html.Raw(campaign.Assigned ? "checked=\"checked\"" : ""))  />
+                    @campaign.MilitaryCampaign @: <br />
+}
 
                                 }
                             </div>
@@ -214,6 +235,17 @@
                 document.getElementById("DisplayTotal").value = parseFloat(document.getElementById("Benefit_TotalBenefitAmount").value);
 
             }
+
+            $("#IsNoncombat").click(function () {
+                if ($(this).is(":checked")) {
+                    $(".campaign").prop('checked', false);
+                    $(".campaign").attr("disabled", true);
+
+                } else {
+                    $(".campaign").attr("disabled", false);
+                }
+            });
+
             $.ajax({
                 "url": "/Residents/GetRegionName/" + $("#StateTerritoryID").val(),
                 "type": "get",

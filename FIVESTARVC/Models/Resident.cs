@@ -18,6 +18,8 @@ namespace FIVESTARVC.Models
 
         [Display(Name = "Service Branch")]
         public ServiceType ServiceBranch { get; set; }
+        [Display(Name = "Non-combat?")]
+        public Boolean IsNoncombat { get; set; }
         [Display(Name = "In Veterans Court?")]
         public Boolean InVetCourt { get; set; }
         [Display(Name = "Room Number")]
