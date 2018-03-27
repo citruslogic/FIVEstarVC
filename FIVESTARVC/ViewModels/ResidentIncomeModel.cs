@@ -49,6 +49,8 @@ namespace FIVESTARVC.ViewModels
 
         [Display(Name = "In Veterans Court?")]
         public Boolean InVetCourt { get; set; }
+        [Display(Name = "Non-combat?")]
+        public Boolean IsNoncombat { get; set; }
         [Display(Name = "Note")]
         [StringLength(150)]
         public string Note { get; set; }

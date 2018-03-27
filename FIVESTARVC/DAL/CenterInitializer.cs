@@ -199,7 +199,6 @@ namespace FIVESTARVC.DAL
 
             var militaryCampaigns = new List<MilitaryCampaign>
             {
-                new MilitaryCampaign { CampaignName="Noncombat", Residents = new List<Resident>() },
                 new MilitaryCampaign { CampaignName="Persian Gulf", Residents = new List<Resident>() },
                 new MilitaryCampaign { CampaignName="OEF", Residents = new List<Resident>() },
                 new MilitaryCampaign { CampaignName="Vietnam", Residents = new List<Resident>() },

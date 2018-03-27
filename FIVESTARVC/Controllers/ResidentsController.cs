@@ -193,6 +193,7 @@ namespace FIVESTARVC.Controllers
                 ClearBirthdate = residentIncomeModel.Birthdate,
                 ServiceBranch = residentIncomeModel.ServiceBranch,
                 InVetCourt = residentIncomeModel.InVetCourt,
+                IsNoncombat = residentIncomeModel.IsNoncombat,
                 RoomNumber = RoomNumber,
                 StateTerritoryID = residentIncomeModel.StateTerritoryID,
                 Note = residentIncomeModel.Note,
@@ -280,7 +281,7 @@ namespace FIVESTARVC.Controllers
 
 
             if (TryUpdateModel(residentIncomeModel, "",
-                 new string[] { "LastName", "FirstMidName", "Ethnicity", "StateTerritoryID", "Gender", "Religion", "ClearBirthdate", "ServiceBranch", "Note", "InVetCourt",
+                 new string[] { "LastName", "FirstMidName", "Ethnicity", "StateTerritoryID", "Gender", "Religion", "ClearBirthdate", "ServiceBranch", "Note", "IsNoncombat", "InVetCourt",
                      "Benefit", "MilitaryCampaigns", "TotalBenefitAmount" }))
             {
                 try
@@ -379,7 +380,7 @@ namespace FIVESTARVC.Controllers
 
             if (TryUpdateModel(residentToUpdate, "",
                new string[] { "ClearLastName", "ClearFirstMidName", "Gender", "Religion", "Ethnicity", "StateTerritoryID", "ClearBirthdate",
-                   "ServiceBranch", "Note", "InVetCourt", "Benefit", "MilitaryCampaigns", "TotalBenefitAmount" }))
+                   "ServiceBranch", "Note", "InVetCourt", "IsNoncombat", "Benefit", "MilitaryCampaigns", "TotalBenefitAmount" }))
             {
                 try
                 {

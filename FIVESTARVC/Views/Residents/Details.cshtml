@@ -123,10 +123,17 @@
 
                     }
 
+                    if (Model.IsNoncombat)
+                    {
+                        <text>Non-combat.</text>
+                    }
+
                     if (!campaignsExist)
                     {
                         <text>No campaigns. </text>
                     }
+
+                    
 
                 }
             </div>
@@ -219,10 +226,10 @@
 
 <h2>Events</h2>
 
-<table class="events table table-sm table-striped" style="width: 70%">
-    <thead>
+<table class="events table table-sm" style="width: 60%">
+    <thead class="table-dark">
         <tr>
-            <th style="width: 17.7em;">Program Name</th>
+            <th style="width: 21.2em;">Program Name</th>
             <th> Date</th>
             <th> Completed?</th>
         </tr>
@@ -231,7 +238,7 @@
         @foreach (var item in Model.ProgramEvents)
         {
             <tr>
-                <td style="width: 17.7em">
+                <td style="width: 21.2em">
                     @Html.DisplayFor(modelItem => item.ProgramType.ProgramDescription)
                 </td>
                 <td>
