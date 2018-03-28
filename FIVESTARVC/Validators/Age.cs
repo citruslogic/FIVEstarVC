@@ -14,7 +14,7 @@ namespace FIVESTARVC.Validators
         {
             DateTime? dt = (DateTime?) value;
 
-            if (dt.HasValue)
+            if (dt.HasValue && dt.GetValueOrDefault().Date <= DateTime.Now)
             {
                  if (DateTime.TryParse(dt.ToString(), out DateTime date))
                 {

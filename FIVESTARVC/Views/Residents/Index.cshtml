@@ -34,13 +34,13 @@
     <button type="button" style="margin-right: 10px;" class="btn btn-success" onclick="location.href = '/Residents/Create';"><i class="fa fa-pencil-square fa-fw"></i> Admit Resident</button>
     <div class="dropdown">
         <button style="margin-right: 10px;" class="btn btn-warning dropdown-toggle" type="button" data-toggle="dropdown">
-        <i class="fa fa-gears fa-fw"></i> Maintenance
+            <i class="fa fa-gears fa-fw"></i> Maintenance
             <span class="caret"></span>
         </button>
         <ul class="dropdown-menu">
             <li><button class="dropdown-item" onclick="addCampaign()"><i class="fa fa-plus fa-fw"></i> Campaign</button></li>
             <li><button class="dropdown-item" onclick="location.href = '/Rooms/Index';"><i class="fa fa-wrench fa-fw"></i> Room Config</button></li>
-            
+
         </ul>
     </div>
 </div>
@@ -125,8 +125,14 @@
                 @Html.ActionLink("Edit", "Edit", new { id = item.ResidentID }, htmlAttributes: new { @class = "btn btn-sm btn-outline-secondary btn-light" }) &nbsp;
 
                 @*Trigger the modal with a button*@
-                <button type="button" class="modal-link btn btn-sm btn-outline-secondary btn-light"
-                       data-toggle="modal" data-target="#QuickEventModal" onclick="showQuickEventDialog(@item.ResidentID)"><i class="fa fa-plus fa-fw"></i> Program</button>
+                @if (item.IsCurrent())
+                {
+                    <button type="button" class="modal-link btn btn-sm btn-outline-secondary btn-light"
+                            data-toggle="modal" data-target="#QuickEventModal" onclick="showQuickEventDialog(@item.ResidentID)">
+                        <i class="fa fa-plus fa-fw"></i> Program
+                    </button>
+                }
+
 
                 @Html.ActionLink("Details", "Details", new { id = item.ResidentID }, htmlAttributes: new { @class = "btn btn-sm btn-outline-secondary btn-light" }) &nbsp;
 
@@ -135,7 +141,6 @@
 
                     @:<input type="button" value="Discharge" class="modal-link btn btn-sm btn-danger"
                               @: data-toggle="modal" data-target="#QuickEventModal" onclick="showDischargeDialog(@item.ResidentID)" />
-
 
                 }
             </td>
@@ -177,7 +182,7 @@
             @Scripts.Render("~/bundles/jqueryval")
 
             <script type="text/javascript">
-                
+
 
                 $('#AddModal').on('shown.bs.modal', function () {
                     jQuery.validator.unobtrusive.parse($(this));
