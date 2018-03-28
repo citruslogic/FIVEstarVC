@@ -14,7 +14,7 @@ namespace FIVESTARVC.Models
         public int BenefitID { get; set; }
 
         [Display(Name = "Disability Rating")]
-        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:#}")]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:P}")]
         [Range(0,100, ErrorMessage = "Disability rating must be a minimum of 0 and cannot exceed 100.")]
         public double? DisabilityPercentage { get; set; }
 

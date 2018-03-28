@@ -9,7 +9,6 @@
 {
     @Html.AntiForgeryToken()
 
-    <div class="form-horizontal">
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         @Html.HiddenFor(model => model.ResidentID)
 
@@ -17,283 +16,288 @@
 
 
             <h2>Update @(Model.ClearLastName)</h2>
-            <table class="table table-sm">
+            @Html.ValidationSummary(true, "")
 
-                <tbody>
-                    <tr>
+            <div class="container">
+                <div class="row col-md-12">
+                    <table class="table table-striped table-sm">
 
-                    <tr>
 
-                        <td class="col-form-label">
-                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
-                            @Html.LabelFor(model => model.ClearLastName, htmlAttributes: new { @class = "control-label" })
-                        </td>
-                        <td>
-                            @Html.EditorFor(model => model.ClearLastName, new { htmlAttributes = new { @class = "form-control" } })
-                            @Html.ValidationMessageFor(model => model.ClearLastName)
-                        </td>
-                        <td class="col-form-label">@Html.LabelFor(model => model.FirstMidName, htmlAttributes: new { @class = "control-label" })</td>
-                        <td>
-                            @Html.EditorFor(model => model.FirstMidName, new { htmlAttributes = new { @class = "form-control" } })
-                            @Html.ValidationMessageFor(model => model.FirstMidName, "")
-                        </td>
-                        <td class="col-form-label">
-                            @Html.LabelFor(model => model.Gender, htmlAttributes: new { @class = "control-label" })
-                            @Html.ValidationMessageFor(model => model.Gender)
-                        </td>
-                        <td>
-                            @Html.EnumDropDownListFor(model => model.Gender, htmlAttributes: new { @class = "form-control" })
-                        </td>
 
-                    </tr>
 
-                    <tr>
-                        <td>
-                            @Html.LabelFor(model => model.Ethnicity, htmlAttributes: new { @class = "control-label" })
-                            @Html.ValidationMessageFor(model => model.Ethnicity)
-                        </td>
-                        <td>
-                            @Html.EnumDropDownListFor(model => model.Ethnicity, htmlAttributes: new { @class = "form-control" })
-                        </td>
-                        <td class="col-form-label">@Html.LabelFor(model => model.ClearBirthdate, htmlAttributes: new { @class = "control-label" })</td>
-                        <td>
-                            <div class="input-group mb-2">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text fa fa-calendar fa-fw" style="width:40px;"></span>
-                                </div>
-                                @Html.EditorFor(model => model.ClearBirthdate)
-                                @Html.ValidationMessageFor(model => model.ClearBirthdate, "")
-                            </div>
-                        </td>
-                        <td class="col-form-label">
-                            @Html.LabelFor(model => model.Religion)
-                            @Html.ValidationMessageFor(model => model.Religion)
-                        </td>
+                        <tbody>
+                            <tr>
+                                <td class="col-form-label">@Html.LabelFor(model => model.FirstMidName, htmlAttributes: new { @class = "control-label" })</td>
+                                <td>
+                                    @Html.EditorFor(model => model.FirstMidName, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.FirstMidName, "")
+                                </td>
+                                <td class="col-form-label">
 
-                        <td>
-                            @Html.EnumDropDownListFor(model => model.Religion, htmlAttributes: new { @class = "form-control" })
-                        </td>
-                    </tr>
+                                    @Html.LabelFor(model => model.ClearLastName, htmlAttributes: new { @class = "control-label" })
+                                </td>
+                                <td>
+                                    @Html.EditorFor(model => model.ClearLastName, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.ClearLastName)
+                                </td>
 
-                    <tr>
-                        <td class="col-form-label">
-                            @Html.LabelFor(model => model.StateTerritoryID)
-                            <p>Region </p>
-                        </td>
-                        <td>
-                            @Html.DropDownList("StateTerritoryID", null, htmlAttributes: new { @class = "form-control" })
-                            @Html.ValidationMessageFor(model => model.StateTerritory)
-                            <div id="Region">
+                                <td class="col-form-label">
+                                    @Html.LabelFor(model => model.Gender, htmlAttributes: new { @class = "control-label" })
+                                    @Html.ValidationMessageFor(model => model.Gender)
+                                </td>
+                                <td>
+                                    @Html.EnumDropDownListFor(model => model.Gender, htmlAttributes: new { @class = "form-control" })
+                                </td>
 
-                            </div>
-                        </td>
+                            </tr>
 
-                    </tr>
-                    @if (!Model.IsCurrent())
-                    {
-                        <tr>
-                            <td class="col-form-label">@Html.Label("Readmit?")</td>
-                            <td class="col-auto">
-                                @Html.CheckBox("Readmit", false)
-                            </td>
-                        </tr>
+                            <tr>
+                                <td>
+                                    @Html.LabelFor(model => model.Ethnicity, htmlAttributes: new { @class = "control-label" })
+                                    @Html.ValidationMessageFor(model => model.Ethnicity)
+                                </td>
+                                <td>
+                                    @Html.EnumDropDownListFor(model => model.Ethnicity, htmlAttributes: new { @class = "form-control" })
+                                </td>
+                                <td class="col-form-label">@Html.LabelFor(model => model.ClearBirthdate, htmlAttributes: new { @class = "control-label" })</td>
+                                <td>
+                                    <div class="input-group mb-2">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text fa fa-calendar fa-fw" style="width:40px;"></span>
+                                        </div>
+                                        @Html.EditorFor(model => model.ClearBirthdate)
+                                        @Html.ValidationMessageFor(model => model.ClearBirthdate, "")
+                                    </div>
+                                </td>
+                                <td class="col-form-label">
+                                    @Html.LabelFor(model => model.Religion, htmlAttributes: new { @class = "control-label" })
+                                    @Html.ValidationMessageFor(model => model.Religion)
+                                </td>
+
+                                <td>
+                                    @Html.EnumDropDownListFor(model => model.Religion, htmlAttributes: new { @class = "form-control" })
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td class="col-form-label">
+                                    @Html.LabelFor(model => model.StateTerritoryID, htmlAttributes: new { @class = "control-label" })
+                                </td>
+                                <td>
+                                    @Html.DropDownList("StateTerritoryID", null, htmlAttributes: new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.StateTerritory)
+                                </td>
+                                <td class="col-form-label"> @Html.LabelFor(model => model.ServiceBranch, htmlAttributes: new { @class = "control-label" })</td>
+                                <td>
+                                    @Html.EnumDropDownListFor(model => model.ServiceBranch, htmlAttributes: new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.ServiceBranch, "")
+                                </td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td class="col-form-label">
+                                    @Html.Label("Region", htmlAttributes: new { @class = "text-right" })
+                                </td>
+                                <td>
+
+
+                                    <div class="align-text-top" id="Region">
+
+                                    </div>
+                                </td>
+
+                            </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+                <hr />
+                <div class="row">
+                    <div class="col-md-5">
+                        <table class="table-sm">
+                            <tbody>
+                                <tr>
+
+                                    <td class="col-form-label"> @Html.Label("Room", htmlAttributes: new { @class = "control-label" })</td>
+                                    <td>
+                                        @Html.DropDownList("RoomNumber", null, htmlAttributes: new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(model => model.RoomNumber, "")
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="col-form-label">@Html.Label("In Veteran's Court?", htmlAttributes: new { @class = "control-label" })</td>
+                                    <td>
+                                        @Html.EditorFor(model => model.InVetCourt)
+                                        @Html.ValidationMessageFor(model => model.InVetCourt, "")
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="col-form-label border-top">
+                                        @Html.LabelFor(model => model.IsNoncombat, htmlAttributes: new { @class = "control-label" })
+                                    </td>
+                                    <td class="border-top">
+                                        @Html.EditorFor(model => model.IsNoncombat)
+                                        @Html.ValidationMessageFor(model => model.IsNoncombat, "")
+
+
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="col-form-label border-bottom">
+                                        @Html.Label("Campaigns", htmlAttributes: new { @class = "control-label" })
+                                    </td>
+                                    <td class="border-bottom">
+                                        <div class="form-check" style="height: 100px; overflow-y: scroll; margin-top: 10px;">
+
+                                            @{
+                                        List<FIVESTARVC.ViewModels.AssignedCampaignData> campaigns = ViewBag.Campaigns;
+
+                                        foreach (var campaign in campaigns)
+                                        {
+
+                                            @:
+
+
+
+
+                                            <input type="checkbox"
+                                                   class="form-check-input campaign"
+                                                   name="selectedCampaigns"
+                                                   value="@campaign.MilitaryCampaignID"
+                                                   @(Html.Raw(campaign.Assigned ? "checked=\"checked\"" : "")) />
+                                            @campaign.MilitaryCampaign @:<br />
+                                }
+
+                                            }
+                                        </div>
+                                    </td>
+
+
+                                <tr>
+                                    <td>
+                                        &nbsp;
+                                    </td>
+                                </tr>
+                                
+                                <tr>
+                                    <td class="col-form-label">@Html.LabelFor(model => model.Note, htmlAttributes: new { @class = "control-label" }) </td>
+                                    <td>
+                                        @Html.TextAreaFor(model => model.Note, htmlAttributes: new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(model => model.Note, "")
+                                    </td>
+
+                                </tr>
+                            </tbody>
+                        </table>
+
+
+                    </div>
+                    @Html.Partial("BenefitPartialViewEdit")
+
+
+
+
+                </div>
+
+
+
+
+
+
+                <p>
+                    <input type="submit" value="Update" class="btn btn-secondary" />
+                    @Html.ActionLink("Back to List", "Index", null, htmlAttributes: new { @class = "btn btn-primary" })
+                </p>
+
+
+            </div>
+            </div>
+            }
+
+
+
+            @section Scripts {
+                @Scripts.Render("~/bundles/jqueryval")
+                @Scripts.Render("~/bundles/jqueryui")
+                <script type="text/javascript">
+
+                    if (!Modernizr.inputtypes.date) {
+                        $('input[type=date]')
+                            .attr('type', 'text')
+                            .datepicker({
+                                // Consistent format with the HTML5 picker
+                                dateFormat: 'mm-dd-yy'
+                            });
                     }
 
-                    <tr>
-                        <td class="col-form-label"> @Html.LabelFor(model => model.ServiceBranch, htmlAttributes: new { @class = "control-label col-md-offset-3" })</td>
-                        <td class="col-auto">
-                            @Html.EnumDropDownListFor(model => model.ServiceBranch, htmlAttributes: new { @class = "form-control" })
-                            @Html.ValidationMessageFor(model => model.ServiceBranch, "")
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="col-form-label"> @Html.LabelFor(model => model.RoomNumber, htmlAttributes: new { @class = "control-label col-md-offset-3" })</td>
-                        <td class="col-auto">
-                            @*Room selector*@
-                            @if (Model.IsCurrent())
-                            {
-                                @Html.DropDownList("RoomNumber", null, htmlAttributes: new { @class = "form-control" })
-                                @Html.ValidationMessageFor(model => model.RoomNumber, "")
+                    $(document).ready(function () {
+
+
+                        if (document.getElementById("Benefit_TotalBenefitAmount").value) {
+                            document.getElementById("DisplayTotal").value = parseFloat(document.getElementById("Benefit_TotalBenefitAmount").value);
+
+                        }
+
+                        $("#IsNoncombat").click(function () {
+                            if ($(this).is(":checked")) {
+                                $(".campaign").prop('checked', false);
+                                $(".campaign").attr("disabled", true);
+
+                            } else {
+                                $(".campaign").attr("disabled", false);
                             }
-                            else
-                            {
-                                @Html.DropDownList("RoomNumber", null, htmlAttributes: new { @class = "form-control", @disabled = "disabled" })
-                                @Html.ValidationMessageFor(model => model.RoomNumber, "")
+                        });
+
+                        $.ajax({
+                            "url": "/Residents/GetRegionName/" + $("#StateTerritoryID").val(),
+                            "type": "get",
+                            "dataType": "json",
+                            "success": function (data) {
+                                $('#Region').text(data);
                             }
-                        </td>
+                        });
+                        /* Disable the room dropdown if we're not readmitting the resident. */
 
-                    </tr>
+                        $("#Readmit").click(function () {
+                            if ($(this).is(":checked")) {
+                                $("#RoomNumber").prop("disabled", false);
+                            } else {
+                                $("#RoomNumber").prop("disabled", true);
+                            }
+                        });
+                    });
 
-                    <tr>
-                        <td class="col-form-label">@Html.Label("in Veteran's Court?", htmlAttributes: new { @class = "control-label col-sm-offset-10" })</td>
-                        <td class="col-auto">
-                            @Html.EditorFor(model => model.InVetCourt)
-                            @Html.ValidationMessageFor(model => model.InVetCourt, "")
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="col-form-label">
-                            @Html.LabelFor(model => model.IsNoncombat, htmlAttributes: new { @class = "control-label col-md-offset-3" })
+                    $('#StateTerritoryID').on("change", function () {
 
-                            @Html.Label("Campaigns", htmlAttributes: new { @class = "control-label col-md-offset-3" })
+                        $.ajax({
+                            "url": "/Residents/GetRegionName/" + $("#StateTerritoryID").val(),
+                            "type": "get",
+                            "dataType": "json",
+                            "success": function (data) {
+                                $('#Region').text(data);
+                            }
+                        });
 
+                    });
 
+                    $('.income').on("keyup", function () {
+                        var total = parseFloat(0.0);
 
-                        </td>
+                        $('.income').each(function () {
+                            total += parseFloat($(this).val() || 0);
+                        });
 
+                        if (total.valueOf != NaN) {
+                            $('#Benefit_TotalBenefitAmount').val(total);
+                            $('#DisplayTotal').val(total);
+                        }
 
-
-
-
-                        <td>
-                            @Html.EditorFor(model => model.IsNoncombat)
-                            @Html.ValidationMessageFor(model => model.IsNoncombat, "", new { @class = "text-danger" })
-                            <br />
-                        
-                            <div class="form-check" style="overflow-y: scroll">
-                                @{
-                List<FIVESTARVC.ViewModels.AssignedCampaignData> campaigns = ViewBag.Campaigns;
-
-                foreach (var campaign in campaigns)
-                {
-
-                    @:
-
-
-
-
-                    <input type="checkbox"
-                           class="form-check-input campaign"
-                           name="selectedCampaigns"
-                           value="@campaign.MilitaryCampaignID"
-                           @if (Model.IsNoncombat)
-                           { 
-                              @(Html.Raw("disabled=\"disabled\""))
-
-                           }
-                           @(Html.Raw(campaign.Assigned ? "checked=\"checked\"" : ""))  />
-                    @campaign.MilitaryCampaign @: <br />
-}
-
-                                }
-                            </div>
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <td class="col-form-label">@Html.LabelFor(model => model.Note, htmlAttributes: new { @class = "control-label col-md-offset-3" }) </td>
-                        <td class="col-auto">
-                            @Html.TextAreaFor(model => model.Note, htmlAttributes: new { @class = "form-control" })
-                            @Html.ValidationMessageFor(model => model.Note, "")
-                        </td>
-                    </tr>
-
-                </tbody>
-            </table>
-            @Html.Partial("BenefitPartialViewEdit")
+                    });
 
 
 
 
-        </div>
-
-
-
-
-
-
-        <p>
-            <input type="submit" value="Update" class="btn btn-secondary" />
-            @Html.ActionLink("Back to List", "Index", null, htmlAttributes: new { @class = "btn btn-primary" })
-        </p>
-
-
-    </div>
-}
-
-
-
-@section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
-    @Scripts.Render("~/bundles/jqueryui")
-    <script type="text/javascript">
-
-        if (!Modernizr.inputtypes.date) {
-            $('input[type=date]')
-                .attr('type', 'text')
-                .datepicker({
-                    // Consistent format with the HTML5 picker
-                    dateFormat: 'mm-dd-yy'
-                });
-        }
-
-        $(document).ready(function () {
-
-
-            if (document.getElementById("Benefit_TotalBenefitAmount").value) {
-                document.getElementById("DisplayTotal").value = parseFloat(document.getElementById("Benefit_TotalBenefitAmount").value);
-
+                </script>
             }
-
-            $("#IsNoncombat").click(function () {
-                if ($(this).is(":checked")) {
-                    $(".campaign").prop('checked', false);
-                    $(".campaign").attr("disabled", true);
-
-                } else {
-                    $(".campaign").attr("disabled", false);
-                }
-            });
-
-            $.ajax({
-                "url": "/Residents/GetRegionName/" + $("#StateTerritoryID").val(),
-                "type": "get",
-                "dataType": "json",
-                "success": function (data) {
-                    $('#Region').text(data);
-                }
-            });
-            /* Disable the room dropdown if we're not readmitting the resident. */
-
-            $("#Readmit").click(function () {
-                if ($(this).is(":checked")) {
-                    $("#RoomNumber").prop("disabled", false);
-                } else {
-                    $("#RoomNumber").prop("disabled", true);
-                }
-            });
-        });
-
-        $('#StateTerritoryID').on("change", function () {
-
-            $.ajax({
-                "url": "/Residents/GetRegionName/" + $("#StateTerritoryID").val(),
-                "type": "get",
-                "dataType": "json",
-                "success": function (data) {
-                    $('#Region').text(data);
-                }
-            });
-
-        });
-
-        $('.income').on("keyup", function () {
-            var total = parseFloat(0.0);
-
-            $('.income').each(function () {
-                total += parseFloat($(this).val() || 0);
-            });
-
-            if (total.valueOf != NaN) {
-                $('#Benefit_TotalBenefitAmount').val(total);
-                $('#DisplayTotal').val(total);
-            }
-
-        });
-
-
-
-
-    </script>
-}
