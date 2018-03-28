@@ -10,6 +10,7 @@ using PagedList;
 using FIVESTARVC.DAL;
 using FIVESTARVC.Models;
 using FIVESTARVC.ViewModels;
+using DelegateDecompiler;
 
 namespace FIVESTARVC.Controllers
 {
@@ -26,7 +27,7 @@ namespace FIVESTARVC.Controllers
             ViewBag.ProgramTypeID = new SelectList(db.ProgramTypes, "ProgramTypeID", "ProgramDescription");
 
 
-            var programEvents = db.ProgramEvents.Include(p => p.ProgramType).Include(p => p.Resident);
+            var programEvents = db.ProgramEvents.Include(p => p.ProgramType).Include(p => p.Resident).ToList();
 
             if (searchString != null)
             {
@@ -41,23 +42,23 @@ namespace FIVESTARVC.Controllers
 
             if (!String.IsNullOrEmpty(searchString))
             {
-                programEvents = programEvents.Where(p => p.Resident.ClearLastName.Contains(searchString)
-                                       || p.Resident.FirstMidName.Contains(searchString));
+                programEvents = programEvents.Where(p => p.Resident.ClearLastName.Computed().Contains(searchString)
+                                       || p.Resident.FirstMidName.Contains(searchString)).ToList();
             }
 
             switch (sortOrder)
             {
                 case "name_desc":
-                    programEvents = programEvents.OrderByDescending(p => p.Resident.ClearLastName);
+                    programEvents = programEvents.OrderByDescending(p => p.Resident.ClearLastName.Computed()).ToList();
                     break;
                 case "ProgramDescription":
-                    programEvents = programEvents.OrderBy(p => p.ProgramTypeID);
+                    programEvents = programEvents.OrderBy(p => p.ProgramTypeID).ToList();
                     break;
                 case "ProgramDescription_desc":
-                    programEvents = programEvents.OrderByDescending(p => p.ProgramTypeID);
+                    programEvents = programEvents.OrderByDescending(p => p.ProgramTypeID).ToList();
                     break;
                 default:
-                    programEvents = programEvents.OrderBy(p => p.ResidentID);
+                    programEvents = programEvents.OrderBy(p => p.ResidentID).ToList();
                     break;
             }
 
