@@ -155,7 +155,7 @@ namespace FIVESTARVC.Controllers
 
             ViewBag.CumulativeCount = DB.Residents.Count();
 
-            ViewBag.P2I = DB.ProgramEvents.Count(x => x.ProgramTypeID == 10);
+            ViewBag.P2I = DB.ProgramEvents.Count(x => x.ProgramTypeID == 9);
 
             ViewBag.EmergencyShelter = DB.ProgramEvents.Count(x => x.ProgramTypeID == 1);
 
@@ -633,7 +633,7 @@ namespace FIVESTARVC.Controllers
             int runningTotal = 0;
 
             var gradQuery = (from y in events
-                             where y.ProgramTypeID == 10
+                             where y.ProgramTypeID == 9
                              group y by y.ClearStartDate.Computed().Year into typeGroup
                              select new
                              {
@@ -659,7 +659,7 @@ namespace FIVESTARVC.Controllers
             int runningTotal = 0;
 
             var gradQuery = (from y in events
-                             where y.ProgramTypeID == 10
+                             where y.ProgramTypeID == 9
                              group y by y.ClearStartDate.Computed().Year into typeGroup
                              select new
                              {
@@ -834,6 +834,7 @@ namespace FIVESTARVC.Controllers
         public ActionResult DownloadData()
         {
             var residents = DB.Residents;
+            var programs = DB.ProgramTypes;
 
             var residentProgramType = DB.Residents.Include(p => p.ProgramEvents).ToList()
                 .Select(r => new ReportingResidentViewModel
@@ -870,59 +871,72 @@ namespace FIVESTARVC.Controllers
 
                 var eventids = r.SelectMany(i => i.ProgramTypeID).ToList();
 
-                /* These Event IDs have changed, and the order of the columns 
-                 * may not be what is expected.
-                 * See CenterInitializer.cs for the ProgramTypeID order. 
-                 * - Frank Butler
+                /* (from Resident in DB.Residents
+                           where Resident.ServiceBranch == ServiceType.COASTGUARD
+                           select Resident).ToList();
                  */
                 foreach (var eid in eventids)
                 {
-                    switch (eid)
-                    {
-                        case 1:
-                            myExport["Emergency Shelter"] = "1";
-                            break;
-                        case 2:
-                            myExport["Resident Admission"] = "1";
-                            break;
-                        case 3:
-                            myExport["Re-admit"] = "1";
-                            break;
-                        case 4:
-                            myExport["Resident Graduation"] = "1";
-                            break;
-                        case 5:
-                            myExport["Self Discharge"] = "1";
-                            break;
-                        case 6:
-                            myExport["Discharge for Cause"] = "1";
-                            break;
-                        case 8:
-                            myExport["Work Program"] = "1";
-                            break;
-                        case 9:
-                            myExport["Mental Wellness"] = "1";
-                            break;
-                        case 10:
-                            myExport["P2I"] = "1";
-                            break;
-                        case 11:
-                            myExport["School Program"] = "1";
-                            break;
-                        case 12:
-                            myExport["Financial Program"] = "1";
-                            break;
-                        case 13:
-                            myExport["Depression / Behavioral Program"] = "1";
-                            break;
-                        case 14:
-                            myExport["Substance Abuse Program"] = "1";
-                            break;
-                        default:
-                            //do something
-                            break;
+                    int eventID = eid;
 
+                    var prgm = (from p in DB.ProgramTypes
+                                          where p.ProgramTypeID == eventID
+                                          select p.ProgramDescription).ToArray();
+
+                    int testVar = 1;
+
+                    if (prgm.Length < testVar )
+                    {
+                        break;
                     }
+
+                    String programName = prgm[0];
+
+
+                    myExport[programName.ToString()] = "1";
+                    //switch (eid)
+                    //{
+                    //    case 1:
+                    //        myExport["Emergency Shelter"] = "1";
+                    //        break;
+                    //    case 2:
+                    //        myExport["Resident Admission"] = "1";
+                    //        break;
+                    //    case 3:
+                    //        myExport["Re-admit"] = "1";
+                    //        break;
+                    //    case 4:
+                    //        myExport["Resident Graduation"] = "1";
+                    //        break;
+                    //    case 5:
+                    //        myExport["Self Discharge"] = "1";
+                    //        break;
+                    //    case 6:
+                    //        myExport["Discharge for Cause"] = "1";
+                    //        break;
+                    //    case 7:
+                    //        myExport["Higher Level of Care"] = "1";
+                    //        break;
+                    //    case 8:
+                    //        myExport["Work Program"] = "1";
+                    //        break;
+                    //    case 9:
+                    //        myExport["P2I"] = "1";
+                    //        break;
+                    //    case 10:
+                    //        myExport["School Program"] = "1";
+                    //        break;
+                    //    case 11:
+                    //        myExport["Financial Program"] = "1";
+                    //        break;
+                    //    case 12:
+                    //        myExport["Substance Abuse Program"] = "1";
+                    //        break;
+                    //    default:
+                    //        //do something
+                    //        break;
+
+                //}
                 }
 
             }

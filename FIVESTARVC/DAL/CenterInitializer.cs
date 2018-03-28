@@ -160,12 +160,10 @@ namespace FIVESTARVC.DAL
 
                 // ENROLLED PROGRAMS
                 new ProgramType { ProgramDescription="Work Program" },                              // 8
-                new ProgramType { ProgramDescription="Mental Wellness" },                           // 9
-                new ProgramType { ProgramDescription="P2I" },                                       // 10
-                new ProgramType { ProgramDescription="School Program" },                            // 11
-                new ProgramType { ProgramDescription="Financial Program"},                          // 12
-                new ProgramType { ProgramDescription="Depression / Behavioral Program"},            // 13
-                new ProgramType { ProgramDescription="Substance Abuse Program"}                     // 14
+                new ProgramType { ProgramDescription="P2I" },                                       // 9
+                new ProgramType { ProgramDescription="School Program" },                            // 10
+                new ProgramType { ProgramDescription="Financial Program"},                          // 11
+                new ProgramType { ProgramDescription="Substance Abuse Program"}                     // 12
 
             };
 
@@ -186,7 +184,6 @@ namespace FIVESTARVC.DAL
                 //Other events
                 new ProgramEvent { ClearStartDate=DateTime.Parse("2004-05-05"), Completed=true, ResidentID=5, ProgramTypeID=8},
                 new ProgramEvent { ClearStartDate=DateTime.Parse("2003-03-02"), Completed=true, ResidentID=6, ProgramTypeID=8},
-                new ProgramEvent { ClearStartDate=DateTime.Parse("2006-03-22"), Completed=true, ResidentID=1, ProgramTypeID=13},
                 new ProgramEvent { ClearStartDate=DateTime.Parse("2006-03-22"), Completed=true, ResidentID=2, ProgramTypeID=8},
                 new ProgramEvent { ClearStartDate=DateTime.Parse("2005-10-05"), ResidentID=2},
                 new ProgramEvent { ClearStartDate=DateTime.Parse("2005-11-19"), ResidentID=3}
