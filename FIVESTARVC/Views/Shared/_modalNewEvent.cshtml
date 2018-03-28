@@ -16,8 +16,7 @@
     <div class="row">
         <input type="hidden" name="ResidentID" value="@ViewBag.ResidentID" />
         <p>
-            @ViewBag.Fullname is starting a new program. Provide an <code>End Date</code> if
-            the program's end date for the resident is known.
+            @ViewBag.Fullname is starting a new program. 
         </p>
         <div class="form-group">
             @Html.LabelFor(model => model.ProgramTypeID, "Program name", htmlAttributes: new { @class = "control-label" })

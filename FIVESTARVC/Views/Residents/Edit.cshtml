@@ -119,7 +119,10 @@
                         <table class="table-sm">
                             <tbody>
                                 <tr>
-
+                                    <td class="col-form-label">@Html.Label("Readmit?")</td>
+                                    <td>@Html.CheckBox("Readmit")</td>
+                                    </tr>
+                                <tr>
                                     <td class="col-form-label"> @Html.Label("Room", htmlAttributes: new { @class = "control-label" })</td>
                                     <td>
                                         @Html.DropDownList("RoomNumber", null, htmlAttributes: new { @class = "form-control" })
