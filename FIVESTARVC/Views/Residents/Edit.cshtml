@@ -250,6 +250,10 @@
                             }
                         });
 
+                        if ($("#IsNoncombat").prop('checked')) {
+                            $(".campaign").attr("disabled", true);
+                        }
+
                         $.ajax({
                             "url": "/Residents/GetRegionName/" + $("#StateTerritoryID").val(),
                             "type": "get",

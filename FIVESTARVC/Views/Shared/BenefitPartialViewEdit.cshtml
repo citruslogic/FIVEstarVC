@@ -24,13 +24,10 @@
                     @Html.LabelFor(model => model.Benefit.DisabilityPercentage, htmlAttributes: new { @class = "control-label" })
                 </td>
                 <td>
-                    <div class="input-group money-wide mb-2">
+                    
 
                         @Html.EditorFor(model => model.Benefit.DisabilityPercentage, new { htmlAttributes = new { @class = "form-control money-wide" } })
-                        <div class="input-group-append">
-                            <span class="input-group-text">%</span>
-                        </div>
-                    </div>
+                        
                     @Html.ValidationMessageFor(model => model.Benefit.DisabilityPercentage, "")
                 </td>
 
