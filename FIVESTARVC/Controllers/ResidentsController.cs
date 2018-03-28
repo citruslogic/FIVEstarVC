@@ -204,49 +204,7 @@ namespace FIVESTARVC.Controllers
 
             };
 
-            try
-            {
-                if (ModelState.IsValid)
-                {
-
-                    
-                    db.Residents.Add(resident);
-                    resident.ProgramEvents.Add(new ProgramEvent
-                    {
-                        ProgramTypeID = AdmissionType,
-                        ClearStartDate = DateTime.Now,
-
-                    });
-
-                    Room room = db.Rooms.Find(resident.RoomNumber);
-
-                    if (room.IsOccupied == false)
-                    {
-                        room.IsOccupied = true;
-                    }
-
-                    db.SaveChanges();
-
-                }
-
-
-            }
-            catch (DbEntityValidationException e)
-            {
-                foreach (var eve in e.EntityValidationErrors)
-                {
-                    Console.WriteLine("Entity of type \"{0}\" in state \"{1}\" has the following validation errors:",
-                        eve.Entry.Entity.GetType().Name, eve.Entry.State);
-                    foreach (var ve in eve.ValidationErrors)
-                    {
-                        Console.WriteLine("- Property: \"{0}\", Error: \"{1}\"",
-                            ve.PropertyName, ve.ErrorMessage);
-                    }
-                }
-                
-
-            }
-
+            
                 Benefit benefit = new Benefit
             {
                 DisabilityPercentage = residentIncomeModel.DisabilityPercentage,
@@ -262,8 +220,24 @@ namespace FIVESTARVC.Controllers
             {
                 if (ModelState.IsValid)
                 {
+                    db.Residents.Add(resident);
+                    resident.ProgramEvents.Add(new ProgramEvent
+                    {
+                        ProgramTypeID = AdmissionType,
+                        ClearStartDate = DateTime.Now,
+
+                    });
+
+                    Room room = db.Rooms.Find(resident.RoomNumber);
+
+                    if (room.IsOccupied == false)
+                    {
+                        room.IsOccupied = true;
+                    }
+
                     db.Benefits.Add(benefit);
                     resident.Benefit = benefit;
+
                     db.SaveChanges();
 
                 }

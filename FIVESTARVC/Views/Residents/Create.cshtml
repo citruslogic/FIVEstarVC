@@ -1,160 +1,182 @@
 ﻿@model FIVESTARVC.ViewModels.ResidentIncomeModel
 
 
-    @{
-        ViewBag.Title = "New Resident";
-    }
+@{
+    ViewBag.Title = "New Resident";
+}
 
 
-    @using (Html.BeginForm())
-    {
-        @Html.AntiForgeryToken()
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <h2> Admit Resident </h2>
+    <div class="container">
+        <div class="row col-md-12">
+            <table class="table-sm">
 
 
+
+
+
+                <tbody>
+                    <tr>
+
+                        <td class="col-form-label">
+                            @Html.ValidationSummary(true, "")
+
+                            @Html.LabelFor(model => model.LastName, htmlAttributes: new { @class = "control-label" })
+                        </td>
+                        <td>
+                            @Html.EditorFor(model => model.LastName, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.LastName)
+                        </td>
+                        <td class="col-form-label">@Html.LabelFor(model => model.FirstMidName, htmlAttributes: new { @class = "control-label" })</td>
+                        <td>
+                            @Html.EditorFor(model => model.FirstMidName, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.FirstMidName, "")
+                        </td>
+                        <td class="col-form-label">
+                            @Html.LabelFor(model => model.Gender, htmlAttributes: new { @class = "control-label" })
+                            @Html.ValidationMessageFor(model => model.Gender)
+                        </td>
+                        <td>
+                            @Html.EnumDropDownListFor(model => model.Gender, htmlAttributes: new { @class = "form-control" })
+                        </td>
+
+                    </tr>
+
+                    <tr>
+                        <td>
+                            @Html.LabelFor(model => model.Ethnicity, htmlAttributes: new { @class = "control-label" })
+                            @Html.ValidationMessageFor(model => model.Ethnicity)
+                        </td>
+                        <td>
+                            @Html.EnumDropDownListFor(model => model.Ethnicity, htmlAttributes: new { @class = "form-control" })
+                        </td>
+                        <td class="col-form-label">@Html.LabelFor(model => model.Birthdate, htmlAttributes: new { @class = "control-label" })</td>
+                        <td>
+                            <div class="input-group mb-2">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text fa fa-calendar fa-fw" style="width:40px;"></span>
+                                </div>
+                                @Html.EditorFor(model => model.Birthdate)
+                                @Html.ValidationMessageFor(model => model.Birthdate, "")
+                            </div>
+                        </td>
+                        <td class="col-form-label">
+                            @Html.LabelFor(model => model.Religion, htmlAttributes: new { @class = "control-label" })
+                            @Html.ValidationMessageFor(model => model.Religion)
+                        </td>
+
+                        <td>
+                            @Html.EnumDropDownListFor(model => model.Religion, htmlAttributes: new { @class = "form-control" })
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td class="col-form-label">
+                            @Html.LabelFor(model => model.StateTerritoryID, htmlAttributes: new { @class = "control-label" })
+                        </td>
+                        <td>
+                            @Html.DropDownList("StateTerritoryID", null, htmlAttributes: new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.StateTerritory)
+                        </td>
+                        <td class="col-form-label"> @Html.LabelFor(model => model.ServiceBranch, htmlAttributes: new { @class = "control-label" })</td>
+                        <td>
+                            @Html.EnumDropDownListFor(model => model.ServiceBranch, htmlAttributes: new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.ServiceBranch, "")
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-form-label">
+                            @Html.Label("Region", htmlAttributes: new { @class = "control-label" })
+                        </td>
+                        <td>
+
+
+                            <div class="col-form-label" id="Region">
+
+                            </div>
+                        </td>
+
+                    </tr>
+
+                </tbody>
+            </table>
+        </div>
+        <hr />
         <div class="row">
-
-        <div class="table">
-            <h2> Admit Resident </h2>
-            
-                <table class="table table-sm">
-
-
+            <div class="col-md-6">
+                <table class="table-sm">
                     <tbody>
                         <tr>
 
-                            <td class="col-form-label">
-                                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-
-                                @Html.LabelFor(model => model.LastName, htmlAttributes: new { @class = "control-label" })
-                            </td>
-                            <td>
-                                @Html.EditorFor(model => model.LastName, new { htmlAttributes = new { @class = "form-control" } })
-                                @Html.ValidationMessageFor(model => model.LastName)
-                            </td>
-                            <td class="col-form-label">@Html.LabelFor(model => model.FirstMidName, htmlAttributes: new { @class = "control-label" })</td>
-                            <td>
-                                @Html.EditorFor(model => model.FirstMidName, new { htmlAttributes = new { @class = "form-control" } })
-                                @Html.ValidationMessageFor(model => model.FirstMidName, "")
-                            </td>
-                            <td class="col-form-label">
-                                @Html.LabelFor(model => model.Gender, htmlAttributes: new { @class = "control-label" })
-                                @Html.ValidationMessageFor(model => model.Gender)
-                            </td>
-                            <td>
-                                @Html.EnumDropDownListFor(model => model.Gender, htmlAttributes: new { @class = "form-control" })
-                            </td>
-                            
-                        </tr>
- 
-                        <tr>
-                            <td>
-                                @Html.LabelFor(model => model.Ethnicity, htmlAttributes: new { @class = "control-label" })
-                                @Html.ValidationMessageFor(model => model.Ethnicity)
-                            </td>
-                            <td>
-                                @Html.EnumDropDownListFor(model => model.Ethnicity, htmlAttributes: new { @class = "form-control" })
-                            </td>
-                            <td class="col-form-label">@Html.LabelFor(model => model.Birthdate, htmlAttributes: new { @class = "control-label" })</td>
-                            <td>
-                                <div class="input-group mb-2">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text fa fa-calendar fa-fw" style="width:40px;"></span>
-                                    </div>
-                                    @Html.EditorFor(model => model.Birthdate)
-                                    @Html.ValidationMessageFor(model => model.Birthdate, "")
-                                </div>
-                            </td>
-                            <td class="col-form-label">
-                                @Html.LabelFor(model => model.Religion)
-                                @Html.ValidationMessageFor(model => model.Religion)
-                            </td>
-
-                            <td>
-                                @Html.EnumDropDownListFor(model => model.Religion, htmlAttributes: new { @class = "form-control" })
-                            </td>
-                        </tr>
-
-                        <tr>
-                            <td class="col-form-label">
-                                @Html.LabelFor(model => model.StateTerritoryID) 
-                                <p>Region </p>
-                            </td>
-                            <td>
-                                @Html.DropDownList("StateTerritoryID", null, htmlAttributes: new { @class = "form-control" })
-                                @Html.ValidationMessageFor(model => model.StateTerritory)
-                               <div id="Region">
-
-                                </div>
-                            </td>
-                            <td class="col-form-label"> @Html.LabelFor(model => model.ServiceBranch, htmlAttributes: new { @class = "control-label" })</td>
-                            <td>
-                                @Html.EnumDropDownListFor(model => model.ServiceBranch, htmlAttributes: new { @class = "form-control" })
-                                @Html.ValidationMessageFor(model => model.ServiceBranch, "")
-                            </td>
-                        </tr>
-                        <tr>
-                            
-                            <td class="col-form-label"> @Html.Label("Room", htmlAttributes: new { @class = "control-label col-md-offset-3" })</td>
+                            <td class="col-form-label"> @Html.Label("Room", htmlAttributes: new { @class = "control-label" })</td>
                             <td>
                                 @Html.DropDownList("RoomNumber", null, htmlAttributes: new { @class = "form-control" })
                                 @Html.ValidationMessageFor(model => model.RoomNumber, "")
                             </td>
                         </tr>
                         <tr>
-                            <td class="col-form-label">@Html.Label("in Veteran's Court?", htmlAttributes: new { @class = "control-label col-sm-offset-10" })</td>
+                            <td class="col-form-label">@Html.Label("in Veteran's Court?", htmlAttributes: new { @class = "control-label" })</td>
                             <td>
                                 @Html.EditorFor(model => model.InVetCourt)
-                                @Html.ValidationMessageFor(model => model.InVetCourt, "", new { @class = "text-danger" })
+                                @Html.ValidationMessageFor(model => model.InVetCourt, "")
                             </td>
                         </tr>
                         <tr>
                             <td class="col-form-label">
-                                @Html.LabelFor(model => model.IsNoncombat, htmlAttributes: new { @class = "control-label col-md-offset-3" })
-                                
-                                @Html.Label("Campaigns", htmlAttributes: new { @class = "control-label col-md-offset-3" })
+                                @Html.LabelFor(model => model.IsNoncombat, htmlAttributes: new { @class = "control-label" })
+                                <br />
+                                @Html.Label("Campaigns", htmlAttributes: new { @class = "control-label" })
 
 
 
                             </td>
-                           
-                            
-                                
-                            
+
 
                             <td>
                                 @Html.EditorFor(model => model.IsNoncombat)
-                                @Html.ValidationMessageFor(model => model.IsNoncombat, "", new { @class = "text-danger" })
-                                <br />
-                                <div class="form-check" style="height: 100px; overflow-y: scroll;">
+                                @Html.ValidationMessageFor(model => model.IsNoncombat, "")
+
+                                <div class="form-check" style="height: 100px; overflow-y: scroll; margin-top: 10px;">
+
                                     @{
-            List<FIVESTARVC.ViewModels.AssignedCampaignData> campaigns = ViewBag.Campaigns;
+                                        List<FIVESTARVC.ViewModels.AssignedCampaignData> campaigns = ViewBag.Campaigns;
 
-            foreach (var campaign in campaigns)
-            {
+                                        foreach (var campaign in campaigns)
+                                        {
 
-                            @:
+                                            @:
 
 
-                            <input type="checkbox"
-                                   class="form-check-input campaign"
-                                   name="selectedCampaigns"
-                                   value="@campaign.MilitaryCampaignID"
-                                   @(Html.Raw(campaign.Assigned ? "checked=\"checked\"" : "")) />
-                            @campaign.MilitaryCampaign @:<br />
-}
+
+
+
+
+
+
+                                            <input type="checkbox"
+                                                   class="form-check-input campaign"
+                                                   name="selectedCampaigns"
+                                                   value="@campaign.MilitaryCampaignID"
+                                                   @(Html.Raw(campaign.Assigned ? "checked=\"checked\"" : "")) />
+                                            @campaign.MilitaryCampaign @:<br />
+                                        }
 
                                     }
                                 </div>
                             </td>
                         </tr>
                         <tr>
-                            <td class="col-form-label">@Html.Label("Admission type")</td>
+                            <td class="col-form-label">@Html.Label("Admission type", htmlAttributes: new { @class = "control-label" })</td>
                             <td>
                                 @Html.DropDownList("AdmissionType", null, htmlAttributes: new { @class = "form-control" })
                             </td>
                         </tr>
                         <tr>
-                            <td class="col-form-label">@Html.LabelFor(model => model.Note, htmlAttributes: new { @class = "control-label col-md-offset-3" }) </td>
+                            <td class="col-form-label">@Html.LabelFor(model => model.Note, htmlAttributes: new { @class = "control-label" }) </td>
                             <td>
                                 @Html.TextAreaFor(model => model.Note, htmlAttributes: new { @class = "form-control" })
                                 @Html.ValidationMessageFor(model => model.Note, "")
@@ -163,12 +185,12 @@
                     </tbody>
                 </table>
 
-            
-        </div>
-        @Html.Partial("BenefitPartialViewCreate")
+
+            </div>
+            @Html.Partial("BenefitPartialViewCreate")
 
         </div>
-
+    </div>
 
     <br />
     <p>
@@ -178,7 +200,7 @@
         @Html.ActionLink("Back to List", "Index", null, htmlAttributes: new { @class = "btn btn-secondary" })
 
     </p>
-           
+
 
 }
 
@@ -186,7 +208,7 @@
     @Scripts.Render("~/bundles/jqueryval")
     @Scripts.Render("~/bundles/jqueryui")
 
-<script type="text/javascript">
+    <script type="text/javascript">
 
     if (!Modernizr.inputtypes.date) {
         $('input[type=date]')
@@ -209,7 +231,7 @@
             if ($(this).is(":checked")) {
                 $(".campaign").prop('checked', false);
                 $(".campaign").attr("disabled", true);
-                
+
             } else {
                 $(".campaign").attr("disabled", false);
             }
@@ -224,7 +246,7 @@
             }
         });
 
-       
+
 
     });
 
@@ -254,7 +276,7 @@
             });
 
         });
-    
+
 
         $('.DropDownClear').on("onload", function () {
             document.getElementById('RoomID').length = 0;
@@ -264,7 +286,7 @@
         });
 
             //Clear the rooms dropdown
-        
+
         function roomsort() {
             //Call the GET method again and run the query
             //By calling it now, you ensure the Rooms
@@ -278,6 +300,6 @@
             });
         }
 
-        
-</script>
+
+    </script>
 }
