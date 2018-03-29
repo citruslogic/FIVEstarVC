@@ -169,10 +169,14 @@ namespace FIVESTARVC.Controllers
             //double average = 0;
             //double days = 0;
 
-            var residents = DB.Residents.Include(p => p.ProgramEvents).ToList();
+            var residents = DB.Residents.ToList();
 
             foreach (Resident resident in residents)
             {
+                if (resident.IsCurrent())
+                {
+                    continue;
+                }
                 total += resident.DaysInCenter();
             }
 
