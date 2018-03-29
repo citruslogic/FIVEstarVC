@@ -118,10 +118,13 @@
                     <div class="col-md-5">
                         <table class="table-sm">
                             <tbody>
+                                @if (!Model.IsCurrent())
+                                {
                                 <tr>
                                     <td class="col-form-label">@Html.Label("Readmit?")</td>
                                     <td>@Html.CheckBox("Readmit")</td>
-                                    </tr>
+                                </tr> 
+                                }
                                 <tr>
                                     <td class="col-form-label"> @Html.Label("Room", htmlAttributes: new { @class = "control-label" })</td>
                                     <td>
@@ -237,6 +240,7 @@
 
                     $(document).ready(function () {
 
+                        
 
                         if (document.getElementById("Benefit_TotalBenefitAmount").value) {
                             document.getElementById("DisplayTotal").value = parseFloat(document.getElementById("Benefit_TotalBenefitAmount").value);
@@ -302,6 +306,12 @@
                         }
 
                     });
+
+                    
+                    
+                    
+
+                    
 
 
 
