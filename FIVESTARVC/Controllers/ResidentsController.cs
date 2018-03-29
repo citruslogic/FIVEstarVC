@@ -204,12 +204,22 @@ namespace FIVESTARVC.Controllers
 
             };
 
+            
+                Benefit benefit = new Benefit
+            {
+                DisabilityPercentage = residentIncomeModel.DisabilityPercentage / 100,
+                SSI = residentIncomeModel.SSI,
+                SSDI = residentIncomeModel.SSDI,
+                FoodStamp = residentIncomeModel.FoodStamp,
+                OtherDescription = residentIncomeModel.OtherDescription,
+                Other = residentIncomeModel.Other,
+                TotalBenefitAmount = residentIncomeModel.TotalBenefitAmount
+            };
+
             try
             {
                 if (ModelState.IsValid)
                 {
-
-                    
                     db.Residents.Add(resident);
                     resident.ProgramEvents.Add(new ProgramEvent
                     {
@@ -225,45 +235,9 @@ namespace FIVESTARVC.Controllers
                         room.IsOccupied = true;
                     }
 
-                    db.SaveChanges();
-
-                }
-
-
-            }
-            catch (DbEntityValidationException e)
-            {
-                foreach (var eve in e.EntityValidationErrors)
-                {
-                    Console.WriteLine("Entity of type \"{0}\" in state \"{1}\" has the following validation errors:",
-                        eve.Entry.Entity.GetType().Name, eve.Entry.State);
-                    foreach (var ve in eve.ValidationErrors)
-                    {
-                        Console.WriteLine("- Property: \"{0}\", Error: \"{1}\"",
-                            ve.PropertyName, ve.ErrorMessage);
-                    }
-                }
-                
-
-            }
-
-                Benefit benefit = new Benefit
-            {
-                DisabilityPercentage = residentIncomeModel.DisabilityPercentage,
-                SSI = residentIncomeModel.SSI,
-                SSDI = residentIncomeModel.SSDI,
-                FoodStamp = residentIncomeModel.FoodStamp,
-                OtherDescription = residentIncomeModel.OtherDescription,
-                Other = residentIncomeModel.Other,
-                TotalBenefitAmount = residentIncomeModel.TotalBenefitAmount
-            };
-
-            try
-            {
-                if (ModelState.IsValid)
-                {
                     db.Benefits.Add(benefit);
                     resident.Benefit = benefit;
+
                     db.SaveChanges();
 
                 }
@@ -404,19 +378,24 @@ namespace FIVESTARVC.Controllers
                     {
                         Room room = db.Rooms.Find(RoomNumber);
 
-                        if (residentToUpdate.RoomNumber != RoomNumber)
+                        if (residentToUpdate.Room.RoomNumber != RoomNumber)
                         {
                             /* Resident is changing rooms, if they have one */
                             if (residentToUpdate.Room != null)
                             {
                                 residentToUpdate.Room.IsOccupied = false;
+                                residentToUpdate.RoomNumber = RoomNumber;
+
+                                room.IsOccupied = true;
                             }
                             
-                            residentToUpdate.RoomNumber = RoomNumber;
-                            room.IsOccupied = true;
+
                         }
 
-                    } 
+                    }
+
+                    /* Using fractional as a percentage. */
+                    residentToUpdate.Benefit.DisabilityPercentage = residentToUpdate.Benefit.DisabilityPercentage / 100;
                     db.SaveChanges();
 
                     TempData["UserMessage"] = residentToUpdate.ClearLastName + " has been updated.  ";
