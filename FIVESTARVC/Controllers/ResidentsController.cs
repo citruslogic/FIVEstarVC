@@ -207,7 +207,7 @@ namespace FIVESTARVC.Controllers
             
                 Benefit benefit = new Benefit
             {
-                DisabilityPercentage = residentIncomeModel.DisabilityPercentage,
+                DisabilityPercentage = residentIncomeModel.DisabilityPercentage / 100,
                 SSI = residentIncomeModel.SSI,
                 SSDI = residentIncomeModel.SSDI,
                 FoodStamp = residentIncomeModel.FoodStamp,
@@ -390,7 +390,10 @@ namespace FIVESTARVC.Controllers
                             room.IsOccupied = true;
                         }
 
-                    } 
+                    }
+
+                    /* Using fractional as a percentage. */
+                    residentToUpdate.Benefit.DisabilityPercentage = residentToUpdate.Benefit.DisabilityPercentage / 100;
                     db.SaveChanges();
 
                     TempData["UserMessage"] = residentToUpdate.ClearLastName + " has been updated.  ";

@@ -27,7 +27,7 @@ namespace FIVESTARVC.Controllers
             ViewBag.ProgramTypeID = new SelectList(db.ProgramTypes, "ProgramTypeID", "ProgramDescription");
 
 
-            var programEvents = db.ProgramEvents.Include(p => p.ProgramType).Include(p => p.Resident).ToList();
+            var programEvents = db.ProgramEvents.Include(p => p.ProgramType).Where(t => t.ProgramTypeID >= 8).Include(p => p.Resident).ToList();
 
             if (searchString != null)
             {
@@ -86,7 +86,7 @@ namespace FIVESTARVC.Controllers
         // GET: ProgramEvents/Create
         public ActionResult Create()
         {
-            ViewBag.ProgramTypeID = new SelectList(db.ProgramTypes, "ProgramTypeID", "ProgramDescription");
+            ViewBag.ProgramTypeID = new SelectList(db.ProgramTypes.Where(t => t.ProgramTypeID >= 8), "ProgramTypeID", "ProgramDescription");
             ViewBag.ResidentID = new SelectList(db.Residents, "ResidentID", "ClearLastName");
             return View();
         }
@@ -113,7 +113,7 @@ namespace FIVESTARVC.Controllers
                 return RedirectToAction("Index");
             }
 
-            ViewBag.ProgramTypeID = new SelectList(db.ProgramTypes, "ProgramTypeID", "ProgramDescription", programEvent.ProgramTypeID);
+            ViewBag.ProgramTypeID = new SelectList(db.ProgramTypes.Where(t => t.ProgramTypeID >= 8), "ProgramTypeID", "ProgramDescription", programEvent.ProgramTypeID);
             ViewBag.ResidentID = new SelectList(db.Residents, "ResidentID", "ClearLastName", programEvent.ResidentID);
             return View(programEvent);
         }
@@ -130,7 +130,7 @@ namespace FIVESTARVC.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.ProgramTypeID = new SelectList(db.ProgramTypes, "ProgramTypeID", "ProgramDescription", programEvent.ProgramTypeID);
+            ViewBag.ProgramTypeID = new SelectList(db.ProgramTypes.Where(t => t.ProgramTypeID >= 8), "ProgramTypeID", "ProgramDescription", programEvent.ProgramTypeID);
             ViewBag.ResidentID = new SelectList(db.Residents, "ResidentID", "ClearLastName", programEvent.ResidentID);
             return View(programEvent);
         }
@@ -161,7 +161,7 @@ namespace FIVESTARVC.Controllers
                     return RedirectToAction("Index");
                 }
             }
-            ViewBag.ProgramTypeID = new SelectList(db.ProgramTypes, "ProgramTypeID", "ProgramDescription", db.ProgramTypes);
+            ViewBag.ProgramTypeID = new SelectList(db.ProgramTypes.Where(t => t.ProgramTypeID >= 8), "ProgramTypeID", "ProgramDescription", db.ProgramTypes);
             ViewBag.ResidentID = new SelectList(db.Residents, "ResidentID", "ClearLastName", db.Residents);
             return View(eventToUpdate);
         }
