@@ -378,16 +378,18 @@ namespace FIVESTARVC.Controllers
                     {
                         Room room = db.Rooms.Find(RoomNumber);
 
-                        if (residentToUpdate.RoomNumber != RoomNumber)
+                        if (residentToUpdate.Room.RoomNumber != RoomNumber)
                         {
                             /* Resident is changing rooms, if they have one */
                             if (residentToUpdate.Room != null)
                             {
                                 residentToUpdate.Room.IsOccupied = false;
+                                residentToUpdate.RoomNumber = RoomNumber;
+
+                                room.IsOccupied = true;
                             }
                             
-                            residentToUpdate.RoomNumber = RoomNumber;
-                            room.IsOccupied = true;
+
                         }
 
                     }
