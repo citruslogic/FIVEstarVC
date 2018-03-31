@@ -181,7 +181,16 @@ namespace FIVESTARVC.Controllers
                 total += resident.DaysInCenter();
             }
 
-            ViewBag.AvgStay = total / numbCount;
+            /* Scenario is unlikely but possible. Thanks David! */
+            if (numbCount == 0)
+            {
+                ViewBag.AvgStay = "No current residents";
+
+            } else
+            {
+                ViewBag.AvgStay = total / numbCount;
+
+            }
             /*
              * (p => p.ProgramTypeID == 4 || item.ProgramTypeID == 5 || item.ProgramTypeID == 6 || item.ProgramTypeID == 7) 
             //Discharge or graduation events
