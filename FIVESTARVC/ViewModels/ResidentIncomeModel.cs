@@ -64,9 +64,8 @@ namespace FIVESTARVC.ViewModels
         public int BenefitID { get; set; }
 
         [Display(Name = "Disability Rating")]
-        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:#}")]
-        [Range(0, 100, ErrorMessage = "Disability rating must be a minimum of 0 and cannot exceed 100.")]
-        public double? DisabilityPercentage { get; set; }
+        [RegularExpression(@"(^100(\.0{1,2})?%$)|(^([1-9]([0-9])?|0)(\.[0-9]{1,2})?%$)", ErrorMessage = "Percentage only, minimum 0 and maximum 100.")]
+        public string DisabilityPercentage { get; set; }
 
         [DataType(DataType.Currency)]
         [Column(TypeName = "money")]
