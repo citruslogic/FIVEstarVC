@@ -487,7 +487,7 @@ namespace FIVESTARVC.Controllers
 
             var Query = (from y in events
                          where y.ProgramTypeID == 4
-                         group y by y.ClearStartDate.Computed().Year into typeGroup
+                         group y by y.ClearStartDate.Year into typeGroup
                          select new
                          {
                              StartDate = typeGroup.Key,
@@ -512,7 +512,7 @@ namespace FIVESTARVC.Controllers
 
             var Query = (from y in events
                          where y.ProgramTypeID == 4
-                         group y by y.ClearStartDate.Computed().Year into typeGroup
+                         group y by y.ClearStartDate.Year into typeGroup
                          select new
                          {
                              StartDate = typeGroup.Key,
@@ -537,7 +537,7 @@ namespace FIVESTARVC.Controllers
 
             var gradQuery = (from y in events
                              where y.ProgramTypeID == 2
-                             group y by y.ClearStartDate.Computed().Year into typeGroup
+                             group y by y.ClearStartDate.Year into typeGroup
                              select new
                              {
                                  StartDate = typeGroup.Key,
@@ -562,7 +562,7 @@ namespace FIVESTARVC.Controllers
 
             var gradQuery = (from y in events
                              where y.ProgramTypeID == 2
-                             group y by y.ClearStartDate.Computed().Year into typeGroup
+                             group y by y.ClearStartDate.Year into typeGroup
                              select new
                              {
                                  StartDate = typeGroup.Key,
@@ -587,7 +587,7 @@ namespace FIVESTARVC.Controllers
 
             var Query = (from y in events
                          where y.ProgramTypeID == 3
-                         group y by y.ClearStartDate.Computed().Year into typeGroup
+                         group y by y.ClearStartDate.Year into typeGroup
                          select new
                          {
                              StartDate = typeGroup.Key,
@@ -612,7 +612,7 @@ namespace FIVESTARVC.Controllers
 
             var Query = (from y in events
                          where y.ProgramTypeID == 3
-                         group y by y.ClearStartDate.Computed().Year into typeGroup
+                         group y by y.ClearStartDate.Year into typeGroup
                          select new
                          {
                              StartDate = typeGroup.Key,
@@ -639,7 +639,7 @@ namespace FIVESTARVC.Controllers
 
             var gradQuery = (from y in events
                              where y.ProgramTypeID == 10
-                             group y by y.ClearStartDate.Computed().Year into typeGroup
+                             group y by y.ClearStartDate.Year into typeGroup
                              select new
                              {
                                  StartDate = typeGroup.Key,
@@ -665,7 +665,7 @@ namespace FIVESTARVC.Controllers
 
             var gradQuery = (from y in events
                              where y.ProgramTypeID == 10
-                             group y by y.ClearStartDate.Computed().Year into typeGroup
+                             group y by y.ClearStartDate.Year into typeGroup
                              select new
                              {
                                  StartDate = typeGroup.Key,
@@ -691,7 +691,7 @@ namespace FIVESTARVC.Controllers
 
             var Query = (from y in events
                          where y.ProgramTypeID == 1
-                         group y by y.ClearStartDate.Computed().Year into typeGroup
+                         group y by y.ClearStartDate.Year into typeGroup
                          select new
                          {
                              StartDate = typeGroup.Key,
@@ -716,7 +716,7 @@ namespace FIVESTARVC.Controllers
 
             var Query = (from y in events
                          where y.ProgramTypeID == 1
-                         group y by y.ClearStartDate.Computed().Year into typeGroup
+                         group y by y.ClearStartDate.Year into typeGroup
                          select new
                          {
                              StartDate = typeGroup.Key,
@@ -741,7 +741,7 @@ namespace FIVESTARVC.Controllers
 
             var Query = (from y in events
                          where y.ProgramTypeID == 5 || y.ProgramTypeID == 6 || y.ProgramTypeID == 7
-                         group y by y.ClearStartDate.Computed().Year into typeGroup
+                         group y by y.ClearStartDate.Year into typeGroup
                          select new
                          {
                              StartDate = typeGroup.Key,
@@ -766,7 +766,7 @@ namespace FIVESTARVC.Controllers
 
             var Query = (from y in events
                          where y.ProgramTypeID == 5 || y.ProgramTypeID == 6 || y.ProgramTypeID == 7
-                         group y by y.ClearStartDate.Computed().Year into typeGroup
+                         group y by y.ClearStartDate.Year into typeGroup
                          select new
                          {
                              StartDate = typeGroup.Key,
@@ -791,7 +791,7 @@ namespace FIVESTARVC.Controllers
             var queryResults = (from y in events
                                 join resident in DB.Residents on y.ResidentID equals resident.ResidentID
                                 where y.ProgramTypeID == 2 || y.ProgramTypeID == 1 || y.ProgramTypeID == 3 && resident.InVetCourt.Equals(true)
-                                group y by y.ClearStartDate.Computed().Year into typeGroup
+                                group y by y.ClearStartDate.Year into typeGroup
                                 select new
                                 {
                                     VetCourt = typeGroup.Count(),
@@ -817,7 +817,7 @@ namespace FIVESTARVC.Controllers
             var queryResults = (from y in events
                                 join resident in DB.Residents on y.ResidentID equals resident.ResidentID
                                 where y.ProgramTypeID == 2 || y.ProgramTypeID == 1 || y.ProgramTypeID == 3 && resident.InVetCourt.Equals(true)
-                                group y by y.ClearStartDate.Computed().Year into typeGroup
+                                group y by y.ClearStartDate.Year into typeGroup
                                 select new
                                 {
                                     VetCourt = typeGroup.Count(),
