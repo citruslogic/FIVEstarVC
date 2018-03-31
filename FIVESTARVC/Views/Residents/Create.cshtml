@@ -200,7 +200,7 @@
     <br />
     <p>
 
-        <input type="submit" value="Admit" class="btn btn-primary" />
+        <input type="submit" value="Admit" class="btn btn-primary" data-confirm="Are you sure you want to submit this application?" />
 
         @Html.ActionLink("Back to List", "Index", null, htmlAttributes: new { @class = "btn btn-secondary" })
 
@@ -282,6 +282,13 @@
 
         });
 
+        jQuery(document).ready(function () {
+            jQuery('[data-confirm]').click(function (e) {
+                if (!confirm(jQuery(this).attr("data-confirm"))) {
+                    e.preventDefault();
+                }
+            });
+        });
 
         $('.DropDownClear').on("onload", function () {
             document.getElementById('RoomID').length = 0;
