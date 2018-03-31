@@ -51,11 +51,8 @@
             </td>
             <td>
                 @Html.ActionLink("Edit", "Edit", new { id = item.RoomNumber }) |
-                @Html.ActionLink("Details", "Details", new { id = item.RoomNumber })
-
-                @*Commented out for security reasons.*@
-                @*|
-                    @Html.ActionLink("Delete", "Delete", new { id=item.RoomID })*@
+                @Html.ActionLink("Details", "Details", new { id = item.RoomNumber }) |
+                @Html.ActionLink("Delete", "Delete", new { id=item.RoomNumber })
             </td>
         </tr>
     }
