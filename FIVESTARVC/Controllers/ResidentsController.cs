@@ -41,15 +41,15 @@ namespace FIVESTARVC.Controllers
             ViewBag.CurrentFilter = searchString;
 
             var residents = (from s in db.Residents
-                            select s).ToList();
+                             select s).ToList();
 
 
 
 
             if (!String.IsNullOrEmpty(searchString))
             {
-                    residents = residents.Where(s => s.ClearLastName.Computed().Contains(searchString)
-                                       || s.FirstMidName.Contains(searchString)).ToList();
+                residents = residents.Where(s => s.ClearLastName.Computed().Contains(searchString)
+                                   || s.FirstMidName.Contains(searchString)).ToList();
             }
 
             switch (sortOrder)
@@ -94,7 +94,7 @@ namespace FIVESTARVC.Controllers
 
                 ViewBag.room = roomNum;
             }
-            
+
             else
             {
                 ViewBag.room = "No Room Assigned";
@@ -156,7 +156,7 @@ namespace FIVESTARVC.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(ResidentIncomeModel residentIncomeModel, string[] selectedCampaigns, 
+        public ActionResult Create(ResidentIncomeModel residentIncomeModel, string[] selectedCampaigns,
             int AdmissionType, int RoomNumber)
         {
             TempData["Duplicate"] = null;
@@ -204,8 +204,8 @@ namespace FIVESTARVC.Controllers
 
             };
 
-            
-                Benefit benefit = new Benefit
+
+            Benefit benefit = new Benefit
             {
                 DisabilityPercentage = residentIncomeModel.DisabilityPercentage,
                 SSI = residentIncomeModel.SSI,
@@ -250,7 +250,7 @@ namespace FIVESTARVC.Controllers
                 ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
             }
 
-           
+
 
 
 
@@ -263,8 +263,8 @@ namespace FIVESTARVC.Controllers
 
                     UpdateResidentCampaigns(selectedCampaigns, resident);
                     db.SaveChanges();
-                   
-                    
+
+
 
                     TempData["UserMessage"] = residentIncomeModel.LastName + " has been admitted into your center.  ";
 
@@ -292,9 +292,9 @@ namespace FIVESTARVC.Controllers
             {
 
                 // Found a match.
-                
+
             }
-            
+
             return RedirectToAction("Create");
         }
 
@@ -317,13 +317,13 @@ namespace FIVESTARVC.Controllers
 
             PopulateAssignedCampaignData(resident);
 
-            
+
             if (resident == null)
             {
                 return HttpNotFound();
             }
 
-            ViewBag.RoomNumber = new SelectList(db.Rooms.Where(rm => rm.IsOccupied == false 
+            ViewBag.RoomNumber = new SelectList(db.Rooms.Where(rm => rm.IsOccupied == false
             || rm.RoomNumber == resident.RoomNumber), "RoomNumber", "RoomNumber", resident.RoomNumber.GetValueOrDefault().ToString());
             ViewBag.StateTerritoryID = new SelectList(db.States, "StateTerritoryID", "State", resident.StateTerritoryID);
 
@@ -378,19 +378,26 @@ namespace FIVESTARVC.Controllers
                     {
                         Room room = db.Rooms.Find(RoomNumber);
 
-                        if (residentToUpdate.Room.RoomNumber != RoomNumber)
+                        if (residentToUpdate.Room != null)
                         {
-                            /* Resident is changing rooms, if they have one */
-                            if (residentToUpdate.Room != null)
+                            if (residentToUpdate.Room.RoomNumber != RoomNumber)
                             {
-                                residentToUpdate.Room.IsOccupied = false;
-                                residentToUpdate.RoomNumber = RoomNumber;
+                                /* Resident is changing rooms, if they have one */
+                                if (residentToUpdate.Room != null)
+                                {
+                                    residentToUpdate.Room.IsOccupied = false;
+                                    residentToUpdate.RoomNumber = RoomNumber;
 
-                                room.IsOccupied = true;
+                                    room.IsOccupied = true;
+                                }
+
+
                             }
-                            
-
+                        } else
+                        {
+                            residentToUpdate.Room = room;
                         }
+
 
                     }
 
@@ -411,7 +418,7 @@ namespace FIVESTARVC.Controllers
             ViewBag.StateTerritoryID = new SelectList(db.States, "StateTerritoryID", "State", residentToUpdate.StateTerritoryID);
 
             PopulateAssignedCampaignData(residentToUpdate);
-            
+
             return View(residentToUpdate);
         }
 
@@ -481,16 +488,17 @@ namespace FIVESTARVC.Controllers
         public ActionResult AddCampaign(MilitaryCampaign model)
         {
 
-            
+
             if (ModelState.IsValid)
             {
-                db.MilitaryCampaigns.Add(model);              
+                db.MilitaryCampaigns.Add(model);
                 db.SaveChanges();
                 TempData["UserMessage"] = "A new campaign has been added.  ";
 
                 return RedirectToAction("Index");
 
-            } else
+            }
+            else
             {
                 // Failed
                 ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
@@ -503,7 +511,7 @@ namespace FIVESTARVC.Controllers
 
         // GET: Residents/Discharge/5
         [HttpGet]
-       public ActionResult Discharge(int? id, bool? saveChangesError = false)
+        public ActionResult Discharge(int? id, bool? saveChangesError = false)
         {
             if (id == null)
             {
@@ -536,8 +544,8 @@ namespace FIVESTARVC.Controllers
             }
 
             ViewBag.ProgramTypeID = new SelectList(db.ProgramTypes
-                .Where(t => t.ProgramTypeID < 8 && t.ProgramTypeID >= 4 ), "ProgramTypeID", "ProgramDescription");
-           
+                .Where(t => t.ProgramTypeID < 8 && t.ProgramTypeID >= 4), "ProgramTypeID", "ProgramDescription");
+
             return PartialView("_Discharge", residentToDischarge);
         }
 
@@ -554,14 +562,14 @@ namespace FIVESTARVC.Controllers
                 .Single();
 
                 Room roomToRelease = db.Rooms.Find(residentToDischarge.RoomNumber);
-                
+
                 // It is possible for the resident to not be assigned a room at this point.
                 if (roomToRelease != null)
                 {
                     residentToDischarge.RoomNumber = null;
                     roomToRelease.IsOccupied = false;
-                    
-                }   
+
+                }
 
 
                 residentToDischarge.ProgramEvents.Add(new ProgramEvent
@@ -585,7 +593,7 @@ namespace FIVESTARVC.Controllers
             ViewBag.ProgramTypeID = new SelectList(db.ProgramTypes
                 .Where(t => t.ProgramTypeID >= 4 && t.ProgramTypeID <= 7), "ProgramTypeID", "ProgramDescription");
 
-            
+
             return RedirectToAction("Index");
         }
 
@@ -600,7 +608,7 @@ namespace FIVESTARVC.Controllers
             ViewBag.ProgramTypeID = new SelectList(db.ProgramTypes
                 .Where(t => t.ProgramTypeID >= 8), "ProgramTypeID", "ProgramDescription");
 
- 
+
             return PartialView("_modalNewEvent");
         }
 
@@ -645,7 +653,7 @@ namespace FIVESTARVC.Controllers
             return Json(RegionName, JsonRequestBehavior.AllowGet);
         }
 
-      
+
 
     }
 }
