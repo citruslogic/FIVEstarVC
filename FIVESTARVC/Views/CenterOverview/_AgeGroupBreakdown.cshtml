@@ -7,7 +7,7 @@
     Layout = null;
 }
 
-<h4>Age Composition</h4>
+<h4>Current Age Composition</h4>
 
 <table class="table table-sm">
     <thead>
@@ -15,12 +15,12 @@
             <th>
                 Age group
             </th>
-            
+
             <th>
                 Count
             </th>
         </tr>
-   </thead>
+    </thead>
     <tbody>
         @foreach (var item in Model)
         {
@@ -34,17 +34,26 @@
             </tr>
         }
         <tr>
-            <td>
-                <strong>Total: </strong>
+            <td class="text-right">
+                <strong>Total </strong>
             </td>
             <td>
-              @ViewBag.Sum  
+                @ViewBag.Sum
+            </td>
+        </tr>
+        <tr>
+            <td class="text-right">
+                <strong>Average Age </strong>
+            </td>
+            <td>
+                @ViewBag.AverageAge
             </td>
         </tr>
 
 
+
     </tbody>
-   
-</table> 
+
+</table>
 
 
