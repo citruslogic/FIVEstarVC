@@ -1,0 +1,50 @@
+﻿@model IList<FIVESTARVC.ViewModels.AgeGroups>
+@{
+    ViewBag.Title = "AgeBreakdown";
+}
+
+@{
+    Layout = null;
+}
+
+<h4>Age Composition</h4>
+
+<table class="table table-sm">
+    <thead>
+        <tr>
+            <th>
+                Age group
+            </th>
+            
+            <th>
+                Count
+            </th>
+        </tr>
+   </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.AgeGroup)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Count)
+                </td>
+            </tr>
+        }
+        <tr>
+            <td>
+                <strong>Total: </strong>
+            </td>
+            <td>
+              @ViewBag.Sum  
+            </td>
+        </tr>
+
+
+    </tbody>
+   
+</table> 
+
+

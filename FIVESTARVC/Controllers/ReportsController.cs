@@ -155,7 +155,7 @@ namespace FIVESTARVC.Controllers
 
             ViewBag.CumulativeCount = DB.Residents.Count();
 
-            ViewBag.P2I = DB.ProgramEvents.Count(x => x.ProgramTypeID == 9);
+            ViewBag.P2I = DB.ProgramEvents.Count(x => x.ProgramTypeID == 10);
 
             ViewBag.EmergencyShelter = DB.ProgramEvents.Count(x => x.ProgramTypeID == 1);
 
@@ -165,7 +165,7 @@ namespace FIVESTARVC.Controllers
 
             //Variables to find average length of stay
             int total = 0;
-            //int numbCount = 0;
+            int numbCount = 0;
             //double average = 0;
             //double days = 0;
 
@@ -177,10 +177,11 @@ namespace FIVESTARVC.Controllers
                 {
                     continue;
                 }
+                numbCount++;
                 total += resident.DaysInCenter();
             }
 
-            ViewBag.AvgStay = total / residents.Count();
+            ViewBag.AvgStay = total / numbCount;
             /*
              * (p => p.ProgramTypeID == 4 || item.ProgramTypeID == 5 || item.ProgramTypeID == 6 || item.ProgramTypeID == 7) 
             //Discharge or graduation events
@@ -486,7 +487,7 @@ namespace FIVESTARVC.Controllers
 
             var Query = (from y in events
                          where y.ProgramTypeID == 4
-                         group y by y.ClearStartDate.Computed().Year into typeGroup
+                         group y by y.ClearStartDate.Year into typeGroup
                          select new
                          {
                              StartDate = typeGroup.Key,
@@ -511,7 +512,7 @@ namespace FIVESTARVC.Controllers
 
             var Query = (from y in events
                          where y.ProgramTypeID == 4
-                         group y by y.ClearStartDate.Computed().Year into typeGroup
+                         group y by y.ClearStartDate.Year into typeGroup
                          select new
                          {
                              StartDate = typeGroup.Key,
@@ -536,7 +537,7 @@ namespace FIVESTARVC.Controllers
 
             var gradQuery = (from y in events
                              where y.ProgramTypeID == 2
-                             group y by y.ClearStartDate.Computed().Year into typeGroup
+                             group y by y.ClearStartDate.Year into typeGroup
                              select new
                              {
                                  StartDate = typeGroup.Key,
@@ -561,7 +562,7 @@ namespace FIVESTARVC.Controllers
 
             var gradQuery = (from y in events
                              where y.ProgramTypeID == 2
-                             group y by y.ClearStartDate.Computed().Year into typeGroup
+                             group y by y.ClearStartDate.Year into typeGroup
                              select new
                              {
                                  StartDate = typeGroup.Key,
@@ -586,7 +587,7 @@ namespace FIVESTARVC.Controllers
 
             var Query = (from y in events
                          where y.ProgramTypeID == 3
-                         group y by y.ClearStartDate.Computed().Year into typeGroup
+                         group y by y.ClearStartDate.Year into typeGroup
                          select new
                          {
                              StartDate = typeGroup.Key,
@@ -611,7 +612,7 @@ namespace FIVESTARVC.Controllers
 
             var Query = (from y in events
                          where y.ProgramTypeID == 3
-                         group y by y.ClearStartDate.Computed().Year into typeGroup
+                         group y by y.ClearStartDate.Year into typeGroup
                          select new
                          {
                              StartDate = typeGroup.Key,
@@ -637,8 +638,8 @@ namespace FIVESTARVC.Controllers
             int runningTotal = 0;
 
             var gradQuery = (from y in events
-                             where y.ProgramTypeID == 9
-                             group y by y.ClearStartDate.Computed().Year into typeGroup
+                             where y.ProgramTypeID == 10
+                             group y by y.ClearStartDate.Year into typeGroup
                              select new
                              {
                                  StartDate = typeGroup.Key,
@@ -663,8 +664,8 @@ namespace FIVESTARVC.Controllers
             int runningTotal = 0;
 
             var gradQuery = (from y in events
-                             where y.ProgramTypeID == 9
-                             group y by y.ClearStartDate.Computed().Year into typeGroup
+                             where y.ProgramTypeID == 10
+                             group y by y.ClearStartDate.Year into typeGroup
                              select new
                              {
                                  StartDate = typeGroup.Key,
@@ -690,7 +691,7 @@ namespace FIVESTARVC.Controllers
 
             var Query = (from y in events
                          where y.ProgramTypeID == 1
-                         group y by y.ClearStartDate.Computed().Year into typeGroup
+                         group y by y.ClearStartDate.Year into typeGroup
                          select new
                          {
                              StartDate = typeGroup.Key,
@@ -715,7 +716,7 @@ namespace FIVESTARVC.Controllers
 
             var Query = (from y in events
                          where y.ProgramTypeID == 1
-                         group y by y.ClearStartDate.Computed().Year into typeGroup
+                         group y by y.ClearStartDate.Year into typeGroup
                          select new
                          {
                              StartDate = typeGroup.Key,
@@ -740,7 +741,7 @@ namespace FIVESTARVC.Controllers
 
             var Query = (from y in events
                          where y.ProgramTypeID == 5 || y.ProgramTypeID == 6 || y.ProgramTypeID == 7
-                         group y by y.ClearStartDate.Computed().Year into typeGroup
+                         group y by y.ClearStartDate.Year into typeGroup
                          select new
                          {
                              StartDate = typeGroup.Key,
@@ -765,7 +766,7 @@ namespace FIVESTARVC.Controllers
 
             var Query = (from y in events
                          where y.ProgramTypeID == 5 || y.ProgramTypeID == 6 || y.ProgramTypeID == 7
-                         group y by y.ClearStartDate.Computed().Year into typeGroup
+                         group y by y.ClearStartDate.Year into typeGroup
                          select new
                          {
                              StartDate = typeGroup.Key,
@@ -790,7 +791,7 @@ namespace FIVESTARVC.Controllers
             var queryResults = (from y in events
                                 join resident in DB.Residents on y.ResidentID equals resident.ResidentID
                                 where y.ProgramTypeID == 2 || y.ProgramTypeID == 1 || y.ProgramTypeID == 3 && resident.InVetCourt.Equals(true)
-                                group y by y.ClearStartDate.Computed().Year into typeGroup
+                                group y by y.ClearStartDate.Year into typeGroup
                                 select new
                                 {
                                     VetCourt = typeGroup.Count(),
@@ -816,7 +817,7 @@ namespace FIVESTARVC.Controllers
             var queryResults = (from y in events
                                 join resident in DB.Residents on y.ResidentID equals resident.ResidentID
                                 where y.ProgramTypeID == 2 || y.ProgramTypeID == 1 || y.ProgramTypeID == 3 && resident.InVetCourt.Equals(true)
-                                group y by y.ClearStartDate.Computed().Year into typeGroup
+                                group y by y.ClearStartDate.Year into typeGroup
                                 select new
                                 {
                                     VetCourt = typeGroup.Count(),
@@ -838,7 +839,6 @@ namespace FIVESTARVC.Controllers
         public ActionResult DownloadData()
         {
             var residents = DB.Residents;
-            var programs = DB.ProgramTypes;
 
             var residentProgramType = DB.Residents.Include(p => p.ProgramEvents).ToList()
                 .Select(r => new ReportingResidentViewModel
@@ -875,72 +875,59 @@ namespace FIVESTARVC.Controllers
 
                 var eventids = r.SelectMany(i => i.ProgramTypeID).ToList();
 
-                /* (from Resident in DB.Residents
-                           where Resident.ServiceBranch == ServiceType.COASTGUARD
-                           select Resident).ToList();
+                /* These Event IDs have changed, and the order of the columns 
+                 * may not be what is expected.
+                 * See CenterInitializer.cs for the ProgramTypeID order. 
+                 * - Frank Butler
                  */
                 foreach (var eid in eventids)
                 {
-                    int eventID = eid;
-
-                    var prgm = (from p in DB.ProgramTypes
-                                          where p.ProgramTypeID == eventID
-                                          select p.ProgramDescription).ToArray();
-
-                    int testVar = 1;
-
-                    if (prgm.Length < testVar )
+                    switch (eid)
                     {
-                        break;
+                        case 1:
+                            myExport["Emergency Shelter"] = "1";
+                            break;
+                        case 2:
+                            myExport["Resident Admission"] = "1";
+                            break;
+                        case 3:
+                            myExport["Re-admit"] = "1";
+                            break;
+                        case 4:
+                            myExport["Resident Graduation"] = "1";
+                            break;
+                        case 5:
+                            myExport["Self Discharge"] = "1";
+                            break;
+                        case 6:
+                            myExport["Discharge for Cause"] = "1";
+                            break;
+                        case 8:
+                            myExport["Work Program"] = "1";
+                            break;
+                        case 9:
+                            myExport["Mental Wellness"] = "1";
+                            break;
+                        case 10:
+                            myExport["P2I"] = "1";
+                            break;
+                        case 11:
+                            myExport["School Program"] = "1";
+                            break;
+                        case 12:
+                            myExport["Financial Program"] = "1";
+                            break;
+                        case 13:
+                            myExport["Depression / Behavioral Program"] = "1";
+                            break;
+                        case 14:
+                            myExport["Substance Abuse Program"] = "1";
+                            break;
+                        default:
+                            //do something
+                            break;
+
                     }
-
-                    String programName = prgm[0];
-
-
-                    myExport[programName.ToString()] = "1";
-                    //switch (eid)
-                    //{
-                    //    case 1:
-                    //        myExport["Emergency Shelter"] = "1";
-                    //        break;
-                    //    case 2:
-                    //        myExport["Resident Admission"] = "1";
-                    //        break;
-                    //    case 3:
-                    //        myExport["Re-admit"] = "1";
-                    //        break;
-                    //    case 4:
-                    //        myExport["Resident Graduation"] = "1";
-                    //        break;
-                    //    case 5:
-                    //        myExport["Self Discharge"] = "1";
-                    //        break;
-                    //    case 6:
-                    //        myExport["Discharge for Cause"] = "1";
-                    //        break;
-                    //    case 7:
-                    //        myExport["Higher Level of Care"] = "1";
-                    //        break;
-                    //    case 8:
-                    //        myExport["Work Program"] = "1";
-                    //        break;
-                    //    case 9:
-                    //        myExport["P2I"] = "1";
-                    //        break;
-                    //    case 10:
-                    //        myExport["School Program"] = "1";
-                    //        break;
-                    //    case 11:
-                    //        myExport["Financial Program"] = "1";
-                    //        break;
-                    //    case 12:
-                    //        myExport["Substance Abuse Program"] = "1";
-                    //        break;
-                    //    default:
-                    //        //do something
-                    //        break;
-
-                //}
                 }
 
             }
