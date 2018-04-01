@@ -8,23 +8,34 @@
 }
 
 <h2>Center Summary</h2>
+<div>
+    <p>
+        <strong>Cumulative Residents: </strong> @ViewBag.CumulativeCount,
+        <strong>Current Residents: </strong> @ViewBag.TotalCount,
+        <strong>Total Graduated: </strong> @ViewBag.Graduated
+    </p>
+
+</div>
 <hr />
+<div class="btn-group-sm">
+    @Html.ActionLink("Download Data", "DownloadData", null, htmlAttributes: new { @class = "btn btn-primary" })
 
-<button class="btn btn-default" onclick="location.href='/Reports/Historic';" style="background-color: lightsteelblue"> Historic Chart </button>
-<button class="btn btn-default" onclick="location.href='/Reports/CumulativeHistoric';" style="background-color: lightsteelblue"> Cumulative Historic Chart </button>
-<button class="btn btn-default" onclick="location.href='/Reports/campaigns';" style="background-color: lightsteelblue"> Campaign Data Chart </button>
+    <button class="btn btn-default" onclick="location.href='/Reports/Historic';" style="background-color: lightsteelblue"> Historic Chart </button>
+    <button class="btn btn-default" onclick="location.href='/Reports/CumulativeHistoric';" style="background-color: lightsteelblue"> Cumulative Historic Chart </button>
+    <button class="btn btn-default" onclick="location.href='/Reports/campaigns';" style="background-color: lightsteelblue"> Campaign Data Chart </button>
 
-<br>
-<br>
-<h4>Cumulative Residents: @Html.Raw(ViewBag.CumulativeCount)</h4>
-<h4>Current Residents: @Html.Raw(ViewBag.TotalCount)</h4>
-<h4>Total Graduated: @Html.Raw(ViewBag.Graduated)</h4>
-<br>
-@Html.ActionLink("Download Data", "DownloadData")
+</div>
+
+
+
+<hr />
 
 <div class="container">
     <div class="row">
         <div class="col-md-3">
+            <div id="GenderGroups">
+
+            </div>
             <div id="AgeGroups">
 
             </div>
@@ -32,7 +43,7 @@
 
             </div>
         </div>
-        
+
 
 
         <div class="col-md-4">
@@ -40,7 +51,7 @@
             <h4>Center Performance</h4>
 
 
-            <table class="table">
+            <table class="table table-sm">
                 <tr>
                     <th style="font-weight: bold; color:dodgerblue; font-size: 110%">
                         Metric
@@ -55,12 +66,12 @@
                     </td>
                     <td>
                         @{
-                        if (ViewBag.Admitted == null)
-                        { <text>0</text> }
-                else
-                {
-                    @Html.Raw(ViewBag.Admitted)
-            }
+                            if (ViewBag.Admitted == null)
+                            { <text>0</text> }
+                        else
+                        {
+                            @Html.Raw(ViewBag.Admitted)
+                        }
                         }
                     </td>
                 </tr>
@@ -71,12 +82,12 @@
                     </td>
                     <td>
                         @{
-                        if (ViewBag.EmergencyShelter == null)
-                        { <text>0</text> }
-                else
-                {
-                    @Html.Raw(ViewBag.EmergencyShelter)
-            }
+                            if (ViewBag.EmergencyShelter == null)
+                            { <text>0</text> }
+                        else
+                        {
+                            @Html.Raw(ViewBag.EmergencyShelter)
+                        }
                         }
                     </td>
                 </tr>
@@ -86,12 +97,12 @@
                     </td>
                     <td>
                         @{
-                        if (ViewBag.DischargeCount == null)
-                        { <text>0</text> }
-                else
-                {
-                    @Html.Raw(ViewBag.DischargeCount)
-            }
+                            if (ViewBag.DischargeCount == null)
+                            { <text>0</text> }
+                        else
+                        {
+                            @Html.Raw(ViewBag.DischargeCount)
+                        }
                         }
                     </td>
                 </tr>
@@ -101,12 +112,12 @@
                     </td>
                     <td>
                         @{
-                        if (ViewBag.Graduated == null)
-                        { <text>0</text> }
-                else
-                {
-                    @Html.Raw(ViewBag.Graduated)
-            }
+                            if (ViewBag.Graduated == null)
+                            { <text>0</text> }
+                        else
+                        {
+                            @Html.Raw(ViewBag.Graduated)
+                        }
                         }
                     </td>
                 </tr>
@@ -116,12 +127,12 @@
                     </td>
                     <td>
                         @{
-                        if (ViewBag.GraduatedPercent == null)
-                        { <text>0</text> }
-                else
-                {
-                    @Html.Raw(ViewBag.GraduatedPercent)
-            }
+                            if (ViewBag.GraduatedPercent == null)
+                            { <text>0</text> }
+                        else
+                        {
+                            @Html.Raw(ViewBag.GraduatedPercent)
+                        }
                         }
                         %
                     </td>
@@ -132,12 +143,12 @@
                     </td>
                     <td>
                         @{
-                        if (ViewBag.VeteransCourt == null)
-                        { <text>0</text> }
-                else
-                {
-                    @Html.Raw(ViewBag.VeteransCourt)
-            }
+                            if (ViewBag.VeteransCourt == null)
+                            { <text>0</text> }
+                        else
+                        {
+                            @Html.Raw(ViewBag.VeteransCourt)
+                        }
                         }
                     </td>
                 </tr>
@@ -147,12 +158,12 @@
                     </td>
                     <td>
                         @{
-                        if (ViewBag.P2I == null)
-                        { <text>0</text> }
-                else
-                {
-                    @Html.Raw(ViewBag.P2I)
-            }
+                            if (ViewBag.P2I == null)
+                            { <text>0</text> }
+                        else
+                        {
+                            @Html.Raw(ViewBag.P2I)
+                        }
                         }
                     </td>
                 </tr>
@@ -162,7 +173,7 @@
         </div>
         <div class="col-md-5">
             <h4>Military Service Statistics</h4>
-            <table class="table">
+            <table class="table table-sm">
                 <tr>
                     <th style="font-weight: bold; color:dodgerblue; font-size: 110%">
                         Service Branch
@@ -183,12 +194,12 @@
                     </td>
                     <td>
                         @{
-                        if (ViewBag.CurrentNavy == null)
-                        { <text>0</text> }
-                else
-                {
-                    @Html.Raw(ViewBag.CurrentNavy)
-            }
+                            if (ViewBag.CurrentNavy == null)
+                            { <text>0</text> }
+                        else
+                        {
+                            @Html.Raw(ViewBag.CurrentNavy)
+                        }
                         }
                     </td>
                 </tr>
@@ -201,12 +212,12 @@
                     </td>
                     <td>
                         @{
-                        if (ViewBag.CurrentArmy == null)
-                        { <text>0</text> }
-                else
-                {
-                    @Html.Raw(ViewBag.CurrentArmy)
-            }
+                            if (ViewBag.CurrentArmy == null)
+                            { <text>0</text> }
+                        else
+                        {
+                            @Html.Raw(ViewBag.CurrentArmy)
+                        }
                         }
                     </td>
                 </tr>
@@ -219,12 +230,12 @@
                     </td>
                     <td>
                         @{
-                        if (ViewBag.CurrentMarine == null)
-                        { <text>0</text> }
-                else
-                {
-                    @Html.Raw(ViewBag.CurrentMarine)
-            }
+                            if (ViewBag.CurrentMarine == null)
+                            { <text>0</text> }
+                        else
+                        {
+                            @Html.Raw(ViewBag.CurrentMarine)
+                        }
                         }
                     </td>
                 </tr>
@@ -237,12 +248,12 @@
                     </td>
                     <td>
                         @{
-                        if (ViewBag.CurrentAF == null)
-                        { <text>0</text> }
-                else
-                {
-                    @Html.Raw(ViewBag.CurrentAF)
-            }
+                            if (ViewBag.CurrentAF == null)
+                            { <text>0</text> }
+                        else
+                        {
+                            @Html.Raw(ViewBag.CurrentAF)
+                        }
                         }
                     </td>
                 </tr>
@@ -255,12 +266,12 @@
                     </td>
                     <td>
                         @{
-                        if (ViewBag.CurrentCG == null)
-                        { <text>0</text> }
-                else
-                {
-                    @Html.Raw(ViewBag.CurrentCG)
-            }
+                            if (ViewBag.CurrentCG == null)
+                            { <text>0</text> }
+                        else
+                        {
+                            @Html.Raw(ViewBag.CurrentCG)
+                        }
                         }
                     </td>
                 </tr>
@@ -296,6 +307,15 @@
                 "dataType": "html",
                 "success": function (data) {
                     $('#AverageStay').html(data);
+                }
+            });
+
+            $.ajax({
+                "url": "/CenterOverview/GenderGroupBreakdown/",
+                "type": "get",
+                "dataType": "html",
+                "success": function (data) {
+                    $('#GenderGroups').html(data);
                 }
             });
         });

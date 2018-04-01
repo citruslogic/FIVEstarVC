@@ -14,6 +14,19 @@ namespace FIVESTARVC.Controllers
     {
         ResidentContext db = new ResidentContext();
 
+        // For the current residents.
+        // GET: GenderGroupBreakdown
+        public ActionResult GenderGroupBreakdown()
+        {
+            var GenderGroups = db.Residents.ToList().Where(cur => cur.IsCurrent()).GroupBy(r => r.Gender).Select(group => new GenderGroup
+            {
+                Gender = FSEnumHelper.GetDescription(group.Key),
+                Count = group.Count()
+            });
+
+            return PartialView("_GenderGroupBreakdown", GenderGroups.ToList());
+        }
+
         // GET: AgeGroupBreakdown
         public ActionResult AgeGroupBreakdown()
         {
