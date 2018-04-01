@@ -332,6 +332,19 @@
 
         });
 
+        $("#Benefit_DisabilityPercentage").focusout(function () {
+
+            if ($(this).val().length > 0) {
+
+                if ($(this).val().indexOf("%") == -1) {
+                    var percentage = $(this).val();
+                    $(this).val(percentage + '%');
+                }
+
+            }
+
+        });
+
         $('.income').on("keyup", function () {
             var total = parseFloat(0.0);
 

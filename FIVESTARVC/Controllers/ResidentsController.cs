@@ -11,6 +11,7 @@ using PagedList;
 using FIVESTARVC.ViewModels;
 using System.Data.Entity.Validation;
 using DelegateDecompiler;
+using System.Globalization;
 
 namespace FIVESTARVC.Controllers
 {
@@ -48,8 +49,10 @@ namespace FIVESTARVC.Controllers
 
             if (!String.IsNullOrEmpty(searchString))
             {
-                residents = residents.Where(s => s.ClearLastName.Computed().Contains(searchString)
-                                   || s.FirstMidName.Contains(searchString)).ToList();
+                residents = residents.Where(s => CultureInfo.CurrentCulture.CompareInfo.IndexOf
+                                   (s.ClearLastName, searchString, CompareOptions.IgnoreCase) >= 0
+                                   || CultureInfo.CurrentCulture.CompareInfo.IndexOf
+                                   (s.FirstMidName, searchString, CompareOptions.IgnoreCase) >= 0).ToList();
             }
 
             switch (sortOrder)
