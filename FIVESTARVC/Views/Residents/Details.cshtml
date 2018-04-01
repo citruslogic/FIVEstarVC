@@ -37,7 +37,7 @@
 
 
         .events tbody td, .events thead th {
-            width: 19.2%;
+            width: 15.2%;
             float: left;
         }
 </style>
@@ -244,8 +244,9 @@
         <table class="events table table-sm" style="width: 100%">
             <thead class="table-dark">
                 <tr>
-                    <th style="width: 21.2em;">Program Name</th>
-                    <th> Date</th>
+                    <th style="width: 21.2em;">Track Name</th>
+                    <th> Start Date</th>
+                    <th> End Date</th>
                     <th> Completed?</th>
                 </tr>
             </thead>
@@ -258,6 +259,9 @@
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.ClearStartDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ClearEndDate)
                     </td>
                     <td>
                         @if (item.Completed == true)
@@ -283,6 +287,5 @@
 
 
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.ResidentID }, htmlAttributes: new { @class = "btn btn-secondary" })
     @Html.ActionLink("Back to List", "Index", null, htmlAttributes: new { @class = "btn btn-primary" })
 </p>

@@ -617,10 +617,14 @@ namespace FIVESTARVC.Controllers
 
         /*
          * Save the Quick Event triggered on /Residents/Index
+         * 
+         * TODO: submit multiple programs (maybe up to 2 or 3?) at once.
+         * 
+         * Unclear whether a resident will be in more than 2 at a time. 
          */
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult ViewQuickEvent([Bind(Include = "ProgramEventID,ResidentID,ProgramTypeID,ClearStartDate,Completed")] int id, CustomEvent customEvent)
+        public ActionResult ViewQuickEvent(int id, [Bind(Include = "ProgramEventID,ResidentID,ProgramTypeID,ClearStartDate,ClearEndDate, Completed")] CustomEvent customEvent)
         {
             ProgramEvent ev = new ProgramEvent()
             {
@@ -628,6 +632,7 @@ namespace FIVESTARVC.Controllers
                 ResidentID = customEvent.ResidentID,
                 ProgramTypeID = customEvent.ProgramTypeID,
                 ClearStartDate = customEvent.ClearStartDate,
+                ClearEndDate = customEvent.ClearEndDate,
                 Completed = customEvent.Completed
             };
 
