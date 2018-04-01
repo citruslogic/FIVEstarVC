@@ -824,6 +824,7 @@
     <Content Include="Views\Login\Index.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\CenterOverview\_AgeGroupBreakdown.cshtml" />
+    <Content Include="Views\CenterOverview\_AverageStay.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

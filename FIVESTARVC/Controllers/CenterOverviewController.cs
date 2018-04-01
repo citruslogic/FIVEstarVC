@@ -29,6 +29,40 @@ namespace FIVESTARVC.Controllers
             return PartialView("_AgeGroupBreakdown", AgeGroups.ToList());
         }
 
+        // GET: GetAverageStay
+        public ActionResult GetAverageStay()
+        {
+            //Variables to find average length of stay
+            int total = 0;
+            int numbCount = 0;
+
+            var residents = db.Residents.ToList();
+
+            foreach (Resident resident in residents)
+            {
+                if (resident.IsCurrent())
+                {
+                    continue;
+                }
+                numbCount++;
+                total += resident.DaysInCenter();
+            }
+
+            /* Scenario is unlikely but possible. Thanks David! */
+            if (numbCount == 0)
+            {
+                ViewBag.AvgStay = 0;
+
+            }
+            else
+            {
+                ViewBag.AvgStay = total / numbCount;
+
+            }
+
+            return PartialView("_AverageStay");
+        }
+
         public double GetCurrentAverageAge()
         {
 

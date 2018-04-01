@@ -109,6 +109,7 @@ namespace FIVESTARVC.Controllers
                     ResidentID = programEvent.ResidentID,
                     ProgramTypeID = programEvent.ProgramTypeID,
                     ClearStartDate = programEvent.ClearStartDate,
+                    ClearEndDate = programEvent.ClearEndDate,
                     Completed = programEvent.Completed
 
                 });
@@ -157,7 +158,7 @@ namespace FIVESTARVC.Controllers
             if (ModelState.IsValid)
             {
                 if (TryUpdateModel(eventToUpdate, "",
-               new string[] { "ProgramEventID", "ProgramTypeID", "ResidentID", "ClearStartDate", "Completed" }))
+               new string[] { "ProgramEventID", "ProgramTypeID", "ResidentID", "ClearStartDate", "ClearEndDate", "Completed" }))
                 {
 
                     db.SaveChanges();

@@ -163,35 +163,6 @@ namespace FIVESTARVC.Controllers
 
 
 
-            //Variables to find average length of stay
-            int total = 0;
-            int numbCount = 0;
-
-            var residents = DB.Residents.ToList();
-
-            foreach (Resident resident in residents)
-            {
-                if (resident.IsCurrent())
-                {
-                    continue;
-                }
-                numbCount++;
-                total += resident.DaysInCenter();
-            }
-
-            /* Scenario is unlikely but possible. Thanks David! */
-            if (numbCount == 0)
-            {
-                ViewBag.AvgStay = "No current residents";
-
-            } else
-            {
-                ViewBag.AvgStay = total / numbCount;
-
-            }
-            
-
-
             return View();
         }
         /* Get the age of all residents that have been in the center. */
