@@ -16,10 +16,10 @@
     <div class="row">
         <input type="hidden" name="ResidentID" value="@ViewBag.ResidentID" />
         <p>
-            @ViewBag.Fullname is starting a new program. 
+            @ViewBag.Fullname is starting a new track.
         </p>
         <div class="form-group">
-            @Html.LabelFor(model => model.ProgramTypeID, "Program name", htmlAttributes: new { @class = "control-label" })
+            @Html.LabelFor(model => model.ProgramTypeID, "Track name", htmlAttributes: new { @class = "control-label" })
             <div>
                 @Html.DropDownList("ProgramTypeID", null, htmlAttributes: new { @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.ProgramTypeID, "")
@@ -33,10 +33,16 @@
                 @Html.ValidationMessageFor(model => model.ClearStartDate, "")
             </div>
         </div>
-
-        
-
+        <div class="form-group">
+            @Html.LabelFor(model => model.ClearEndDate, htmlAttributes: new { @class = "control-label" })
+            <div>
+                @Html.EditorFor(model => model.ClearEndDate, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.ClearStartDate, "")
+            </div>
         </div>
+
+
+    </div>
         <div class="row">
         <div class="form-group">
             @Html.LabelFor(model => model.Completed, htmlAttributes: new { @class = "control-label" })
@@ -60,7 +66,7 @@
                     <button type="submit" id="submit-btn"
                             class="btn btn-primary"
                             style="margin-left: 5px;">
-                        Save Event
+                        Save
                     </button>
                 </div>
             </div>

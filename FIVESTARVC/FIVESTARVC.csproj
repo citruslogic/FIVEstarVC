@@ -223,6 +223,7 @@
     <Compile Include="ViewModels\AssignedCampaignData.cs" />
     <Compile Include="ViewModels\AssignedRoom.cs" />
     <Compile Include="ViewModels\CustomEvent.cs" />
+    <Compile Include="ViewModels\GenderGroup.cs" />
     <Compile Include="ViewModels\ReportingResidentViewModel.cs" />
     <Compile Include="ViewModels\DashboardData.cs" />
     <Compile Include="ViewModels\HistoricData.cs" />
@@ -824,6 +825,8 @@
     <Content Include="Views\Login\Index.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\CenterOverview\_AgeGroupBreakdown.cshtml" />
+    <Content Include="Views\CenterOverview\_AverageStay.cshtml" />
+    <Content Include="Views\CenterOverview\_GenderGroupBreakdown.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

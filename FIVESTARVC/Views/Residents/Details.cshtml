@@ -37,7 +37,7 @@
 
 
         .events tbody td, .events thead th {
-            width: 19.2%;
+            width: 15.2%;
             float: left;
         }
 </style>
@@ -133,7 +133,7 @@
                         <text>Non-combat.</text>
                     }
 
-                    if (!campaignsExist)
+                    else if (!campaignsExist)
                     {
                         <text>No campaigns. </text>
                     }
@@ -224,45 +224,68 @@
 </div>
 
 
-<br />
-
-<h2>Events</h2>
-
-<table class="events table table-sm" style="width: 60%">
-    <thead class="table-dark">
-        <tr>
-            <th style="width: 21.2em;">Program Name</th>
-            <th> Date</th>
-            <th> Completed?</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model.ProgramEvents)
-        {
+<div class="row">
+    <div class="col-md-3">
+        <table class="table table-sm">
             <tr>
-                <td style="width: 21.2em">
-                    @Html.DisplayFor(modelItem => item.ProgramType.ProgramDescription)
+                <td>
+                    @Html.LabelFor(model => model.Note, htmlAttributes: new { @class = "control-label font-weight-bold" })
+
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.ClearStartDate)
-                </td>
-                <td>
-                    @if (item.Completed == true)
-                    {
-                        <text>Yes</text>
-                    } else
-                    {
-                        <text>No</text>
-                    }
+                    @Html.DisplayFor(model => model.Note)
                 </td>
             </tr>
+        </table>
+    </div>
+    <div class="col-md-9">
+        <h4>Tracks</h4>
+
+        <table class="events table table-sm" style="width: 100%">
+            <thead class="table-dark">
+                <tr>
+                    <th style="width: 21.2em;">Track Name</th>
+                    <th> Start Date</th>
+                    <th> End Date</th>
+                    <th> Completed?</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.ProgramEvents)
+            {
+                <tr>
+                    <td style="width: 21.2em">
+                        @Html.DisplayFor(modelItem => item.ProgramType.ProgramDescription)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ClearStartDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ClearEndDate)
+                    </td>
+                    <td>
+                        @if (item.Completed == true)
+                    {
+                        <text>Yes</text>
+                }
+                else
+                {
+                    <text>No</text>
+            }
+                    </td>
+                </tr>
         }
-    </tbody>
-</table>
+            </tbody>
+        </table>
+
+    </div>
+    
+
+
+</div>
 
 
 
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.ResidentID }, htmlAttributes: new { @class = "btn btn-secondary" })
     @Html.ActionLink("Back to List", "Index", null, htmlAttributes: new { @class = "btn btn-primary" })
 </p>
