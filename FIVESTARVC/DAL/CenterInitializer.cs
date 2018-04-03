@@ -182,7 +182,7 @@ namespace FIVESTARVC.DAL
                 new ProgramEvent { ClearStartDate=DateTime.Parse("2016-07-13"), Completed=false, ResidentID=6, ProgramTypeID=2},
 
                 //Other events
-                new ProgramEvent { ClearStartDate=DateTime.Parse("2004-05-05"), Completed=true, ResidentID=5, ProgramTypeID=8},
+                new ProgramEvent { ClearStartDate=DateTime.Parse("2004-05-05"), ClearEndDate=DateTime.Parse("2004-05-15"), Completed=true, ResidentID=5, ProgramTypeID=8},
                 new ProgramEvent { ClearStartDate=DateTime.Parse("2003-03-02"), Completed=true, ResidentID=6, ProgramTypeID=8},
                 new ProgramEvent { ClearStartDate=DateTime.Parse("2006-03-22"), Completed=true, ResidentID=2, ProgramTypeID=8},
                 new ProgramEvent { ClearStartDate=DateTime.Parse("2005-10-05"), ResidentID=2},

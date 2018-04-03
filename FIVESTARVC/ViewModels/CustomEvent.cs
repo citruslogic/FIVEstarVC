@@ -26,7 +26,13 @@ namespace FIVESTARVC.ViewModels
             get; set;
         }
 
-
+        [Display(Name = "End Date")]
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
+        public DateTime? ClearEndDate
+        {
+            get; set;
+        }
 
         public Boolean Completed { get; set; }
 

@@ -11,6 +11,7 @@ using FIVESTARVC.DAL;
 using FIVESTARVC.Models;
 using FIVESTARVC.ViewModels;
 using DelegateDecompiler;
+using System.Globalization;
 
 namespace FIVESTARVC.Controllers
 {
@@ -42,8 +43,10 @@ namespace FIVESTARVC.Controllers
 
             if (!String.IsNullOrEmpty(searchString))
             {
-                programEvents = programEvents.Where(p => p.Resident.ClearLastName.Computed().Contains(searchString)
-                                       || p.Resident.FirstMidName.Contains(searchString)).ToList();
+                programEvents = programEvents.Where(r => CultureInfo.CurrentCulture.CompareInfo.IndexOf
+                                   (r.Resident.ClearLastName, searchString, CompareOptions.IgnoreCase) >= 0
+                                   || CultureInfo.CurrentCulture.CompareInfo.IndexOf
+                                   (r.Resident.FirstMidName, searchString, CompareOptions.IgnoreCase) >= 0).ToList();
             }
 
             switch (sortOrder)
@@ -106,6 +109,7 @@ namespace FIVESTARVC.Controllers
                     ResidentID = programEvent.ResidentID,
                     ProgramTypeID = programEvent.ProgramTypeID,
                     ClearStartDate = programEvent.ClearStartDate,
+                    ClearEndDate = programEvent.ClearEndDate,
                     Completed = programEvent.Completed
 
                 });
@@ -154,7 +158,7 @@ namespace FIVESTARVC.Controllers
             if (ModelState.IsValid)
             {
                 if (TryUpdateModel(eventToUpdate, "",
-               new string[] { "ProgramEventID", "ProgramTypeID", "ResidentID", "ClearStartDate", "Completed" }))
+               new string[] { "ProgramEventID", "ProgramTypeID", "ResidentID", "ClearStartDate", "ClearEndDate", "Completed" }))
                 {
 
                     db.SaveChanges();

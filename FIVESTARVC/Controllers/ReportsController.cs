@@ -163,54 +163,6 @@ namespace FIVESTARVC.Controllers
 
 
 
-            //Variables to find average length of stay
-            int total = 0;
-            int numbCount = 0;
-            //double average = 0;
-            //double days = 0;
-
-            var residents = DB.Residents.ToList();
-
-            foreach (Resident resident in residents)
-            {
-                if (resident.IsCurrent())
-                {
-                    continue;
-                }
-                numbCount++;
-                total += resident.DaysInCenter();
-            }
-
-            ViewBag.AvgStay = total / numbCount;
-            /*
-             * (p => p.ProgramTypeID == 4 || item.ProgramTypeID == 5 || item.ProgramTypeID == 6 || item.ProgramTypeID == 7) 
-            //Discharge or graduation events
-            if (item.
-            {
-                endDate = item.ClearStartDate; //Startdate of a discharge event is the "end date" in this sense
-                resID = item.ResidentID;
-                numbCount++;
-
-                foreach (var startItem in avgProgStay)
-                {
-                    if (resID == startItem.ResidentID)
-                    {
-                        if (startItem.ProgramTypeID == 1 || startItem.ProgramTypeID == 2 || startItem.ProgramTypeID == 3)
-                        {
-                            startDate = startItem.ClearStartDate;
-                            days = (endDate - startDate).TotalDays;
-                            total += days;
-                        }
-                    }
-                }
-            }
-
-            average = total / numbCount;
-        }
-
-            */
-
-
             return View();
         }
         /* Get the age of all residents that have been in the center. */

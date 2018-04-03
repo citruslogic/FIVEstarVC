@@ -7,11 +7,11 @@
 }
 <link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
 
-<h2>Event Log</h2>
+<h2>Resident Track Log</h2>
 <br />
-<div class="btn-group" style="margin-bottom: 0.5em;">
+@*<div class="btn-group" style="margin-bottom: 0.5em;">
     <input type="button" class="btn btn-success" value="Enroll Program" onclick="location.href='/ProgramEvents/Create';" />
-</div>
+</div>*@
 <br />
 @using (Html.BeginForm("Index", "ProgramEvents", FormMethod.Get))
 {
@@ -20,7 +20,7 @@
         Find by name:&nbsp;
 
         @Html.TextBox("searchString", ViewBag.CurrentFilter as string, htmlAttributes: new { @class = "form-control" })
-        &nbsp;<input class="btn btn-sm btn-outline-secondary" type="submit" value="Refine" />
+        &nbsp;<input class="btn btn-sm btn-outline-secondary" type="submit" value="Search" />
     </div>
 }
 <br />
@@ -33,7 +33,10 @@
             @Html.ActionLink("Last Name", "Index", new { sortOrder = ViewBag.NameSortParm, currentFilter = ViewBag.CurrentFilter })
         </th>
         <th>
-             Date
+             Start Date
+        </th>
+        <th>
+            End Date
         </th>
        
         <th>
@@ -55,7 +58,9 @@
             <td>
                 @Html.DisplayFor(modelItem => item.ClearStartDate)
             </td>
-            
+            <td>
+                @Html.DisplayFor(modelItem => item.ClearEndDate)
+            </td>
             <td>
                 @(item.Completed ? "Yes" : "No")
             </td>

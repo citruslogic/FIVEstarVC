@@ -1,0 +1,42 @@
+﻿@model IList<FIVESTARVC.ViewModels.GenderGroup>
+
+
+@{
+    Layout = null;
+}
+
+<h4>Current Gender Composition</h4>
+
+<table class="table table-sm">
+    <thead>
+        <tr>
+            <th>
+                Gender
+            </th>
+
+            <th>
+                Count
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Gender)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Count)
+                </td>
+            </tr>
+        }
+        
+
+
+
+    </tbody>
+
+</table>
+
+
