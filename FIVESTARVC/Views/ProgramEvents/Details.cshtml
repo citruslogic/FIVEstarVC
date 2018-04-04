@@ -46,6 +46,7 @@
     </dl>
 </div>
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.ProgramEventID }) |
-    @Html.ActionLink("Back to List", "Index")
+    @Html.ActionLink("Edit", "Edit", new { id = Model.ProgramEventID })
+    &nbsp;
+    <input type="button" class="btn btn-success" value="Back to Tracks" onclick="location.href='/ProgramEvents/Index';" />
 </p>

@@ -47,10 +47,11 @@
     @using (Html.BeginForm()) {
         @Html.AntiForgeryToken()
 
-        <div class="form-actions no-color">
-            <input type="submit" value="Delete" class="btn btn-danger" /> |
-            @Html.ActionLink("Back to List", "Index")
-        </div>
+    <div class="form-actions no-color">
+        <input type="submit" value="Delete" class="btn btn-danger" />
+        &nbsp;
+        <input type="button" class="btn btn-success" value="Back to Tracks" onclick="location.href='/ProgramEvents/Index';" />
+    </div>
     }
 </div>
 <br />
