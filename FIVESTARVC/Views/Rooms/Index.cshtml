@@ -28,9 +28,9 @@
         <th>
             @Html.DisplayNameFor(model => model.RoomNumber)
         </th>
-        @*<th>
+        <th>
                 @Html.DisplayNameFor(model => model.IsOccupied)
-            </th>*@
+            </th>
         <th>
             @Html.DisplayNameFor(model => model.WingName)
         </th>
@@ -43,21 +43,27 @@
             <td>
                 @Html.DisplayFor(modelItem => item.RoomNumber)
             </td>
-            @*<td>
+            <td>
                     @Html.DisplayFor(modelItem => item.IsOccupied)
-                </td>*@
+                </td>
             <td>
                 @Html.DisplayFor(modelItem => item.WingName)
             </td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { id = item.RoomNumber }) |
-                @Html.ActionLink("Details", "Details", new { id = item.RoomNumber }) |
-                @Html.ActionLink("Delete", "Delete", new { id=item.RoomNumber })
+            
+
+            <td class="btn-block">
+                <input type="button" class="btn btn-success" value="Details" onclick="location.href='/Rooms/Details';" />
+
+                <input type="button" class="btn btn-success" value="Delete" onclick="location.href='/Rooms/Delete';" />
+                &nbsp;
+
             </td>
+
         </tr>
+
     }
-        
-    </table>
+
+</table>
 
 <p>
     <input type="button" class="btn btn-success" value="Return To Resident" onclick="location.href='/Residents/Index';" />
