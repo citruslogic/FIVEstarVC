@@ -10,8 +10,8 @@
 <h2>Resident Track Log</h2>
 <br />
 @*<div class="btn-group" style="margin-bottom: 0.5em;">
-    <input type="button" class="btn btn-success" value="Enroll Program" onclick="location.href='/ProgramEvents/Create';" />
-</div>*@
+        <input type="button" class="btn btn-success" value="Enroll Program" onclick="location.href='/ProgramEvents/Create';" />
+    </div>*@
 <br />
 @using (Html.BeginForm("Index", "ProgramEvents", FormMethod.Get))
 {
@@ -24,36 +24,41 @@
     </div>
 }
 <br />
-<table class="table table-sm table-striped">
+
+
+@foreach (var group in Model.GroupBy(item => item.Resident.Fullname))
+{
+    <h4>@Html.Encode(group.Key)</h4>
+<table class="table table-sm table-bordered table-striped">
+    
+
+
     <tr>
-        <th>
+        <th style="width: 17.7em">
             @Html.ActionLink("Description", "Index", new { sortOrder = ViewBag.ProgramSortParm, currentFilter = ViewBag.CurrentFilter })
         </th>
+        @*<th>
+                @Html.ActionLink("Last Name", "Index", new { sortOrder = ViewBag.NameSortParm, currentFilter = ViewBag.CurrentFilter })
+            </th>*@
         <th>
-            @Html.ActionLink("Last Name", "Index", new { sortOrder = ViewBag.NameSortParm, currentFilter = ViewBag.CurrentFilter })
-        </th>
-        <th>
-             Start Date
+            Start Date
         </th>
         <th>
             End Date
         </th>
-       
+
         <th>
             Completed?
         </th>
         <th></th>
     </tr>
 
-    @foreach (var item in Model)
+
+    @foreach (var item in group)
     {
         <tr>
-
             <td>
                 @Html.DisplayFor(modelItem => item.ProgramType.ProgramDescription)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Resident.ClearLastName)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.ClearStartDate)
@@ -71,8 +76,10 @@
             </td>
         </tr>
     }
-
 </table>
+}
+
+
 <br />
 Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
 

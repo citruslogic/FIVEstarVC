@@ -30,11 +30,11 @@ namespace FIVESTARVC.Controllers
         // GET: AgeGroupBreakdown
         public ActionResult AgeGroupBreakdown()
         {
-            var AgeGroups = db.Residents.ToList().Where(cur => cur.IsCurrent()).GroupBy(r => r.Age / 10).Select(group => new AgeGroups
+            var AgeGroups = db.Residents.ToList().Where(cur => cur.IsCurrent()).GroupBy(r => r.Age / 6).Select(group => new AgeGroups
             {
-                AgeGroup = String.Format("{0} - {1}", group.Key * 10, (group.Key - 1) * 10),
+                AgeGroup = String.Format("{0} - {1}", group.Key * 6, (group.Key + 1) * 6),
                 Count = group.Count()
-            });
+            }).OrderByDescending(a => a.AgeGroup);
 
             ViewBag.Sum = AgeGroups.Sum(group => group.Count);
             ViewBag.AverageAge = GetCurrentAverageAge();

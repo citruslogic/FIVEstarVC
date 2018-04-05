@@ -17,9 +17,10 @@
 
 </div>
 <hr />
-<div class="btn-group-sm">
-    @Html.ActionLink("Download Data", "DownloadData", null, htmlAttributes: new { @class = "btn btn-primary" })
-
+<div class="btn-group-sm d-print-none">
+    @Html.ActionLink("Download Data", "DownloadData", null, htmlAttributes: new { @class = "btn btn-secondary" })
+    
+    <button class="btn btn-secondary" onclick="printReport()"><i class="fa fa-print fa-fw"></i> Print Report</button> |
     <button class="btn btn-default" onclick="location.href='/Reports/Historic';" style="background-color: lightsteelblue"> Historic Chart </button>
     <button class="btn btn-default" onclick="location.href='/Reports/CumulativeHistoric';" style="background-color: lightsteelblue"> Cumulative Historic Chart </button>
     <button class="btn btn-default" onclick="location.href='/Reports/campaigns';" style="background-color: lightsteelblue"> Campaign Data Chart </button>
@@ -28,7 +29,7 @@
 
 
 
-<hr />
+<hr class="d-print-none" />
 
 <div class="container">
     <div class="row">
@@ -289,6 +290,10 @@
     @Scripts.Render("~/bundles/jqueryui")
 
     <script type="text/javascript">
+
+        function printReport() {
+            window.print();
+        }
 
         $(document).ready(function () {
 
