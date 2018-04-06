@@ -186,8 +186,43 @@ namespace FIVESTARVC.Controllers
             return residentListing.Average(r => r.Age);
         }
 
-        public ActionResult Historic()
+        //Useless method, must delete
+        //public List<string> gradYears()
+        //{
+        //    List<string> gradPercent = new List<string>();
+
+        //    DateTime currentDate = DateTime.Now;
+
+        //    int currentYear = currentDate.Year;
+
+        //    int num = currentYear - 2011;
+
+        //    int year = 2012;
+
+        //    for (int x = 0; x < num; x++)
+        //    {
+        //        gradPercent.Add(year.ToString());
+        //        year++;
+        //    }
+
+        //    gradPercent.ToString().ToArray();
+
+        //    return gradPercent;
+        //}
+
+        public ActionResult gradRates()
         {
+            var events = DB.ProgramEvents.ToList();
+
+            var Query = (from y in events
+                         where y.ProgramTypeID == 4
+                         group y by y.ClearStartDate.Year into typeGroup
+                         orderby typeGroup.Key ascending
+                         select new ChartData
+                         {
+                             Year = typeGroup.Key,
+                             Count = typeGroup.Count(),
+                         }).ToList();
 
             Highcharts columnChart = new Highcharts("columnchart");
 
@@ -204,35 +239,578 @@ namespace FIVESTARVC.Controllers
 
             columnChart.SetTitle(new Title()
             {
-                Text = "Historic Data"
+                Text = "Graduations by Year"
             });
 
-            //columnChart.SetSubtitle(new Subtitle()
-            //{
-            //    Text = "Played 9 Years Together From 2004 To 2012"
-            //});
+            List<int> metricCounts = new List<int>();
+            List<string> years = new List<string>();
 
-            object[] P2I = p2iRates().Cast<object>().ToArray();
-            object[] Admit = admittedRates().Cast<object>().ToArray();
-            object[] reAdmit = readmittedRates().Cast<object>().ToArray();
-            object[] Graduate = gradRates().Cast<object>().ToArray();
-            object[] Emergency = emergRates().Cast<object>().ToArray();
-            object[] Discharge = dischargeRates().Cast<object>().ToArray();
-            object[] vetCourt = vetCourtRates().Cast<object>().ToArray();
-            string[] years = gradYears().ToArray();
+            foreach (var r in Query)
+            {
+                metricCounts.Add(r.Count);
+                years.Add(r.Year.ToString());
+            }
+
+            String[] chartYears = years.Cast<string>().ToArray();
+            object[] metric = metricCounts.Cast<object>().ToArray();
 
             columnChart.SetXAxis(new XAxis()
             {
                 Type = AxisTypes.Category,
                 Title = new XAxisTitle() { Text = "Years", Style = "fontWeight: 'bold', fontSize: '17px'" },
-                Categories = years
+                Categories = chartYears
             });
 
             columnChart.SetYAxis(new YAxis()
             {
                 Title = new YAxisTitle()
                 {
-                    Text = "Number of Residents",
+                    Text = "Graduations",
+                    Style = "fontWeight: 'bold', fontSize: '17px'"
+                },
+                ShowFirstLabel = true,
+                ShowLastLabel = true,
+                Min = 0
+            });
+
+            columnChart.SetLegend(new Legend
+            {
+                Enabled = true,
+                BorderColor = System.Drawing.Color.CornflowerBlue,
+                BorderRadius = 6,
+                BackgroundColor = new BackColorOrGradient(ColorTranslator.FromHtml("#FFADD8E6"))
+            });
+
+            columnChart.SetSeries(new Series[]
+            {
+                new Series{
+
+                    Name = "Graduated",
+                    Data = new Data(metric)
+                },
+
+            }
+            );
+
+            return PartialView(columnChart);
+
+
+        }
+
+        public ActionResult gradRatesCum()
+        {
+            var events = DB.ProgramEvents.ToList();
+
+            int runningTotal = 0;
+
+            var Query = (from y in events
+                         where y.ProgramTypeID == 4
+                         group y by y.ClearStartDate.Year into typeGroup
+                         orderby typeGroup.Key ascending
+                         select new ChartData
+                         {
+                             Year = typeGroup.Key,
+                             Count = typeGroup.Count(),
+                         });
+
+            List<int> rates = new List<int>();
+
+            foreach (var t in Query)
+            {
+                runningTotal = runningTotal + t.Count;
+
+                rates.Add(runningTotal);
+            }
+
+            Highcharts columnChart = new Highcharts("columnchart");
+
+            columnChart.InitChart(new Chart()
+            {
+                Type = DotNet.Highcharts.Enums.ChartTypes.Line,
+                BackgroundColor = new BackColorOrGradient(System.Drawing.Color.AliceBlue),
+                Style = "fontWeight: 'bold', fontSize: '17px'",
+                BorderColor = System.Drawing.Color.LightBlue,
+                BorderRadius = 0,
+                BorderWidth = 2
+
+            });
+
+            columnChart.SetTitle(new Title()
+            {
+                Text = "Cumulative Graduations by Year"
+            });
+
+            //List<int> metricCounts = new List<int>();
+            List<string> years = new List<string>();
+
+            foreach (var r in Query)
+            {
+                //metricCounts.Add(r.Count);
+                years.Add(r.Year.ToString());
+            }
+
+            String[] chartYears = years.Cast<string>().ToArray();
+            object[] metric = rates.Cast<object>().ToArray();
+
+            columnChart.SetXAxis(new XAxis()
+            {
+                Type = AxisTypes.Category,
+                Title = new XAxisTitle() { Text = "Years", Style = "fontWeight: 'bold', fontSize: '17px'" },
+                Categories = chartYears
+            });
+
+            columnChart.SetYAxis(new YAxis()
+            {
+                Title = new YAxisTitle()
+                {
+                    Text = "Graduations",
+                    Style = "fontWeight: 'bold', fontSize: '17px'"
+                },
+                ShowFirstLabel = true,
+                ShowLastLabel = true,
+                Min = 0
+            });
+
+            columnChart.SetLegend(new Legend
+            {
+                Enabled = true,
+                BorderColor = System.Drawing.Color.CornflowerBlue,
+                BorderRadius = 6,
+                BackgroundColor = new BackColorOrGradient(ColorTranslator.FromHtml("#FFADD8E6"))
+            });
+
+            columnChart.SetSeries(new Series[]
+            {
+                new Series{
+
+                    Name = "Graduated",
+                    Data = new Data(metric)
+                },
+
+            }
+            );
+
+            return PartialView(columnChart);
+        }
+
+        public ActionResult admittedRates()
+        {
+            var events = DB.ProgramEvents.ToList();
+
+            var Query = (from y in events
+                             where y.ProgramTypeID == 2
+                             group y by y.ClearStartDate.Year into typeGroup
+                             orderby typeGroup.Key ascending
+                             select new ChartData
+                             {
+                                 Year = typeGroup.Key,
+                                 Count = typeGroup.Count(),
+                             });
+
+            Highcharts columnChart = new Highcharts("columnchart");
+
+            columnChart.InitChart(new Chart()
+            {
+                Type = DotNet.Highcharts.Enums.ChartTypes.Line,
+                BackgroundColor = new BackColorOrGradient(System.Drawing.Color.AliceBlue),
+                Style = "fontWeight: 'bold', fontSize: '17px'",
+                BorderColor = System.Drawing.Color.LightBlue,
+                BorderRadius = 0,
+                BorderWidth = 2
+
+            });
+
+            columnChart.SetTitle(new Title()
+            {
+                Text = "Admissions by Year"
+            });
+
+            List<int> metricCounts = new List<int>();
+            List<string> years = new List<string>();
+
+            foreach (var r in Query)
+            {
+                metricCounts.Add(r.Count);
+                years.Add(r.Year.ToString());
+            }
+
+            String[] chartYears = years.Cast<string>().ToArray();
+            object[] metric = metricCounts.Cast<object>().ToArray();
+
+            columnChart.SetXAxis(new XAxis()
+            {
+                Type = AxisTypes.Category,
+                Title = new XAxisTitle() { Text = "Years", Style = "fontWeight: 'bold', fontSize: '17px'" },
+                Categories = chartYears
+            });
+
+            columnChart.SetYAxis(new YAxis()
+            {
+                Title = new YAxisTitle()
+                {
+                    Text = "Admissions",
+                    Style = "fontWeight: 'bold', fontSize: '17px'"
+                },
+                ShowFirstLabel = true,
+                ShowLastLabel = true,
+                Min = 0
+            });
+
+            columnChart.SetLegend(new Legend
+            {
+                Enabled = true,
+                BorderColor = System.Drawing.Color.CornflowerBlue,
+                BorderRadius = 6,
+                BackgroundColor = new BackColorOrGradient(ColorTranslator.FromHtml("#FFADD8E6"))
+            });
+
+            columnChart.SetSeries(new Series[]
+            {
+                new Series{
+
+                    Name = "Admitted",
+                    Data = new Data(metric)
+                },
+
+            }
+            );
+
+            return PartialView(columnChart);
+        }
+
+        public ActionResult admittedRatesCum()
+        {
+            var events = DB.ProgramEvents.ToList();
+
+            int runningTotal = 0;
+
+            var gradQuery = (from y in events
+                             where y.ProgramTypeID == 2
+                             group y by y.ClearStartDate.Year into typeGroup
+                             orderby typeGroup.Key ascending
+                             select new ChartData
+                             {
+                                 Year = typeGroup.Key,
+                                 Count = typeGroup.Count(),
+                             });
+
+            List<int> rates = new List<int>();
+
+            foreach (var t in gradQuery)
+            {
+                runningTotal = runningTotal + t.Count;
+
+                rates.Add(runningTotal);
+            }
+
+            Highcharts columnChart = new Highcharts("columnchart");
+
+            columnChart.InitChart(new Chart()
+            {
+                Type = DotNet.Highcharts.Enums.ChartTypes.Line,
+                BackgroundColor = new BackColorOrGradient(System.Drawing.Color.AliceBlue),
+                Style = "fontWeight: 'bold', fontSize: '17px'",
+                BorderColor = System.Drawing.Color.LightBlue,
+                BorderRadius = 0,
+                BorderWidth = 2
+
+            });
+
+            columnChart.SetTitle(new Title()
+            {
+                Text = "Cumulative Admissions by Year"
+            });
+
+            List<int> metricCounts = new List<int>();
+            List<string> years = new List<string>();
+
+            foreach (var r in gradQuery)
+            {
+                //metricCounts.Add(r.Count);
+                years.Add(r.Year.ToString());
+            }
+
+            String[] chartYears = years.Cast<string>().ToArray();
+            object[] metric = rates.Cast<object>().ToArray();
+
+            columnChart.SetXAxis(new XAxis()
+            {
+                Type = AxisTypes.Category,
+                Title = new XAxisTitle() { Text = "Years", Style = "fontWeight: 'bold', fontSize: '17px'" },
+                Categories = chartYears
+            });
+
+            columnChart.SetYAxis(new YAxis()
+            {
+                Title = new YAxisTitle()
+                {
+                    Text = "Admissions",
+                    Style = "fontWeight: 'bold', fontSize: '17px'"
+                },
+                ShowFirstLabel = true,
+                ShowLastLabel = true,
+                Min = 0
+            });
+
+            columnChart.SetLegend(new Legend
+            {
+                Enabled = true,
+                BorderColor = System.Drawing.Color.CornflowerBlue,
+                BorderRadius = 6,
+                BackgroundColor = new BackColorOrGradient(ColorTranslator.FromHtml("#FFADD8E6"))
+            });
+
+            columnChart.SetSeries(new Series[]
+            {
+                new Series{
+
+                    Name = "Admitted",
+                    Data = new Data(metric)
+                },
+
+            }
+            );
+
+            return PartialView(columnChart);
+        }
+
+        public ActionResult readmittedRates()
+        {
+            var events = DB.ProgramEvents.ToList();
+
+            var Query = (from y in events
+                         where y.ProgramTypeID == 3
+                         group y by y.ClearStartDate.Year into typeGroup
+                         orderby typeGroup.Key ascending
+                         select new ChartData
+                         {
+                             Year = typeGroup.Key,
+                             Count = typeGroup.Count(),
+                         });
+
+            Highcharts columnChart = new Highcharts("columnchart");
+
+            columnChart.InitChart(new Chart()
+            {
+                Type = DotNet.Highcharts.Enums.ChartTypes.Line,
+                BackgroundColor = new BackColorOrGradient(System.Drawing.Color.AliceBlue),
+                Style = "fontWeight: 'bold', fontSize: '17px'",
+                BorderColor = System.Drawing.Color.LightBlue,
+                BorderRadius = 0,
+                BorderWidth = 2
+
+            });
+
+            columnChart.SetTitle(new Title()
+            {
+                Text = "Re-Admissions by Year"
+            });
+
+            List<int> metricCounts = new List<int>();
+            List<string> years = new List<string>();
+
+            foreach (var r in Query)
+            {
+                metricCounts.Add(r.Count);
+                years.Add(r.Year.ToString());
+            }
+
+            String[] chartYears = years.Cast<string>().ToArray();
+            object[] metric = metricCounts.Cast<object>().ToArray();
+
+            columnChart.SetXAxis(new XAxis()
+            {
+                Type = AxisTypes.Category,
+                Title = new XAxisTitle() { Text = "Years", Style = "fontWeight: 'bold', fontSize: '17px'" },
+                Categories = chartYears
+            });
+
+            columnChart.SetYAxis(new YAxis()
+            {
+                Title = new YAxisTitle()
+                {
+                    Text = "Re-Admissions",
+                    Style = "fontWeight: 'bold', fontSize: '17px'"
+                },
+                ShowFirstLabel = true,
+                ShowLastLabel = true,
+                Min = 0
+            });
+
+            columnChart.SetLegend(new Legend
+            {
+                Enabled = true,
+                BorderColor = System.Drawing.Color.CornflowerBlue,
+                BorderRadius = 6,
+                BackgroundColor = new BackColorOrGradient(ColorTranslator.FromHtml("#FFADD8E6"))
+            });
+
+            columnChart.SetSeries(new Series[]
+            {
+                new Series{
+
+                    Name = "Re-Admitted",
+                    Data = new Data(metric)
+                },
+
+            }
+            );
+
+            return PartialView(columnChart);
+        }
+
+        public ActionResult readmittedRatesCum()
+        {
+            var events = DB.ProgramEvents.ToList();
+
+            int runningTotal = 0;
+
+            var Query = (from y in events
+                         where y.ProgramTypeID == 3
+                         group y by y.ClearStartDate.Year into typeGroup
+                         orderby typeGroup.Key ascending
+                         select new ChartData
+                         {
+                             Year = typeGroup.Key,
+                             Count = typeGroup.Count(),
+                         });
+
+            List<int> rates = new List<int>();
+
+            foreach (var t in Query)
+            {
+                runningTotal = runningTotal + t.Count;
+
+                rates.Add(runningTotal);
+            }
+
+            Highcharts columnChart = new Highcharts("columnchart");
+
+            columnChart.InitChart(new Chart()
+            {
+                Type = DotNet.Highcharts.Enums.ChartTypes.Line,
+                BackgroundColor = new BackColorOrGradient(System.Drawing.Color.AliceBlue),
+                Style = "fontWeight: 'bold', fontSize: '17px'",
+                BorderColor = System.Drawing.Color.LightBlue,
+                BorderRadius = 0,
+                BorderWidth = 2
+
+            });
+
+            columnChart.SetTitle(new Title()
+            {
+                Text = "Cumulative Admissions by Year"
+            });
+
+            //List<int> metricCounts = new List<int>();
+            List<string> years = new List<string>();
+
+            foreach (var r in Query)
+            {
+                //metricCounts.Add(r.Count);
+                years.Add(r.Year.ToString());
+            }
+
+            String[] chartYears = years.Cast<string>().ToArray();
+            object[] metric = rates.Cast<object>().ToArray();
+
+            columnChart.SetXAxis(new XAxis()
+            {
+                Type = AxisTypes.Category,
+                Title = new XAxisTitle() { Text = "Years", Style = "fontWeight: 'bold', fontSize: '17px'" },
+                Categories = chartYears
+            });
+
+            columnChart.SetYAxis(new YAxis()
+            {
+                Title = new YAxisTitle()
+                {
+                    Text = "Re-Admissions",
+                    Style = "fontWeight: 'bold', fontSize: '17px'"
+                },
+                ShowFirstLabel = true,
+                ShowLastLabel = true,
+                Min = 0
+            });
+
+            columnChart.SetLegend(new Legend
+            {
+                Enabled = true,
+                BorderColor = System.Drawing.Color.CornflowerBlue,
+                BorderRadius = 6,
+                BackgroundColor = new BackColorOrGradient(ColorTranslator.FromHtml("#FFADD8E6"))
+            });
+
+            columnChart.SetSeries(new Series[]
+            {
+                new Series{
+
+                    Name = "Re-Admitted",
+                    Data = new Data(metric)
+                },
+
+            }
+            );
+
+            return PartialView(columnChart);
+        }
+
+        public ActionResult p2iRates()
+        {
+            var events = DB.ProgramEvents.ToList();
+
+            var gradQuery = (from y in events
+                             where y.ProgramTypeID == 10
+                             group y by y.ClearStartDate.Year into typeGroup
+                             orderby typeGroup.Key ascending
+                             select new ChartData
+                             {
+                                 Year = typeGroup.Key,
+                                 Count = typeGroup.Count(),
+                             });
+
+            Highcharts columnChart = new Highcharts("columnchart");
+
+            columnChart.InitChart(new Chart()
+            {
+                Type = DotNet.Highcharts.Enums.ChartTypes.Line,
+                BackgroundColor = new BackColorOrGradient(System.Drawing.Color.AliceBlue),
+                Style = "fontWeight: 'bold', fontSize: '17px'",
+                BorderColor = System.Drawing.Color.LightBlue,
+                BorderRadius = 0,
+                BorderWidth = 2
+
+            });
+
+            columnChart.SetTitle(new Title()
+            {
+                Text = "P2I Residents by Year"
+            });
+
+            List<int> metricCounts = new List<int>();
+            List<string> years = new List<string>();
+
+            foreach (var r in gradQuery)
+            {
+                metricCounts.Add(r.Count);
+                years.Add(r.Year.ToString());
+            }
+
+            String[] chartYears = years.Cast<string>().ToArray();
+            object[] metric = metricCounts.Cast<object>().ToArray();
+
+            columnChart.SetXAxis(new XAxis()
+            {
+                Type = AxisTypes.Category,
+                Title = new XAxisTitle() { Text = "Years", Style = "fontWeight: 'bold', fontSize: '17px'" },
+                Categories = chartYears
+            });
+
+            columnChart.SetYAxis(new YAxis()
+            {
+                Title = new YAxisTitle()
+                {
+                    Text = "P2I",
                     Style = "fontWeight: 'bold', fontSize: '17px'"
                 },
                 ShowFirstLabel = true,
@@ -253,53 +831,39 @@ namespace FIVESTARVC.Controllers
                 new Series{
 
                     Name = "P2I",
-                    Data = new Data(P2I)
+                    Data = new Data(metric)
                 },
-
-                new Series{
-
-                    Name = "Admitted",
-                    Data = new Data(Admit)
-                },
-
-                new Series{
-
-                    Name = "Re-Admitted",
-                    Data = new Data(reAdmit)
-                },
-
-                new Series{
-
-                    Name = "Graduated",
-                    Data = new Data(Graduate)
-                },
-
-                new Series{
-
-                    Name = "Emergency Shelter",
-                    Data = new Data(Emergency)
-                },
-
-                new Series{
-
-                    Name = "Discharged",
-                    Data = new Data(Discharge)
-                },
-
-                new Series{
-
-                    Name = "Vet Court",
-                    Data = new Data(vetCourt)
-                }
 
             }
             );
 
-            return View(columnChart);
+            return PartialView(columnChart);
         }
 
-        public ActionResult CumulativeHistoric()
+        public ActionResult p2iRatesCum()
         {
+            var events = DB.ProgramEvents.ToList();
+
+            int runningTotal = 0;
+
+            var gradQuery = (from y in events
+                             where y.ProgramTypeID == 10
+                             group y by y.ClearStartDate.Year into typeGroup
+                             orderby typeGroup.Key ascending
+                             select new ChartData
+                             {
+                                 Year = typeGroup.Key,
+                                 Count = typeGroup.Count(),
+                             });
+
+            List<int> rates = new List<int>();
+
+            foreach (var t in gradQuery)
+            {
+                runningTotal = runningTotal + t.Count;
+
+                rates.Add(runningTotal);
+            }
 
             Highcharts columnChart = new Highcharts("columnchart");
 
@@ -316,35 +880,33 @@ namespace FIVESTARVC.Controllers
 
             columnChart.SetTitle(new Title()
             {
-                Text = "Cumulative Historic Data"
+                Text = "Cumulative P2I Residents by Year"
             });
 
-            //columnChart.SetSubtitle(new Subtitle()
-            //{
-            //    Text = "Played 9 Years Together From 2004 To 2012"
-            //});
+            //List<int> metricCounts = new List<int>();
+            List<string> years = new List<string>();
 
-            object[] P2I = p2iRatesCum().Cast<object>().ToArray();
-            object[] Admit = admittedRatesCum().Cast<object>().ToArray();
-            object[] reAdmit = readmittedRatesCum().Cast<object>().ToArray();
-            object[] Graduate = gradRatesCum().Cast<object>().ToArray();
-            object[] Emergency = emergRatesCum().Cast<object>().ToArray();
-            object[] Discharge = dischargeRatesCum().Cast<object>().ToArray();
-            object[] vetCourt = vetCourtRatesCum().Cast<object>().ToArray();
-            string[] years = gradYears().ToArray();
+            foreach (var r in gradQuery)
+            {
+                //metricCounts.Add(r.Count);
+                years.Add(r.Year.ToString());
+            }
+
+            String[] chartYears = years.Cast<string>().ToArray();
+            object[] metric = rates.Cast<object>().ToArray();
 
             columnChart.SetXAxis(new XAxis()
             {
                 Type = AxisTypes.Category,
                 Title = new XAxisTitle() { Text = "Years", Style = "fontWeight: 'bold', fontSize: '17px'" },
-                Categories = years
+                Categories = chartYears
             });
 
             columnChart.SetYAxis(new YAxis()
             {
                 Title = new YAxisTitle()
                 {
-                    Text = "Number of Residents",
+                    Text = "P2I",
                     Style = "fontWeight: 'bold', fontSize: '17px'"
                 },
                 ShowFirstLabel = true,
@@ -365,302 +927,101 @@ namespace FIVESTARVC.Controllers
                 new Series{
 
                     Name = "P2I",
-                    Data = new Data(P2I)
+                    Data = new Data(metric)
                 },
-
-                new Series{
-
-                    Name = "Admitted",
-                    Data = new Data(Admit)
-                },
-
-                new Series{
-
-                    Name = "Re-Admitted",
-                    Data = new Data(reAdmit)
-                },
-
-                new Series{
-
-                    Name = "Graduated",
-                    Data = new Data(Graduate)
-                },
-
-                new Series{
-
-                    Name = "Emergency Shelter",
-                    Data = new Data(Emergency)
-                },
-
-                new Series{
-
-                    Name = "Discharged",
-                    Data = new Data(Discharge)
-                },
-
-                new Series{
-
-                    Name = "Vet Court",
-                    Data = new Data(vetCourt)
-                }
 
             }
             );
 
-            return View(columnChart);
+            return PartialView(columnChart);
         }
 
-        public List<string> gradYears()
-        {
-            List<string> gradPercent = new List<string>();
-
-            DateTime currentDate = DateTime.Now;
-
-            int currentYear = currentDate.Year;
-
-            int num = currentYear - 2011;
-
-            int year = 2012;
-
-            for (int x = 0; x < num; x++)
-            {
-                gradPercent.Add(year.ToString());
-                year++;
-            }
-
-            gradPercent.ToString().ToArray();
-
-            return gradPercent;
-        }
-
-        public List<int> gradRates()
-        {
-            var events = DB.ProgramEvents.ToList();
-
-            var Query = (from y in events
-                         where y.ProgramTypeID == 4
-                         group y by y.ClearStartDate.Year into typeGroup
-                         select new
-                         {
-                             StartDate = typeGroup.Key,
-                             Count = typeGroup.Count(),
-                         });
-
-            List<int> rates = new List<int>();
-
-            foreach (var t in Query)
-            {
-                rates.Add(t.Count);
-            }
-
-            return rates;
-        }
-
-        public List<int> gradRatesCum()
-        {
-            var events = DB.ProgramEvents.ToList();
-
-            int runningTotal = 0;
-
-            var Query = (from y in events
-                         where y.ProgramTypeID == 4
-                         group y by y.ClearStartDate.Year into typeGroup
-                         select new
-                         {
-                             StartDate = typeGroup.Key,
-                             Count = typeGroup.Count(),
-                         });
-
-            List<int> rates = new List<int>();
-
-            foreach (var t in Query)
-            {
-                runningTotal = runningTotal + t.Count;
-
-                rates.Add(runningTotal);
-            }
-
-            return rates;
-        }
-
-        public List<int> admittedRates()
-        {
-            var events = DB.ProgramEvents.ToList();
-
-            var gradQuery = (from y in events
-                             where y.ProgramTypeID == 2
-                             group y by y.ClearStartDate.Year into typeGroup
-                             select new
-                             {
-                                 StartDate = typeGroup.Key,
-                                 Count = typeGroup.Count(),
-                             });
-
-            List<int> rates = new List<int>();
-
-            foreach (var t in gradQuery)
-            {
-                rates.Add(t.Count);
-            }
-
-            return rates;
-        }
-
-        public List<int> admittedRatesCum()
-        {
-            var events = DB.ProgramEvents.ToList();
-
-            int runningTotal = 0;
-
-            var gradQuery = (from y in events
-                             where y.ProgramTypeID == 2
-                             group y by y.ClearStartDate.Year into typeGroup
-                             select new
-                             {
-                                 StartDate = typeGroup.Key,
-                                 Count = typeGroup.Count(),
-                             });
-
-            List<int> rates = new List<int>();
-
-            foreach (var t in gradQuery)
-            {
-                runningTotal = runningTotal + t.Count;
-
-                rates.Add(runningTotal);
-            }
-
-            return rates;
-        }
-
-        public List<int> readmittedRates()
-        {
-            var events = DB.ProgramEvents.ToList();
-
-            var Query = (from y in events
-                         where y.ProgramTypeID == 3
-                         group y by y.ClearStartDate.Year into typeGroup
-                         select new
-                         {
-                             StartDate = typeGroup.Key,
-                             Count = typeGroup.Count(),
-                         });
-
-            List<int> rates = new List<int>();
-
-            foreach (var t in Query)
-            {
-                rates.Add(t.Count);
-            }
-
-            return rates;
-        }
-
-        public List<int> readmittedRatesCum()
-        {
-            var events = DB.ProgramEvents.ToList();
-
-            int runningTotal = 0;
-
-            var Query = (from y in events
-                         where y.ProgramTypeID == 3
-                         group y by y.ClearStartDate.Year into typeGroup
-                         select new
-                         {
-                             StartDate = typeGroup.Key,
-                             Count = typeGroup.Count(),
-                         });
-
-            List<int> rates = new List<int>();
-
-            foreach (var t in Query)
-            {
-                runningTotal = runningTotal + t.Count;
-
-                rates.Add(runningTotal);
-            }
-
-            return rates;
-        }
-
-        public List<int> p2iRates()
-        {
-            var events = DB.ProgramEvents.ToList();
-
-            int runningTotal = 0;
-
-            var gradQuery = (from y in events
-                             where y.ProgramTypeID == 10
-                             group y by y.ClearStartDate.Year into typeGroup
-                             select new
-                             {
-                                 StartDate = typeGroup.Key,
-                                 Count = typeGroup.Count(),
-                                 runningTotal = runningTotal + typeGroup.Count()
-                             });
-
-            List<int> rates = new List<int>();
-
-            foreach (var t in gradQuery)
-            {
-                rates.Add(t.Count);
-            }
-
-            return rates;
-        }
-
-        public List<int> p2iRatesCum()
-        {
-            var events = DB.ProgramEvents.ToList();
-
-            int runningTotal = 0;
-
-            var gradQuery = (from y in events
-                             where y.ProgramTypeID == 10
-                             group y by y.ClearStartDate.Year into typeGroup
-                             select new
-                             {
-                                 StartDate = typeGroup.Key,
-                                 Count = typeGroup.Count(),
-                                 runningTotal = runningTotal + typeGroup.Count()
-                             });
-
-            List<int> cumRates = new List<int>();
-
-            foreach (var t in gradQuery)
-            {
-                runningTotal = runningTotal + t.Count;
-
-                cumRates.Add(runningTotal);
-            }
-
-            return cumRates;
-        }
-
-        public List<int> emergRates()
+        public ActionResult emergRates()
         {
             var events = DB.ProgramEvents.ToList();
 
             var Query = (from y in events
                          where y.ProgramTypeID == 1
                          group y by y.ClearStartDate.Year into typeGroup
-                         select new
+                         orderby typeGroup.Key ascending
+                         select new ChartData
                          {
-                             StartDate = typeGroup.Key,
+                             Year = typeGroup.Key,
                              Count = typeGroup.Count(),
                          });
 
-            List<int> rates = new List<int>();
+            Highcharts columnChart = new Highcharts("columnchart");
 
-            foreach (var t in Query)
+            columnChart.InitChart(new Chart()
             {
-                rates.Add(t.Count);
+                Type = DotNet.Highcharts.Enums.ChartTypes.Line,
+                BackgroundColor = new BackColorOrGradient(System.Drawing.Color.AliceBlue),
+                Style = "fontWeight: 'bold', fontSize: '17px'",
+                BorderColor = System.Drawing.Color.LightBlue,
+                BorderRadius = 0,
+                BorderWidth = 2
+
+            });
+
+            columnChart.SetTitle(new Title()
+            {
+                Text = "Emergency Shelters by Year"
+            });
+
+            List<int> metricCounts = new List<int>();
+            List<string> years = new List<string>();
+
+            foreach (var r in Query)
+            {
+                metricCounts.Add(r.Count);
+                years.Add(r.Year.ToString());
             }
 
-            return rates;
+            String[] chartYears = years.Cast<string>().ToArray();
+            object[] metric = metricCounts.Cast<object>().ToArray();
+
+            columnChart.SetXAxis(new XAxis()
+            {
+                Type = AxisTypes.Category,
+                Title = new XAxisTitle() { Text = "Years", Style = "fontWeight: 'bold', fontSize: '17px'" },
+                Categories = chartYears
+            });
+
+            columnChart.SetYAxis(new YAxis()
+            {
+                Title = new YAxisTitle()
+                {
+                    Text = "Emergency Shelters",
+                    Style = "fontWeight: 'bold', fontSize: '17px'"
+                },
+                ShowFirstLabel = true,
+                ShowLastLabel = true,
+                Min = 0
+            });
+
+            columnChart.SetLegend(new Legend
+            {
+                Enabled = true,
+                BorderColor = System.Drawing.Color.CornflowerBlue,
+                BorderRadius = 6,
+                BackgroundColor = new BackColorOrGradient(ColorTranslator.FromHtml("#FFADD8E6"))
+            });
+
+            columnChart.SetSeries(new Series[]
+            {
+                new Series{
+
+                    Name = "Emergency Shelter",
+                    Data = new Data(metric)
+                },
+
+            }
+            );
+
+            return PartialView(columnChart);
         }
 
-        public List<int> emergRatesCum()
+        public ActionResult emergRatesCum()
         {
             var events = DB.ProgramEvents.ToList();
 
@@ -669,9 +1030,10 @@ namespace FIVESTARVC.Controllers
             var Query = (from y in events
                          where y.ProgramTypeID == 1
                          group y by y.ClearStartDate.Year into typeGroup
-                         select new
+                         orderby typeGroup.Key ascending
+                         select new ChartData
                          {
-                             StartDate = typeGroup.Key,
+                             Year = typeGroup.Key,
                              Count = typeGroup.Count(),
                          });
 
@@ -684,33 +1046,163 @@ namespace FIVESTARVC.Controllers
                 rates.Add(runningTotal);
             }
 
-            return rates;
+            Highcharts columnChart = new Highcharts("columnchart");
+
+            columnChart.InitChart(new Chart()
+            {
+                Type = DotNet.Highcharts.Enums.ChartTypes.Line,
+                BackgroundColor = new BackColorOrGradient(System.Drawing.Color.AliceBlue),
+                Style = "fontWeight: 'bold', fontSize: '17px'",
+                BorderColor = System.Drawing.Color.LightBlue,
+                BorderRadius = 0,
+                BorderWidth = 2
+
+            });
+
+            columnChart.SetTitle(new Title()
+            {
+                Text = "Cumulative Emergency Shelters by Year"
+            });
+
+            //List<int> metricCounts = new List<int>();
+            List<string> years = new List<string>();
+
+            foreach (var r in Query)
+            {
+                //metricCounts.Add(r.Count);
+                years.Add(r.Year.ToString());
+            }
+
+            String[] chartYears = years.Cast<string>().ToArray();
+            object[] metric = rates.Cast<object>().ToArray();
+
+            columnChart.SetXAxis(new XAxis()
+            {
+                Type = AxisTypes.Category,
+                Title = new XAxisTitle() { Text = "Years", Style = "fontWeight: 'bold', fontSize: '17px'" },
+                Categories = chartYears
+            });
+
+            columnChart.SetYAxis(new YAxis()
+            {
+                Title = new YAxisTitle()
+                {
+                    Text = "Emergency Shelters",
+                    Style = "fontWeight: 'bold', fontSize: '17px'"
+                },
+                ShowFirstLabel = true,
+                ShowLastLabel = true,
+                Min = 0
+            });
+
+            columnChart.SetLegend(new Legend
+            {
+                Enabled = true,
+                BorderColor = System.Drawing.Color.CornflowerBlue,
+                BorderRadius = 6,
+                BackgroundColor = new BackColorOrGradient(ColorTranslator.FromHtml("#FFADD8E6"))
+            });
+
+            columnChart.SetSeries(new Series[]
+            {
+                new Series{
+
+                    Name = "Emergency Shelter",
+                    Data = new Data(metric)
+                },
+
+            }
+            );
+
+            return PartialView(columnChart);
         }
 
-        public List<int> dischargeRates()
+        public ActionResult dischargeRates()
         {
             var events = DB.ProgramEvents.ToList();
 
             var Query = (from y in events
                          where y.ProgramTypeID == 5 || y.ProgramTypeID == 6 || y.ProgramTypeID == 7
                          group y by y.ClearStartDate.Year into typeGroup
-                         select new
+                         orderby typeGroup.Key ascending
+                         select new ChartData
                          {
-                             StartDate = typeGroup.Key,
+                             Year = typeGroup.Key,
                              Count = typeGroup.Count(),
                          });
 
-            List<int> rates = new List<int>();
+            Highcharts columnChart = new Highcharts("columnchart");
 
-            foreach (var t in Query)
+            columnChart.InitChart(new Chart()
             {
-                rates.Add(t.Count);
+                Type = DotNet.Highcharts.Enums.ChartTypes.Line,
+                BackgroundColor = new BackColorOrGradient(System.Drawing.Color.AliceBlue),
+                Style = "fontWeight: 'bold', fontSize: '17px'",
+                BorderColor = System.Drawing.Color.LightBlue,
+                BorderRadius = 0,
+                BorderWidth = 2
+
+            });
+
+            columnChart.SetTitle(new Title()
+            {
+                Text = "Discharges by Year"
+            });
+
+            List<int> metricCounts = new List<int>();
+            List<string> years = new List<string>();
+
+            foreach (var r in Query)
+            {
+                metricCounts.Add(r.Count);
+                years.Add(r.Year.ToString());
             }
 
-            return rates;
+            String[] chartYears = years.Cast<string>().ToArray();
+            object[] metric = metricCounts.Cast<object>().ToArray();
+
+            columnChart.SetXAxis(new XAxis()
+            {
+                Type = AxisTypes.Category,
+                Title = new XAxisTitle() { Text = "Years", Style = "fontWeight: 'bold', fontSize: '17px'" },
+                Categories = chartYears
+            });
+
+            columnChart.SetYAxis(new YAxis()
+            {
+                Title = new YAxisTitle()
+                {
+                    Text = "Discharges",
+                    Style = "fontWeight: 'bold', fontSize: '17px'"
+                },
+                ShowFirstLabel = true,
+                ShowLastLabel = true,
+                Min = 0
+            });
+
+            columnChart.SetLegend(new Legend
+            {
+                Enabled = true,
+                BorderColor = System.Drawing.Color.CornflowerBlue,
+                BorderRadius = 6,
+                BackgroundColor = new BackColorOrGradient(ColorTranslator.FromHtml("#FFADD8E6"))
+            });
+
+            columnChart.SetSeries(new Series[]
+            {
+                new Series{
+
+                    Name = "Discharge",
+                    Data = new Data(metric)
+                },
+
+            }
+            );
+
+            return PartialView(columnChart);
         }
 
-        public List<int> dischargeRatesCum()
+        public ActionResult dischargeRatesCum()
         {
             var events = DB.ProgramEvents.ToList();
 
@@ -719,9 +1211,10 @@ namespace FIVESTARVC.Controllers
             var Query = (from y in events
                          where y.ProgramTypeID == 5 || y.ProgramTypeID == 6 || y.ProgramTypeID == 7
                          group y by y.ClearStartDate.Year into typeGroup
-                         select new
+                         orderby typeGroup.Key ascending
+                         select new ChartData
                          {
-                             StartDate = typeGroup.Key,
+                             Year = typeGroup.Key,
                              Count = typeGroup.Count(),
                          });
 
@@ -734,33 +1227,164 @@ namespace FIVESTARVC.Controllers
                 rates.Add(runningTotal);
             }
 
-            return rates;
+            Highcharts columnChart = new Highcharts("columnchart");
+
+            columnChart.InitChart(new Chart()
+            {
+                Type = DotNet.Highcharts.Enums.ChartTypes.Line,
+                BackgroundColor = new BackColorOrGradient(System.Drawing.Color.AliceBlue),
+                Style = "fontWeight: 'bold', fontSize: '17px'",
+                BorderColor = System.Drawing.Color.LightBlue,
+                BorderRadius = 0,
+                BorderWidth = 2
+
+            });
+
+            columnChart.SetTitle(new Title()
+            {
+                Text = "Cumulative Discharges by Year"
+            });
+
+            //List<int> metricCounts = new List<int>();
+            List<string> years = new List<string>();
+
+            foreach (var r in Query)
+            {
+                //metricCounts.Add(r.Count);
+                years.Add(r.Year.ToString());
+            }
+
+            String[] chartYears = years.Cast<string>().ToArray();
+            object[] metric = rates.Cast<object>().ToArray();
+
+            columnChart.SetXAxis(new XAxis()
+            {
+                Type = AxisTypes.Category,
+                Title = new XAxisTitle() { Text = "Years", Style = "fontWeight: 'bold', fontSize: '17px'" },
+                Categories = chartYears
+            });
+
+            columnChart.SetYAxis(new YAxis()
+            {
+                Title = new YAxisTitle()
+                {
+                    Text = "Discharges",
+                    Style = "fontWeight: 'bold', fontSize: '17px'"
+                },
+                ShowFirstLabel = true,
+                ShowLastLabel = true,
+                Min = 0
+            });
+
+            columnChart.SetLegend(new Legend
+            {
+                Enabled = true,
+                BorderColor = System.Drawing.Color.CornflowerBlue,
+                BorderRadius = 6,
+                BackgroundColor = new BackColorOrGradient(ColorTranslator.FromHtml("#FFADD8E6"))
+            });
+
+            columnChart.SetSeries(new Series[]
+            {
+                new Series{
+
+                    Name = "Discharges",
+                    Data = new Data(metric)
+                },
+
+            }
+            );
+
+            return PartialView(columnChart);
         }
 
-        public List<int> vetCourtRates()
+        public ActionResult vetCourtRates()
         {
             var events = DB.ProgramEvents.ToList();
-            var queryResults = (from y in events
+
+            var Query = (from y in events
                                 join resident in DB.Residents on y.ResidentID equals resident.ResidentID
                                 where y.ProgramTypeID == 2 || y.ProgramTypeID == 1 || y.ProgramTypeID == 3 && resident.InVetCourt.Equals(true)
                                 group y by y.ClearStartDate.Year into typeGroup
-                                select new
+                                orderby typeGroup.Key ascending
+                                select new ChartData
                                 {
-                                    VetCourt = typeGroup.Count(),
-                                    admtYear = typeGroup.Key
+                                    Count = typeGroup.Count(),
+                                    Year = typeGroup.Key
                                 });
 
-            List<int> rates = new List<int>();
+            Highcharts columnChart = new Highcharts("columnchart");
 
-            foreach (var r in queryResults)
+            columnChart.InitChart(new Chart()
             {
-                rates.Add(r.VetCourt);
+                Type = DotNet.Highcharts.Enums.ChartTypes.Line,
+                BackgroundColor = new BackColorOrGradient(System.Drawing.Color.AliceBlue),
+                Style = "fontWeight: 'bold', fontSize: '17px'",
+                BorderColor = System.Drawing.Color.LightBlue,
+                BorderRadius = 0,
+                BorderWidth = 2
+
+            });
+
+            columnChart.SetTitle(new Title()
+            {
+                Text = "VetCourt Residents by Year"
+            });
+
+            List<int> metricCounts = new List<int>();
+            List<string> years = new List<string>();
+
+            foreach (var r in Query)
+            {
+                metricCounts.Add(r.Count);
+                years.Add(r.Year.ToString());
             }
 
-            return rates;
+            String[] chartYears = years.Cast<string>().ToArray();
+            object[] metric = metricCounts.Cast<object>().ToArray();
+
+            columnChart.SetXAxis(new XAxis()
+            {
+                Type = AxisTypes.Category,
+                Title = new XAxisTitle() { Text = "Years", Style = "fontWeight: 'bold', fontSize: '17px'" },
+                Categories = chartYears
+            });
+
+            columnChart.SetYAxis(new YAxis()
+            {
+                Title = new YAxisTitle()
+                {
+                    Text = "VetCourt",
+                    Style = "fontWeight: 'bold', fontSize: '17px'"
+                },
+                ShowFirstLabel = true,
+                ShowLastLabel = true,
+                Min = 0
+            });
+
+            columnChart.SetLegend(new Legend
+            {
+                Enabled = true,
+                BorderColor = System.Drawing.Color.CornflowerBlue,
+                BorderRadius = 6,
+                BackgroundColor = new BackColorOrGradient(ColorTranslator.FromHtml("#FFADD8E6"))
+            });
+
+            columnChart.SetSeries(new Series[]
+            {
+                new Series{
+
+                    Name = "VetCourt",
+                    Data = new Data(metric)
+                },
+
+            }
+            );
+
+            return PartialView(columnChart);
         }
 
-        public List<int> vetCourtRatesCum()
+        public ActionResult vetCourtRatesCum()
         {
             var events = DB.ProgramEvents.ToList();
 
@@ -770,22 +1394,91 @@ namespace FIVESTARVC.Controllers
                                 join resident in DB.Residents on y.ResidentID equals resident.ResidentID
                                 where y.ProgramTypeID == 2 || y.ProgramTypeID == 1 || y.ProgramTypeID == 3 && resident.InVetCourt.Equals(true)
                                 group y by y.ClearStartDate.Year into typeGroup
-                                select new
+                                orderby typeGroup.Key ascending
+                                select new ChartData
                                 {
-                                    VetCourt = typeGroup.Count(),
-                                    admtYear = typeGroup.Key
+                                    Count = typeGroup.Count(),
+                                    Year = typeGroup.Key
                                 }).ToList();
 
             List<int> rates = new List<int>();
 
             foreach (var r in queryResults)
             {
-                runningTotal = runningTotal + r.VetCourt;
+                runningTotal = runningTotal + r.Count;
 
                 rates.Add(runningTotal);
             }
 
-            return rates;
+            Highcharts columnChart = new Highcharts("columnchart");
+
+            columnChart.InitChart(new Chart()
+            {
+                Type = DotNet.Highcharts.Enums.ChartTypes.Line,
+                BackgroundColor = new BackColorOrGradient(System.Drawing.Color.AliceBlue),
+                Style = "fontWeight: 'bold', fontSize: '17px'",
+                BorderColor = System.Drawing.Color.LightBlue,
+                BorderRadius = 0,
+                BorderWidth = 2
+
+            });
+
+            columnChart.SetTitle(new Title()
+            {
+                Text = "Cumulative VetCourt Residents by Year"
+            });
+
+            //List<int> metricCounts = new List<int>();
+            List<string> years = new List<string>();
+
+            foreach (var r in queryResults)
+            {
+                //metricCounts.Add(r.Count);
+                years.Add(r.Year.ToString());
+            }
+
+            String[] chartYears = years.Cast<string>().ToArray();
+            object[] metric = rates.Cast<object>().ToArray();
+
+            columnChart.SetXAxis(new XAxis()
+            {
+                Type = AxisTypes.Category,
+                Title = new XAxisTitle() { Text = "Years", Style = "fontWeight: 'bold', fontSize: '17px'" },
+                Categories = chartYears
+            });
+
+            columnChart.SetYAxis(new YAxis()
+            {
+                Title = new YAxisTitle()
+                {
+                    Text = "VetCourt",
+                    Style = "fontWeight: 'bold', fontSize: '17px'"
+                },
+                ShowFirstLabel = true,
+                ShowLastLabel = true,
+                Min = 0
+            });
+
+            columnChart.SetLegend(new Legend
+            {
+                Enabled = true,
+                BorderColor = System.Drawing.Color.CornflowerBlue,
+                BorderRadius = 6,
+                BackgroundColor = new BackColorOrGradient(ColorTranslator.FromHtml("#FFADD8E6"))
+            });
+
+            columnChart.SetSeries(new Series[]
+            {
+                new Series{
+
+                    Name = "VetCourt",
+                    Data = new Data(metric)
+                },
+
+            }
+            );
+
+            return PartialView(columnChart);
         }
 
         public ActionResult DownloadData()
