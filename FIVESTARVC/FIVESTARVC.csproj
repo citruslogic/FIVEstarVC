@@ -204,6 +204,7 @@
     <Compile Include="Helpers\Encryptor.cs" />
     <Compile Include="Models\AdAuthenticationService.cs" />
     <Compile Include="Models\Benefit.cs" />
+    <Compile Include="Models\ChartData.cs" />
     <Compile Include="Models\EnumReligionType.cs" />
     <Compile Include="Models\EnumGenderType.cs" />
     <Compile Include="Models\EnumEthnicityType.cs" />
