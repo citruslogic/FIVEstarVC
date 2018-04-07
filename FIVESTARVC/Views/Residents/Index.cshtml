@@ -127,10 +127,12 @@
                 @*Trigger the modal with a button*@
                 @if (item.IsCurrent())
                 {
-                    <button type="button" class="modal-link btn btn-sm btn-outline-secondary btn-light"
+                    @Html.ActionLink("Assign Tracks", "Create","ProgramEvents", new { id = item.ResidentID }, 
+                   htmlAttributes: new { @class = "btn btn-sm btn-outline-secondary btn-light" })
+                    @*<button type="button" class="modal-link btn btn-sm btn-outline-secondary btn-light"
                             data-toggle="modal" data-target="#QuickEventModal" onclick="showQuickEventDialog(@item.ResidentID)">
                         <i class="fa fa-plus fa-fw"></i> Track
-                    </button>
+                    </button>*@
                 }
 
 
@@ -203,6 +205,8 @@
                     });
 
                 }
+
+
 
                 function addCampaign() {
 

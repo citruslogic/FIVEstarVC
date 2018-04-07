@@ -35,7 +35,7 @@
 </head>
 
 <body>
-    <img src="~/Content/fivestar_logo.jpg" style="margin-top: -50px;"/>
+    <img src="~/Content/fivestar_logo.jpg" style="margin-top: -50px;" />
     <nav class="navbar navbar-dark d-print-none" style="background-image: url('../../Content/flag_bg.jpg')">
         <div class="container">
 
@@ -53,8 +53,8 @@
         </div>
     </nav>
     <div class="container body-content" style="padding-bottom: 0px;">
-       
-   
+
+
         @RenderBody()
 
 
@@ -66,9 +66,10 @@
     </div>
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
-    <script src="~/Scripts/Highcharts-4.0.1/js/highcharts.js"></script>  
+    <script src="~/Scripts/Highcharts-4.0.1/js/highcharts.js"></script>
     @RenderSection("scripts", required: false)
 
-  
+
+
 </body>
 </html>

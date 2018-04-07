@@ -86,12 +86,38 @@ namespace FIVESTARVC.Controllers
             return View(programEvent);
         }
 
-        // GET: ProgramEvents/Create
-        public ActionResult Create()
+        /*
+         * Append as many tracks as desired */
+        // GET: ProgramEvents/AddMultiTrack
+        public ActionResult AddMultiTrack()
         {
+
             ViewBag.ProgramTypeID = new SelectList(db.ProgramTypes.Where(t => t.ProgramTypeID >= 8), "ProgramTypeID", "ProgramDescription");
-            ViewBag.ResidentID = new SelectList(db.Residents, "ResidentID", "ClearLastName");
-            return View();
+
+            return PartialView("_ProgramTrack", new TempProgramEvent());
+        }
+
+
+        // GET: ProgramEvents/Create
+        public ActionResult Create(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            CustomEvent model = new CustomEvent();
+            model.programEvents = new List<TempProgramEvent>
+            {
+                new TempProgramEvent{ ResidentID = id.Value, StartDate = DateTime.Now },
+            };
+
+            ViewBag.ProgramTypeID = new SelectList(db.ProgramTypes.Where(t => t.ProgramTypeID >= 8), "ProgramTypeID", "ProgramDescription");
+
+            ViewBag.ResidentID = id;
+            ViewBag.Fullname = db.Residents.Find(model.programEvents.First().ResidentID).Fullname;
+
+            return View(model);
         }
 
         // POST: ProgramEvents/Create
@@ -99,27 +125,53 @@ namespace FIVESTARVC.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(CustomEvent programEvent)
+        public ActionResult Create(int ResidentID, CustomEvent model)
         {
-            if (ModelState.IsValid)
+
+            IEnumerable<TempProgramEvent> newPrograms = model.programEvents.Where(s => !s.IsDeleted && s.ProgramEventID == 0);
+
+            foreach (TempProgramEvent track in newPrograms)
             {
+                if (ModelState.IsValid)
+                {
+                    db.ProgramEvents.Add(new ProgramEvent {
+
+                        ResidentID = ResidentID,
+                        ProgramTypeID = track.ProgramTypeID,
+                        ClearStartDate = track.StartDate,
+                        ClearEndDate = track.EndDate,
+                        Completed = track.Completed
+                    });
+                }
                 
-                db.ProgramEvents.Add(new ProgramEvent {
-
-                    ResidentID = programEvent.ResidentID,
-                    ProgramTypeID = programEvent.ProgramTypeID,
-                    ClearStartDate = programEvent.ClearStartDate,
-                    ClearEndDate = programEvent.ClearEndDate,
-                    Completed = programEvent.Completed
-
-                });
-                db.SaveChanges();
-                return RedirectToAction("Index");
             }
 
-            ViewBag.ProgramTypeID = new SelectList(db.ProgramTypes.Where(t => t.ProgramTypeID >= 8), "ProgramTypeID", "ProgramDescription", programEvent.ProgramTypeID);
-            ViewBag.ResidentID = new SelectList(db.Residents, "ResidentID", "ClearLastName", programEvent.ResidentID);
-            return View(programEvent);
+            db.SaveChanges();
+            if (newPrograms.Count() > 1)
+            {
+                TempData["UserMessage"] = db.Residents.Find(ResidentID).Fullname + " has new events.  ";
+            } else
+            {
+                TempData["UserMessage"] = db.Residents.Find(ResidentID).Fullname + " has a new event.  ";
+            }
+
+            ViewBag.ProgramTypeID = new SelectList(db.ProgramTypes.Where(t => t.ProgramTypeID >= 8), "ProgramTypeID", "ProgramDescription");
+
+
+            return RedirectToAction("Index", "Residents"); ;
+
+            //if (ModelState.IsValid)
+            //{
+                
+            //    db.ProgramEvents.Add(programEvent);
+            //    db.SaveChanges();
+            //    return RedirectToAction("Index");
+            //}
+
+            //ViewBag.ProgramTypeID = new SelectList(db.ProgramTypes.Where(t => t.ProgramTypeID >= 8), "ProgramTypeID", "ProgramDescription", programEvent.ProgramTypeID);
+            //ViewBag.ResidentID = new SelectList(db.Residents, "ResidentID", "ClearLastName", programEvent.ResidentID);
+
+            //return View(programEvent);
         }
 
         // GET: ProgramEvents/Edit/5

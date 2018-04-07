@@ -7,6 +7,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity.ModelConfiguration;
 using FIVESTARVC.Helpers;
+using System.Web.Mvc;
 
 namespace FIVESTARVC.Models
 {
@@ -73,9 +74,14 @@ namespace FIVESTARVC.Models
 
         public Boolean Completed { get; set; }
 
+        [NotMapped]
+        public bool IsDeleted { get; set; }
+
         public virtual Resident Resident { get; set; }
         public virtual ProgramType ProgramType { get; set; }
-       
+
+        
+
         public String GetLongStartDate()
         {
             return ClearStartDate.ToLongDateString();
