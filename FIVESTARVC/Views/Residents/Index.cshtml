@@ -39,6 +39,12 @@
         </button>
         <ul class="dropdown-menu">
             <li><button class="dropdown-item" onclick="addCampaign()"><i class="fa fa-plus fa-fw"></i> Campaign</button></li>
+            <li>
+                <button class="dropdown-item" onclick="showQuickEventDialog()">
+                    <i class="fa fa-plus fa-fw"></i> Track
+                </button>
+            </li>
+            <li class="dropdown-divider"></li>
             <li><button class="dropdown-item" onclick="location.href = '/Rooms/Index';"><i class="fa fa-wrench fa-fw"></i> Room Config</button></li>
 
         </ul>
@@ -129,10 +135,7 @@
                 {
                     @Html.ActionLink("Assign Tracks", "Create","ProgramEvents", new { id = item.ResidentID }, 
                    htmlAttributes: new { @class = "btn btn-sm btn-outline-secondary btn-light" })
-                    @*<button type="button" class="modal-link btn btn-sm btn-outline-secondary btn-light"
-                            data-toggle="modal" data-target="#QuickEventModal" onclick="showQuickEventDialog(@item.ResidentID)">
-                        <i class="fa fa-plus fa-fw"></i> Track
-                    </button>*@
+                   
                 }
 
 
@@ -196,17 +199,14 @@
                     });
                 }, 4000);
 
-                function showQuickEventDialog(resident) {
+                function showQuickEventDialog() {
 
-                    $.get('/Residents/ViewQuickEvent/' + resident, function (data) {
-                        $('.modal-body').html(data);
-                        $('.modal-title').html("Quick Event");
-                        $('#QuickEventModal').modal('show');
+                    $.get('/ProgramEvents/ViewQuickEvent/', function (data) {
+                        $('.modal-content').html(data);
+                        $('#AddModal').modal('show');
                     });
 
                 }
-
-
 
                 function addCampaign() {
 

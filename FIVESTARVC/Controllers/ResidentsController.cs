@@ -600,59 +600,6 @@ namespace FIVESTARVC.Controllers
             return RedirectToAction("Index");
         }
 
-
-        //// GET
-        //// Quick Event form (part of a modal dialog)
-        //[HttpGet]
-        //public ActionResult ViewQuickEvent(int id)
-        //{
-        //    ViewBag.ResidentID = id;
-        //    ViewBag.Fullname = db.Residents.Find(id).Fullname;
-        //    ViewBag.ProgramTypeID = new SelectList(db.ProgramTypes
-        //        .Where(t => t.ProgramTypeID >= 8), "ProgramTypeID", "ProgramDescription");
-
-
-        //    return PartialView("_modalNewEvent");
-        //}
-
-        ///*
-        // * Save the Quick Event triggered on /Residents/Index
-        // * 
-        // * TODO: submit multiple programs (maybe up to 2 or 3?) at once.
-        // * 
-        // * Unclear whether a resident will be in more than 2 at a time. 
-        // */
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public ActionResult ViewQuickEvent(int id, [Bind(Include = "ProgramEventID,ResidentID,ProgramTypeID,ClearStartDate,ClearEndDate, Completed")] CustomEvent customEvent)
-        //{
-        //    ProgramEvent ev = new ProgramEvent()
-        //    {
-        //        ProgramEventID = customEvent.ProgramEventID,
-        //        ResidentID = customEvent.ResidentID,
-        //        ProgramTypeID = customEvent.ProgramTypeID,
-        //        ClearStartDate = customEvent.ClearStartDate,
-        //        ClearEndDate = customEvent.ClearEndDate,
-        //        Completed = customEvent.Completed
-        //    };
-
-        //    if (ModelState.IsValid)
-        //    {
-        //        db.ProgramEvents.Add(ev);
-        //        db.SaveChanges();
-        //        TempData["UserMessage"] = db.Residents.Find(id).Fullname + " has a new event.  ";
-
-        //    }
-
-        //    ViewBag.ProgramTypeID = new SelectList(db.ProgramTypes
-        //        .Where(t => t.ProgramTypeID >= 8), "ProgramTypeID", "ProgramDescription", ev.ProgramTypeID);
-        //    ViewBag.ResidentID = id;
-
-        //    return RedirectToAction("Index");
-
-        //}
-
-
         [HttpGet]
         public ActionResult GetRegionName(string id)
         {

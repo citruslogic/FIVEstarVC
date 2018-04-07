@@ -222,6 +222,36 @@ namespace FIVESTARVC.Controllers
             return View(eventToUpdate);
         }
 
+        [HttpGet]
+        public ActionResult ViewQuickEvent()
+        {
+
+
+            return PartialView("ViewQuickEvent", new ProgramType());
+        }
+
+        /*
+         * Save the Quick Event triggered on /Residents/Index
+         * 
+         */
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult ViewQuickEvent(ProgramType type)
+        {
+            
+            if (ModelState.IsValid)
+            {
+                db.ProgramTypes.Add(type);
+                db.SaveChanges();
+                TempData["UserMessage"] = "A new track has been added.  ";
+
+            }
+
+
+            return RedirectToAction("Index", "Residents");
+
+        }
+
         // GET: ProgramEvents/Delete/5
         public ActionResult Delete(int? id)
         {

@@ -802,7 +802,7 @@
     <Content Include="Views\ProgramEvents\Details.cshtml" />
     <Content Include="Views\ProgramEvents\Edit.cshtml" />
     <Content Include="Views\ProgramEvents\Index.cshtml" />
-    <Content Include="Views\Shared\_modalNewEvent.cshtml" />
+    <Content Include="Views\Shared\ViewQuickEvent.cshtml" />
     <Content Include="Views\Reports\Historic.cshtml" />
     <Content Include="Views\Shared\BenefitPartialViewEdit.cshtml" />
     <Content Include="Views\Shared\BenefitPartialViewCreate.cshtml" />
