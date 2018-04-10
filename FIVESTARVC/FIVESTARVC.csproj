@@ -797,7 +797,6 @@
     <Content Include="Views\Residents\Edit.cshtml" />
     <Content Include="Views\Residents\Index.cshtml" />
     <Content Include="Views\Reports\Index.cshtml" />
-    <Content Include="Views\ProgramEvents\Create-backup.cshtml" />
     <Content Include="Views\ProgramEvents\Delete.cshtml" />
     <Content Include="Views\ProgramEvents\Details.cshtml" />
     <Content Include="Views\ProgramEvents\Edit.cshtml" />

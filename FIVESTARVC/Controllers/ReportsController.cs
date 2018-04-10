@@ -168,11 +168,18 @@ namespace FIVESTARVC.Controllers
         /* Get the age of all residents that have been in the center. */
         public IEnumerable<ReportingResidentViewModel> GetResidentsAge()
         {
+            if (DB.Residents.ToList().Any())
+            {
+                IEnumerable<ReportingResidentViewModel> residentListing = DB.Residents.ToList()
+                    .Select(r => new ReportingResidentViewModel { ID = r.ResidentID, Age = r.Age.Computed() });
 
-            IEnumerable<ReportingResidentViewModel> residentListing = DB.Residents.ToList()
-                .Select(r => new ReportingResidentViewModel { ID = r.ResidentID, Age = r.Age.Computed() });
+                return residentListing;
 
-            return residentListing;
+            } else
+            {
+                return null;
+            }
+           
         }
         /* Get the average age of all residents that have been in the center.
          * If you want only the current residents, use IsCurrent() in a Where
@@ -180,10 +187,16 @@ namespace FIVESTARVC.Controllers
         public double GetAverageAge()
         {
 
-            IEnumerable<ReportingResidentViewModel> residentListing = DB.Residents.ToList()
-                .Select(r => new ReportingResidentViewModel { ID = r.ResidentID, Age = r.Age.Computed() });
+           if (GetResidentsAge().Any())
+           {
+                return GetResidentsAge().Average(r => r.Age);
 
-            return residentListing.Average(r => r.Age);
+           } else
+           {
+
+                return 0.0;
+           }
+
         }
 
         //Useless method, must delete

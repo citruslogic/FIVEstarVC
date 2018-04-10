@@ -30,6 +30,7 @@ namespace FIVESTARVC.Controllers
         // GET: AgeGroupBreakdown
         public ActionResult AgeGroupBreakdown()
         {
+            
             var AgeGroups = db.Residents.ToList().Where(cur => cur.IsCurrent()).GroupBy(r => r.Age / 6).Select(group => new AgeGroups
             {
                 AgeGroup = String.Format("{0} - {1}", group.Key * 6, (group.Key + 1) * 6),
@@ -78,11 +79,18 @@ namespace FIVESTARVC.Controllers
 
         public double GetCurrentAverageAge()
         {
+            if (db.Residents.ToList().Where(cur => cur.IsCurrent()).Any())
+            {
+                IEnumerable<ReportingResidentViewModel> residentListing = db.Residents.ToList().Where(cur => cur.IsCurrent())
+                    .Select(r => new ReportingResidentViewModel { ID = r.ResidentID, Age = r.Age.Computed() });
 
-            IEnumerable<ReportingResidentViewModel> residentListing = db.Residents.ToList().Where(cur => cur.IsCurrent())
-                .Select(r => new ReportingResidentViewModel { ID = r.ResidentID, Age = r.Age.Computed() });
+                return Math.Round(residentListing.Average(r => r.Age), 2);
 
-            return Math.Round(residentListing.Average(r => r.Age), 2);
+            } else
+            {
+                return 0.0;
+            }
+               
         }
 
     }
