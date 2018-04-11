@@ -116,10 +116,10 @@ namespace FIVESTARVC.Controllers
 
             foreach (Resident resident in residents)
             {
-                if (resident.IsCurrent())
-                {
-                    continue;
-                }
+                //if (resident.IsCurrent())
+                //{
+                //    continue;
+                //}
                 numbCount++;
                 total += resident.DaysInCenter();
             }
