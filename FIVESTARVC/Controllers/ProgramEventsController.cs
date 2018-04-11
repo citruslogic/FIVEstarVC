@@ -15,6 +15,7 @@ using System.Globalization;
 
 namespace FIVESTARVC.Controllers
 {
+    [Authorize]
     public class ProgramEventsController : Controller
     {
         private ResidentContext db = new ResidentContext();

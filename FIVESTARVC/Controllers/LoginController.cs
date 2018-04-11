@@ -11,16 +11,18 @@ namespace FIVESTARVC.Controllers
     public class LoginController : Controller
     {
         [AllowAnonymous]
-        public virtual ActionResult Index()
+        public virtual ActionResult Index(string ReturnUrl)
         {
-            return View();
+            var model = new LoginViewModel { ReturnUrl = ReturnUrl };
+
+            return View(model);
         }
 
 
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public virtual ActionResult Index(LoginViewModel model, string returnUrl)
+        public virtual ActionResult Index(LoginViewModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -36,7 +38,7 @@ namespace FIVESTARVC.Controllers
             if (authenticationResult.IsSuccess)
             {
                 // we are in!
-                return RedirectToLocal(returnUrl);
+                return RedirectToLocal(model.ReturnUrl);
             }
 
             ModelState.AddModelError("", authenticationResult.ErrorMessage);
@@ -74,5 +76,7 @@ namespace FIVESTARVC.Controllers
         [AllowHtml]
         [DataType(DataType.Password)]
         public string Password { get; set; }
+
+        public string ReturnUrl { get; set; }
     }
 }
