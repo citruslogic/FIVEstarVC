@@ -152,10 +152,11 @@
     <div class="col-sm-5 offset-2" style="box-shadow: 0 0 30px black;">
         <h5>Income </h5>
         <table class="table table-bordered table-striped">
+
             <thead>
                 <tr>
                     <th class="col-md-2">Type</th>
-                    <th class="col-md-2">Amount</th>
+                    <th class="col-md-2 p-md-3"></th>
                 </tr>
             </thead>
             <tbody>
@@ -164,8 +165,16 @@
                         @Html.LabelFor(model => model.Benefit.DisabilityPercentage, htmlAttributes: new { @class = "control-label col-md-offset-1" })
                     </td>
                     <td>
-                            @Html.DisplayFor(model => model.Benefit.DisabilityPercentage)
-                        
+                        @Html.DisplayFor(model => model.Benefit.DisabilityPercentage)
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-form-label">
+                        @Html.LabelFor(model => model.Benefit.FoodStamp, htmlAttributes: new { @class = "control-label col-md-offset-1" })
+                    </td>
+                    <td>
+                        @(Model.Benefit.FoodStamp ? "Yes" : "No")
                     </td>
                 </tr>
                 <tr>
@@ -184,14 +193,7 @@
                         @Html.DisplayFor(model => model.Benefit.SSDI)
                     </td>
                 </tr>
-                <tr>
-                    <td class="col-form-label">
-                        @Html.LabelFor(model => model.Benefit.FoodStamp, htmlAttributes: new { @class = "control-label col-md-offset-1" })
-                    </td>
-                    <td>
-                        @Html.DisplayFor(model => model.Benefit.FoodStamp)
-                    </td>
-                </tr>
+
                 <tr>
                     <td class="col-form-label">
                         @Html.LabelFor(model => model.Benefit.OtherDescription, htmlAttributes: new { @class = "control-label col-md-offset-1" })
@@ -218,7 +220,7 @@
 
                     </td>
                 </tr>
-        </table>
+</table>
     </div>
 
 </div>

@@ -33,11 +33,9 @@ namespace FIVESTARVC.Models
         [DisplayFormat(DataFormatString = "{0:C0}")]
         public decimal? SSDI { get; set; }
 
-        [DataType(DataType.Currency)]
-        [Column(TypeName = "money")]
-        [DisplayFormat(DataFormatString = "{0:C0}")]
+        
         [Display(Name = "Food stamps")]
-        public decimal? FoodStamp { get; set; }
+        public bool FoodStamp { get; set; }
         
         /* Other forms of disability as income */
         [Display(Name = "Other Income (Description)")]

@@ -14,7 +14,7 @@
         <thead>
             <tr>
                 <th class="col-md-2">Type</th>
-                <th class="col-md-2">Amount</th>
+                <th class="col-md-2"></th>
             </tr>
         </thead>
         <tbody>
@@ -54,7 +54,7 @@
                     @Html.LabelFor(model => model.FoodStamp, htmlAttributes: new { @class = "control-label" })
                 </td>
                 <td>
-                    @Html.EditorFor(model => model.FoodStamp, new { htmlAttributes = new { @class = "form-control income money-wide" } })
+                    @Html.EditorFor(model => model.FoodStamp, new { htmlAttributes = new { @class = "form-control" } })
                     @Html.ValidationMessageFor(model => model.FoodStamp, "")
                 </td>
             </tr>
