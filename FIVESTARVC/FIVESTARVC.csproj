@@ -834,6 +834,7 @@
     <Content Include="Views\Shared\EditorTemplates\Collection.cshtml" />
     <Content Include="Views\ProgramEvents\Create.cshtml" />
     <Content Include="Views\Shared\_ProgramTrack.cshtml" />
+    <Content Include="Views\Shared\DisplayChart.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

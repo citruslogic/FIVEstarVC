@@ -17,8 +17,10 @@ namespace FIVESTARVC.ViewModels
         public ServiceType ServiceType { get; set; }
         public int Age { get; set; }
         public string Note { get; set; }
-
-
+        public GenderType Gender { get; set; }
+        public EthnicityType Ethnicity { get; set; }
+        public virtual StateTerritory StateTerritory { get; set; }
+        public ReligionType Religion { get; set; }
 
         public IEnumerable<int> ProgramTypeID { get; set; }
         public IEnumerable<ProgramEvent> ProgramEvents { get; set; }
