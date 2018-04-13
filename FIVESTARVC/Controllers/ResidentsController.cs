@@ -562,7 +562,7 @@ namespace FIVESTARVC.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
-        public ActionResult Discharge(int id, int ProgramTypeID)
+        public ActionResult Discharge(int id, int ProgramTypeID, string DischargeDate)
         {
             try
             {
@@ -585,7 +585,7 @@ namespace FIVESTARVC.Controllers
                 residentToDischarge.ProgramEvents.Add(new ProgramEvent
                 {
                     ProgramTypeID = ProgramTypeID,
-                    ClearStartDate = DateTime.Now,
+                    ClearStartDate = DateTime.Parse(DischargeDate)
 
                 });
 
