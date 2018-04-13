@@ -35,7 +35,11 @@
         /* fallback */
     }
 
-
+   
+    .money-wide {
+        width: 150px;
+        
+    }
         .events tbody td, .events thead th {
             width: 15.2%;
             float: left;
@@ -138,7 +142,7 @@
                         <text>No campaigns. </text>
                     }
 
-                    
+
 
                 }
             </div>
@@ -149,20 +153,20 @@
         </div>
 
     </div>
-    <div class="col-sm-5 offset-2" style="box-shadow: 0 0 30px black;">
+    <div class="col-sm-5 offset-3" style="box-shadow: 0 0 30px black;">
         <h5>Income </h5>
         <table class="table table-bordered table-striped">
 
             <thead>
                 <tr>
-                    <th class="col-md-2">Type</th>
-                    <th class="col-md-2 p-md-3"></th>
+                    <th style="width: 300px;">Type</th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
                     <td class="col-form-label">
-                        @Html.LabelFor(model => model.Benefit.DisabilityPercentage, htmlAttributes: new { @class = "control-label col-md-offset-1" })
+                        @Html.LabelFor(model => model.Benefit.DisabilityPercentage, htmlAttributes: new { @class = "control-label" })
                     </td>
                     <td>
                         @Html.DisplayFor(model => model.Benefit.DisabilityPercentage)
@@ -171,7 +175,7 @@
                 </tr>
                 <tr>
                     <td class="col-form-label">
-                        @Html.LabelFor(model => model.Benefit.FoodStamp, htmlAttributes: new { @class = "control-label col-md-offset-1" })
+                        @Html.LabelFor(model => model.Benefit.FoodStamp, htmlAttributes: new { @class = "control-label" })
                     </td>
                     <td>
                         @(Model.Benefit.FoodStamp ? "Yes" : "No")
@@ -179,7 +183,7 @@
                 </tr>
                 <tr>
                     <td class="col-form-label">
-                        @Html.LabelFor(model => model.Benefit.SSI, htmlAttributes: new { @class = "control-label col-md-offset-1" })
+                        @Html.LabelFor(model => model.Benefit.SSI, htmlAttributes: new { @class = "control-label" })
                     </td>
                     <td>
                         @Html.DisplayFor(model => model.Benefit.SSI)
@@ -187,7 +191,7 @@
                 </tr>
                 <tr>
                     <td class="col-form-label">
-                        @Html.LabelFor(model => model.Benefit.SSDI, htmlAttributes: new { @class = "control-label col-md-offset-1" })
+                        @Html.LabelFor(model => model.Benefit.SSDI, htmlAttributes: new { @class = "control-label" })
                     </td>
                     <td>
                         @Html.DisplayFor(model => model.Benefit.SSDI)
@@ -196,7 +200,7 @@
 
                 <tr>
                     <td class="col-form-label">
-                        @Html.LabelFor(model => model.Benefit.OtherDescription, htmlAttributes: new { @class = "control-label col-md-offset-1" })
+                        @Html.LabelFor(model => model.Benefit.OtherDescription, htmlAttributes: new { @class = "control-label" })
                     </td>
                     <td>
                         @Html.DisplayFor(model => model.Benefit.OtherDescription)
@@ -204,7 +208,7 @@
                 </tr>
                 <tr>
                     <td class="col-form-label">
-                        @Html.LabelFor(model => model.Benefit.Other, htmlAttributes: new { @class = "control-label col-md-offset-1" })
+                        @Html.LabelFor(model => model.Benefit.Other, htmlAttributes: new { @class = "control-label" })
                     </td>
                     <td>
                         @Html.DisplayFor(model => model.Benefit.Other)
@@ -212,7 +216,7 @@
                 </tr>
                 <tr>
                     <td class="col-form-label">
-                        @Html.LabelFor(model => model.Benefit.TotalBenefitAmount, htmlAttributes: new { @class = "control-label col-md-offset-1 " })
+                        @Html.LabelFor(model => model.Benefit.TotalBenefitAmount, htmlAttributes: new { @class = "control-label" })
                     </td>
                     <td>
 
@@ -220,7 +224,7 @@
 
                     </td>
                 </tr>
-</table>
+        </table>
     </div>
 
 </div>
@@ -254,34 +258,34 @@
             </thead>
             <tbody>
                 @foreach (var item in Model.ProgramEvents)
-            {
-                <tr>
-                    <td style="width: 21.2em">
-                        @Html.DisplayFor(modelItem => item.ProgramType.ProgramDescription)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.ClearStartDate)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.ClearEndDate)
-                    </td>
-                    <td>
-                        @if (item.Completed == true)
-                    {
-                        <text>Yes</text>
-                }
-                else
                 {
-                    <text>No</text>
-            }
-                    </td>
-                </tr>
-        }
+                    <tr>
+                        <td style="width: 21.2em">
+                            @Html.DisplayFor(modelItem => item.ProgramType.ProgramDescription)
+                        </td>
+                        <td>
+                            @(item.GetShortStartDate())
+                        </td>
+                        <td>
+                            @(item.GetShortEndDate())
+                        </td>
+                        <td>
+                            @if (item.Completed == true)
+                            {
+                                <text>Yes</text>
+                            }
+                            else
+                            {
+                                <text>No</text>
+                            }
+                        </td>
+                    </tr>
+                }
             </tbody>
         </table>
 
     </div>
-    
+
 
 
 </div>

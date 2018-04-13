@@ -58,13 +58,13 @@
     {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.ProgramType.ProgramDescription)
+                @(item.ProgramType.ProgramDescription)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.ClearStartDate)
+                @(item.GetShortStartDate())
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.ClearEndDate)
+                @(item.GetShortEndDate())
             </td>
             <td>
                 @(item.Completed ? "Yes" : "No")
