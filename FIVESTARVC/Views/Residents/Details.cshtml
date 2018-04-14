@@ -178,7 +178,15 @@
                         @Html.LabelFor(model => model.Benefit.FoodStamp, htmlAttributes: new { @class = "control-label" })
                     </td>
                     <td>
-                        @(Model.Benefit.FoodStamp ? "Yes" : "No")
+                        @if (Model.Benefit != null)
+                        {
+                            @(Model.Benefit.FoodStamp ? "Yes" : "No")
+
+                        } else
+                        {
+                            <text>No</text>
+                        }
+
                     </td>
                 </tr>
                 <tr>
