@@ -54,7 +54,7 @@
                     @Html.LabelFor(model => model.FoodStamp, htmlAttributes: new { @class = "control-label" })
                 </td>
                 <td>
-                    @Html.EditorFor(model => model.FoodStamp)
+                    @Html.CheckBoxFor(model => model.FoodStamp, htmlAttributes: new { @class = "biggerCheckBox" })
                     @Html.ValidationMessageFor(model => model.FoodStamp, "")
                 </td>
             </tr>

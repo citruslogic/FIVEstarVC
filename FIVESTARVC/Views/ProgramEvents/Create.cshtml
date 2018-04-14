@@ -1,6 +1,13 @@
 ﻿@model FIVESTARVC.ViewModels.CustomEvent
 
+<style>
+    .biggerCheckBox {
+        transform: scale(1.5);
+        -webkit-transform: scale(1.5);
+        margin-left: 5px;
+    }
 
+</style>
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
@@ -8,7 +15,7 @@
     <h5>
         @ViewBag.Fullname
     </h5>
-<p> This resident can be enrolled in one or more tracks.</p>
+    <p> This resident can be enrolled in one or more tracks.</p>
 
     <input type="hidden" name="ResidentID" value="@ViewBag.ResidentID" />
 
@@ -52,7 +59,7 @@
 @section Scripts {
     <script type="text/javascript">
 
-         
+
 
         $("#addTrack").on("click", function () {
             $.ajax({
@@ -64,13 +71,13 @@
                     $('#tracks').find('tbody:last').append('<tr>' + data + '</tr>');
 
                 }
-                                
+
 
             });
 
-                $(".savebtn").show();
-           
-            
+            $(".savebtn").show();
+
+
         });
 
 
@@ -86,13 +93,13 @@
             } else {
                 $(".savebtn").show();
             }
-                
-            
+
+
 
         });
 
 
-        
+
 
 
     </script>
