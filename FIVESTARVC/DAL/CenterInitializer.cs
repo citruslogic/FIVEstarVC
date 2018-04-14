@@ -135,9 +135,9 @@ namespace FIVESTARVC.DAL
                 new Resident { FirstMidName="Carson", StateTerritoryID=14, ClearBirthdate=DateTime.Parse("3/4/1988"), ClearLastName="Steven", RoomNumber = 102, ServiceBranch=ServiceType.ARMY },
                 new Resident { FirstMidName="Naomi", StateTerritoryID=25, ClearBirthdate=DateTime.Parse("6/12/1979"), ClearLastName="Wildman", RoomNumber = 103, ServiceBranch=ServiceType.AIRFORCE },
                 new Resident { FirstMidName="Gary", StateTerritoryID=8, ClearBirthdate=DateTime.Parse("6/24/1980"), ClearLastName="Noonan", RoomNumber = 105, ServiceBranch=ServiceType.NAVY },
-                new Resident { FirstMidName="Steve", StateTerritoryID=40, ClearBirthdate=DateTime.Parse("1/15/1981"), ClearLastName="Nash", RoomNumber = 106, ServiceBranch=ServiceType.MARINES },
-                new Resident { FirstMidName="Neo", StateTerritoryID=15, ClearBirthdate=DateTime.Parse("3/8/1974"), ClearLastName="Anderson", RoomNumber = 107, ServiceBranch=ServiceType.AIRFORCE },
-                new Resident { FirstMidName="Charlie", StateTerritoryID=22, ClearLastName="Brown", ClearBirthdate=DateTime.Parse("12/23/1976"), RoomNumber = 108, ServiceBranch=ServiceType.NAVY }
+                new Resident { FirstMidName="Steve", StateTerritoryID=40, ClearBirthdate=DateTime.Parse("1/15/1981"), ClearLastName="Nash", RoomNumber = null, ServiceBranch=ServiceType.MARINES },
+                new Resident { FirstMidName="Neo", StateTerritoryID=15, ClearBirthdate=DateTime.Parse("3/8/1974"), ClearLastName="Anderson", RoomNumber = null, ServiceBranch=ServiceType.AIRFORCE },
+                new Resident { FirstMidName="Charlie", StateTerritoryID=22, ClearLastName="Brown", ClearBirthdate=DateTime.Parse("12/23/1976"), RoomNumber = null, ServiceBranch=ServiceType.NAVY }
             };
 
             residents.ForEach(r => context.Residents.Add(r));
