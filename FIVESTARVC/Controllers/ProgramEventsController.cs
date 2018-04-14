@@ -129,7 +129,7 @@ namespace FIVESTARVC.Controllers
         public ActionResult Create(int ResidentID, CustomEvent model)
         {
 
-            IEnumerable<TempProgramEvent> newPrograms = model.programEvents.Where(s => !s.IsDeleted && s.ProgramEventID == 0);
+            IEnumerable<TempProgramEvent> newPrograms = model.programEvents.Where(s => s.ProgramEventID == 0);
 
             foreach (TempProgramEvent track in newPrograms)
             {

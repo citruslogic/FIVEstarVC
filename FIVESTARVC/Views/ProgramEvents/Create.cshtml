@@ -1,13 +1,6 @@
 ﻿@model FIVESTARVC.ViewModels.CustomEvent
 
-<style>
-    .biggerCheckBox {
-        transform: scale(1.5);
-        -webkit-transform: scale(1.5);
-        margin-left: 5px;
-    }
 
-</style>
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
@@ -38,24 +31,18 @@
 
 
     <hr />
+
     <div class="btn-group-sm">
         <button type="submit" class="savebtn btn btn-primary btn-sm">Enroll</button>
-        <button type="button" class="btn btn-sm" id="addTrack">Add Track</button>
+        <span class="offset-sm-1"></span>
+        <button type="button" class="btn btn-sm" id="addTrack">Add New Track</button>
         <button type="button" class="btn btn-sm" onclick="location.href='/Residents'">Back to List</button>
+
 
     </div>
 
-
-
-
-
-
-
-
-}
-
 <br />
-
+}
 @section Scripts {
     <script type="text/javascript">
 
@@ -98,7 +85,7 @@
 
         });
 
-
+        
 
 
 
