@@ -15,12 +15,13 @@ using System.Globalization;
 
 namespace FIVESTARVC.Controllers
 {
-    [Authorize]
+    
     public class ResidentsController : Controller
     {
         private ResidentContext db = new ResidentContext();
 
         // GET: Residents
+        [Authorize]
         public ActionResult Index(string sortOrder, string currentFilter, string searchString, int? page)
         {
 
@@ -43,9 +44,6 @@ namespace FIVESTARVC.Controllers
 
             var residents = (from s in db.Residents
                              select s).ToList();
-
-
-
 
             if (!String.IsNullOrEmpty(searchString))
             {
@@ -77,6 +75,7 @@ namespace FIVESTARVC.Controllers
 
         }
 
+        [Authorize]
         // GET: Residents/Details/5
         public ActionResult Details(int? id)
         {
@@ -121,6 +120,7 @@ namespace FIVESTARVC.Controllers
         }
 
         // GET: Residents/Create
+        [Authorize]
         public ActionResult Create()
         {
             ResidentIncomeModel residentIncomeModel = new ResidentIncomeModel();
@@ -159,6 +159,7 @@ namespace FIVESTARVC.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public ActionResult Create(ResidentIncomeModel residentIncomeModel, string[] selectedCampaigns,
             int AdmissionType, int RoomNumber)
         {
@@ -302,6 +303,7 @@ namespace FIVESTARVC.Controllers
         }
 
         // GET: Residents/Edit/5
+        [Authorize]
         public ActionResult Edit(int? id)
         {
 
@@ -341,6 +343,7 @@ namespace FIVESTARVC.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost, ActionName("Edit")]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public ActionResult EditPost(int? id, string[] selectedCampaigns, int? RoomNumber, bool? Readmit)
         {
 
@@ -477,6 +480,7 @@ namespace FIVESTARVC.Controllers
 
         // GET: Residents/AddCampaign/5
         [HttpGet]
+        [Authorize]
         public ActionResult AddCampaign()
         {
 
@@ -488,6 +492,7 @@ namespace FIVESTARVC.Controllers
         // POST: Residents/AddCampaign/5
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public ActionResult AddCampaign(MilitaryCampaign model)
         {
 
@@ -514,6 +519,7 @@ namespace FIVESTARVC.Controllers
 
         // GET: Residents/Discharge/5
         [HttpGet]
+        [Authorize]
         public ActionResult Discharge(int? id, bool? saveChangesError = false)
         {
             if (id == null)
@@ -555,7 +561,8 @@ namespace FIVESTARVC.Controllers
         // POST: Residents/Discharge/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Discharge(int id, int ProgramTypeID)
+        [Authorize]
+        public ActionResult Discharge(int id, int ProgramTypeID, string DischargeDate)
         {
             try
             {
@@ -578,7 +585,7 @@ namespace FIVESTARVC.Controllers
                 residentToDischarge.ProgramEvents.Add(new ProgramEvent
                 {
                     ProgramTypeID = ProgramTypeID,
-                    ClearStartDate = DateTime.Now,
+                    ClearStartDate = DateTime.Parse(DischargeDate)
 
                 });
 
@@ -601,6 +608,7 @@ namespace FIVESTARVC.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public ActionResult GetRegionName(string id)
         {
             var RegionName = db.States.Find(Int32.Parse(id)).Region;

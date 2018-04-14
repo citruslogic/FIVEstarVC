@@ -168,11 +168,18 @@ namespace FIVESTARVC.Controllers
         /* Get the age of all residents that have been in the center. */
         public IEnumerable<ReportingResidentViewModel> GetResidentsAge()
         {
+            if (DB.Residents.ToList().Any())
+            {
+                IEnumerable<ReportingResidentViewModel> residentListing = DB.Residents.ToList()
+                    .Select(r => new ReportingResidentViewModel { ID = r.ResidentID, Age = r.Age.Computed() });
 
-            IEnumerable<ReportingResidentViewModel> residentListing = DB.Residents.ToList()
-                .Select(r => new ReportingResidentViewModel { ID = r.ResidentID, Age = r.Age.Computed() });
+                return residentListing;
 
-            return residentListing;
+            } else
+            {
+                return null;
+            }
+           
         }
         /* Get the average age of all residents that have been in the center.
          * If you want only the current residents, use IsCurrent() in a Where
@@ -180,10 +187,16 @@ namespace FIVESTARVC.Controllers
         public double GetAverageAge()
         {
 
-            IEnumerable<ReportingResidentViewModel> residentListing = DB.Residents.ToList()
-                .Select(r => new ReportingResidentViewModel { ID = r.ResidentID, Age = r.Age.Computed() });
+           if (GetResidentsAge().Any())
+           {
+                return GetResidentsAge().Average(r => r.Age);
 
-            return residentListing.Average(r => r.Age);
+           } else
+           {
+
+                return 0.0;
+           }
+
         }
 
         //Useless method, must delete
@@ -292,7 +305,7 @@ namespace FIVESTARVC.Controllers
             }
             );
 
-            return PartialView(columnChart);
+            return PartialView("DisplayChart", columnChart);
 
 
         }
@@ -390,7 +403,7 @@ namespace FIVESTARVC.Controllers
             }
             );
 
-            return PartialView(columnChart);
+            return PartialView("DisplayChart", columnChart);
         }
 
         public ActionResult admittedRates()
@@ -475,7 +488,7 @@ namespace FIVESTARVC.Controllers
             }
             );
 
-            return PartialView(columnChart);
+            return PartialView("DisplayChart", columnChart);
         }
 
         public ActionResult admittedRatesCum()
@@ -571,7 +584,7 @@ namespace FIVESTARVC.Controllers
             }
             );
 
-            return PartialView(columnChart);
+            return PartialView("DisplayChart", columnChart);
         }
 
         public ActionResult readmittedRates()
@@ -656,7 +669,7 @@ namespace FIVESTARVC.Controllers
             }
             );
 
-            return PartialView(columnChart);
+            return PartialView("DisplayChart", columnChart);
         }
 
         public ActionResult readmittedRatesCum()
@@ -752,7 +765,7 @@ namespace FIVESTARVC.Controllers
             }
             );
 
-            return PartialView(columnChart);
+            return PartialView("DisplayChart", columnChart);
         }
 
         public ActionResult p2iRates()
@@ -837,7 +850,7 @@ namespace FIVESTARVC.Controllers
             }
             );
 
-            return PartialView(columnChart);
+            return PartialView("DisplayChart", columnChart);
         }
 
         public ActionResult p2iRatesCum()
@@ -933,7 +946,7 @@ namespace FIVESTARVC.Controllers
             }
             );
 
-            return PartialView(columnChart);
+            return PartialView("DisplayChart", columnChart);
         }
 
         public ActionResult emergRates()
@@ -1018,7 +1031,7 @@ namespace FIVESTARVC.Controllers
             }
             );
 
-            return PartialView(columnChart);
+            return PartialView("DisplayChart", columnChart);
         }
 
         public ActionResult emergRatesCum()
@@ -1114,7 +1127,7 @@ namespace FIVESTARVC.Controllers
             }
             );
 
-            return PartialView(columnChart);
+            return PartialView("DisplayChart", columnChart);
         }
 
         public ActionResult dischargeRates()
@@ -1199,7 +1212,7 @@ namespace FIVESTARVC.Controllers
             }
             );
 
-            return PartialView(columnChart);
+            return PartialView("DisplayChart", columnChart);
         }
 
         public ActionResult dischargeRatesCum()
@@ -1295,7 +1308,7 @@ namespace FIVESTARVC.Controllers
             }
             );
 
-            return PartialView(columnChart);
+            return PartialView("DisplayChart", columnChart);
         }
 
         public ActionResult vetCourtRates()
@@ -1381,7 +1394,7 @@ namespace FIVESTARVC.Controllers
             }
             );
 
-            return PartialView(columnChart);
+            return PartialView("DisplayChart", columnChart);
         }
 
         public ActionResult vetCourtRatesCum()
@@ -1478,12 +1491,13 @@ namespace FIVESTARVC.Controllers
             }
             );
 
-            return PartialView(columnChart);
+            return PartialView("DisplayChart", columnChart);
         }
 
         public ActionResult DownloadData()
         {
             var residents = DB.Residents;
+
 
             var residentProgramType = DB.Residents.Include(p => p.ProgramEvents).ToList()
                 .Select(r => new ReportingResidentViewModel
@@ -1495,9 +1509,12 @@ namespace FIVESTARVC.Controllers
                     Age = r.Age.Computed(),
                     ServiceType = r.ServiceBranch,
                     InVetCourt = r.InVetCourt,
+                    Gender = r.Gender,
+                    Religion = r.Religion,
+                    StateTerritory = r.StateTerritory,
+                    Ethnicity = r.Ethnicity,
                     Note = r.Note,
-                    ProgramTypeID = r.ProgramEvents.Select(t => t.ProgramTypeID.GetValueOrDefault())
-
+                    ProgramTypeID = r.ProgramEvents.Select(t => t.ProgramTypeID.GetValueOrDefault()),
                 }).GroupBy(r => r.ID);
 
 
@@ -1512,6 +1529,11 @@ namespace FIVESTARVC.Controllers
                 myExport["First Name"] = r.First().FirstName;
                 myExport["Birthdate"] = r.First().Birthdate;
                 myExport["Age"] = r.First().Age;
+                myExport["Gender"] = FSEnumHelper.GetDescription(r.First().Gender);
+                myExport["Religion"] = FSEnumHelper.GetDescription(r.First().Religion);
+                myExport["Ethnicity"] = FSEnumHelper.GetDescription(r.First().Ethnicity);
+                myExport["State/Territory"] = r.First().StateTerritory.State;
+                myExport["Region"] = r.First().StateTerritory.Region;
                 myExport["Service Branch"] = FSEnumHelper.GetDescription(r.First().ServiceType);
                 myExport["Vet Court"] = r.First().InVetCourt;
                 myExport["Notes"] = r.First().Note;
@@ -1525,54 +1547,72 @@ namespace FIVESTARVC.Controllers
                  * See CenterInitializer.cs for the ProgramTypeID order. 
                  * - Frank Butler
                  */
-                foreach (var eid in eventids)
+                 foreach (var eid in eventids)
                 {
-                    switch (eid)
-                    {
-                        case 1:
-                            myExport["Emergency Shelter"] = "1";
-                            break;
-                        case 2:
-                            myExport["Resident Admission"] = "1";
-                            break;
-                        case 3:
-                            myExport["Re-admit"] = "1";
-                            break;
-                        case 4:
-                            myExport["Resident Graduation"] = "1";
-                            break;
-                        case 5:
-                            myExport["Self Discharge"] = "1";
-                            break;
-                        case 6:
-                            myExport["Discharge for Cause"] = "1";
-                            break;
-                        case 8:
-                            myExport["Work Program"] = "1";
-                            break;
-                        case 9:
-                            myExport["Mental Wellness"] = "1";
-                            break;
-                        case 10:
-                            myExport["P2I"] = "1";
-                            break;
-                        case 11:
-                            myExport["School Program"] = "1";
-                            break;
-                        case 12:
-                            myExport["Financial Program"] = "1";
-                            break;
-                        case 13:
-                            myExport["Depression / Behavioral Program"] = "1";
-                            break;
-                        case 14:
-                            myExport["Substance Abuse Program"] = "1";
-                            break;
-                        default:
-                            //do something
-                            break;
+                    int eventID = eid;
 
+                    var prgm = (from p in DB.ProgramTypes
+                                where p.ProgramTypeID == eventID
+                                select p.ProgramDescription).ToArray();
+
+                    int testVar = 1;
+
+                    if (prgm.Length < testVar)
+                    {
+                        break;
                     }
+
+                    String programName = prgm[0];
+
+
+                    myExport[programName.ToString()] = "1";
+
+                    //switch (eid)
+                    //{
+                    //    case 1:
+                    //        myExport["Emergency Shelter"] = "1";
+                    //        break;
+                    //    case 2:
+                    //        myExport["Resident Admission"] = "1";
+                    //        break;
+                    //    case 3:
+                    //        myExport["Re-admit"] = "1";
+                    //        break;
+                    //    case 4:
+                    //        myExport["Resident Graduation"] = "1";
+                    //        break;
+                    //    case 5:
+                    //        myExport["Self Discharge"] = "1";
+                    //        break;
+                    //    case 6:
+                    //        myExport["Discharge for Cause"] = "1";
+                    //        break;
+                    //    case 8:
+                    //        myExport["Work Program"] = "1";
+                    //        break;
+                    //    case 9:
+                    //        myExport["Mental Wellness"] = "1";
+                    //        break;
+                    //    case 10:
+                    //        myExport["P2I"] = "1";
+                    //        break;
+                    //    case 11:
+                    //        myExport["School Program"] = "1";
+                    //        break;
+                    //    case 12:
+                    //        myExport["Financial Program"] = "1";
+                    //        break;
+                    //    case 13:
+                    //        myExport["Depression / Behavioral Program"] = "1";
+                    //        break;
+                    //    case 14:
+                    //        myExport["Substance Abuse Program"] = "1";
+                    //        break;
+                    //    default:
+                    //        //do something
+                    //        break;
+
+                    //}
                 }
 
             }

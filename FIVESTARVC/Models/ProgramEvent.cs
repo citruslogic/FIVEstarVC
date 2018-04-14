@@ -80,7 +80,24 @@ namespace FIVESTARVC.Models
         public virtual Resident Resident { get; set; }
         public virtual ProgramType ProgramType { get; set; }
 
-        
+        public String GetShortStartDate()
+        {
+            return ClearStartDate.ToShortDateString();
+        }
+
+        public String GetShortEndDate()
+        {
+            if (ClearEndDate.HasValue)
+            {
+                return ClearEndDate.Value.ToShortDateString();
+
+            }
+            else {
+
+                return null;
+            }
+
+        }
 
         public String GetLongStartDate()
         {
@@ -89,7 +106,16 @@ namespace FIVESTARVC.Models
 
         public String GetLongEndDate()
         {
-            return ClearEndDate.GetValueOrDefault().ToLongDateString();
+            if (ClearEndDate.HasValue)
+            {
+                return ClearEndDate.Value.ToLongDateString();
+
+            }
+            else
+            {
+
+                return null;
+            }
         }
 
         public class ModelConfiguration : EntityTypeConfiguration<ProgramEvent>

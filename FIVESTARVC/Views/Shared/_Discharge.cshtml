@@ -24,6 +24,17 @@
 
                     <tbody>
                         <tr>
+                            <td>@Html.Label("Discharge Date")</td>
+                            <td>
+                                <div class="input-group mb-2">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text fa fa-calendar fa-fw" style="width:40px;"></span>
+                                    </div>
+                                    <input type="date" name="DischargeDate" id="DischargeDate" class="form-control"  value="@DateTime.Today.ToString("yyyy-MM-dd")"  />
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
 
                             <td class="col-form-label">
 
@@ -43,7 +54,7 @@
                         <tr>
                             <td class="col-form-label">@Html.LabelFor(model => model.ClearBirthdate, htmlAttributes: new { @class = "control-label" })</td>
                             <td>
-                                @(Model.ClearBirthdate.ToLongDateString())
+                                @(Model.ClearBirthdate.ToShortDateString())
                             </td>
                         </tr>
                         <tr>
@@ -87,20 +98,20 @@
         </div>
 
 
-    <div class="row">
-        <div class="form-group form-inline">
-            <div class="btn-toolbar mr-1">
-                <button type="button" class="btn btn-default"
-                        data-dismiss="modal">
-                    Cancel
-                </button>
-            
-                <input type="submit" value="Discharge" 
-                       class="btn btn-danger"
-                       style="margin-left: 5px;"/>
-            </div>
+        <div class="row">
+            <div class="form-group form-inline">
+                <div class="btn-toolbar mr-1">
+                    <button type="button" class="btn btn-default"
+                            data-dismiss="modal">
+                        Cancel
+                    </button>
 
-        </div>
+                    <input type="submit" value="Discharge"
+                           class="btn btn-danger"
+                           style="margin-left: 5px;" />
+                </div>
+
+            </div>
         </div>
 
     </div>
@@ -111,6 +122,16 @@
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
     <script type="text/javascript">
+
+        if (!Modernizr.inputtypes.date) {
+            $('input[type=date]')
+                .attr('type', 'text')
+                .datepicker({
+                    // Consistent format with the HTML5 picker
+                    dateFormat: 'mm-dd-yy'
+                });
+        }
+
         $(function () {
             $('#submit-btn').click(function () {
                 $('#modal-container').modal('hide');

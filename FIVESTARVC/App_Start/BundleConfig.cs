@@ -43,6 +43,8 @@ namespace FIVESTARVC
               "~/Content/themes/base/datepicker.css",
               "~/Content/themes/base/progressbar.css",
               "~/Content/themes/base/theme.css"));
+
+            bundles.Add(new LessBundle("~/Content/less").Include("~/Content/*.less"));
         }
     }
 }

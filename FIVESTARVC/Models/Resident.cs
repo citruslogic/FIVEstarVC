@@ -106,9 +106,20 @@ namespace FIVESTARVC.Models
 
         public int DaysInCenter()
         {
-            TimeSpan span = GetDischargeDate().GetValueOrDefault().Subtract(GetAdmitDate().GetValueOrDefault());
+            TimeSpan span;
 
-            return (int) Math.Abs(span.TotalDays);
+            // Resident may not be discharged yet.
+            if (GetDischargeDate().HasValue)
+            {
+                span = GetDischargeDate().GetValueOrDefault().Subtract(GetAdmitDate().GetValueOrDefault());
+                
+            } else
+            {
+                span = DateTime.Now.Subtract(GetAdmitDate().GetValueOrDefault());
+
+            }
+
+                return (int) Math.Abs(span.TotalDays);
 
         }
 
