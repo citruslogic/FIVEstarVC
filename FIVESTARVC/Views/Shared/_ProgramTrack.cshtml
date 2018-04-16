@@ -1,5 +1,12 @@
 ﻿@model FIVESTARVC.ViewModels.TempProgramEvent
 
+<style>
+    .biggerCheckBox {
+        transform: scale(1.5);
+        -webkit-transform: scale(1.5);
+        margin-left: 5px;
+    }
+</style>
 @using (Html.BeginCollectionItem("programEvents"))
 {
 
@@ -10,10 +17,9 @@
 
     </td>
     <td>
-        @Html.HiddenFor(m => m.IsDeleted, new { data_is_deleted = "false" })
         @Html.LabelFor(model => model.ProgramTypeID, "Track name", htmlAttributes: new { @class = "control-label" })
         <div>
-            @Html.DropDownList("ProgramTypeID", null, htmlAttributes: new { @class = "form-control" })
+            @Html.DropDownList("ProgramTypeID", null, "Select a track.", htmlAttributes: new { @class = "form-control with-default" })
             @Html.ValidationMessageFor(model => model.ProgramTypeID, "")
         </div>
     </td>
@@ -38,27 +44,22 @@
         <div>
 
             <div>
-                @Html.EditorFor(model => model.Completed, new { htmlAtributes = new { @class = "form-control" } })
+                @Html.CheckBoxFor(model => model.Completed, htmlAttributes: new { @class = "biggerCheckBox" })
                 @Html.ValidationMessageFor(model => model.Completed, "")
             </div>
         </div>
     </td>
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 }
 
 
+<script type="text/javascript">
+
+    $('.with-default').on('change', function () {
+        if ($(this).children('option[value=""]').length) {
+            $(this).children('option[value=""]').remove()
+        }
+    });
+
+</script>

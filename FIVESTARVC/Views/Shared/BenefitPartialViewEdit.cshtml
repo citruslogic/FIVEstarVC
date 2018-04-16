@@ -4,18 +4,14 @@
 @{
     Layout = null;
 }
-<style>
-    .money-wide {
-        width: 150px;
-    }
-</style>
+
 <div class="col-sm-5">
     <h4>Income </h4>
     <table class="table table-sm table-striped">
         <thead>
             <tr>
-                <th class="col-md-2">Type</th>
-                <th class="col-md-2"></th>
+                <th style="width: 300px;">Type</th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
@@ -26,7 +22,7 @@
                 <td>
                     
 
-                        @Html.EditorFor(model => model.Benefit.DisabilityPercentage, new { htmlAttributes = new { @class = "form-control money-wide percent" } })
+                        @Html.EditorFor(model => model.Benefit.DisabilityPercentage, new { htmlAttributes = new { @class = "form-control percent" } })
                         
                     @Html.ValidationMessageFor(model => model.Benefit.DisabilityPercentage, "")
                 </td>
@@ -35,7 +31,7 @@
             <tr>
                 <td class="col-form-label">@Html.LabelFor(model => model.Benefit.SSI, htmlAttributes: new { @class = "control-label" })</td>
                 <td>
-                    @Html.EditorFor(model => model.Benefit.SSI, new { htmlAttributes = new { @class = "form-control income money-wide" } })
+                    @Html.EditorFor(model => model.Benefit.SSI, new { htmlAttributes = new { @class = "form-control income" } })
                     @Html.ValidationMessageFor(model => model.Benefit.SSI, "")
                 </td>
 
@@ -46,7 +42,7 @@
 
                 </td>
                 <td>
-                    @Html.EditorFor(model => model.Benefit.SSDI, new { htmlAttributes = new { @class = "form-control  income money-wide" } })
+                    @Html.EditorFor(model => model.Benefit.SSDI, new { htmlAttributes = new { @class = "form-control  income" } })
                     @Html.ValidationMessageFor(model => model.Benefit.SSDI, "")
                 </td>
 
@@ -56,7 +52,10 @@
                     @Html.LabelFor(model => model.Benefit.FoodStamp, htmlAttributes: new { @class = "control-label" })
                 </td>
                 <td>
-                    @Html.EditorFor(model => model.Benefit.FoodStamp, new { htmlAttributes = new { @class = "form-control" } })
+                    
+                        @Html.EditorFor(model => model.Benefit.FoodStamp, new { htmlAttributes = new { @class = "biggerCheckBox" } })
+                
+                   
                     @Html.ValidationMessageFor(model => model.Benefit.FoodStamp, "")
                 </td>
             </tr>
@@ -74,7 +73,7 @@
                     @Html.LabelFor(model => model.Benefit.Other, htmlAttributes: new { @class = "control-label" })
                 </td>
                 <td>
-                    @Html.EditorFor(model => model.Benefit.Other, new { htmlAttributes = new { @class = "form-control income money-wide" } })
+                    @Html.EditorFor(model => model.Benefit.Other, new { htmlAttributes = new { @class = "form-control income" } })
                     @Html.ValidationMessageFor(model => model.Benefit.Other, "")
                 </td>
             </tr>

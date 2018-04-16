@@ -29,8 +29,8 @@ namespace FIVESTARVC.Controllers
             ViewBag.ProgramTypeID = new SelectList(db.ProgramTypes, "ProgramTypeID", "ProgramDescription");
 
 
-            var programEvents = db.ProgramEvents.Include(p => p.ProgramType).Where(t => t.ProgramTypeID >= 8).Include(p => p.Resident).ToList();
-
+            //var programEvents = db.ProgramEvents.Include(p => p.ProgramType).Where(t => t.ProgramTypeID >= 8).Include(p => p.Resident).ToList();
+            var programEvents = db.Residents.Include(p => p.ProgramEvents).ToList();
             if (searchString != null)
             {
                 page = 1;
@@ -45,21 +45,21 @@ namespace FIVESTARVC.Controllers
             if (!String.IsNullOrEmpty(searchString))
             {
                 programEvents = programEvents.Where(r => CultureInfo.CurrentCulture.CompareInfo.IndexOf
-                                   (r.Resident.ClearLastName, searchString, CompareOptions.IgnoreCase) >= 0
+                                   (r.ClearLastName, searchString, CompareOptions.IgnoreCase) >= 0
                                    || CultureInfo.CurrentCulture.CompareInfo.IndexOf
-                                   (r.Resident.FirstMidName, searchString, CompareOptions.IgnoreCase) >= 0).ToList();
+                                   (r.FirstMidName, searchString, CompareOptions.IgnoreCase) >= 0).ToList();
             }
 
             switch (sortOrder)
             {
                 case "name_desc":
-                    programEvents = programEvents.OrderByDescending(p => p.Resident.ClearLastName.Computed()).ToList();
+                    programEvents = programEvents.OrderByDescending(p => p.ClearLastName.Computed()).ToList();
                     break;
                 case "ProgramDescription":
-                    programEvents = programEvents.OrderBy(p => p.ProgramTypeID).ToList();
+                    programEvents = programEvents.OrderBy(p => p.ProgramEvents).ToList();
                     break;
                 case "ProgramDescription_desc":
-                    programEvents = programEvents.OrderByDescending(p => p.ProgramTypeID).ToList();
+                    programEvents = programEvents.OrderByDescending(p => p.ProgramEvents).ToList();
                     break;
                 default:
                     programEvents = programEvents.OrderBy(p => p.ResidentID).ToList();
@@ -129,7 +129,7 @@ namespace FIVESTARVC.Controllers
         public ActionResult Create(int ResidentID, CustomEvent model)
         {
 
-            IEnumerable<TempProgramEvent> newPrograms = model.programEvents.Where(s => !s.IsDeleted && s.ProgramEventID == 0);
+            IEnumerable<TempProgramEvent> newPrograms = model.programEvents.Where(s => s.ProgramEventID == 0);
 
             foreach (TempProgramEvent track in newPrograms)
             {
@@ -161,18 +161,7 @@ namespace FIVESTARVC.Controllers
 
             return RedirectToAction("Index", "Residents"); ;
 
-            //if (ModelState.IsValid)
-            //{
-                
-            //    db.ProgramEvents.Add(programEvent);
-            //    db.SaveChanges();
-            //    return RedirectToAction("Index");
-            //}
 
-            //ViewBag.ProgramTypeID = new SelectList(db.ProgramTypes.Where(t => t.ProgramTypeID >= 8), "ProgramTypeID", "ProgramDescription", programEvent.ProgramTypeID);
-            //ViewBag.ResidentID = new SelectList(db.Residents, "ResidentID", "ClearLastName", programEvent.ResidentID);
-
-            //return View(programEvent);
         }
 
         // GET: ProgramEvents/Edit/5
@@ -187,7 +176,7 @@ namespace FIVESTARVC.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.ProgramTypeID = new SelectList(db.ProgramTypes.Where(t => t.ProgramTypeID >= 8), "ProgramTypeID", "ProgramDescription", programEvent.ProgramTypeID);
+            ViewBag.ProgramTypeID = new SelectList(db.ProgramTypes, "ProgramTypeID", "ProgramDescription", programEvent.ProgramTypeID);
             ViewBag.ResidentID = new SelectList(db.Residents, "ResidentID", "ClearLastName", programEvent.ResidentID);
             return View(programEvent);
         }
@@ -218,7 +207,7 @@ namespace FIVESTARVC.Controllers
                     return RedirectToAction("Index");
                 }
             }
-            ViewBag.ProgramTypeID = new SelectList(db.ProgramTypes.Where(t => t.ProgramTypeID >= 8), "ProgramTypeID", "ProgramDescription", db.ProgramTypes);
+            ViewBag.ProgramTypeID = new SelectList(db.ProgramTypes, "ProgramTypeID", "ProgramDescription", db.ProgramTypes);
             ViewBag.ResidentID = new SelectList(db.Residents, "ResidentID", "ClearLastName", db.Residents);
             return View(eventToUpdate);
         }
