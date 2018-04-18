@@ -7,6 +7,11 @@ using FIVESTARVC.Models;
 using FIVESTARVC.DAL;
 using FIVESTARVC.ViewModels;
 using DelegateDecompiler;
+using System.IO;
+using iTextSharp.text;
+using iTextSharp.text.pdf;
+using iTextSharp.tool.xml;
+using iTextSharp.text.html.simpleparser;
 
 namespace FIVESTARVC.Controllers
 {
@@ -154,6 +159,29 @@ namespace FIVESTARVC.Controllers
             }
                
         }
+        
+       [HttpPost]
+       [ValidateInput(false)]
+        public FileResult Export(string report)
+        {
+            using (MemoryStream stream = new System.IO.MemoryStream())
+            {
+                StringReader sr = new StringReader(report);
+                Document pdfDoc = new Document(PageSize.A4, 10f, 10f, 10f, 10f);
+                PdfWriter writer = PdfWriter.GetInstance(pdfDoc, stream);
+                pdfDoc.Open();
+                XMLWorkerHelper.GetInstance().ParseXHtml(writer, pdfDoc, sr);
+                pdfDoc.Close();
+                return File(stream.ToArray(), "application/pdf", "Report -" + DateTime.Today.ToShortDateString() + ".pdf");
+            }
+        }
+
+        // Rotativa 
+        //public ActionResult PrintAllReport()
+        //{
+        //    var report = new ActionAsPdf("Index");
+        //    return report;
+        //}
 
     }
 }

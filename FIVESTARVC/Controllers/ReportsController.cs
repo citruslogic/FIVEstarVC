@@ -7,7 +7,6 @@ using System.Web.Mvc;
 using FIVESTARVC.DAL;
 using FIVESTARVC.Models;
 using FIVESTARVC.ViewModels;
-using Jitbit.Utils;
 using DelegateDecompiler;
 using System.Globalization;
 using System.Threading;
@@ -16,6 +15,7 @@ using DotNet.Highcharts.Enums;
 using DotNet.Highcharts.Helpers;
 using DotNet.Highcharts.Options;
 using System.Drawing;
+using Jitbit.Utils;
 
 namespace FIVESTARVC.Controllers
 {
@@ -1717,8 +1717,6 @@ namespace FIVESTARVC.Controllers
             return View(columnChart);
 
         }
-
-
 
     }
 }
