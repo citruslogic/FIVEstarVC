@@ -9,11 +9,55 @@
 
 @*Required for the Bootstrap dropdown.*@
 <script type="text/javascript" src="~/Scripts/umd/popper.js"></script>
+
+<div class="btn-group d-print-none mt-lg-1">
+    <button class="btn" style="margin-right: 10px;" onclick="location.href = '/Reports/DownloadData';">
+        <i class="fa fa-arrow-down fa-fw"></i> Download Data
+    </button>
+
+
+    <div class="dropdown">
+        <button style="margin-right: 10px;" class="btn dropdown-toggle" type="button" data-toggle="dropdown">
+            <i class="fa fa-line-chart fa-fw"></i> Historic Charts
+            <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu">
+            <li><button class="dropdown-item" onclick="gradChart()"><i class="fa fa-plus fa-fw"></i> Graduation Rates</button></li>
+            <li><button class="dropdown-item" onclick="admitChart()"><i class="fa fa-plus fa-fw"></i> Admission Rates</button></li>
+            <li><button class="dropdown-item" onclick="readmitChart()"><i class="fa fa-plus fa-fw"></i> Re-Admission Rates</button></li>
+            <li><button class="dropdown-item" onclick="p2iChart()"><i class="fa fa-plus fa-fw"></i> P2I Rates</button></li>
+            <li><button class="dropdown-item" onclick="emergChart()"><i class="fa fa-plus fa-fw"></i> Emergency Shelter Rates</button></li>
+            <li><button class="dropdown-item" onclick="disChart()"><i class="fa fa-plus fa-fw"></i> Discharge Rates</button></li>
+            <li><button class="dropdown-item" onclick="vetChart()"><i class="fa fa-plus fa-fw"></i> Vet-Court Rates</button></li>
+
+        </ul>
+    </div>
+
+    <div class="dropdown">
+        <button style="margin-right: 10px;" class="btn dropdown-toggle" type="button" data-toggle="dropdown">
+            <i class="fa fa-line-chart fa-fw"></i> Cumulative Historic Charts
+            <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu">
+            <li><button class="dropdown-item" onclick="gradChartCum()"><i class="fa fa-plus fa-fw"></i> Cumulative Graduation Rates</button></li>
+            <li><button class="dropdown-item" onclick="admitChartCum()"><i class="fa fa-plus fa-fw"></i> Cumulative Admission Rates</button></li>
+            <li><button class="dropdown-item" onclick="readmitChartCum()"><i class="fa fa-plus fa-fw"></i> Cumulative Re-Admission Rates</button></li>
+            <li><button class="dropdown-item" onclick="p2iChartCum()"><i class="fa fa-plus fa-fw"></i> Cumulative P2I Rates</button></li>
+            <li><button class="dropdown-item" onclick="emergChartCum()"><i class="fa fa-plus fa-fw"></i> Cumulative Emergency Shelter Rates</button></li>
+            <li><button class="dropdown-item" onclick="disChartCum()"><i class="fa fa-plus fa-fw"></i> Cumulative Discharge Rates</button></li>
+            <li><button class="dropdown-item" onclick="vetChartCum()"><i class="fa fa-plus fa-fw"></i> Cumulative Vet-Court Rates</button></li>
+        </ul>
+    </div>
+
+</div>
 @using (Html.BeginForm("Export", "CenterOverview", FormMethod.Post))
 {
+
+    <button class="btn mt-lg-1" style="margin-right: 10px;" onclick="printReport()"><i class="fa fa-file-pdf-o fa-fw"></i> Report PDF</button>
     <input type="hidden" name="report" />
+    <hr />
     <h2>Center Summary</h2>
-    <div>
+    <div class="mb-lg-2">
         <p>
             <strong>Cumulative Residents: </strong> @ViewBag.CumulativeCount,
             <strong>Current Residents: </strong> @ViewBag.TotalCount,
@@ -22,55 +66,9 @@
 
     </div>
     <hr />
-    <div class="btn-group d-print-none">
-        <button class="btn btn-secondary" style="margin-right: 10px;" onclick="location.href = '/Reports/DownloadData';">
-            <i class="fa fa-arrow-down fa-fw"></i> Download Data
-        </button>
 
-        <button class="btn btn-secondary" style="margin-right: 10px;" onclick="printReport()"><i class="fa fa-file-pdf-o fa-fw"></i> Print Report</button>
-
-        <div class="dropdown">
-            <button style="margin-right: 10px;" class="btn btn-warning dropdown-toggle" type="button" data-toggle="dropdown">
-                <i class="fa fa-gears fa-fw"></i> Historic Charts
-                <span class="caret"></span>
-            </button>
-            <ul class="dropdown-menu">
-                <li><button class="dropdown-item" onclick="gradChart()"><i class="fa fa-plus fa-fw"></i> Graduation Rates</button></li>
-                <li><button class="dropdown-item" onclick="admitChart()"><i class="fa fa-plus fa-fw"></i> Admission Rates</button></li>
-                <li><button class="dropdown-item" onclick="readmitChart()"><i class="fa fa-plus fa-fw"></i> Re-Admission Rates</button></li>
-                <li><button class="dropdown-item" onclick="p2iChart()"><i class="fa fa-plus fa-fw"></i> P2I Rates</button></li>
-                <li><button class="dropdown-item" onclick="emergChart()"><i class="fa fa-plus fa-fw"></i> Emergency Shelter Rates</button></li>
-                <li><button class="dropdown-item" onclick="disChart()"><i class="fa fa-plus fa-fw"></i> Discharge Rates</button></li>
-                <li><button class="dropdown-item" onclick="vetChart()"><i class="fa fa-plus fa-fw"></i> Vet-Court Rates</button></li>
-
-            </ul>
-        </div>
-
-        <div class="dropdown">
-            <button style="margin-right: 10px;" class="btn btn-warning dropdown-toggle" type="button" data-toggle="dropdown">
-                <i class="fa fa-gears fa-fw"></i> Cumulative Historic Charts
-                <span class="caret"></span>
-            </button>
-            <ul class="dropdown-menu">
-                <li><button class="dropdown-item" onclick="gradChartCum()"><i class="fa fa-plus fa-fw"></i> Cumulative Graduation Rates</button></li>
-                <li><button class="dropdown-item" onclick="admitChartCum()"><i class="fa fa-plus fa-fw"></i> Cumulative Admission Rates</button></li>
-                <li><button class="dropdown-item" onclick="readmitChartCum()"><i class="fa fa-plus fa-fw"></i> Cumulative Re-Admission Rates</button></li>
-                <li><button class="dropdown-item" onclick="p2iChartCum()"><i class="fa fa-plus fa-fw"></i> Cumulative P2I Rates</button></li>
-                <li><button class="dropdown-item" onclick="emergChartCum()"><i class="fa fa-plus fa-fw"></i> Cumulative Emergency Shelter Rates</button></li>
-                <li><button class="dropdown-item" onclick="disChartCum()"><i class="fa fa-plus fa-fw"></i> Cumulative Discharge Rates</button></li>
-                <li><button class="dropdown-item" onclick="vetChartCum()"><i class="fa fa-plus fa-fw"></i> Cumulative Vet-Court Rates</button></li>
-            </ul>
-        </div>
-
-    </div>
 
     <div id="reportHtml">
-
-
-
-        <hr class="d-print-none" />
-
-
 
         <div class="container">
             <div class="row">
@@ -107,10 +105,10 @@
                                 @{
                                     if (ViewBag.Admitted == null)
                                     { <text>0</text> }
-                                    else
-                                    {
+                                else
+                                {
                                     @Html.Raw(ViewBag.Admitted)
-                                    }
+                                }
                                 }
                             </td>
                         </tr>
@@ -122,10 +120,10 @@
                                 @{
                                     if (ViewBag.EmergencyShelter == null)
                                     { <text>0</text> }
-                                    else
-                                    {
+                                else
+                                {
                                     @Html.Raw(ViewBag.EmergencyShelter)
-                                    }
+                                }
                                 }
                             </td>
                         </tr>
@@ -137,10 +135,10 @@
                                 @{
                                     if (ViewBag.DischargeCount == null)
                                     { <text>0</text> }
-                                    else
-                                    {
+                                else
+                                {
                                     @Html.Raw(ViewBag.DischargeCount)
-                                    }
+                                }
                                 }
                             </td>
                         </tr>
@@ -152,10 +150,10 @@
                                 @{
                                     if (ViewBag.Graduated == null)
                                     { <text>0</text> }
-                                    else
-                                    {
+                                else
+                                {
                                     @Html.Raw(ViewBag.Graduated)
-                                    }
+                                }
                                 }
                             </td>
                         </tr>
@@ -167,10 +165,10 @@
                                 @{
                                     if (ViewBag.GraduatedPercent == null)
                                     { <text>0</text> }
-                                    else
-                                    {
+                                else
+                                {
                                     @Html.Raw(ViewBag.GraduatedPercent)
-                                    }
+                                }
                                 }
                                 %
                             </td>
@@ -183,10 +181,10 @@
                                 @{
                                     if (ViewBag.VeteransCourt == null)
                                     { <text>0</text> }
-                                    else
-                                    {
+                                else
+                                {
                                     @Html.Raw(ViewBag.VeteransCourt)
-                                    }
+                                }
                                 }
                             </td>
                         </tr>
@@ -198,10 +196,10 @@
                                 @{
                                     if (ViewBag.P2I == null)
                                     { <text>0</text> }
-                                    else
-                                    {
+                                else
+                                {
                                     @Html.Raw(ViewBag.P2I)
-                                    }
+                                }
                                 }
                             </td>
                         </tr>
@@ -233,10 +231,10 @@
                                 @{
                                     if (ViewBag.CurrentNavy == null)
                                     { <text>0</text> }
-                                    else
-                                    {
+                                else
+                                {
                                     @Html.Raw(ViewBag.CurrentNavy)
-                                    }
+                                }
                                 }
                             </td>
                         </tr>
@@ -251,10 +249,10 @@
                                 @{
                                     if (ViewBag.CurrentArmy == null)
                                     { <text>0</text> }
-                                    else
-                                    {
+                                else
+                                {
                                     @Html.Raw(ViewBag.CurrentArmy)
-                                    }
+                                }
                                 }
                             </td>
                         </tr>
@@ -269,10 +267,10 @@
                                 @{
                                     if (ViewBag.CurrentMarine == null)
                                     { <text>0</text> }
-                                    else
-                                    {
+                                else
+                                {
                                     @Html.Raw(ViewBag.CurrentMarine)
-                                    }
+                                }
                                 }
                             </td>
                         </tr>
@@ -287,10 +285,10 @@
                                 @{
                                     if (ViewBag.CurrentAF == null)
                                     { <text>0</text> }
-                                    else
-                                    {
+                                else
+                                {
                                     @Html.Raw(ViewBag.CurrentAF)
-                                    }
+                                }
                                 }
                             </td>
                         </tr>
@@ -305,10 +303,10 @@
                                 @{
                                     if (ViewBag.CurrentCG == null)
                                     { <text>0</text> }
-                                    else
-                                    {
+                                else
+                                {
                                     @Html.Raw(ViewBag.CurrentCG)
-                                    }
+                                }
                                 }
                             </td>
                         </tr>
@@ -318,184 +316,184 @@
 
         </div>
     </div>
-                                    }
+}
 
-    <!-- Modal -->
-    <div class="modal fade" id="AddModal" tabindex="-1" role="dialog" aria-labelledby="AddModal" aria-hidden="true">
-        <div class="modal-dialog modal-lg" role="document">
-            <div class="modal-content">
-            </div>
+<!-- Modal -->
+<div class="modal fade" id="AddModal" tabindex="-1" role="dialog" aria-labelledby="AddModal" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
         </div>
     </div>
-    <br />
+</div>
+<br />
 
-    @section Scripts {
-        @Scripts.Render("~/bundles/jqueryval")
-        @Scripts.Render("~/bundles/jqueryui")
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/jqueryui")
 
-        <script type="text/javascript">
+    <script type="text/javascript">
 
-            function printReport() {
+        function printReport() {
 
-                $("input[name='report']").val($("#reportHtml").html());
-            }
+            $("input[name='report']").val($("#reportHtml").html());
+        }
 
-            $(document).ready(function () {
+        $(document).ready(function () {
 
-                $.ajax({
-                    "url": "/CenterOverview/AgeGroupBreakdown/",
-                    "type": "get",
-                    "dataType": "html",
-                    "success": function (data) {
-                        $('#AgeGroups').html(data);
-                    }
-                });
-
-                $.ajax({
-                    "url": "/CenterOverview/GetAverageStay/",
-                    "type": "get",
-                    "dataType": "html",
-                    "success": function (data) {
-                        $('#AverageStay').html(data);
-                    }
-                });
-
-                $.ajax({
-                    "url": "/CenterOverview/GenderGroupBreakdown/",
-                    "type": "get",
-                    "dataType": "html",
-                    "success": function (data) {
-                        $('#GenderGroups').html(data);
-                    }
-                });
+            $.ajax({
+                "url": "/CenterOverview/AgeGroupBreakdown/",
+                "type": "get",
+                "dataType": "html",
+                "success": function (data) {
+                    $('#AgeGroups').html(data);
+                }
             });
 
-            function gradChart() {
+            $.ajax({
+                "url": "/CenterOverview/GetAverageStay/",
+                "type": "get",
+                "dataType": "html",
+                "success": function (data) {
+                    $('#AverageStay').html(data);
+                }
+            });
 
-                $.get('/Reports/gradRates/', function (data) {
-                    $('.modal-content').html(data);
-                    $('#AddModal').modal('show');
+            $.ajax({
+                "url": "/CenterOverview/GenderGroupBreakdown/",
+                "type": "get",
+                "dataType": "html",
+                "success": function (data) {
+                    $('#GenderGroups').html(data);
+                }
+            });
+        });
 
-                });
-            }
+        function gradChart() {
 
-            function admitChart() {
+            $.get('/Reports/gradRates/', function (data) {
+                $('.modal-content').html(data);
+                $('#AddModal').modal('show');
 
-                $.get('/Reports/admittedRates/', function (data) {
-                    $('.modal-content').html(data);
-                    $('#AddModal').modal('show');
+            });
+        }
 
-                });
-            }
+        function admitChart() {
 
-            function readmitChart() {
+            $.get('/Reports/admittedRates/', function (data) {
+                $('.modal-content').html(data);
+                $('#AddModal').modal('show');
 
-                $.get('/Reports/readmittedRates/', function (data) {
-                    $('.modal-content').html(data);
-                    $('#AddModal').modal('show');
+            });
+        }
 
-                });
-            }
+        function readmitChart() {
 
-            function p2iChart() {
+            $.get('/Reports/readmittedRates/', function (data) {
+                $('.modal-content').html(data);
+                $('#AddModal').modal('show');
 
-                $.get('/Reports/p2iRates/', function (data) {
-                    $('.modal-content').html(data);
-                    $('#AddModal').modal('show');
+            });
+        }
 
-                });
-            }
+        function p2iChart() {
 
-            function emergChart() {
+            $.get('/Reports/p2iRates/', function (data) {
+                $('.modal-content').html(data);
+                $('#AddModal').modal('show');
 
-                $.get('/Reports/emergRates/', function (data) {
-                    $('.modal-content').html(data);
-                    $('#AddModal').modal('show');
+            });
+        }
 
-                });
-            }
+        function emergChart() {
 
-            function disChart() {
+            $.get('/Reports/emergRates/', function (data) {
+                $('.modal-content').html(data);
+                $('#AddModal').modal('show');
 
-                $.get('/Reports/dischargeRates/', function (data) {
-                    $('.modal-content').html(data);
-                    $('#AddModal').modal('show');
+            });
+        }
 
-                });
-            }
+        function disChart() {
 
-            function vetChart() {
+            $.get('/Reports/dischargeRates/', function (data) {
+                $('.modal-content').html(data);
+                $('#AddModal').modal('show');
 
-                $.get('/Reports/vetCourtRates/', function (data) {
-                    $('.modal-content').html(data);
-                    $('#AddModal').modal('show');
+            });
+        }
 
-                });
-            }
+        function vetChart() {
 
-            function gradChartCum() {
+            $.get('/Reports/vetCourtRates/', function (data) {
+                $('.modal-content').html(data);
+                $('#AddModal').modal('show');
 
-                $.get('/Reports/gradRatesCum/', function (data) {
-                    $('.modal-content').html(data);
-                    $('#AddModal').modal('show');
+            });
+        }
 
-                });
-            }
+        function gradChartCum() {
 
-            function admitChartCum() {
+            $.get('/Reports/gradRatesCum/', function (data) {
+                $('.modal-content').html(data);
+                $('#AddModal').modal('show');
 
-                $.get('/Reports/admittedRatesCum/', function (data) {
-                    $('.modal-content').html(data);
-                    $('#AddModal').modal('show');
+            });
+        }
 
-                });
-            }
+        function admitChartCum() {
 
-            function readmitChartCum() {
+            $.get('/Reports/admittedRatesCum/', function (data) {
+                $('.modal-content').html(data);
+                $('#AddModal').modal('show');
 
-                $.get('/Reports/readmittedRatesCum/', function (data) {
-                    $('.modal-content').html(data);
-                    $('#AddModal').modal('show');
+            });
+        }
 
-                });
-            }
+        function readmitChartCum() {
 
-            function p2iChartCum() {
+            $.get('/Reports/readmittedRatesCum/', function (data) {
+                $('.modal-content').html(data);
+                $('#AddModal').modal('show');
 
-                $.get('/Reports/p2iRatesCum/', function (data) {
-                    $('.modal-content').html(data);
-                    $('#AddModal').modal('show');
+            });
+        }
 
-                });
-            }
+        function p2iChartCum() {
 
-            function emergChartCum() {
+            $.get('/Reports/p2iRatesCum/', function (data) {
+                $('.modal-content').html(data);
+                $('#AddModal').modal('show');
 
-                $.get('/Reports/emergRatesCum/', function (data) {
-                    $('.modal-content').html(data);
-                    $('#AddModal').modal('show');
+            });
+        }
 
-                });
-            }
+        function emergChartCum() {
 
-            function disChartCum() {
+            $.get('/Reports/emergRatesCum/', function (data) {
+                $('.modal-content').html(data);
+                $('#AddModal').modal('show');
 
-                $.get('/Reports/dischargeRatesCum/', function (data) {
-                    $('.modal-content').html(data);
-                    $('#AddModal').modal('show');
+            });
+        }
 
-                });
-            }
+        function disChartCum() {
 
-            function vetChartCum() {
+            $.get('/Reports/dischargeRatesCum/', function (data) {
+                $('.modal-content').html(data);
+                $('#AddModal').modal('show');
 
-                $.get('/Reports/vetCourtRatesCum/', function (data) {
-                    $('.modal-content').html(data);
-                    $('#AddModal').modal('show');
+            });
+        }
 
-                });
-            }
+        function vetChartCum() {
 
-        </script>
+            $.get('/Reports/vetCourtRatesCum/', function (data) {
+                $('.modal-content').html(data);
+                $('#AddModal').modal('show');
 
-    }
+            });
+        }
+
+    </script>
+
+}
