@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Specialized;
+using System.Configuration;
 using System.IO;
 using System.Security.Cryptography;
 
@@ -81,7 +83,16 @@ namespace FIVESTARVC.Helpers
             }
         }
 
-        static string _Pwd = "DEMOTEST"; //Be careful storing this in code unless it’s secured and not distributed
+        static readonly string _Pwd = SecureAppSettings.Get("WebServicePassword"); //Be careful storing this in code unless it’s secured and not distributed
         static byte[] _Salt = new byte[] { 0x45, 0xF1, 0x61, 0x6e, 0x20, 0x00, 0x65, 0x64, 0x76, 0x65, 0x64, 0x03, 0x76 };
+    }
+
+    public static class SecureAppSettings
+    {
+        public static string Get(string key)
+        {
+            NameValueCollection settings = ConfigurationManager.GetSection("secureAppSettings") as NameValueCollection;
+            return settings[key];
+        }
     }
 }
