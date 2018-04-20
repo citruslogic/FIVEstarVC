@@ -128,18 +128,18 @@
                 }
             </td>
             <td>
-                @Html.ActionLink("Edit", "Edit", new { id = item.ResidentID }, htmlAttributes: new { @class = "btn btn-sm btn-outline-secondary btn-light" }) &nbsp;
+                @Html.ActionLink("Edit", "Edit", new { id = item.ResidentID }, htmlAttributes: new { @class = "btn btn-secondary btn-sm" }) &nbsp;
 
                 @*Trigger the modal with a button*@
                 @if (item.IsCurrent())
                 {
                     @Html.ActionLink("Assign Tracks", "Create","ProgramEvents", new { id = item.ResidentID }, 
-                   htmlAttributes: new { @class = "btn btn-sm btn-outline-secondary btn-light" })
+                   htmlAttributes: new { @class = "btn btn-secondary btn-sm" })
                    
                 }
 
 
-                @Html.ActionLink("Details", "Details", new { id = item.ResidentID }, htmlAttributes: new { @class = "btn btn-sm btn-outline-secondary btn-light" }) &nbsp;
+                @Html.ActionLink("Details", "Details", new { id = item.ResidentID }, htmlAttributes: new { @class = "btn btn-secondary btn-sm" }) &nbsp;
 
                 @if (item.IsCurrent())
                 {
