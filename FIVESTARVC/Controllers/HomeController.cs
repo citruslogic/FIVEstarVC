@@ -12,7 +12,7 @@ using DelegateDecompiler;
 
 namespace FIVESTARVC.Controllers
 {
-
+    [Authorize]
     public class HomeController : Controller
     {
         private ResidentContext db = new ResidentContext();

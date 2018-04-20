@@ -12,6 +12,7 @@ using PagedList;
 
 namespace FIVESTARVC.Controllers
 {
+    [Authorize]
     public class RoomsController : Controller
     {
         private ResidentContext db = new ResidentContext();

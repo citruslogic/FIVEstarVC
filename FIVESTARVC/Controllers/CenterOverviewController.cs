@@ -15,6 +15,7 @@ using iTextSharp.text.html.simpleparser;
 
 namespace FIVESTARVC.Controllers
 {
+    [Authorize]
     public class CenterOverviewController : Controller
     {
         ResidentContext db = new ResidentContext();
