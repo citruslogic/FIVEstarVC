@@ -26,7 +26,7 @@ namespace FIVESTARVC.Controllers
             var residents = db.Residents.Include(r => r.Room).ToList().Select(data => new DashboardData
             {
                 ResidentID = data.ResidentID,
-                FirstMidName = data.FirstMidName,
+                FirstMidName = data.ClearFirstMidName,
                 LastName = data.ClearLastName.Computed(),
                 RoomNumber = data.RoomNumber.GetValueOrDefault()
 

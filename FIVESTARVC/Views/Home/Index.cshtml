@@ -41,7 +41,7 @@
                 @foreach (var resident in ViewBag.NearestResidents)
                 {
                     <div class="col-md-2" style="margin-top: 0.5em;">
-                        @resident.FirstMidName @resident.ClearLastName<br />
+                        @resident.Fullname<br />
                         @resident.BDateMonthName @resident.ClearBirthdate.Day
                     </div>
                 }

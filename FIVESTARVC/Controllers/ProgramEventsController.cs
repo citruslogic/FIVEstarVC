@@ -47,7 +47,7 @@ namespace FIVESTARVC.Controllers
                 programEvents = programEvents.Where(r => CultureInfo.CurrentCulture.CompareInfo.IndexOf
                                    (r.ClearLastName, searchString, CompareOptions.IgnoreCase) >= 0
                                    || CultureInfo.CurrentCulture.CompareInfo.IndexOf
-                                   (r.FirstMidName, searchString, CompareOptions.IgnoreCase) >= 0).ToList();
+                                   (r.ClearFirstMidName, searchString, CompareOptions.IgnoreCase) >= 0).ToList();
             }
 
             switch (sortOrder)
