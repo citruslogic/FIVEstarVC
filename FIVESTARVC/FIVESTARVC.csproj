@@ -850,9 +850,6 @@
     <Content Include="Views\ProgramEvents\Create.cshtml" />
     <Content Include="Views\Shared\_ProgramTrack.cshtml" />
     <Content Include="Views\Shared\DisplayChart.cshtml" />
-    <Content Include="secure.config">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

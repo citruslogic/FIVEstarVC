@@ -19,6 +19,33 @@ using Jitbit.Utils;
 
 namespace FIVESTARVC.Controllers
 {
+    /*
+     * ~~~~~~~~~~READ ME~~~~~~~~~~~~
+     * 
+     * This is the reports controller which handles most of the counts of data, graphs, and general reports
+     * found in the application (most of which in the 'Reports' tab). This controller can look like a mess
+     * when first opened so I would reccomend hitting Ctrl+M+O if you are using visual studio to collapse all
+     * the action results and make the controller easier to navigate. My general organizational scheme is as follows:
+     * The index action result is where almost all of the aggregate counts are for things like current residents or
+     * event counts. After that action result (going top to bottom), is two methods for finding an individual resident's
+     * age and the average residents age. Following this is all the action results I used to create the charts that are 
+     * found on the reports page. The name of the action results indicates if they are cumulative or not. Each chart has
+     * a regular and cumulative version. Following these action results is the DownloadData() method which handles exporting
+     * the residents database to an excel compatible file. After this is the last action result which returns a chart
+     * that displays current residents campaign participation data.
+     * 
+     * You'll notice that all the queries looking for a certain event type (graduation, admission, work program, etc.)
+     * are looking for specific event ID's rather than names of events. This can make findinig events annoying if
+     * those ID to Event Name pairings aren't known. To find a list of these look at the ProgramType table.
+     * 
+     * There will be some sparse comments spread out throughout this controller following this one, but this should
+     * serve to inform anyone in the future what each of these action results are for. Namely, the first two chart action
+     * results, gradRates() and gradRatesCum(), will be commented to explain how these action results work. All the following
+     * chart action results will be uncommented but work the same (only differences being the database queries and chart names).
+     * 
+     * Last edited 4/19/2018
+     */
+
     [Authorize]
     public class ReportsController : Controller
     {
@@ -108,7 +135,7 @@ namespace FIVESTARVC.Controllers
                 }
             }
 
-            //Counts number of current residents, based on events
+            //Counts number of current residents by increasing count by 1 for every admit event, and decreasing for any discharge event
             var CurrentRes = DB.ProgramEvents;
             int count = 0;
             int dischargeCount = 0;
@@ -149,17 +176,21 @@ namespace FIVESTARVC.Controllers
             float Admitted = DB.ProgramEvents.Count(x => x.ProgramTypeID == 2);
             ViewBag.Admitted = Admitted;
 
+            //finds grad percent
             float gradPercent = (Graduated / Admitted) * 100;
 
             ViewBag.GraduatedPercent = gradPercent.ToString("n2"); //Graduation Percentage
 
-
+            //Counts cumulative residents
             ViewBag.CumulativeCount = DB.Residents.Count();
 
+            //Finds cumulative P2I count
             ViewBag.P2I = DB.ProgramEvents.Count(x => x.ProgramTypeID == 10);
 
+            //Finds cumulative emergency shelter counts
             ViewBag.EmergencyShelter = DB.ProgramEvents.Count(x => x.ProgramTypeID == 1);
 
+            //Finds cumulative veterans court counts
             ViewBag.VeteransCourt = DB.Residents.Count(x => x.InVetCourt == true);
 
 
@@ -200,34 +231,11 @@ namespace FIVESTARVC.Controllers
 
         }
 
-        //Useless method, must delete
-        //public List<string> gradYears()
-        //{
-        //    List<string> gradPercent = new List<string>();
-
-        //    DateTime currentDate = DateTime.Now;
-
-        //    int currentYear = currentDate.Year;
-
-        //    int num = currentYear - 2011;
-
-        //    int year = 2012;
-
-        //    for (int x = 0; x < num; x++)
-        //    {
-        //        gradPercent.Add(year.ToString());
-        //        year++;
-        //    }
-
-        //    gradPercent.ToString().ToArray();
-
-        //    return gradPercent;
-        //}
-
         public ActionResult gradRates()
         {
             var events = DB.ProgramEvents.ToList();
 
+            //Query selects all events with an ID of 4 (graduation events) and groups them by year. Results stored in 'Query' variable
             var Query = (from y in events
                          where y.ProgramTypeID == 4
                          group y by y.ClearStartDate.Year into typeGroup
@@ -256,9 +264,11 @@ namespace FIVESTARVC.Controllers
                 Text = "Graduations by Year"
             });
 
+            //Sending query results to separate lists, then back to arrays, as seen below was how I was able to format the data in a way HighCharts would accept
             List<int> metricCounts = new List<int>();
             List<string> years = new List<string>();
-
+            
+            //This loop takes the data from the query result and sends it to two lists for the X axis and Y axis 
             foreach (var r in Query)
             {
                 metricCounts.Add(r.Count);
@@ -315,6 +325,7 @@ namespace FIVESTARVC.Controllers
         {
             var events = DB.ProgramEvents.ToList();
 
+            //Cumulative charts work the same, but this running total variable is used to keep counts cumulatively
             int runningTotal = 0;
 
             var Query = (from y in events
@@ -329,6 +340,7 @@ namespace FIVESTARVC.Controllers
 
             List<int> rates = new List<int>();
 
+            //Right here is where the running total is calculated and added to a list
             foreach (var t in Query)
             {
                 runningTotal = runningTotal + t.Count;
@@ -354,12 +366,11 @@ namespace FIVESTARVC.Controllers
                 Text = "Cumulative Graduations by Year"
             });
 
-            //List<int> metricCounts = new List<int>();
+            //Years are pulled from the query result for a list that will be the X axis
             List<string> years = new List<string>();
 
             foreach (var r in Query)
             {
-                //metricCounts.Add(r.Count);
                 years.Add(r.Year.ToString());
             }
 
@@ -1499,7 +1510,7 @@ namespace FIVESTARVC.Controllers
         {
             var residents = DB.Residents;
 
-
+            //Big nasty looking query that selects all the data that gets spit out to the excel sheet
             var residentProgramType = DB.Residents.Include(p => p.ProgramEvents).ToList()
                 .Select(r => new ReportingResidentViewModel
                 {
@@ -1523,8 +1534,10 @@ namespace FIVESTARVC.Controllers
 
             var myExport = new CsvExport();
 
+            //Each pass of this foreach loop inserts all the data from a single resident into the excel sheet
             foreach (var r in residentProgramType)
             {
+                //All the non-events related data
                 myExport.AddRow();
                 myExport["Last Name"] = r.First().LastName;
                 myExport["First Name"] = r.First().FirstName;
@@ -1543,81 +1556,35 @@ namespace FIVESTARVC.Controllers
 
                 var eventids = r.SelectMany(i => i.ProgramTypeID).ToList();
 
-                /* These Event IDs have changed, and the order of the columns 
-                 * may not be what is expected.
-                 * See CenterInitializer.cs for the ProgramTypeID order. 
-                 * - Frank Butler
-                 */
+                //This foreach is used to display all the events a resident is in
                  foreach (var eid in eventids)
                 {
                     int eventID = eid;
 
+                    //Query to the database to grab the name of the program
                     var prgm = (from p in DB.ProgramTypes
                                 where p.ProgramTypeID == eventID
                                 select p.ProgramDescription).ToArray();
 
                     int testVar = 1;
 
+                    //Breaks the loop if a resident is in no programs
                     if (prgm.Length < testVar)
                     {
                         break;
                     }
 
+                    //Grabs the name of a matching program and adds it to the excel sheet with a '1' to indicate a resident is in it
                     String programName = prgm[0];
 
 
                     myExport[programName.ToString()] = "1";
 
-                    //switch (eid)
-                    //{
-                    //    case 1:
-                    //        myExport["Emergency Shelter"] = "1";
-                    //        break;
-                    //    case 2:
-                    //        myExport["Resident Admission"] = "1";
-                    //        break;
-                    //    case 3:
-                    //        myExport["Re-admit"] = "1";
-                    //        break;
-                    //    case 4:
-                    //        myExport["Resident Graduation"] = "1";
-                    //        break;
-                    //    case 5:
-                    //        myExport["Self Discharge"] = "1";
-                    //        break;
-                    //    case 6:
-                    //        myExport["Discharge for Cause"] = "1";
-                    //        break;
-                    //    case 8:
-                    //        myExport["Work Program"] = "1";
-                    //        break;
-                    //    case 9:
-                    //        myExport["Mental Wellness"] = "1";
-                    //        break;
-                    //    case 10:
-                    //        myExport["P2I"] = "1";
-                    //        break;
-                    //    case 11:
-                    //        myExport["School Program"] = "1";
-                    //        break;
-                    //    case 12:
-                    //        myExport["Financial Program"] = "1";
-                    //        break;
-                    //    case 13:
-                    //        myExport["Depression / Behavioral Program"] = "1";
-                    //        break;
-                    //    case 14:
-                    //        myExport["Substance Abuse Program"] = "1";
-                    //        break;
-                    //    default:
-                    //        //do something
-                    //        break;
-
-                    //}
                 }
 
             }
 
+            //The following lines are how the excel sheet is saved and opened when this action result is invoked
             string filepath = Server.MapPath(Url.Content("~/Content/CenterReport.csv"));
 
             myExport.ExportToFile(filepath);
@@ -1665,13 +1632,9 @@ namespace FIVESTARVC.Controllers
 
             columnChart.SetTitle(new Title()
             {
-                Text = "Resident Campaign Data"
+                Text = "Current Resident Campaign Data"
             });
 
-            //columnChart.SetSubtitle(new Subtitle()
-            //{
-            //    Text = "Played 9 Years Together From 2004 To 2012"
-            //});
             object[] residentCount = resCounts.Cast<object>().ToArray();
             string[] Campaigns = campaignNames.ToArray();
 
@@ -1715,8 +1678,7 @@ namespace FIVESTARVC.Controllers
             }
             );
 
-            return View(columnChart);
-
+            return PartialView("DisplayChart", columnChart);
         }
 
     }
