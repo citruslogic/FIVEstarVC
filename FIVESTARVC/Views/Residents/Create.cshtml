@@ -301,6 +301,15 @@
             
         });
 
+        /* For the case we are striking enter instead of clicking the Admit button */
+        $(document).keypress(function (e) {
+            if (e.which == 13) {
+                if (!confirm("Are you sure you want to submit this application?")) {
+                    e.preventDefault();
+                }
+            }
+        });
+
         jQuery(document).ready(function () {
             jQuery('[data-confirm]').click(function (e) {
                 if (!confirm(jQuery(this).attr("data-confirm"))) {

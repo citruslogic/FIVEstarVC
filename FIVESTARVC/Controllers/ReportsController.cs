@@ -1515,7 +1515,7 @@ namespace FIVESTARVC.Controllers
                 .Select(r => new ReportingResidentViewModel
                 {
                     ID = r.ResidentID,
-                    FirstName = r.FirstMidName,
+                    FirstName = r.ClearFirstMidName,
                     LastName = r.ClearLastName,
                     Birthdate = r.ClearBirthdate,
                     Age = r.Age.Computed(),
