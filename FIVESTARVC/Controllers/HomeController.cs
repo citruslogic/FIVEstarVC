@@ -9,6 +9,8 @@ using FIVESTARVC.Models;
 using FIVESTARVC.DAL;
 using FIVESTARVC.ViewModels;
 using DelegateDecompiler;
+using OfficeOpenXml;
+using System.IO;
 
 namespace FIVESTARVC.Controllers
 {
@@ -75,7 +77,35 @@ namespace FIVESTARVC.Controllers
                 NearestResidents = null;
         }
 
+        public ActionResult ImportData()
+        {
+            ImportedListData listData = new ImportedListData();
 
+            string excelFile = "C:\\webuploads\\import.xlsx";
+
+            var ep = new ExcelPackage(new FileInfo(excelFile));
+            var ws = ep.Workbook.Worksheets["Sheet1"];
+
+            var genders = new List<string>();
+            for (int rw = 2; rw <= ws.Dimension.End.Row; rw++)
+            {
+                if (ws.Cells[rw, 1].Value != null)
+                    genders.Add(ws.Cells[rw, 1].Value.ToString());
+            }
+
+            listData.Genders = genders;
+
+            var firstnames = new List<string>();
+            for (int rw = 2; rw <= ws.Dimension.End.Row; rw++)
+            {
+                if (ws.Cells[rw, 3].Value != null)
+                    firstnames.Add(ws.Cells[rw, 3].Value.ToString());
+            }
+
+            listData.FirstNames = firstnames;
+
+            return View(listData);
+        }
 
 
 
