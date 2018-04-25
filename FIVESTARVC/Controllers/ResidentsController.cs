@@ -50,7 +50,7 @@ namespace FIVESTARVC.Controllers
                 residents = residents.Where(s => CultureInfo.CurrentCulture.CompareInfo.IndexOf
                                    (s.ClearLastName, searchString, CompareOptions.IgnoreCase) >= 0
                                    || CultureInfo.CurrentCulture.CompareInfo.IndexOf
-                                   (s.FirstMidName, searchString, CompareOptions.IgnoreCase) >= 0).ToList();
+                                   (s.ClearFirstMidName, searchString, CompareOptions.IgnoreCase) >= 0).ToList();
             }
 
             switch (sortOrder)
@@ -189,7 +189,7 @@ namespace FIVESTARVC.Controllers
 
             Resident resident = new Resident
             {
-                FirstMidName = residentIncomeModel.FirstMidName,
+                ClearFirstMidName = residentIncomeModel.FirstMidName,
                 ClearLastName = residentIncomeModel.LastName,
                 Gender = residentIncomeModel.Gender,
                 Ethnicity = residentIncomeModel.Ethnicity,
@@ -289,7 +289,7 @@ namespace FIVESTARVC.Controllers
         {
 
             /* Check for the possible pre-existence of the resident in the system. */
-            if (db.Residents.Any(r => r.FirstMidName.Contains(resident.FirstMidName)
+            if (db.Residents.Any(r => r.ClearFirstMidName.Contains(resident.ClearFirstMidName)
                 && r.ClearLastName.Contains(resident.ClearLastName)
                 && r.ClearBirthdate.Date == resident.ClearBirthdate.Date
                 && r.ServiceBranch == resident.ServiceBranch))

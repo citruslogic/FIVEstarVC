@@ -23,6 +23,8 @@ namespace FIVESTARVC.Models
         
         private string LastName { get; set; }
 
+        private string FirstMidName { get; set; }
+
         private string Birthdate { get; set; }
 
         [Display(Name = "Last Name")]
@@ -45,7 +47,23 @@ namespace FIVESTARVC.Models
 
         [Required]
         [Display(Name = "First Name")]
-        public string FirstMidName { get; set; }
+        [NotMapped]
+        public string ClearFirstMidName {
+            get
+            {
+
+                return Encryptor.Decrypt(FirstMidName);
+
+
+            }
+
+            set
+            {
+
+                FirstMidName = Encryptor.Encrypt(value);
+
+            }
+        }
 
         [Display(Name = "Birthdate")]
         [DataType(DataType.Date)]
@@ -103,7 +121,7 @@ namespace FIVESTARVC.Models
 
         public string Fullname
         {
-            get { return FirstMidName + " " + ClearLastName; }
+            get { return ClearFirstMidName + " " + ClearLastName; }
         }
 
         /* Remaining days until birthday */
@@ -139,6 +157,7 @@ namespace FIVESTARVC.Models
         {
             public ModelConfiguration()
             {
+                Property(p => p.FirstMidName);
                 Property(p => p.LastName);
                 Property(p => p.Birthdate);
             }
