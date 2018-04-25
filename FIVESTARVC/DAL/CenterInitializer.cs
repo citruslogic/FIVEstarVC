@@ -130,18 +130,7 @@ namespace FIVESTARVC.DAL
             Rooms.ForEach(m => context.Rooms.Add(m));
             context.SaveChanges();
 
-            var residents = new List<Resident>
-            {
-                new Resident { ClearFirstMidName="Carson", StateTerritoryID=14, ClearBirthdate=DateTime.Parse("3/4/1988"), ClearLastName="Steven", RoomNumber = 102, ServiceBranch=ServiceType.ARMY },
-                new Resident { ClearFirstMidName="Naomi", StateTerritoryID=25, ClearBirthdate=DateTime.Parse("6/12/1979"), ClearLastName="Wildman", RoomNumber = 103, ServiceBranch=ServiceType.AIRFORCE },
-                new Resident { ClearFirstMidName="Gary", StateTerritoryID=8, ClearBirthdate=DateTime.Parse("6/24/1980"), ClearLastName="Noonan", RoomNumber = 105, ServiceBranch=ServiceType.NAVY },
-                new Resident { ClearFirstMidName="Steve", StateTerritoryID=40, ClearBirthdate=DateTime.Parse("1/15/1981"), ClearLastName="Nash", RoomNumber = null, ServiceBranch=ServiceType.MARINES },
-                new Resident { ClearFirstMidName="Neo", StateTerritoryID=15, ClearBirthdate=DateTime.Parse("3/8/1974"), ClearLastName="Anderson", RoomNumber = null, ServiceBranch=ServiceType.AIRFORCE },
-                new Resident { ClearFirstMidName="Charlie", StateTerritoryID=22, ClearLastName="Brown", ClearBirthdate=DateTime.Parse("12/23/1976"), RoomNumber = null, ServiceBranch=ServiceType.NAVY }
-            };
-
-            residents.ForEach(r => context.Residents.Add(r));
-            context.SaveChanges();
+            
 
 
 
@@ -171,34 +160,7 @@ namespace FIVESTARVC.DAL
             context.SaveChanges();
 
 
-            var events = new List<ProgramEvent>
-            {
-                //adding admission event for all residents, the admission doesn't "end."
-                new ProgramEvent { ClearStartDate=DateTime.Parse("2012-05-16"), Completed=false, ResidentID=1, ProgramTypeID=2},
-                new ProgramEvent { ClearStartDate=DateTime.Parse("2014-06-14"), Completed=false, ResidentID=2, ProgramTypeID=2},
-                new ProgramEvent { ClearStartDate=DateTime.Parse("2013-07-4"), Completed=false, ResidentID=3, ProgramTypeID=2},
-                new ProgramEvent { ClearStartDate=DateTime.Parse("2012-06-20"), Completed=false, ResidentID=4, ProgramTypeID=2},
-                new ProgramEvent { ClearStartDate=DateTime.Parse("2015-07-15"), Completed=false, ResidentID=5, ProgramTypeID=2},
-                new ProgramEvent { ClearStartDate=DateTime.Parse("2016-07-13"), Completed=false, ResidentID=6, ProgramTypeID=2},
-
-                //Grad Events for Testing
-                //new ProgramEvent { ClearStartDate=DateTime.Parse("2013-05-16"), Completed=false, ResidentID=1, ProgramTypeID=4},
-                //new ProgramEvent { ClearStartDate=DateTime.Parse("2015-06-14"), Completed=false, ResidentID=2, ProgramTypeID=4},
-                //new ProgramEvent { ClearStartDate=DateTime.Parse("2014-07-4"), Completed=false, ResidentID=3, ProgramTypeID=4},
-                new ProgramEvent { ClearStartDate=DateTime.Parse("2013-06-20"), Completed=false, ResidentID=4, ProgramTypeID=4},
-                new ProgramEvent { ClearStartDate=DateTime.Parse("2016-07-15"), Completed=false, ResidentID=5, ProgramTypeID=4},
-                new ProgramEvent { ClearStartDate=DateTime.Parse("2018-07-13"), Completed=false, ResidentID=6, ProgramTypeID=4},
-
-                //Other events
-                new ProgramEvent { ClearStartDate=DateTime.Parse("2004-05-05"), ClearEndDate=DateTime.Parse("2004-05-15"), Completed=true, ResidentID=5, ProgramTypeID=8},
-                new ProgramEvent { ClearStartDate=DateTime.Parse("2003-03-02"), Completed=true, ResidentID=6, ProgramTypeID=8},
-                new ProgramEvent { ClearStartDate=DateTime.Parse("2006-03-22"), Completed=true, ResidentID=2, ProgramTypeID=8},
-                new ProgramEvent { ClearStartDate=DateTime.Parse("2005-10-05"), ResidentID=2},
-                new ProgramEvent { ClearStartDate=DateTime.Parse("2005-11-19"), ResidentID=3}
-            };
-
-            events.ForEach(e => context.ProgramEvents.Add(e));
-            context.SaveChanges();
+            
 
            
 

@@ -32,21 +32,25 @@
                     </div>
                 </div>
             </div>
-    <hr />
+            <hr />
 
             <div class="row col-md-10">
                 <div class="col-md-3">
-                <p> Birthdays coming up:</p>
+                    <p> Birthdays coming up:</p>
                 </div>
-                @foreach (var resident in ViewBag.NearestResidents)
+                @if (ViewBag.NearestResidents != null)
                 {
-                    <div class="col-md-2" style="margin-top: 0.5em;">
-                        @resident.Fullname<br />
-                        @resident.BDateMonthName @resident.ClearBirthdate.Day
-                    </div>
+                    foreach (var resident in ViewBag.NearestResidents)
+                    {
+                        <div class="col-md-2" style="margin-top: 0.5em;">
+                            @resident.Fullname<br />
+                            @resident.BDateMonthName @resident.ClearBirthdate.Day
+                        </div>
+                    }
                 }
+
             </div>
-    <hr />
+            <hr />
             <div class="row" style="margin-top: 0.9em">
                 <h4>Residents recently admitted into your center.</h4>
 
@@ -61,10 +65,10 @@
                         <div class="card">
                             <div class="card-body">
                                 <h5 class="card-title">@item.FirstMidName @item.LastName</h5>
-                                <label>Room: </label> 
+                                <label>Room: </label>
                                 @if (item.RoomNumber != 0)
                                 {
-                                        @item.RoomNumber
+                                    @item.RoomNumber
                                 }
                                 else
                                 {
@@ -79,6 +83,6 @@
 
 
             </div>
-    <br />
+            <br />
 
         </div>
