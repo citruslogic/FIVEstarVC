@@ -1,0 +1,30 @@
+﻿@model FIVESTARVC.ViewModels.ImportedListData
+
+<div>
+    <table>
+        <tr>
+            <th>Gender</th>
+            <th>First Name</th>
+        </tr>
+
+        @foreach (var row in Model.Genders)
+    {
+        <tr>
+            <td>
+                @Html.Raw(row)
+            </td>
+
+        </tr>
+}
+        @foreach (var frow in Model.FirstNames)
+    {
+            <tr>
+        <td>
+            @Html.Raw(frow)
+        </td>
+                </tr>
+}
+
+    </table>
+</div>
+
