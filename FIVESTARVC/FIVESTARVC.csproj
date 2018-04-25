@@ -221,7 +221,6 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Helpers\AuthorizeAD.cs" />
     <Compile Include="Helpers\Encryptor.cs" />
     <Compile Include="Models\AdAuthenticationService.cs" />
     <Compile Include="Models\Benefit.cs" />

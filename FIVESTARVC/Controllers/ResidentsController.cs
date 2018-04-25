@@ -485,7 +485,6 @@ namespace FIVESTARVC.Controllers
         // POST: Residents/AddCampaign/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize]
         public ActionResult AddCampaign(MilitaryCampaign model)
         {
 
