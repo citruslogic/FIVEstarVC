@@ -19,7 +19,7 @@ using Jitbit.Utils;
 
 namespace FIVESTARVC.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "RTS-Group")]
     public class ReportsController : Controller
     {
         private ResidentContext DB = new ResidentContext();

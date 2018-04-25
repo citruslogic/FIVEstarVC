@@ -14,7 +14,7 @@ using System.IO;
 
 namespace FIVESTARVC.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "RTS-Group")]
     public class HomeController : Controller
     {
         private ResidentContext db = new ResidentContext();
