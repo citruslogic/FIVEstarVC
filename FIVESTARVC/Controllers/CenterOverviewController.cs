@@ -15,7 +15,8 @@ using iTextSharp.text.html.simpleparser;
 
 namespace FIVESTARVC.Controllers
 {
-    [Authorize(Roles = "RTS-Group")]
+    [Authorize]
+    //[Authorize(Roles = "RTS-Group")]
     public class CenterOverviewController : Controller
     {
         ResidentContext db = new ResidentContext();
@@ -52,6 +53,39 @@ namespace FIVESTARVC.Controllers
             });
 
             return PartialView("_GenderGroupBreakdown", genders.ToList());
+        }
+
+        public ActionResult GetServiceDischargeCounts()
+        {
+            List<DischargeStatusGroups> serviceDischargeGroups = new List<DischargeStatusGroups>();
+            IEnumerable<Resident> residents = db.Residents.ToList();
+
+            serviceDischargeGroups.Add(new DischargeStatusGroups
+            {
+                StatusName = "Honorable",
+                Count = residents.Where(r => r.MilitaryDischarge == MilitaryDischargeType.HONORABLE).Count()
+            });
+
+            serviceDischargeGroups.Add(new DischargeStatusGroups
+            {
+                StatusName = "Dishonorable",
+                Count = residents.Where(r => r.MilitaryDischarge == MilitaryDischargeType.DISHONORABLE).Count()
+            });
+
+            serviceDischargeGroups.Add(new DischargeStatusGroups
+            {
+                StatusName = "General Under Honorable",
+                Count = residents.Where(r => r.MilitaryDischarge == MilitaryDischargeType.GENHONORABLE).Count()
+            });
+
+            serviceDischargeGroups.Add(new DischargeStatusGroups
+            {
+                StatusName = "Other",
+                Count = residents.Where(r => r.MilitaryDischarge == MilitaryDischargeType.OTHER).Count()
+            });
+
+            return PartialView("_ServiceDischargeBreakdown", serviceDischargeGroups);
+
         }
 
         // GET: AgeGroupBreakdown

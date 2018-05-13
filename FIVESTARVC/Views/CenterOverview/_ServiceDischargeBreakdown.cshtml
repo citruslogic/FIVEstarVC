@@ -1,17 +1,17 @@
-﻿@model IList<FIVESTARVC.ViewModels.GenderGroup>
-
+﻿@model IList<FIVESTARVC.ViewModels.DischargeStatusGroups>
 
 @{
     Layout = null;
 }
-<h4>Demographics</h4>
-<h5>Current Gender Composition</h5>
+
+
+<h5>Service Discharge Composition</h5>
 
 <table class="table table-sm">
     <thead>
         <tr>
             <th>
-                Gender
+                Discharge Status
             </th>
 
             <th>
@@ -24,19 +24,18 @@
         {
             <tr>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Gender)
+                    @Html.DisplayFor(modelItem => item.StatusName)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Count)
                 </td>
             </tr>
         }
-        
+
 
 
 
     </tbody>
 
 </table>
-
 

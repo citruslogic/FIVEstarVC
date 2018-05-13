@@ -108,7 +108,18 @@
             @(ViewBag.DateFirstAdmitted)
 
         </div>
+        <div class="col-form-label">
+            <div class="font-weight-bold">
+                @Html.Label("Service Discharge Status")
+            </div>
 
+            @{
+                var dischargeDescription = FSEnumHelper.GetDescription(Model.MilitaryDischarge);
+
+
+                @Html.DisplayFor(modelItem => dischargeDescription)
+            }
+        </div>
         <div class="col-form-label">
             @Html.Label("Campaigns", htmlAttributes: new { @class = "col-md-0 font-weight-bold" })
             <br />
@@ -172,6 +183,17 @@
                         @Html.DisplayFor(model => model.Benefit.DisabilityPercentage)
 
                     </td>
+                    </tr>
+                <tr>
+                    <td class="col-form-label">
+                        @Html.LabelFor(model => model.Benefit.DisabilityAmount, htmlAttributes: new { @class = "control-label" })
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => model.Benefit.DisabilityAmount)
+
+                    </td>
+                </tr>
+                    
                 </tr>
                 <tr>
                     <td class="col-form-label">
@@ -256,7 +278,7 @@
         <h4>Tracks</h4>
 
         <table class="events table table-sm" style="width: 100%">
-            <thead class="table-dark">
+            <thead>
                 <tr>
                     <th style="width: 21.2em;">Track Name</th>
                     <th> Start Date</th>

@@ -176,10 +176,17 @@ namespace FIVESTARVC.Controllers
             float Admitted = DB.ProgramEvents.Count(x => x.ProgramTypeID == 2);
             ViewBag.Admitted = Admitted;
 
-            //finds grad percent
-            float gradPercent = (Graduated / Admitted) * 100;
-
-            ViewBag.GraduatedPercent = gradPercent.ToString("n2"); //Graduation Percentage
+            if (Admitted > 0)
+            {
+                //finds grad percent
+                float gradPercent = (Graduated / Admitted) * 100;
+                ViewBag.GraduatedPercent = gradPercent.ToString("0.##"); ; //Graduation Percentage
+            } else
+            {
+                ViewBag.GraduatedPercent = 0;
+            }
+            
+           
 
             //Counts cumulative residents
             ViewBag.CumulativeCount = DB.Residents.Count();
@@ -197,6 +204,7 @@ namespace FIVESTARVC.Controllers
 
             return View();
         }
+       
         /* Get the age of all residents that have been in the center. */
         public IEnumerable<ReportingResidentViewModel> GetResidentsAge()
         {

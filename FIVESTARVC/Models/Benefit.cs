@@ -20,6 +20,12 @@ namespace FIVESTARVC.Models
         [DataType(DataType.Currency)]
         [Column(TypeName = "money")]
         [DisplayFormat(DataFormatString = "{0:C0}")]
+        [Display(Name = "Disability Amount")]
+        public decimal? DisabilityAmount { get; set; }
+
+        [DataType(DataType.Currency)]
+        [Column(TypeName = "money")]
+        [DisplayFormat(DataFormatString = "{0:C0}")]
         [Display(Name = "Total Benefit Amount")]
         public decimal? TotalBenefitAmount { get; set; }
 

@@ -15,7 +15,8 @@ using System.Globalization;
 
 namespace FIVESTARVC.Controllers
 {
-    [Authorize(Roles = "RTS-Group")]
+    [Authorize]
+    //[Authorize(Roles = "RTS-Group")]
     public class ResidentsController : Controller
     {
         private ResidentContext db = new ResidentContext();
@@ -192,6 +193,7 @@ namespace FIVESTARVC.Controllers
                 Religion = residentIncomeModel.Religion,
                 ClearBirthdate = residentIncomeModel.Birthdate,
                 ServiceBranch = residentIncomeModel.ServiceBranch,
+                MilitaryDischarge = residentIncomeModel.DischargeStatus,
                 InVetCourt = residentIncomeModel.InVetCourt,
                 IsNoncombat = residentIncomeModel.IsNoncombat,
                 RoomNumber = RoomNumber,
@@ -208,6 +210,7 @@ namespace FIVESTARVC.Controllers
             Benefit benefit = new Benefit
             {
                 DisabilityPercentage = residentIncomeModel.DisabilityPercentage,
+                DisabilityAmount = residentIncomeModel.DisabilityAmount,
                 SSI = residentIncomeModel.SSI,
                 SSDI = residentIncomeModel.SSDI,
                 FoodStamp = residentIncomeModel.FoodStamp,
@@ -224,7 +227,7 @@ namespace FIVESTARVC.Controllers
                     resident.ProgramEvents.Add(new ProgramEvent
                     {
                         ProgramTypeID = AdmissionType,
-                        ClearStartDate = DateTime.Now,
+                        ClearStartDate = residentIncomeModel.AdmitDate,
 
                     });
 

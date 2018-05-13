@@ -73,7 +73,7 @@
 
         <div class="container">
             <div class="row">
-
+                
                 <div class="col-sm-3">
                     <div id="GenderGroups">
                     </div>
@@ -91,10 +91,10 @@
 
                     <table class="table table-xs">
                         <tr>
-                            <th style="font-weight: bold; color:dodgerblue; font-size: 110%">
+                            <th>
                                 Metric
                             </th>
-                            <th style="font-weight: bold; color:dodgerblue; font-size: 110%">
+                            <th>
                                 Cumulative Total
                             </th>
                         </tr>
@@ -209,15 +209,17 @@
 
                 <div class="col-sm-4">
                     <h4>Military Service Statistics</h4>
+                    <div id="ServiceDischargeGroups"></div>
+                    <h5>Branches</h5>
                     <table class="table table-sm">
                         <tr>
-                            <th style="font-weight: bold; color:dodgerblue; font-size: 110%">
+                            <th>
                                 Service Branch
                             </th>
-                            <th style="font-weight: bold; color:dodgerblue; font-size: 110%">
+                            <th>
                                 Cumulative Residents
                             </th>
-                            <th style="font-weight: bold; color:dodgerblue; font-size: 110%">
+                            <th>
                                 Current Residents
                             </th>
                         </tr>
@@ -340,6 +342,15 @@
         }
 
         $(document).ready(function () {
+
+            $.ajax({
+                "url": "/CenterOverview/GetServiceDischargeCounts/",
+                "type": "get",
+                "dataType": "html",
+                "success": function (data) {
+                    $('#ServiceDischargeGroups').html(data);
+                }
+            });
 
             $.ajax({
                 "url": "/CenterOverview/AgeGroupBreakdown/",

@@ -11,7 +11,7 @@
     @Html.AntiForgeryToken()
 
     <h4>Discharge @Model.Fullname</h4>
-    <p> Are you sure you want to discharge this resident from your center?</p>
+    <p> Are you sure you want to release this resident from your center?</p>
     <br />
     @Html.ValidationSummary(true, "")
     @Html.HiddenFor(model => model.ResidentID)
@@ -24,7 +24,7 @@
 
                     <tbody>
                         <tr>
-                            <td>@Html.Label("Discharge Date")</td>
+                            <td>@Html.Label("Release Date")</td>
                             <td>
                                 <div class="input-group mb-2">
                                     <div class="input-group-prepend">
@@ -77,7 +77,7 @@
 
 
                 <div class="form-group">
-                    @Html.Label("Discharge Reason", htmlAttributes: new { @class = "control-label" })
+                    @Html.Label("Release Reason", htmlAttributes: new { @class = "control-label" })
                     <div>
                         @Html.DropDownList("ProgramTypeID", null, htmlAttributes: new { @class = "form-control" })
                         @Html.ValidationMessageFor(model => model.ProgramEvents, "")
@@ -101,7 +101,7 @@
                         Cancel
                     </button>
 
-                    <input type="submit" value="Discharge"
+                    <input type="submit" value="Release"
                            class="btn btn-danger"
                            style="margin-left: 5px;" />
                 </div>

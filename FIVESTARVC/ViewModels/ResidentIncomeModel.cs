@@ -31,8 +31,16 @@ namespace FIVESTARVC.ViewModels
         [Age(ErrorMessage = "Applicant must be 18 years or older.")]
         public DateTime Birthdate { get; set; }
 
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:MM/dd/yyyy}", ApplyFormatInEditMode = true)]
+        [Display(Name = "Admit Date")]
+        [Required]
+        public DateTime AdmitDate { get; set; }
+
         [Display(Name = "Service Branch")]
         public ServiceType ServiceBranch { get; set; }
+        [Display(Name = "Discharge Status")]
+        public MilitaryDischargeType DischargeStatus { get; set; }
 
         /* March changes to the model - 3/15/2018 */
         [Display(Name = "Gender")]
@@ -66,6 +74,12 @@ namespace FIVESTARVC.ViewModels
         [Display(Name = "Disability Rating")]
         [RegularExpression(@"(^100(\.0{1,2})?%$)|(^([1-9]([0-9])?|0)(\.[0-9]{1,2})?%$)", ErrorMessage = "Percentage only, minimum 0 and maximum 100.")]
         public string DisabilityPercentage { get; set; }
+
+        [DataType(DataType.Currency)]
+        [Column(TypeName = "money")]
+        [DisplayFormat(DataFormatString = "{0:C0}")]
+        [Display(Name = "Disability Amount")]
+        public decimal? DisabilityAmount { get; set; }
 
         [DataType(DataType.Currency)]
         [Column(TypeName = "money")]

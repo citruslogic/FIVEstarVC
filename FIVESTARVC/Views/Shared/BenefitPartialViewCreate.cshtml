@@ -24,9 +24,21 @@
                 </td>
                 <td>
 
-                        @Html.EditorFor(model => model.DisabilityPercentage, new { htmlAttributes = new { @class = "form-control" } })
-                        
+                    @Html.EditorFor(model => model.DisabilityPercentage, new { htmlAttributes = new { @class = "form-control" } })
+
                     @Html.ValidationMessageFor(model => model.DisabilityPercentage, "")
+                </td>
+
+            </tr>
+            <tr>
+                <td class="col-form-label">
+                    @Html.LabelFor(model => model.DisabilityAmount, htmlAttributes: new { @class = "control-label" })
+                </td>
+                <td>
+
+                    @Html.EditorFor(model => model.DisabilityAmount, new { htmlAttributes = new { @class = "form-control income" } })
+
+                    @Html.ValidationMessageFor(model => model.DisabilityAmount, "")
                 </td>
 
             </tr>

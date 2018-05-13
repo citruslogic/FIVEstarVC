@@ -225,6 +225,7 @@
     <Compile Include="Models\AdAuthenticationService.cs" />
     <Compile Include="Models\Benefit.cs" />
     <Compile Include="Models\ChartData.cs" />
+    <Compile Include="Models\EnumMilitaryDischarge.cs" />
     <Compile Include="Models\EnumReligionType.cs" />
     <Compile Include="Models\EnumGenderType.cs" />
     <Compile Include="Models\EnumEthnicityType.cs" />
@@ -244,6 +245,7 @@
     <Compile Include="ViewModels\AssignedCampaignData.cs" />
     <Compile Include="ViewModels\AssignedRoom.cs" />
     <Compile Include="ViewModels\CustomEvent.cs" />
+    <Compile Include="ViewModels\DischargeStatusGroups.cs" />
     <Compile Include="ViewModels\GenderGroup.cs" />
     <Compile Include="ViewModels\ImportedListData.cs" />
     <Compile Include="ViewModels\TempProgramEvent.cs" />
@@ -860,6 +862,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Views\Home\ImportData.cshtml" />
+    <Content Include="Views\CenterOverview\_ServiceDischargeBreakdown.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
