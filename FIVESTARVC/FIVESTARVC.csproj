@@ -222,6 +222,11 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Helpers\Encryptor.cs" />
+    <Compile Include="Migrations\201805142017563_InitialCreate.cs" />
+    <Compile Include="Migrations\201805142017563_InitialCreate.Designer.cs">
+      <DependentUpon>201805142017563_InitialCreate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AdAuthenticationService.cs" />
     <Compile Include="Models\Benefit.cs" />
     <Compile Include="Models\ChartData.cs" />
@@ -885,6 +890,11 @@
   </ItemGroup>
   <ItemGroup>
     <TypeScriptCompile Include="Scripts\index.d.ts" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201805142017563_InitialCreate.resx">
+      <DependentUpon>201805142017563_InitialCreate.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

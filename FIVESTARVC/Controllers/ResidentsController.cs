@@ -15,8 +15,8 @@ using System.Globalization;
 
 namespace FIVESTARVC.Controllers
 {
-    [Authorize]
-    //[Authorize(Roles = "RTS-Group")]
+    //[Authorize]
+    [Authorize(Roles = "RTS-Group")]
     public class ResidentsController : Controller
     {
         private ResidentContext db = new ResidentContext();
