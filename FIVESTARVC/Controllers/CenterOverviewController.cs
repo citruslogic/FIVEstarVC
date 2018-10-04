@@ -15,8 +15,8 @@ using iTextSharp.text.html.simpleparser;
 
 namespace FIVESTARVC.Controllers
 {
-    //[Authorize]
-    [Authorize(Roles = "RTS-Group")]
+    [Authorize]
+    //[Authorize(Roles = "RTS-Group")]
     public class CenterOverviewController : Controller
     {
         ResidentContext db = new ResidentContext();

@@ -12,7 +12,7 @@ using PagedList;
 
 namespace FIVESTARVC.Controllers
 {
-    [Authorize(Roles = "RTS-Group")]
+    //[Authorize(Roles = "RTS-Group")]
     public class RoomsController : Controller
     {
         private ResidentContext db = new ResidentContext();

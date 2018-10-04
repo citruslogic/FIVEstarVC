@@ -15,8 +15,8 @@ using System.Globalization;
 
 namespace FIVESTARVC.Controllers
 {
-    //[Authorize]
-    [Authorize(Roles = "RTS-Group")]
+    [Authorize]
+    //[Authorize(Roles = "RTS-Group")]
     public class ResidentsController : Controller
     {
         private ResidentContext db = new ResidentContext();
@@ -24,8 +24,6 @@ namespace FIVESTARVC.Controllers
         // GET: Residents
         public ActionResult Index(string sortOrder, string currentFilter, string searchString, int? page)
         {
-
-
             ViewBag.CurrentSort = sortOrder;
             ViewBag.NameSortParm = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
             ViewBag.BranchSortParm = sortOrder == "ServiceBranch" ? "ServiceBranch_desc" : "ServiceBranch";
@@ -167,10 +165,8 @@ namespace FIVESTARVC.Controllers
             ViewBag.RoomNumber = new SelectList(db.Rooms.Where(rm => rm.IsOccupied == false), "RoomNumber", "RoomNumber");
             ViewBag.StateTerritoryID = new SelectList(db.States, "StateTerritoryID", "State", residentIncomeModel.StateTerritoryID);
 
-
             var allMilitaryCampaigns = db.MilitaryCampaigns;
             var viewModel = new List<AssignedCampaignData>();
-
 
             foreach (var militaryCampaign in allMilitaryCampaigns)
             {
@@ -253,10 +249,6 @@ namespace FIVESTARVC.Controllers
                 ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
             }
 
-
-
-
-
             if (TryUpdateModel(residentIncomeModel, "",
                  new string[] { "LastName", "FirstMidName", "Ethnicity", "StateTerritoryID", "Gender", "Religion", "ClearBirthdate", "ServiceBranch", "Note", "IsNoncombat", "InVetCourt",
                      "Benefit", "MilitaryCampaigns", "TotalBenefitAmount" }))
@@ -279,7 +271,6 @@ namespace FIVESTARVC.Controllers
                     ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
                 }
             }
-
 
             return View(residentIncomeModel);
         }
@@ -368,12 +359,18 @@ namespace FIVESTARVC.Controllers
                     {
                         if (Readmit == true)
                         {
+                            var ev = residentToUpdate.ProgramEvents.LastOrDefault(i => i.ProgramType.ProgramTypeID == 4 || i.ProgramTypeID == 5 || i.ProgramTypeID == 6 || i.ProgramTypeID == 7);
+                            ev.ClearEndDate = DateTime.Now;
+                            db.Entry(ev).State = EntityState.Modified;
+
+
                             residentToUpdate.ProgramEvents.Add(new ProgramEvent
                             {
                                 ProgramTypeID = 3,
                                 ClearStartDate = DateTime.Now
 
                             });
+                                       
                         }
                     }
 
@@ -574,13 +571,16 @@ namespace FIVESTARVC.Controllers
 
                 }
 
-
                 residentToDischarge.ProgramEvents.Add(new ProgramEvent
                 {
                     ProgramTypeID = ProgramTypeID,
                     ClearStartDate = DateTime.Parse(DischargeDate)
 
                 });
+
+                var ev = residentToDischarge.ProgramEvents.LastOrDefault(i => i.ProgramTypeID == 1 || i.ProgramTypeID == 2 || i.ProgramTypeID == 3);
+                ev.ClearEndDate = DateTime.Parse(DischargeDate);
+                db.Entry(ev).State = EntityState.Modified;
 
                 db.SaveChanges();
                 TempData["UserMessage"] = residentToDischarge.ClearLastName + " has been discharged from your center.  ";
