@@ -140,6 +140,7 @@ namespace FIVESTARVC.Models
                 return Convert.ToInt32(difference.TotalDays);
             }
         }
+
         public string BDateMonthName
         {
             get
