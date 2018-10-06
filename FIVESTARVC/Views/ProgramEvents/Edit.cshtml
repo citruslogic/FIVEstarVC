@@ -21,7 +21,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.ResidentID, "Resident", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                <strong>@String.Concat(Model.Resident.FirstMidName, " ", Model.Resident.ClearLastName)</strong>
+                <strong>@String.Concat(Model.Resident.ClearFirstMidName, " ", Model.Resident.ClearLastName)</strong>
                 @Html.HiddenFor(model => model.ResidentID)
             </div>
         </div>

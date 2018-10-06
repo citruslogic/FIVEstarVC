@@ -172,7 +172,7 @@ namespace FIVESTARVC.Controllers
             }
             else
             {
-                ViewBag.AvgStay = total / numbCount;
+                ViewBag.AvgStay = ((double) total / numbCount).ToString("n2");
 
             }
 

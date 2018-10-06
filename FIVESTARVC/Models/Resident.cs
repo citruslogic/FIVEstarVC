@@ -75,7 +75,7 @@ namespace FIVESTARVC.Models
 
         public DateTime? GetAdmitDate()
         {
-            var events = db.ProgramEvents.Where(r => r.ResidentID == ResidentID).ToList();
+            var events = db.ProgramEvents.Where(r => r.ResidentID == ResidentID).OrderByDescending(s => s.ProgramEventID).ToList();
 
             foreach (ProgramEvent ev in events)
             {
@@ -90,7 +90,7 @@ namespace FIVESTARVC.Models
 
         public DateTime? GetDischargeDate()
         {
-            var events = db.ProgramEvents.Where(r => r.ResidentID == ResidentID).ToList();
+            var events = db.ProgramEvents.Where(r => r.ResidentID == ResidentID).OrderByDescending(s => s.ProgramEventID).ToList();
 
             foreach (ProgramEvent ev in events)
             {
