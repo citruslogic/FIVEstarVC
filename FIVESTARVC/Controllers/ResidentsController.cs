@@ -9,7 +9,6 @@ using FIVESTARVC.DAL;
 using FIVESTARVC.Models;
 using PagedList;
 using FIVESTARVC.ViewModels;
-using System.Data.Entity.Validation;
 using DelegateDecompiler;
 using System.Globalization;
 
@@ -76,6 +75,12 @@ namespace FIVESTARVC.Controllers
         // GET: Residents/Details/5
         public ActionResult Details(int? id)
         {
+            ViewBag.DateFirstAdmitted = db.ProgramEvents
+                                            .Include(r => r.Resident).Where(r => r.ResidentID == id)
+                                            .Include(t => t.ProgramType).Where(p => p.ProgramTypeID == 2).ToList()
+                                            .OrderBy(d => d.ClearStartDate.Computed())
+                                            .Select(s => s.ClearStartDate.Computed())
+                                            .FirstOrDefault().ToLongDateString();
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -106,12 +111,7 @@ namespace FIVESTARVC.Controllers
 
             PopulateAssignedCampaignData(resident);
 
-            ViewBag.DateFirstAdmitted = db.ProgramEvents
-                                            .Include(r => r.Resident).Where(r => r.ResidentID == id)
-                                            .Include(t => t.ProgramType).Where(p => p.ProgramTypeID == 2).ToList()
-                                            .OrderBy(d => d.ClearStartDate.Computed())
-                                            .Select(s => s.ClearStartDate.Computed())
-                                            .FirstOrDefault().ToLongDateString();
+            
 
             return View(resident);
         }
@@ -147,8 +147,6 @@ namespace FIVESTARVC.Controllers
             return View();
 
         }
-
-
 
         // POST: Residents/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
@@ -325,8 +323,6 @@ namespace FIVESTARVC.Controllers
             return View(resident);
         }
 
-
-
         // POST: Residents/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
@@ -352,17 +348,20 @@ namespace FIVESTARVC.Controllers
             {
                 try
                 {
-
                     UpdateResidentCampaigns(selectedCampaigns, residentToUpdate);
 
                     if (Readmit.HasValue)
                     {
                         if (Readmit == true)
                         {
-                            var ev = residentToUpdate.ProgramEvents.LastOrDefault(i => i.ProgramType.ProgramTypeID == 4 || i.ProgramTypeID == 5 || i.ProgramTypeID == 6 || i.ProgramTypeID == 7);
+                            var ev = residentToUpdate.ProgramEvents
+                                .LastOrDefault(i => i.ProgramTypeID == 4
+                                || i.ProgramTypeID == 5
+                                || i.ProgramTypeID == 6
+                                || i.ProgramTypeID == 7
+                                || i.ProgramTypeID == 13);    // Emergency Discharge to be readmited.
                             ev.ClearEndDate = DateTime.Now;
                             db.Entry(ev).State = EntityState.Modified;
-
 
                             residentToUpdate.ProgramEvents.Add(new ProgramEvent
                             {
@@ -397,8 +396,6 @@ namespace FIVESTARVC.Controllers
                         {
                             residentToUpdate.Room = room;
                         }
-
-
                     }
 
                     db.SaveChanges();
@@ -470,8 +467,6 @@ namespace FIVESTARVC.Controllers
             }
         }
 
-
-
         // GET: Residents/AddCampaign/5
         [HttpGet]
         public ActionResult AddCampaign()
@@ -508,7 +503,6 @@ namespace FIVESTARVC.Controllers
             return PartialView(model);
         }
 
-
         // GET: Residents/Discharge/5
         [HttpGet]
         public ActionResult Discharge(int? id, bool? saveChangesError = false)
@@ -544,7 +538,7 @@ namespace FIVESTARVC.Controllers
             }
 
             ViewBag.ProgramTypeID = new SelectList(db.ProgramTypes
-                .Where(t => t.ProgramTypeID < 8 && t.ProgramTypeID >= 4), "ProgramTypeID", "ProgramDescription");
+                .Where(t => t.ProgramTypeID < 8 && t.ProgramTypeID >= 4 || t.ProgramTypeID == 13), "ProgramTypeID", "ProgramDescription");
 
             return PartialView("_Discharge", residentToDischarge);
         }
@@ -578,6 +572,7 @@ namespace FIVESTARVC.Controllers
 
                 });
 
+                // To close admission events
                 var ev = residentToDischarge.ProgramEvents.LastOrDefault(i => i.ProgramTypeID == 1 || i.ProgramTypeID == 2 || i.ProgramTypeID == 3);
                 ev.ClearEndDate = DateTime.Parse(DischargeDate);
                 db.Entry(ev).State = EntityState.Modified;
@@ -587,14 +582,13 @@ namespace FIVESTARVC.Controllers
             }
             catch (DataException/* dex */)
             {
-                //Log the error (uncomment dex variable name and add a line here to write a log.
                 TempData["UserMessage"] = "Failed to discharge the resident from the center.";
 
                 return RedirectToAction("Discharge", new { id = id, saveChangesError = true });
             }
 
             ViewBag.ProgramTypeID = new SelectList(db.ProgramTypes
-                .Where(t => t.ProgramTypeID >= 4 && t.ProgramTypeID <= 7), "ProgramTypeID", "ProgramDescription");
+                .Where(t => t.ProgramTypeID < 8 && t.ProgramTypeID >= 4 || t.ProgramTypeID == 13), "ProgramTypeID", "ProgramDescription");
 
 
             return RedirectToAction("Index");

@@ -4,10 +4,11 @@ using System.Linq;
 using System.Web;
 using System.Data.Entity;
 using FIVESTARVC.Models;
+using System.Data.Entity.Migrations;
 
 namespace FIVESTARVC.DAL
 {
-    public class CenterInitializer : DropCreateDatabaseIfModelChanges<ResidentContext>
+    public class CenterInitializer : CreateDatabaseIfNotExists<ResidentContext>
     {
         protected override void Seed(ResidentContext context)
         {
@@ -72,10 +73,9 @@ namespace FIVESTARVC.DAL
                 new StateTerritory { State = "US Virgin Islands", Region = "Caribbean" }
             };
 
-            States.ForEach(s => context.States.Add(s));
+            States.ForEach(s => context.States.AddOrUpdate(i=> i.State, s));
             context.SaveChanges();
-
-
+            
             var Rooms = new List<Room>
             {
                 //Rooms on the E/S Wing//
@@ -127,42 +127,36 @@ namespace FIVESTARVC.DAL
 
             };
 
-            Rooms.ForEach(m => context.Rooms.Add(m));
+            Rooms.ForEach(m => context.Rooms.AddOrUpdate(i=> i.RoomNumber, m));
             context.SaveChanges();
-
-            
-
-
 
             var programs = new List<ProgramType>
             {
                 // RESIDENT ADMISSION TYPES
-                new ProgramType { ProgramDescription="Emergency Shelter" },                         // 1
-                new ProgramType { ProgramDescription="Resident Admission"},                         // 2
-                new ProgramType { ProgramDescription="Re-admit"},                                   // 3
+                new ProgramType { ProgramTypeID=1, ProgramDescription="Emergency Shelter" },                        
+                new ProgramType { ProgramTypeID=2, ProgramDescription="Resident Admission"},                        
+                new ProgramType { ProgramTypeID=3, ProgramDescription="Re-admit"},                                  
 
                 // RESIDENT DISCHARGE TYPES
-                new ProgramType { ProgramDescription="Resident Graduation" },                       // 4
-                new ProgramType { ProgramDescription="Self Discharge"},                             // 5
-                new ProgramType { ProgramDescription="Discharge for Cause"},                        // 6
-                new ProgramType { ProgramDescription="Higher Level of Care"},                       // 7
+                new ProgramType { ProgramTypeID=4, ProgramDescription="Resident Graduation" },                      
+                new ProgramType { ProgramTypeID=5, ProgramDescription="Self Discharge"},                            
+                new ProgramType { ProgramTypeID=6, ProgramDescription="Discharge for Cause"},                       
+                new ProgramType { ProgramTypeID=7, ProgramDescription="Higher Level of Care"},                      
 
                 // ENROLLED PROGRAMS
-                new ProgramType { ProgramDescription="Work Program" },                              // 8
-                new ProgramType { ProgramDescription="P2I" },                                       // 9
-                new ProgramType { ProgramDescription="School Program" },                            // 10
-                new ProgramType { ProgramDescription="Financial Program"},                          // 11
-                new ProgramType { ProgramDescription="Substance Abuse Program"}                     // 12
+                new ProgramType { ProgramTypeID=8, ProgramDescription="Work Program" },                             
+                new ProgramType { ProgramTypeID=9, ProgramDescription="P2I" },                                      
+                new ProgramType { ProgramTypeID=10, ProgramDescription="School Program" },                          
+                new ProgramType { ProgramTypeID=11, ProgramDescription="Financial Program"},                        
+                new ProgramType { ProgramTypeID=12, ProgramDescription="Substance Abuse Program"},                  
+
+                // EMERGENCY RESIDENT DISCHARGE TYPE
+                new ProgramType { ProgramTypeID=13, ProgramDescription="Emergency Discharge"}                       
 
             };
 
-            programs.ForEach(p => context.ProgramTypes.Add(p));
+            programs.ForEach(p => context.ProgramTypes.AddOrUpdate(i => i.ProgramTypeID, p));
             context.SaveChanges();
-
-
-            
-
-           
 
             var militaryCampaigns = new List<MilitaryCampaign>
             {
@@ -173,10 +167,8 @@ namespace FIVESTARVC.DAL
                 new MilitaryCampaign { CampaignName="Bosnia", Residents = new List<Resident>() }
             };
 
-            militaryCampaigns.ForEach(m => context.MilitaryCampaigns.Add(m));
+            militaryCampaigns.ForEach(m => context.MilitaryCampaigns.AddOrUpdate(i => i.CampaignName, m));
             context.SaveChanges();
-
-         
         }
     }
 }

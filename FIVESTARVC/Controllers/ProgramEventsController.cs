@@ -4,7 +4,6 @@ using System.Data;
 using System.Data.Entity;
 using System.Linq;
 using System.Net;
-using System.Web;
 using System.Web.Mvc;
 using PagedList;
 using FIVESTARVC.DAL;
@@ -93,7 +92,6 @@ namespace FIVESTARVC.Controllers
         // GET: ProgramEvents/AddMultiTrack
         public ActionResult AddMultiTrack()
         {
-
             ViewBag.ProgramTypeID = new SelectList(db.ProgramTypes.Where(t => t.ProgramTypeID >= 8), "ProgramTypeID", "ProgramDescription");
 
             return PartialView("_ProgramTrack", new TempProgramEvent());
@@ -114,7 +112,7 @@ namespace FIVESTARVC.Controllers
                 new TempProgramEvent{ ResidentID = id.Value, StartDate = DateTime.Now },
             };
 
-            ViewBag.ProgramTypeID = new SelectList(db.ProgramTypes.Where(t => t.ProgramTypeID >= 8), "ProgramTypeID", "ProgramDescription");
+            ViewBag.ProgramTypeID = new SelectList(db.ProgramTypes.Where(t => t.ProgramTypeID >= 8 && t.ProgramTypeID <= 12), "ProgramTypeID", "ProgramDescription");
 
             ViewBag.ResidentID = id;
             ViewBag.Fullname = db.Residents.Find(model.programEvents.First().ResidentID).Fullname;
@@ -157,7 +155,7 @@ namespace FIVESTARVC.Controllers
                 TempData["UserMessage"] = db.Residents.Find(ResidentID).Fullname + " has a new event.  ";
             }
 
-            ViewBag.ProgramTypeID = new SelectList(db.ProgramTypes.Where(t => t.ProgramTypeID >= 8), "ProgramTypeID", "ProgramDescription");
+            ViewBag.ProgramTypeID = new SelectList(db.ProgramTypes.Where(t => t.ProgramTypeID >= 8 && t.ProgramTypeID <= 12), "ProgramTypeID", "ProgramDescription");
 
 
             return RedirectToAction("Index", "Residents"); ;
@@ -237,7 +235,6 @@ namespace FIVESTARVC.Controllers
                 TempData["UserMessage"] = "A new track has been added.  ";
 
             }
-
 
             return RedirectToAction("Index", "Residents");
 

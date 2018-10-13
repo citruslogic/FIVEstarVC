@@ -64,7 +64,8 @@ namespace FIVESTARVC.Models
                         if (ProgramEvent.ProgramTypeID == 4 //graduation
                         || ProgramEvent.ProgramTypeID == 5 //discharge
                         || ProgramEvent.ProgramTypeID == 6 //discharge
-                        || ProgramEvent.ProgramTypeID == 7)
+                        || ProgramEvent.ProgramTypeID == 7
+                        || ProgramEvent.ProgramTypeID == 13) 
                         {
                             internalBool = false;
                         }
