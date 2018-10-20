@@ -1,18 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
-using System.Web;
-using FIVESTARVC.DAL;
-using FIVESTARVC.Validators;
-using DelegateDecompiler;
-using System.Globalization;
 
 namespace FIVESTARVC.Models
 {
-   
+
     public class Resident : Person
     {
 
@@ -39,48 +33,40 @@ namespace FIVESTARVC.Models
         public int? BenefitID { get; set; }
 
         public virtual Benefit Benefit { get; set; }
-        
+
 
         //[Computed]
-        public Boolean IsCurrent()
+        public bool IsCurrent()
         {
-                var current = db.ProgramEvents;
+            bool current = false;
+            var ev = db.ProgramEvents
+                .Where(t => t.ResidentID == ResidentID)
+                .OrderByDescending(t => t.ProgramEventID).ToList();
 
-                int ID = base.ResidentID;
-
-                Boolean internalBool = false;
-
-                foreach (var ProgramEvent in current)
+            foreach (var item in ev)
+            {
+                if (item.ProgramType.EventType == EnumEventType.ADMISSION)
                 {
-                    if (ID == ProgramEvent.ResidentID)
-                    {
-                        if (ProgramEvent.ProgramTypeID == 2 //admission
-                        || ProgramEvent.ProgramTypeID == 3 //re-admit
-                        || ProgramEvent.ProgramTypeID == 1)
-                        {
-                            internalBool = true;
-                        }
-
-                        if (ProgramEvent.ProgramTypeID == 4 //graduation
-                        || ProgramEvent.ProgramTypeID == 5 //discharge
-                        || ProgramEvent.ProgramTypeID == 6 //discharge
-                        || ProgramEvent.ProgramTypeID == 7
-                        || ProgramEvent.ProgramTypeID == 13) 
-                        {
-                            internalBool = false;
-                        }
-                    }
+                    current = true;
                 }
-                return internalBool;
+
+                if (item.ProgramType.EventType == EnumEventType.DISCHARGE)
+                {
+                    current = false;
+                }
             }
+
+            return current;
+        }
 
         public DateTime? GetAdmitDate()
         {
-            var events = db.ProgramEvents.Where(r => r.ResidentID == ResidentID).OrderByDescending(s => s.ProgramEventID).ToList();
+            var events = db.ProgramEvents.Where(r => r.ResidentID == ResidentID)
+                .OrderByDescending(s => s.ProgramEventID).ToList();
 
             foreach (ProgramEvent ev in events)
             {
-                if (ev.ProgramTypeID == 1 || ev.ProgramTypeID == 2 || ev.ProgramTypeID == 3)
+                if (ev.ProgramType.EventType == EnumEventType.ADMISSION)
                 {
                     return ev.ClearStartDate;
                 }
@@ -95,8 +81,7 @@ namespace FIVESTARVC.Models
 
             foreach (ProgramEvent ev in events)
             {
-                if (ev.ProgramTypeID == 4 || ev.ProgramTypeID == 5
-                    || ev.ProgramTypeID == 6 || ev.ProgramTypeID == 7)
+                if (ev.ProgramType.EventType == EnumEventType.DISCHARGE)
                 {
                     return ev.ClearStartDate;
                 }
@@ -104,30 +89,22 @@ namespace FIVESTARVC.Models
 
             return null;
 
-            }
+        }
 
 
         public int DaysInCenter()
         {
-            TimeSpan span;
+            TimeSpan span = GetDischargeDate().HasValue
+                ? GetDischargeDate().GetValueOrDefault().Subtract(GetAdmitDate().GetValueOrDefault())
+                : DateTime.Now.Subtract(GetAdmitDate().GetValueOrDefault());
 
             // Resident may not be discharged yet.
-            if (GetDischargeDate().HasValue)
-            {
-                span = GetDischargeDate().GetValueOrDefault().Subtract(GetAdmitDate().GetValueOrDefault());
-                
-            } else
-            {
-                span = DateTime.Now.Subtract(GetAdmitDate().GetValueOrDefault());
 
-            }
-
-                return (int) Math.Abs(span.TotalDays);
-
+            return (int)Math.Abs(span.TotalDays);
         }
 
     }
 }
 
-   
+
 

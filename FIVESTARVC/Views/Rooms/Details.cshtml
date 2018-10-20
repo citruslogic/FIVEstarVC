@@ -7,37 +7,45 @@
 <h2>Details</h2>
 
 <div>
-    <h4>Room</h4>
+    <h4>@Html.DisplayNameFor(model => model.RoomNumber) @Html.DisplayFor(model => model.RoomNumber)</h4>
     <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.RoomNumber)
-        </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.RoomNumber)
-        </dd>
+    @*Disabled.  This field is for database purposes only.  It is used to assign and release rooms*@
 
-        @*Disabled.  This field is for database purposes only.  It is used to assign and release rooms*@
-
-        @*<dt>
+    @*<dt>
             @Html.DisplayNameFor(model => model.IsOccupied)
         </dt>
 
         <dd>
             @Html.DisplayFor(model => model.IsOccupied)
         </dd>*@
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-6" style="box-shadow: 0 0 30px black;">
+                <table class="table table-sm table-striped">
+                    <thead>
+                        <tr>
+                            <td class="font-weight-bold">@Html.DisplayNameFor(model => model.WingName)</td>
+                            <td class="font-weight-bold">Occupant Name</td>
+                            <td class="font-weight-bold">@Html.DisplayNameFor(model => model.DaysOccupied)</td>
+                            <td class="font-weight-bold">Admit Date</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>@Html.DisplayFor(model => model.WingName)</td>
+                            <td>@ViewBag.Resident</td>
+                            <td>@Html.DisplayFor(model => model.DaysOccupied)</td>
+                            <td>@ViewBag.AdmitDate</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.WingName)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.WingName)
-        </dd>
-
-    </dl>
+    </div>
 </div>
+<br />
 <p>
     @Html.ActionLink("Edit", "Edit", new { id = Model.RoomNumber }) |
     @Html.ActionLink("Back to List", "Index")

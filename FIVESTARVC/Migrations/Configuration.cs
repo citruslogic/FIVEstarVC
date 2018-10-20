@@ -1,11 +1,8 @@
 namespace FIVESTARVC.Migrations
 {
     using FIVESTARVC.Models;
-    using System;
     using System.Collections.Generic;
-    using System.Data.Entity;
     using System.Data.Entity.Migrations;
-    using System.Linq;
 
     internal sealed class Configuration : DbMigrationsConfiguration<FIVESTARVC.DAL.ResidentContext>
     {
@@ -142,25 +139,25 @@ namespace FIVESTARVC.Migrations
             var programs = new List<ProgramType>
             {
                 // RESIDENT ADMISSION TYPES
-                new ProgramType { ProgramTypeID=1, ProgramDescription="Emergency Shelter" },
-                new ProgramType { ProgramTypeID=2, ProgramDescription="Resident Admission"},
-                new ProgramType { ProgramTypeID=3, ProgramDescription="Re-admit"},                                  
+                new ProgramType { ProgramTypeID=1, EventType=EnumEventType.ADMISSION, ProgramDescription="Emergency Shelter" },
+                new ProgramType { ProgramTypeID=2, EventType=EnumEventType.ADMISSION, ProgramDescription="Resident Admission"},
+                new ProgramType { ProgramTypeID=3, EventType=EnumEventType.ADMISSION, ProgramDescription="Re-admit"},                                  
 
                 // RESIDENT DISCHARGE TYPES
-                new ProgramType { ProgramTypeID=4, ProgramDescription="Resident Graduation" },
-                new ProgramType { ProgramTypeID=5, ProgramDescription="Self Discharge"},
-                new ProgramType { ProgramTypeID=6, ProgramDescription="Discharge for Cause"},
-                new ProgramType { ProgramTypeID=7, ProgramDescription="Higher Level of Care"},                      
+                new ProgramType { ProgramTypeID=4, EventType=EnumEventType.DISCHARGE, ProgramDescription="Resident Graduation" },
+                new ProgramType { ProgramTypeID=5, EventType=EnumEventType.DISCHARGE, ProgramDescription="Self Discharge"},
+                new ProgramType { ProgramTypeID=6, EventType=EnumEventType.DISCHARGE, ProgramDescription="Discharge for Cause"},
+                new ProgramType { ProgramTypeID=7, EventType=EnumEventType.DISCHARGE, ProgramDescription="Higher Level of Care"},                      
 
                 // ENROLLED PROGRAMS
-                new ProgramType { ProgramTypeID=8, ProgramDescription="Work Program" },
-                new ProgramType { ProgramTypeID=9, ProgramDescription="P2I" },
-                new ProgramType { ProgramTypeID=10, ProgramDescription="School Program" },
-                new ProgramType { ProgramTypeID=11, ProgramDescription="Financial Program"},
-                new ProgramType { ProgramTypeID=12, ProgramDescription="Substance Abuse Program"},                  
-
+                new ProgramType { ProgramTypeID=8, EventType=EnumEventType.TRACK, ProgramDescription="Work Program" },
+                new ProgramType { ProgramTypeID=9, EventType=EnumEventType.TRACK, ProgramDescription="P2I" },
+                new ProgramType { ProgramTypeID=10,EventType=EnumEventType.TRACK, ProgramDescription="School Program" },
+                new ProgramType { ProgramTypeID=11,EventType=EnumEventType.TRACK, ProgramDescription="Financial Program"},
+                new ProgramType { ProgramTypeID=12,EventType=EnumEventType.TRACK, ProgramDescription="Substance Abuse Program"},
+                                                   
                 // EMERGENCY RESIDENT DISCHARGE TYPE
-                new ProgramType { ProgramTypeID=13, ProgramDescription="Emergency Discharge"}
+                new ProgramType { ProgramTypeID=13, EventType=EnumEventType.DISCHARGE, ProgramDescription="Emergency Discharge"}
 
             };
 

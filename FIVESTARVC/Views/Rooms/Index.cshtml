@@ -4,12 +4,48 @@
     ViewBag.Title = "Index";
 }
 
+<style>
+    .rooms table {
+        width: 100%;
+    }
+
+    .rooms thead, .rooms tbody, .rooms tr, .rooms td, .rooms th {
+        display: block;
+    }
+
+        .rooms tr:after {
+            content: ' ';
+            display: block;
+            visibility: hidden;
+            clear: both;
+        }
+
+        .rooms thead th {
+            height: 50px;
+            /*text-align: left;*/
+        }
+
+    .rooms tbody {
+        height: 200px;
+        overflow-y: auto;
+    }
+
+    .rooms thead {
+        /* fallback */
+    }
+
+    .rooms tbody td, .rooms thead th {
+        width: 21.2%;
+        float: left;
+    }
+</style>
+
 @*<h2>!!CAUTION!! This will add or edit the ROOMS in the database.</h2>*@
 <br />
 <li class="btn-block">
-    <input type="button" class="btn" value="New Room" onclick="location.href='/Rooms/Create';" />
+    <input type="button" class="btn btn-success" value="New Room" onclick="location.href='/Rooms/Create';" />
 
-    <input type="button" class="btn" value="Return To Resident" onclick="location.href='/Residents/Index';" />
+    <input type="button" class="btn btn-secondary" value="Return To Resident" onclick="location.href='/Residents/Index';" />
     &nbsp;
 
 </li>
@@ -25,53 +61,53 @@
 <br />
 <div class="container">
     <div class="row">
-        <div class="col-md-6">
-            <table class="table">
-                <tr>
-                    <th>
-                        @Html.DisplayNameFor(model => model.RoomNumber)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.IsOccupied)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.WingName)
-                    </th>
-                    <th></th>
-                </tr>
-
-                @foreach (var item in Model)
-                {
+        <div class="col-md-8">
+            <table class="rooms table table-sm table-striped" style="width: 100%;">
+                <thead style="margin-bottom: 5px;">
                     <tr>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.RoomNumber)
-                        </td>
-                        <td>
-                            @(item.IsOccupied ? "Yes" : "No")
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.WingName)
-                        </td>
-
-
-                        <td class="btn-block">
-                            <input type="button" class="btn" value="Details" onclick="location.href='/Rooms/Details';" />
-
-                            <input type="button" class="btn btn-danger" value="Delete" onclick="location.href='/Rooms/Delete';" />
-                            &nbsp;
-
-                        </td>
-
+                        <th style="width: 20%">
+                            @Html.DisplayNameFor(model => model.RoomNumber)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.IsOccupied)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.WingName)
+                        </th>
+                        <th></th>
                     </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.RoomNumber)
+                            </td>
+                            <td>
+                                @(item.IsOccupied ? "Yes" : "No")
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.WingName)
+                            </td>
 
-                }
+                            <td class="btn-block">
+                                <input type="button" class="btn btn-sm" value="Details" onclick="location.href='/Rooms/Details/@item.RoomNumber';" />
+
+                                <input type="button" class="btn btn-sm btn-danger" value="Delete" onclick="location.href='/Rooms/Delete/@item.RoomNumber';" />
+                                &nbsp;
+
+                            </td>
+
+                        </tr>
+
+                    }
+                </tbody>
 
             </table>
         </div>
     </div>
 </div>
+<br />
 
 
-<p>
-    <input type="button" class="btn" value="Return To Resident" onclick="location.href='/Residents/Index';" />
-</p>

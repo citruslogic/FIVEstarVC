@@ -226,10 +226,15 @@
     <Compile Include="Migrations\201805142017563_InitialCreate.Designer.cs">
       <DependentUpon>201805142017563_InitialCreate.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201810201629342_EnumEventType_ProgramEvents.cs" />
+    <Compile Include="Migrations\201810201629342_EnumEventType_ProgramEvents.Designer.cs">
+      <DependentUpon>201810201629342_EnumEventType_ProgramEvents.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AdAuthenticationService.cs" />
     <Compile Include="Models\Benefit.cs" />
     <Compile Include="Models\ChartData.cs" />
+    <Compile Include="Models\EnumEventType.cs" />
     <Compile Include="Models\EnumMilitaryDischarge.cs" />
     <Compile Include="Models\EnumReligionType.cs" />
     <Compile Include="Models\EnumGenderType.cs" />
@@ -894,6 +899,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201805142017563_InitialCreate.resx">
       <DependentUpon>201805142017563_InitialCreate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201810201629342_EnumEventType_ProgramEvents.resx">
+      <DependentUpon>201810201629342_EnumEventType_ProgramEvents.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

@@ -1,26 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
+﻿using FIVESTARVC.DAL;
+using FIVESTARVC.Helpers;
+using FIVESTARVC.Validators;
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Web;
-using FIVESTARVC.DAL;
-using FIVESTARVC.Validators;
-using DelegateDecompiler;
-using System.Globalization;
-using FIVESTARVC.Helpers;
 using System.Data.Entity.ModelConfiguration;
+using System.Globalization;
 
 namespace FIVESTARVC.Models
 {
     public abstract class Person
     {
-        protected ResidentContext db = new ResidentContext();
+        protected readonly ResidentContext db = new ResidentContext();
 
         [Key]
         public int ResidentID { get; set; }
-        
+
         private string LastName { get; set; }
 
         private string FirstMidName { get; set; }
@@ -29,16 +24,19 @@ namespace FIVESTARVC.Models
 
         [Display(Name = "Last Name")]
         [NotMapped]
-        public string ClearLastName {
+        public string ClearLastName
+        {
 
-            get {
+            get
+            {
 
                 return Encryptor.Decrypt(LastName);
 
 
             }
-                
-            set {
+
+            set
+            {
 
                 LastName = Encryptor.Encrypt(value);
 
@@ -48,7 +46,8 @@ namespace FIVESTARVC.Models
         [Required]
         [Display(Name = "First Name")]
         [NotMapped]
-        public string ClearFirstMidName {
+        public string ClearFirstMidName
+        {
             get
             {
 
@@ -71,7 +70,8 @@ namespace FIVESTARVC.Models
         [Age(ErrorMessage = "Applicant must be 18 years or older.")]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         [NotMapped]
-        public DateTime ClearBirthdate {
+        public DateTime ClearBirthdate
+        {
             get
             {
                 return DateTime.Parse(Encryptor.Decrypt(Birthdate.ToString()));
@@ -111,11 +111,12 @@ namespace FIVESTARVC.Models
 
                     return age.Year - 1;
 
-                } catch (ArgumentOutOfRangeException /* ex */)
+                }
+                catch (ArgumentOutOfRangeException /* ex */)
                 {
                     return 0;
                 }
-              
+
             }
         }
 
@@ -146,11 +147,8 @@ namespace FIVESTARVC.Models
             get
             {
                 CultureInfo ci = new CultureInfo("en-US");
-                
-                return ClearBirthdate.ToString("MMMM", ci);
-                
 
-                
+                return ClearBirthdate.ToString("MMMM", ci);
             }
         }
 

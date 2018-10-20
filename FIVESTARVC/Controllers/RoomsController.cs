@@ -34,11 +34,31 @@ namespace FIVESTARVC.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
+
+            var resident = db.Residents.Include(t => t.ProgramEvents).FirstOrDefault(i => i.RoomNumber == id);
+
+            if (resident != null)
+            {
+                ViewBag.Resident = resident.Fullname;
+                ViewBag.AdmitDate = resident?.ProgramEvents
+               .Where(i => i.ProgramType.EventType == EnumEventType.ADMISSION)
+               .OrderByDescending(i => i.ClearStartDate)
+               .FirstOrDefault().ClearStartDate.ToLongDateString();
+            }
+            else
+            {
+                ViewBag.Resident = "NA";
+                ViewBag.AdmitDate = "None";
+            }
+
             Room room = db.Rooms.Find(id);
+
             if (room == null)
             {
                 return HttpNotFound();
             }
+           
+
             return View(room);
         }
 

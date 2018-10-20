@@ -77,7 +77,7 @@ namespace FIVESTARVC.Controllers
         {
             ViewBag.DateFirstAdmitted = db.ProgramEvents
                                             .Include(r => r.Resident).Where(r => r.ResidentID == id)
-                                            .Include(t => t.ProgramType).Where(p => p.ProgramTypeID == 2).ToList()
+                                            .Include(t => t.ProgramType).Where(p => p.ProgramTypeID == 2 || p.ProgramTypeID == 1).ToList()
                                             .OrderBy(d => d.ClearStartDate.Computed())
                                             .Select(s => s.ClearStartDate.Computed())
                                             .FirstOrDefault().ToLongDateString();
@@ -124,7 +124,7 @@ namespace FIVESTARVC.Controllers
             ViewBag.StateTerritoryID = new SelectList(db.States, "StateTerritoryID", "State", residentIncomeModel.StateTerritoryID);
 
             ViewBag.AdmissionType = new SelectList(db.ProgramTypes
-                .Where(t => t.ProgramTypeID <= 3), "ProgramTypeID", "ProgramDescription", 2);
+                .Where(t => t.EventType == EnumEventType.ADMISSION), "ProgramTypeID", "ProgramDescription", 2);
 
             ViewBag.RoomNumber = new SelectList(db.Rooms.Where(rm => rm.IsOccupied == false), "RoomNumber", "RoomNumber");
 
@@ -158,7 +158,7 @@ namespace FIVESTARVC.Controllers
         {
             TempData["Duplicate"] = null;
             ViewBag.AdmissionType = new SelectList(db.ProgramTypes
-                .Where(t => t.ProgramTypeID <= 3), "ProgramTypeID", "ProgramDescription", AdmissionType);
+                .Where(t => t.EventType == EnumEventType.ADMISSION), "ProgramTypeID", "ProgramDescription", AdmissionType);
 
             ViewBag.RoomNumber = new SelectList(db.Rooms.Where(rm => rm.IsOccupied == false), "RoomNumber", "RoomNumber");
             ViewBag.StateTerritoryID = new SelectList(db.States, "StateTerritoryID", "State", residentIncomeModel.StateTerritoryID);
@@ -355,11 +355,7 @@ namespace FIVESTARVC.Controllers
                         if (Readmit == true)
                         {
                             var ev = residentToUpdate.ProgramEvents
-                                .LastOrDefault(i => i.ProgramTypeID == 4
-                                || i.ProgramTypeID == 5
-                                || i.ProgramTypeID == 6
-                                || i.ProgramTypeID == 7
-                                || i.ProgramTypeID == 13);    // Emergency Discharge to be readmited.
+                                .LastOrDefault(i => i.ProgramType.EventType == EnumEventType.DISCHARGE);    // Emergency Discharge to be readmited.
                             ev.ClearEndDate = DateTime.Now;
                             db.Entry(ev).State = EntityState.Modified;
 
@@ -388,13 +384,20 @@ namespace FIVESTARVC.Controllers
                                     residentToUpdate.RoomNumber = RoomNumber;
 
                                     room.IsOccupied = true;
-                                }
-
-
+                                } 
                             }
                         } else
                         {
-                            residentToUpdate.Room = room;
+                            if (room.IsOccupied != false)
+                            {
+                                residentToUpdate.Room = room;
+                                room.IsOccupied = true;
+                            }
+                            else
+                            {
+                                ModelState.AddModelError("", "The room, " + room.RoomNumber 
+                                    + " is already occupied by " + db.Residents.FirstOrDefault(i => i.RoomNumber == room.RoomNumber)?.Fullname + "; another must be selected.");
+                            }
                         }
                     }
 
@@ -538,7 +541,7 @@ namespace FIVESTARVC.Controllers
             }
 
             ViewBag.ProgramTypeID = new SelectList(db.ProgramTypes
-                .Where(t => t.ProgramTypeID < 8 && t.ProgramTypeID >= 4 || t.ProgramTypeID == 13), "ProgramTypeID", "ProgramDescription");
+                .Where(t => t.EventType == EnumEventType.DISCHARGE), "ProgramTypeID", "ProgramDescription");
 
             return PartialView("_Discharge", residentToDischarge);
         }
@@ -573,7 +576,11 @@ namespace FIVESTARVC.Controllers
                 });
 
                 // To close admission events
-                var ev = residentToDischarge.ProgramEvents.LastOrDefault(i => i.ProgramTypeID == 1 || i.ProgramTypeID == 2 || i.ProgramTypeID == 3);
+                var ev = db.ProgramEvents
+                    .Include(t => t.ProgramType)
+                    .ToList()
+                    .Where(i => i.ProgramType.EventType == EnumEventType.ADMISSION)
+                    .LastOrDefault();
                 ev.ClearEndDate = DateTime.Parse(DischargeDate);
                 db.Entry(ev).State = EntityState.Modified;
 
@@ -588,7 +595,7 @@ namespace FIVESTARVC.Controllers
             }
 
             ViewBag.ProgramTypeID = new SelectList(db.ProgramTypes
-                .Where(t => t.ProgramTypeID < 8 && t.ProgramTypeID >= 4 || t.ProgramTypeID == 13), "ProgramTypeID", "ProgramDescription");
+                .Where(t => t.EventType == EnumEventType.DISCHARGE), "ProgramTypeID", "ProgramDescription");
 
 
             return RedirectToAction("Index");

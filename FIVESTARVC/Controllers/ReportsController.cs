@@ -136,30 +136,23 @@ namespace FIVESTARVC.Controllers
             }
 
             //Counts number of current residents by increasing count by 1 for every admit event, and decreasing for any discharge event
-            var CurrentRes = DB.ProgramEvents;
+            var CurrentRes = DB.ProgramEvents.Include(t => t.ProgramType).ToList();
             int count = 0;
             int dischargeCount = 0;
 
             foreach (var ProgramEvents in CurrentRes)
             {
-                if (ProgramEvents.ProgramTypeID == 2 //admission
-                    || ProgramEvents.ProgramTypeID == 3 //re-admit
-                    || ProgramEvents.ProgramTypeID == 1) //emergency shelter
+                if (ProgramEvents.ProgramType.EventType == EnumEventType.ADMISSION)
                 {
                     count++;
                     continue;
                 }
-                else if (ProgramEvents.ProgramTypeID == 4 //graduation
-                    || ProgramEvents.ProgramTypeID == 5 //discharge
-                    || ProgramEvents.ProgramTypeID == 6 //discharge
-                    || ProgramEvents.ProgramTypeID == 7)//discharge
+                else if (ProgramEvents.ProgramType.EventType == EnumEventType.DISCHARGE)
                 {
                     count--;
                 }
 
-                if (ProgramEvents.ProgramTypeID == 5 //discharge
-                    || ProgramEvents.ProgramTypeID == 6 //discharge
-                    || ProgramEvents.ProgramTypeID == 7)
+                if (ProgramEvents.ProgramType.EventType == EnumEventType.DISCHARGE)
                 {
                     dischargeCount++;
                 }
@@ -1155,7 +1148,7 @@ namespace FIVESTARVC.Controllers
             var events = DB.ProgramEvents.ToList();
 
             var Query = (from y in events
-                         where y.ProgramTypeID == 5 || y.ProgramTypeID == 6 || y.ProgramTypeID == 7
+                         where y.ProgramType.EventType == EnumEventType.DISCHARGE
                          group y by y.ClearStartDate.Year into typeGroup
                          orderby typeGroup.Key ascending
                          select new ChartData
@@ -1242,7 +1235,7 @@ namespace FIVESTARVC.Controllers
             int runningTotal = 0;
 
             var Query = (from y in events
-                         where y.ProgramTypeID == 5 || y.ProgramTypeID == 6 || y.ProgramTypeID == 7
+                         where y.ProgramType.EventType == EnumEventType.DISCHARGE
                          group y by y.ClearStartDate.Year into typeGroup
                          orderby typeGroup.Key ascending
                          select new ChartData
@@ -1337,7 +1330,7 @@ namespace FIVESTARVC.Controllers
 
             var Query = (from y in events
                                 join resident in DB.Residents on y.ResidentID equals resident.ResidentID
-                                where y.ProgramTypeID == 2 || y.ProgramTypeID == 1 || y.ProgramTypeID == 3 && resident.InVetCourt.Equals(true)
+                                where y.ProgramType.EventType == EnumEventType.ADMISSION && resident.InVetCourt.Equals(true)
                                 group y by y.ClearStartDate.Year into typeGroup
                                 orderby typeGroup.Key ascending
                                 select new ChartData
@@ -1425,7 +1418,7 @@ namespace FIVESTARVC.Controllers
 
             var queryResults = (from y in events
                                 join resident in DB.Residents on y.ResidentID equals resident.ResidentID
-                                where y.ProgramTypeID == 2 || y.ProgramTypeID == 1 || y.ProgramTypeID == 3 && resident.InVetCourt.Equals(true)
+                                where y.ProgramType.EventType == EnumEventType.ADMISSION && resident.InVetCourt.Equals(true)
                                 group y by y.ClearStartDate.Year into typeGroup
                                 orderby typeGroup.Key ascending
                                 select new ChartData
