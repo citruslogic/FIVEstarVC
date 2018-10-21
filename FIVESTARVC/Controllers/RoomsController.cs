@@ -164,8 +164,21 @@ namespace FIVESTARVC.Controllers
         public ActionResult DeleteConfirmed(int id)
         {
             Room room = db.Rooms.Find(id);
-            db.Rooms.Remove(room);
-            db.SaveChanges();
+
+            if (!room.IsOccupied)
+            {
+                try
+                {
+                    db.Rooms.Remove(room);
+                    db.SaveChanges();
+                } catch (DataException /* dex */)
+                {
+                    TempData["UserMessage"] = "Failed to remove the room from your center because it is in-use.";
+                    return RedirectToAction("Index", new { id = id, saveChangesError = true });
+                }
+            }
+            TempData["UserMessage"] = "Removed room " + room.RoomNumber + " from your center.";
+
             return RedirectToAction("Index");
         }
 

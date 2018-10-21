@@ -24,7 +24,7 @@ namespace FIVESTARVC.Controllers
         public ActionResult Index(string sortOrder, string currentFilter, string searchString, int? page)
         {
             ViewBag.CurrentSort = sortOrder;
-            ViewBag.NameSortParm = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+            ViewBag.NameSortParm = string.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
             ViewBag.BranchSortParm = sortOrder == "ServiceBranch" ? "ServiceBranch_desc" : "ServiceBranch";
             ViewBag.ProgramTypeID = new SelectList(db.ProgramTypes, "ProgramTypeID", "ProgramDescription");
 
@@ -42,7 +42,7 @@ namespace FIVESTARVC.Controllers
             var residents = (from s in db.Residents
                              select s).ToList();
 
-            if (!String.IsNullOrEmpty(searchString))
+            if (!string.IsNullOrEmpty(searchString))
             {
                 residents = residents.Where(s => CultureInfo.CurrentCulture.CompareInfo.IndexOf
                                    (s.ClearLastName, searchString, CompareOptions.IgnoreCase) >= 0
