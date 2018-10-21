@@ -34,7 +34,9 @@
                     <tbody>
                         <tr>
                             <td>@Html.DisplayFor(model => model.WingName)</td>
-                            <td>@ViewBag.Resident</td>
+                            <td>
+                                <a href="/Residents/Details/@ViewBag.ResidentID" class="page-link">@ViewBag.Resident</a>
+                            </td>
                             <td>@Html.DisplayFor(model => model.DaysOccupied)</td>
                             <td>@ViewBag.AdmitDate</td>
                         </tr>

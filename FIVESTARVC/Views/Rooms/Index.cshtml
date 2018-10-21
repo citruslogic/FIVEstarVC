@@ -3,7 +3,19 @@
 @{
     ViewBag.Title = "Index";
 }
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/jqueryui")
+    <script type="text/javascript">
 
+        $(document).ready(function () {
+            $(".getdate").each(function () {
+                $(this).datepicker();
+            });
+        });
+
+    </script>
+}
 <style>
     .rooms table {
         width: 100%;
@@ -34,10 +46,10 @@
         /* fallback */
     }
 
-    .rooms tbody td, .rooms thead th {
-        width: 21.2%;
-        float: left;
-    }
+        .rooms tbody td, .rooms thead th {
+            width: 21.2%;
+            float: left;
+        }
 </style>
 
 @*<h2>!!CAUTION!! This will add or edit the ROOMS in the database.</h2>*@
@@ -62,6 +74,20 @@
 <div class="container">
     <div class="row">
         <div class="col-md-8">
+            @using (Html.BeginForm("Index", "Rooms", FormMethod.Get))
+            {
+                <div class="form-inline" style="margin-bottom: 1em;">
+
+                    Find room(s) by date:&nbsp;
+                    <input class="form-control text-box single-line" data-val="true" id="searchString" name="searchString" type="date" value="" />
+
+                    @*@Html.TextBox("searchString", "", htmlAttributes: new { @class = "getdate" })*@
+                    &nbsp;<input class="btn btn-sm btn-outline-secondary" type="submit" value="Search by Date" />
+                </div>
+
+            }
+
+            <br />
             <table class="rooms table table-sm table-striped" style="width: 100%;">
                 <thead style="margin-bottom: 5px;">
                     <tr>
@@ -93,8 +119,11 @@
 
                             <td class="btn-block">
                                 <input type="button" class="btn btn-sm" value="Details" onclick="location.href='/Rooms/Details/@item.RoomNumber';" />
+                                @if (!item.IsOccupied)
+                                {
+                                    <input type="button" class="btn btn-sm btn-danger" value="Delete" onclick="location.href='/Rooms/Delete/@item.RoomNumber';" />
+                                }
 
-                                <input type="button" class="btn btn-sm btn-danger" value="Delete" onclick="location.href='/Rooms/Delete/@item.RoomNumber';" />
                                 &nbsp;
 
                             </td>
@@ -109,5 +138,6 @@
     </div>
 </div>
 <br />
+
 
 

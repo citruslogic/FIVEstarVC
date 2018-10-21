@@ -365,11 +365,20 @@ namespace FIVESTARVC.Controllers
                                 ClearStartDate = DateTime.Now
 
                             });
-                                       
+                            
+                            // Reassign the readmitted resident the given room number.
+                            if (RoomNumber.HasValue)
+                            {
+                                Room room = db.Rooms.Find(RoomNumber);
+
+                                room.IsOccupied = true;
+                                residentToUpdate.RoomNumber = RoomNumber;
+                            }
                         }
                     }
 
-                    if (RoomNumber.HasValue)
+                    // For the case when a resident is currently in the center.
+                    if (RoomNumber.HasValue && (Readmit == null || Readmit == false))
                     {
                         Room room = db.Rooms.Find(RoomNumber);
 
@@ -384,19 +393,7 @@ namespace FIVESTARVC.Controllers
                                     residentToUpdate.RoomNumber = RoomNumber;
 
                                     room.IsOccupied = true;
-                                } 
-                            }
-                        } else
-                        {
-                            if (room.IsOccupied != false)
-                            {
-                                residentToUpdate.Room = room;
-                                room.IsOccupied = true;
-                            }
-                            else
-                            {
-                                ModelState.AddModelError("", "The room, " + room.RoomNumber 
-                                    + " is already occupied by " + db.Residents.FirstOrDefault(i => i.RoomNumber == room.RoomNumber)?.Fullname + "; another must be selected.");
+                                }
                             }
                         }
                     }

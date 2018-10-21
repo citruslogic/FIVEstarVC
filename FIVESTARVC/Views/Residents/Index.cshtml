@@ -2,8 +2,6 @@
 @using PagedList.Mvc;
 @using FIVESTARVC.Models;
 
-
-
 <link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
 @*Required for the Bootstrap dropdown.*@
 <script type="text/javascript" src="~/Scripts/umd/popper.js"></script>
@@ -15,6 +13,8 @@
     }
 </style>
 @{
+    /**/
+
     ViewBag.Title = "Residents";
 }
 
@@ -45,7 +45,7 @@
                 </button>
             </li>
             <li class="dropdown-divider"></li>
-            <li><button class="dropdown-item" onclick="location.href = '/Rooms/Index';"><i class="fa fa-wrench fa-fw"></i> Room Config</button></li>
+            <li><button class="dropdown-item" onclick="location.href = '/Rooms/Index';"><i class="fa fa-edit fa-fw"></i> Rooms </button></li>
 
         </ul>
     </div>
@@ -54,13 +54,13 @@
 <br />
 @using (Html.BeginForm("Index", "Residents", FormMethod.Get))
 {
-    <div class="form-inline" style="margin-bottom: 1em;">
+<div class="form-inline" style="margin-bottom: 1em;">
 
-        Find by name:&nbsp;
+    Find by name:&nbsp;
 
-        @Html.TextBox("searchString", ViewBag.CurrentFilter as string, htmlAttributes: new { @class = "form-control" })
-        &nbsp;<input class="btn btn-sm btn-outline-secondary" type="submit" value="Search" />
-    </div>
+    @Html.TextBox("searchString", ViewBag.CurrentFilter as string, htmlAttributes: new { @class = "form-control" })
+    &nbsp;<input class="btn btn-sm btn-outline-secondary" type="submit" value="Search" />
+</div>
 
 }
 <br />
@@ -133,9 +133,9 @@
                 @*Trigger the modal with a button*@
                 @if (item.IsCurrent())
                 {
-                    @Html.ActionLink("Assign Tracks", "Create","ProgramEvents", new { id = item.ResidentID }, 
+                    @Html.ActionLink("Assign Tracks", "Create","ProgramEvents", new { id = item.ResidentID },
                    htmlAttributes: new { @class = "btn btn-secondary btn-sm" })
-                   
+
                 }
 
 
@@ -179,53 +179,53 @@
 </div>
 <br />
 
-        Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
 
-        @Html.PagedListPager(Model, page => Url.Action("Index", new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
+@Html.PagedListPager(Model, page => Url.Action("Index", new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
 
-        @section Scripts {
-            @Scripts.Render("~/bundles/jqueryval")
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
 
-            <script type="text/javascript">
+    <script type="text/javascript">
 
 
-                $('#AddModal').on('shown.bs.modal', function () {
-                    jQuery.validator.unobtrusive.parse($(this));
-                })
+        $('#AddModal').on('shown.bs.modal', function () {
+            jQuery.validator.unobtrusive.parse($(this));
+        })
 
-                window.setTimeout(function () {
-                    $(".alert").fadeTo(500, 0).slideUp(500, function () {
-                        $(this).remove();
-                    });
-                }, 4000);
+        window.setTimeout(function () {
+            $(".alert").fadeTo(500, 0).slideUp(500, function () {
+                $(this).remove();
+            });
+        }, 4000);
 
-                function showQuickEventDialog() {
+        function showQuickEventDialog() {
 
-                    $.get('/ProgramEvents/ViewQuickEvent/', function (data) {
-                        $('.modal-content').html(data);
-                        $('#AddModal').modal('show');
-                    });
-
-                }
-
-                function addCampaign() {
-
-                    $.get('/Residents/AddCampaign/', function (data) {
-                        $('.modal-content').html(data);
-                        $('#AddModal').modal('show');
-
-                    });
-                }
-
-                function showDischargeDialog(resident) {
-
-                    $.get('/Residents/Discharge/' + resident, function (data) {
-                        $('.modal-body').html(data);
-                        $('.modal-title').html("Release from Center");
-                        $('#QuickEventModal').modal('show');
-                    });
-                }
-
-            </script>
+            $.get('/ProgramEvents/ViewQuickEvent/', function (data) {
+                $('.modal-content').html(data);
+                $('#AddModal').modal('show');
+            });
 
         }
+
+        function addCampaign() {
+
+            $.get('/Residents/AddCampaign/', function (data) {
+                $('.modal-content').html(data);
+                $('#AddModal').modal('show');
+
+            });
+        }
+
+        function showDischargeDialog(resident) {
+
+            $.get('/Residents/Discharge/' + resident, function (data) {
+                $('.modal-body').html(data);
+                $('.modal-title').html("Release from Center");
+                $('#QuickEventModal').modal('show');
+            });
+        }
+
+    </script>
+
+}

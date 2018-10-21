@@ -17,14 +17,26 @@ namespace FIVESTARVC.Controllers
     {
         private ResidentContext db = new ResidentContext();
 
+        
 
         // GET: Rooms
-        public ActionResult Index(int? page)
+        public ActionResult Index(string searchString)
         {
-            //var rooms = from y in db.Rooms
-            //            select y;
+            var rooms = db.Rooms.ToList();
 
-            return View(db.Rooms.ToList());
+            ViewBag.CurrentFilter = searchString;
+
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                var date = DateTime.Parse(searchString);
+
+                rooms = db.Residents.ToList()
+                    .Where(t => t.GetAdmitDate()?.ToShortDateString() == date.ToShortDateString())
+                    .Select(i => i.Room)
+                    .ToList();
+            }
+
+            return View(rooms);
         }
 
         // GET: Rooms/Details/5
@@ -40,10 +52,10 @@ namespace FIVESTARVC.Controllers
             if (resident != null)
             {
                 ViewBag.Resident = resident.Fullname;
+                ViewBag.ResidentID = resident.ResidentID;
                 ViewBag.AdmitDate = resident?.ProgramEvents
-               .Where(i => i.ProgramType.EventType == EnumEventType.ADMISSION)
-               .OrderByDescending(i => i.ClearStartDate)
-               .FirstOrDefault().ClearStartDate.ToLongDateString();
+                                .Where(i => i.ProgramType.EventType == EnumEventType.ADMISSION)
+                                .LastOrDefault().ClearStartDate.ToLongDateString();
             }
             else
             {
