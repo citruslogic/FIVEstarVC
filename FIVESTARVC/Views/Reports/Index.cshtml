@@ -17,7 +17,7 @@
         <i class="fa fa-arrow-down fa-fw"></i> Download Data
     </button>
 
-    <button class="btn" style="margin-right: 10px;" onclick="campaignChart()"><i class="fa fa-line-chart fa-fw"></i> Campaigns Chart</button>
+    <button class="btn" style="margin-right: 10px;" onclick="location.href = '/Reports/campaigns';"><i class="fa fa-line-chart fa-fw"></i> Campaigns Chart</button> 
 
     <div class="dropdown">
         <button style="margin-right: 10px;" class="btn dropdown-toggle" type="button" data-toggle="dropdown">
@@ -25,13 +25,13 @@
             <span class="caret"></span>
         </button>
         <ul class="dropdown-menu">
-            <li><button class="dropdown-item" onclick="gradChart()"><i class="fa fa-plus fa-fw"></i> Graduation Rates</button></li>
-            <li><button class="dropdown-item" onclick="admitChart()"><i class="fa fa-plus fa-fw"></i> Admission Rates</button></li>
-            <li><button class="dropdown-item" onclick="readmitChart()"><i class="fa fa-plus fa-fw"></i> Re-Admission Rates</button></li>
-            <li><button class="dropdown-item" onclick="p2iChart()"><i class="fa fa-plus fa-fw"></i> P2I Rates</button></li>
-            <li><button class="dropdown-item" onclick="emergChart()"><i class="fa fa-plus fa-fw"></i> Emergency Shelter Rates</button></li>
-            <li><button class="dropdown-item" onclick="disChart()"><i class="fa fa-plus fa-fw"></i> Discharge Rates</button></li>
-            <li><button class="dropdown-item" onclick="vetChart()"><i class="fa fa-plus fa-fw"></i> Vet-Court Rates</button></li>
+            <li><button class="dropdown-item" onclick="location.href = '/Reports/gradRates';"><i class="fa fa-plus fa-fw"></i> Graduation Rates</button></li>
+            <li><button class="dropdown-item" onclick="location.href = '/Reports/admittedRates';"><i class="fa fa-plus fa-fw"></i> Admission Rates</button></li>
+            <li><button class="dropdown-item" onclick="location.href = '/Reports/readmittedRates';"><i class="fa fa-plus fa-fw"></i> Re-Admission Rates</button></li>
+            <li><button class="dropdown-item" onclick="location.href = '/Reports/p2iRates';"><i class="fa fa-plus fa-fw"></i> P2I Rates</button></li>
+            <li><button class="dropdown-item" onclick="location.href = '/Reports/emergRates';"><i class="fa fa-plus fa-fw"></i> Emergency Shelter Rates</button></li>
+            <li><button class="dropdown-item" onclick="location.href = '/Reports/dischargeRates';"><i class="fa fa-plus fa-fw"></i> Discharge Rates</button></li>
+            <li><button class="dropdown-item" onclick="location.href = '/Reports/vetCourtRates';"><i class="fa fa-plus fa-fw"></i> Vet-Court Rates</button></li>
 
         </ul>
     </div>
@@ -42,13 +42,13 @@
             <span class="caret"></span>
         </button>
         <ul class="dropdown-menu">
-            <li><button class="dropdown-item" onclick="gradChartCum()"><i class="fa fa-plus fa-fw"></i> Cumulative Graduation Rates</button></li>
-            <li><button class="dropdown-item" onclick="admitChartCum()"><i class="fa fa-plus fa-fw"></i> Cumulative Admission Rates</button></li>
-            <li><button class="dropdown-item" onclick="readmitChartCum()"><i class="fa fa-plus fa-fw"></i> Cumulative Re-Admission Rates</button></li>
-            <li><button class="dropdown-item" onclick="p2iChartCum()"><i class="fa fa-plus fa-fw"></i> Cumulative P2I Rates</button></li>
-            <li><button class="dropdown-item" onclick="emergChartCum()"><i class="fa fa-plus fa-fw"></i> Cumulative Emergency Shelter Rates</button></li>
-            <li><button class="dropdown-item" onclick="disChartCum()"><i class="fa fa-plus fa-fw"></i> Cumulative Discharge Rates</button></li>
-            <li><button class="dropdown-item" onclick="vetChartCum()"><i class="fa fa-plus fa-fw"></i> Cumulative Vet-Court Rates</button></li>
+            <li><button class="dropdown-item" onclick="location.href = '/Reports/gradRatesCum';"><i class="fa fa-plus fa-fw"></i> Cumulative Graduation Rates</button></li>
+            <li><button class="dropdown-item" onclick="location.href = '/Reports/admittedRatesCum';"><i class="fa fa-plus fa-fw"></i> Cumulative Admission Rates</button></li>
+            <li><button class="dropdown-item" onclick="location.href = '/Reports/readmittedRatesCum';"><i class="fa fa-plus fa-fw"></i> Cumulative Re-Admission Rates</button></li>
+            <li><button class="dropdown-item" onclick="location.href = '/Reports/p2iRatesCum';"><i class="fa fa-plus fa-fw"></i>Cumulative P2I Rates</button></li>
+            <li><button class="dropdown-item" onclick="location.href = '/Reports/emergRatesCum';"><i class="fa fa-plus fa-fw"></i> Cumulative Emergency Shelter Rates</button></li>
+            <li><button class="dropdown-item" onclick="location.href = '/Reports/dischargeRatesCum';"><i class="fa fa-plus fa-fw"></i> Cumulative Discharge Rates</button></li>
+            <li><button class="dropdown-item" onclick="location.href = '/Reports/vetCourtRatesCum';"><i class="fa fa-plus fa-fw"></i> Cumulative Vet-Court Rates</button></li>
         </ul>
     </div>
 
@@ -381,141 +381,6 @@
                 }
             });
         });
-
-        function campaignChart() {
-
-            $.get('/Reports/campaigns/', function (data) {
-                $('.modal-content').html(data);
-                $('#AddModal').modal('show');
-
-            });
-        }
-
-        function gradChart() {
-
-            $.get('/Reports/gradRates/', function (data) {
-                $('.modal-content').html(data);
-                $('#AddModal').modal('show');
-
-            });
-        }
-
-        function admitChart() {
-
-            $.get('/Reports/admittedRates/', function (data) {
-                $('.modal-content').html(data);
-                $('#AddModal').modal('show');
-
-            });
-        }
-
-        function readmitChart() {
-
-            $.get('/Reports/readmittedRates/', function (data) {
-                $('.modal-content').html(data);
-                $('#AddModal').modal('show');
-
-            });
-        }
-
-        function p2iChart() {
-
-            $.get('/Reports/p2iRates/', function (data) {
-                $('.modal-content').html(data);
-                $('#AddModal').modal('show');
-
-            });
-        }
-
-        function emergChart() {
-
-            $.get('/Reports/emergRates/', function (data) {
-                $('.modal-content').html(data);
-                $('#AddModal').modal('show');
-
-            });
-        }
-
-        function disChart() {
-
-            $.get('/Reports/dischargeRates/', function (data) {
-                $('.modal-content').html(data);
-                $('#AddModal').modal('show');
-
-            });
-        }
-
-        function vetChart() {
-
-            $.get('/Reports/vetCourtRates/', function (data) {
-                $('.modal-content').html(data);
-                $('#AddModal').modal('show');
-
-            });
-        }
-
-        function gradChartCum() {
-
-            $.get('/Reports/gradRatesCum/', function (data) {
-                $('.modal-content').html(data);
-                $('#AddModal').modal('show');
-
-            });
-        }
-
-        function admitChartCum() {
-
-            $.get('/Reports/admittedRatesCum/', function (data) {
-                $('.modal-content').html(data);
-                $('#AddModal').modal('show');
-
-            });
-        }
-
-        function readmitChartCum() {
-
-            $.get('/Reports/readmittedRatesCum/', function (data) {
-                $('.modal-content').html(data);
-                $('#AddModal').modal('show');
-
-            });
-        }
-
-        function p2iChartCum() {
-
-            $.get('/Reports/p2iRatesCum/', function (data) {
-                $('.modal-content').html(data);
-                $('#AddModal').modal('show');
-
-            });
-        }
-
-        function emergChartCum() {
-
-            $.get('/Reports/emergRatesCum/', function (data) {
-                $('.modal-content').html(data);
-                $('#AddModal').modal('show');
-
-            });
-        }
-
-        function disChartCum() {
-
-            $.get('/Reports/dischargeRatesCum/', function (data) {
-                $('.modal-content').html(data);
-                $('#AddModal').modal('show');
-
-            });
-        }
-
-        function vetChartCum() {
-
-            $.get('/Reports/vetCourtRatesCum/', function (data) {
-                $('.modal-content').html(data);
-                $('#AddModal').modal('show');
-
-            });
-        }
 
     </script>
 

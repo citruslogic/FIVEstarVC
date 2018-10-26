@@ -317,7 +317,7 @@ namespace FIVESTARVC.Controllers
             }
             );
 
-            return PartialView("DisplayChart", columnChart);
+            return View("DisplayChart", columnChart);
 
 
         }
@@ -416,7 +416,7 @@ namespace FIVESTARVC.Controllers
             }
             );
 
-            return PartialView("DisplayChart", columnChart);
+            return View("DisplayChart", columnChart);
         }
 
         public ActionResult admittedRates()
@@ -501,7 +501,7 @@ namespace FIVESTARVC.Controllers
             }
             );
 
-            return PartialView("DisplayChart", columnChart);
+            return View("DisplayChart", columnChart);
         }
 
         public ActionResult admittedRatesCum()
@@ -597,7 +597,7 @@ namespace FIVESTARVC.Controllers
             }
             );
 
-            return PartialView("DisplayChart", columnChart);
+            return View("DisplayChart", columnChart);
         }
 
         public ActionResult readmittedRates()
@@ -682,7 +682,7 @@ namespace FIVESTARVC.Controllers
             }
             );
 
-            return PartialView("DisplayChart", columnChart);
+            return View("DisplayChart", columnChart);
         }
 
         public ActionResult readmittedRatesCum()
@@ -725,7 +725,7 @@ namespace FIVESTARVC.Controllers
 
             columnChart.SetTitle(new Title()
             {
-                Text = "Cumulative Admissions by Year"
+                Text = "Cumulative Re-Admissions by Year"
             });
 
             //List<int> metricCounts = new List<int>();
@@ -778,7 +778,7 @@ namespace FIVESTARVC.Controllers
             }
             );
 
-            return PartialView("DisplayChart", columnChart);
+            return View("DisplayChart", columnChart);
         }
 
         public ActionResult p2iRates()
@@ -863,7 +863,7 @@ namespace FIVESTARVC.Controllers
             }
             );
 
-            return PartialView("DisplayChart", columnChart);
+            return View("DisplayChart", columnChart);
         }
 
         public ActionResult p2iRatesCum()
@@ -959,7 +959,7 @@ namespace FIVESTARVC.Controllers
             }
             );
 
-            return PartialView("DisplayChart", columnChart);
+            return View("DisplayChart", columnChart);
         }
 
         public ActionResult emergRates()
@@ -1044,7 +1044,7 @@ namespace FIVESTARVC.Controllers
             }
             );
 
-            return PartialView("DisplayChart", columnChart);
+            return View("DisplayChart", columnChart);
         }
 
         public ActionResult emergRatesCum()
@@ -1140,7 +1140,7 @@ namespace FIVESTARVC.Controllers
             }
             );
 
-            return PartialView("DisplayChart", columnChart);
+            return View("DisplayChart", columnChart);
         }
 
         public ActionResult dischargeRates()
@@ -1225,7 +1225,7 @@ namespace FIVESTARVC.Controllers
             }
             );
 
-            return PartialView("DisplayChart", columnChart);
+            return View("DisplayChart", columnChart);
         }
 
         public ActionResult dischargeRatesCum()
@@ -1321,7 +1321,7 @@ namespace FIVESTARVC.Controllers
             }
             );
 
-            return PartialView("DisplayChart", columnChart);
+            return View("DisplayChart", columnChart);
         }
 
         public ActionResult vetCourtRates()
@@ -1407,7 +1407,7 @@ namespace FIVESTARVC.Controllers
             }
             );
 
-            return PartialView("DisplayChart", columnChart);
+            return View("DisplayChart", columnChart);
         }
 
         public ActionResult vetCourtRatesCum()
@@ -1504,7 +1504,7 @@ namespace FIVESTARVC.Controllers
             }
             );
 
-            return PartialView("DisplayChart", columnChart);
+            return View("DisplayChart", columnChart);
         }
 
         public ActionResult DownloadData()
@@ -1679,7 +1679,7 @@ namespace FIVESTARVC.Controllers
             }
             );
 
-            return PartialView("DisplayChart", columnChart);
+            return View("DisplayChart", columnChart);
         }
 
     }
