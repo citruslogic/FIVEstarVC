@@ -24,8 +24,6 @@ namespace FIVESTARVC.Controllers
 
         public ActionResult Index()
         {
-
-
             var residents = db.Residents.Include(r => r.Room).ToList().Select(data => new DashboardData
             {
                 ResidentID = data.ResidentID,
@@ -46,15 +44,32 @@ namespace FIVESTARVC.Controllers
 
             ViewBag.PercentFilled = roomsOccupied / (double)roomsMax * 100;
 
-            /* David Thompson's (dthompson) grad count */
-            //Finds graduation percent
-            int Graduated = db.ProgramEvents.Where(t => t.ProgramTypeID == 4).Count();
+            /* David Thompson's (dthompson) grad count
+             * Move to a central location in code at a more convenient date. Revised by Tytus on 10/26 */
+            var Graduated = db.Database.SqlQuery<double>(@"select convert(float, count(distinct p.ResidentID))
+                                                                            from Person p 
+                                                                            join ProgramEvent pe on p.ResidentID = pe.ResidentID
+                                                                                where ProgramTypeId = '4'").Single();
+
             ViewBag.Graduated = Graduated;
 
             //Finds number admitted
-            int CurrentResidents = db.Residents.ToList().Count();
-            ViewBag.Admitted = CurrentResidents;
-            ViewBag.gradPercent = Graduated / (double)CurrentResidents * 100;
+            var Admitted = db.Database.SqlQuery<double>(@"select convert(float, count(distinct p.ResidentID))
+                                                                           from Person p 
+                                                                           join ProgramEvent pe on p.ResidentID = pe.ResidentID
+                                                                                where ProgramTypeId in ('1', '2', '3')").Single();
+            ViewBag.Admitted = Admitted;
+
+            if (Admitted > 0)
+            {
+                //finds grad percent
+                double gradPercent = (Graduated / Admitted) * 100;
+                ViewBag.gradPercent = gradPercent.ToString("0.##"); ; //Graduation Percentage
+            }
+            else
+            {
+                ViewBag.gradPercent = 0;
+            }
 
 
             /*******************************************/

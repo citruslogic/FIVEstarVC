@@ -162,17 +162,24 @@ namespace FIVESTARVC.Controllers
             ViewBag.DischargeCount = dischargeCount;
 
             //Finds graduation percent
-            float Graduated = DB.ProgramEvents.Count(x => x.ProgramTypeID == 4);
+            var Graduated = DB.Database.SqlQuery<double>(@"select convert(float, count(distinct p.ResidentID))
+                                                                            from Person p 
+                                                                            join ProgramEvent pe on p.ResidentID = pe.ResidentID
+                                                                                where ProgramTypeId = '4'").Single();
+                                 
             ViewBag.Graduated = Graduated;
 
             //Finds number admitted
-            float Admitted = DB.ProgramEvents.Count(x => x.ProgramTypeID == 2);
+            var Admitted = DB.Database.SqlQuery<double>(@"select convert(float, count(distinct p.ResidentID))
+                                                                           from Person p 
+                                                                           join ProgramEvent pe on p.ResidentID = pe.ResidentID
+                                                                                where ProgramTypeId in ('1', '2', '3')").Single();
             ViewBag.Admitted = Admitted;
 
             if (Admitted > 0)
             {
                 //finds grad percent
-                float gradPercent = (Graduated / Admitted) * 100;
+                double gradPercent = (Graduated / Admitted) * 100;
                 ViewBag.GraduatedPercent = gradPercent.ToString("0.##"); ; //Graduation Percentage
             } else
             {
