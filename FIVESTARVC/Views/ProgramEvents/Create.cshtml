@@ -16,7 +16,7 @@
     <div class="container">
         <div class="form-row">
             <div class="col-md-10">
-                <table id="tracks" class="table table-sm table-bordered table-hover">
+                <table id="tracks" class="table table-sm">
                     <tbody>
 
                         @foreach (var track in Model.programEvents)
@@ -32,11 +32,11 @@
 
     <hr />
 
-    <div class="btn-group-sm">
+    <div style="margin-left: 2.3em;" class="btn-group-sm">
         <button type="submit" class="savebtn btn btn-primary btn">Enroll</button>
         <span class="offset-sm-1"></span>
-        <button type="button" class="btn btn-sm" id="addTrack">Add New Track</button>
-        <button type="button" class="btn btn-sm" onclick="location.href='/Residents'">Back to List</button>
+        <button type="button" class="btn btn-sm" id="addTrack"><i class="fa fa-plus fa-fw"></i>  New Track</button>
+        <button type="button" class="btn btn-sm" onclick="location.href='/Residents'"><i class="fa fa-arrow-left fa-fw"></i> Back to List</button>
 
 
     </div>
