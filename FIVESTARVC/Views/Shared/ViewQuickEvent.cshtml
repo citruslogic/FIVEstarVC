@@ -14,16 +14,9 @@
 
 @using (Ajax.BeginForm("ViewQuickEvent", "ProgramEvents", options, new { @class = "form-horizontal", role = "form" }))
 {
-    <div id="modalForm">
-        <div class="modal-header">
-            <h4 class="modal-title" id="AddTrackLabel">Add New Track</h4>
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-
-        </div>
-        <div class="modal-body">
 
             <p> Type the name of the new track in the text box below, and then click Add.</p>
-           
+
             <br />
             @Html.AntiForgeryToken()
             @Html.ValidationSummary(true, "")
@@ -41,9 +34,6 @@
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                 <button type="submit" class="btn btn-primary">Add</button>
             </div>
-
-        </div>
-    </div>
 }
 
 @section Scripts {

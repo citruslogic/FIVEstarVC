@@ -1,4 +1,4 @@
-# FIVESTARVC 1.1.0
+# FIVESTARVC 1.1.0.0
 
 The FIVESTARVC application makes it easier to check-in/check-out residents in a center. It strives
 to have an straight-forward and intuitive user interface replacing paper forms and spreadsheets. It is 

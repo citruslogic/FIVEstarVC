@@ -11,28 +11,28 @@
     @Styles.Render("~/Content/themes/base/css")
     @Scripts.Render("~/bundles/jquery")
 
-<style>
-    
-    #content {
-        min-height: calc(100% - 285px);
-        /* 285 should be the height of your header + height of footer. */
-    }
+    <style>
 
-    footer {
-        margin: 0;
-        padding: 1px; /* tweaked from 0 to 1px */
-    }
+        #content {
+            min-height: calc(100% - 285px);
+            /* 285 should be the height of your header + height of footer. */
+        }
 
-    .progress {
-        background-color: #aaa;
-        -webkit-box-shadow: none;
-        box-shadow: none;
-    }        
+        footer {
+            margin: 0;
+            padding: 1px; /* tweaked from 0 to 1px */
+        }
 
-    .fa {
-        display: inline;
-    }
-</style>
+        .progress {
+            background-color: #aaa;
+            -webkit-box-shadow: none;
+            box-shadow: none;
+        }
+
+        .fa {
+            display: inline;
+        }
+    </style>
 </head>
 
 <body>
@@ -59,16 +59,48 @@
 
 
     </div>
-    <div class="navbar navbar-dark" style="background-color: navy">
-        <footer>
-            <p class="text-light">
-                &copy; @DateTime.Now.Year - FIVE STAR Veterans Center
-                @ViewContext.Controller.GetType().Assembly.GetName().Version
-</footer>
+
+    <div id="AddModal" class="modal fade">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+
+                    <h5 class="modal-title"></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                </div>
+
+                <div class="modal-body">
+                </div>
+            </div>
+        </div>
     </div>
+
+
+    <footer style="background-color: navy;">
+        <div style="margin-left: 1em;">
+            <p class="text-light" style="font-size: small">
+                &copy; @DateTime.Now.Year - FIVE STAR Veterans Center
+            </p>
+            <button class="btn btn-sm btn-primary" style="margin-top: -2em; font-size: small" onclick="aboutDialog()">Release @ViewContext.Controller.GetType().Assembly.GetName().Version</button>
+        </div>
+    </footer>
+
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
     <script src="~/Scripts/Highcharts-4.0.1/js/highcharts.js"></script>
+    <script type="text/javascript">
+
+        function aboutDialog() {
+
+            $.get('/Home/About/', function (data) {
+                $('.modal-title').html("About FIVESTARAPP");
+                $('.modal-body').html = '';
+                $('.modal-body').html(data);
+                $('#AddModal').modal('show');
+
+            });
+        }
+    </script>
     @RenderSection("scripts", required: false)
 
 

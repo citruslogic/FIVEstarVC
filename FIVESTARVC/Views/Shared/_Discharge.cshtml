@@ -26,11 +26,11 @@
                         <tr>
                             <td>@Html.Label("Release Date")</td>
                             <td>
-                                <div class="input-group mb-2">
+                                <div class="input-group mb-2 col-sm-9">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text fa fa-calendar fa-fw" style="width:40px;"></span>
                                     </div>
-                                    <input type="date" name="DischargeDate" id="DischargeDate" class="form-control"  value="@DateTime.Today.ToString("yyyy-MM-dd")"  />
+                                    <input type="date" name="DischargeDate" id="DischargeDate" class="form-control" value="@DateTime.Today.ToString("yyyy-MM-dd")" />
                                 </div>
                             </td>
                         </tr>
@@ -45,7 +45,7 @@
                             </td>
 
                         </tr>
-                       
+
                         <tr>
                             <td class="col-form-label">@Html.LabelFor(model => model.ClearBirthdate, htmlAttributes: new { @class = "control-label" })</td>
                             <td>
@@ -77,15 +77,17 @@
 
 
                 <div class="form-group">
-                    @Html.Label("Release Reason", htmlAttributes: new { @class = "control-label" })
-                    <div>
-                        @Html.DropDownList("ProgramTypeID", null, htmlAttributes: new { @class = "form-control" })
-                        @Html.ValidationMessageFor(model => model.ProgramEvents, "")
-                    </div>
-                    @Html.LabelFor(model => model.Note, htmlAttributes: new { @class = "control-label" })
-                    <div>
-                        @Html.TextAreaFor(model => model.Note, htmlAttributes: new { @class = "form-control" })
-                        @Html.ValidationMessageFor(model => model.Note, "")
+                    <div class="col-sm-6">
+                        @Html.Label("Release Reason", htmlAttributes: new { @class = "control-label" })
+                        <div>
+                            @Html.DropDownList("ProgramTypeID", null, htmlAttributes: new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.ProgramEvents, "")
+                        </div>
+                        @Html.LabelFor(model => model.Note, htmlAttributes: new { @class = "control-label" })
+                        <div>
+                            @Html.TextAreaFor(model => model.Note, htmlAttributes: new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.Note, "")
+                        </div>
                     </div>
                 </div>
             </div>

@@ -14,14 +14,13 @@ using System.IO;
 
 namespace FIVESTARVC.Controllers
 {
-    [Authorize(Roles = "RTS-Group")]
-    //[Authorize]
+
     public class HomeController : Controller
     {
         private ResidentContext db = new ResidentContext();
         public IEnumerable<Resident> NearestResidents { get; set; }           // Nearest birthdays.
 
-
+        [Authorize]
         public ActionResult Index()
         {
             var residents = db.Residents.Include(r => r.Room).ToList().Select(data => new DashboardData
@@ -121,6 +120,13 @@ namespace FIVESTARVC.Controllers
             listData.FirstNames = firstnames;
 
             return View(listData);
+        }
+
+        [HttpGet]
+        public ActionResult About()
+        {
+
+            return PartialView();
         }
 
 

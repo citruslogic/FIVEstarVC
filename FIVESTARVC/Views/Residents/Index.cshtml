@@ -8,7 +8,7 @@
 
 <style>
     .modal-content {
-        width: 400px !important;
+        /*width: 400px !important;*/
         margin: 30px auto !important;
     }
 </style>
@@ -170,13 +170,6 @@
     </div>
 </div>
 
-<!-- Modal -->
-<div class="modal fade" id="AddModal" tabindex="-1" role="dialog" aria-labelledby="AddModal" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-        </div>
-    </div>
-</div>
 <br />
 
 Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
@@ -202,7 +195,9 @@ Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.Page
         function showQuickEventDialog() {
 
             $.get('/ProgramEvents/ViewQuickEvent/', function (data) {
-                $('.modal-content').html(data);
+                $('.modal-body').html = '';
+                $('.modal-body').html(data);
+                $('.modal-title').html("Quick Event")
                 $('#AddModal').modal('show');
             });
 
@@ -211,7 +206,9 @@ Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.Page
         function addCampaign() {
 
             $.get('/Residents/AddCampaign/', function (data) {
-                $('.modal-content').html(data);
+                $('.modal-body').html = '';
+                $('.modal-body').html(data);
+                $('.modal-title').html("Add Campaign");
                 $('#AddModal').modal('show');
 
             });
@@ -220,6 +217,7 @@ Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.Page
         function showDischargeDialog(resident) {
 
             $.get('/Residents/Discharge/' + resident, function (data) {
+                $('.modal-body').html = '';
                 $('.modal-body').html(data);
                 $('.modal-title').html("Release from Center");
                 $('#QuickEventModal').modal('show');
