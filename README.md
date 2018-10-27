@@ -1,8 +1,8 @@
-# FIVEstarVC 1.0.1
+# FIVESTARVC 1.1.0
 
-The FIVEstarVC application makes it easier to check-in/check-out residents in a center. It strives
-to have an straight-forward and intuitive user interface. Its development 
-is continuous. 
+The FIVESTARVC application makes it easier to check-in/check-out residents in a center. It strives
+to have an straight-forward and intuitive user interface replacing paper forms and spreadsheets. It is 
+always a work-in-progress, and its development is continuous. 
 
 Goals of the project:
 ---------------------
@@ -13,13 +13,15 @@ Goals of the project:
 Current features:
 -----------------
 * Admit/edit/release residents. 
+* Search residents by name and date of admittance.
+* Nearest birthday queueing.
 * View details of a resident.
 * Visual aids to data.
 * Basic room management. 
 
 Planned features:
 -----------------
-* Improved room management (ex: force release a room)
-* Better details visualization for residents.
-* Lookup occupancy by given date. 
-* Simple data roll-back.
+* Advanced logging.
+* Resident check-in/check-out inter-operation. 
+* Volunteer activity tracking.
+* Misc. center resource tracking. 

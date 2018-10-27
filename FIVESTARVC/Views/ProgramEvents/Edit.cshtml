@@ -13,7 +13,7 @@
             <h4>Event category: @Model.ProgramType.EventType.ToString().ToLower()</h4>
         </div>
         <br />
-        <h6>Change this event for the resident, and click Update to make the change. </h6>
+        <h6>Change this event for the resident or set its start and end dates. Click Update to finalize your changes. </h6>
         <hr />
         @Html.ValidationSummary(true, "")
         @Html.HiddenFor(model => model.ProgramEventID)
