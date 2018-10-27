@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using FIVESTARVC.DAL;
+using FIVESTARVC.Models;
+using System;
 using System.Data;
 using System.Data.Entity;
 using System.Linq;
 using System.Net;
-using System.Web;
 using System.Web.Mvc;
-using FIVESTARVC.DAL;
-using FIVESTARVC.Models;
-using PagedList;
 
 namespace FIVESTARVC.Controllers
 {
@@ -17,7 +14,7 @@ namespace FIVESTARVC.Controllers
     {
         private ResidentContext db = new ResidentContext();
 
-        
+
 
         // GET: Rooms
         public ActionResult Index(string searchString)
@@ -69,7 +66,7 @@ namespace FIVESTARVC.Controllers
             {
                 return HttpNotFound();
             }
-           
+
 
             return View(room);
         }
@@ -110,7 +107,7 @@ namespace FIVESTARVC.Controllers
         }
 
 
-        
+
 
         // GET: Rooms/Edit/5
         public ActionResult Edit(int? id)
@@ -171,7 +168,8 @@ namespace FIVESTARVC.Controllers
                 {
                     db.Rooms.Remove(room);
                     db.SaveChanges();
-                } catch (DataException /* dex */)
+                }
+                catch (DataException /* dex */)
                 {
                     TempData["UserMessage"] = "Failed to remove the room from your center because it is in-use.";
                     return RedirectToAction("Index", new { id = id, saveChangesError = true });

@@ -34,11 +34,27 @@
                     <tbody>
                         <tr>
                             <td>@Html.DisplayFor(model => model.WingName)</td>
-                            <td>
-                                <a href="/Residents/Details/@ViewBag.ResidentID" class="page-link">@ViewBag.Resident</a>
-                            </td>
-                            <td>@Html.DisplayFor(model => model.DaysOccupied)</td>
-                            <td>@ViewBag.AdmitDate</td>
+                            @if (Model.IsOccupied == true)
+                            {
+                                <td>
+                                    <a href="/Residents/Details/@ViewBag.ResidentID" class="page-link">@ViewBag.Resident</a>
+                                </td>
+                                <td>@Html.DisplayFor(model => model.DaysOccupied)</td>
+                                <td>@ViewBag.AdmitDate</td>
+                            }
+                            else
+                            {
+                                <td>
+                                    No current resident
+                                </td>
+                                <td>
+                                    None
+                                </td>
+                                <td>
+                                    
+                                </td>
+                            }
+
                         </tr>
                     </tbody>
                 </table>

@@ -98,7 +98,6 @@ namespace FIVESTARVC.Controllers
 
                 ViewBag.room = roomNum;
             }
-
             else
             {
                 ViewBag.room = "No Room Assigned";
@@ -356,13 +355,13 @@ namespace FIVESTARVC.Controllers
                         {
                             var ev = residentToUpdate.ProgramEvents
                                 .LastOrDefault(i => i.ProgramType.EventType == EnumEventType.DISCHARGE);    // Emergency Discharge to be readmited.
-                            ev.ClearEndDate = DateTime.Now;
+                            ev.ClearEndDate = DateTime.Now.Date;
                             db.Entry(ev).State = EntityState.Modified;
 
                             residentToUpdate.ProgramEvents.Add(new ProgramEvent
                             {
                                 ProgramTypeID = 3,
-                                ClearStartDate = DateTime.Now
+                                ClearStartDate = DateTime.Now.Date
 
                             });
                             

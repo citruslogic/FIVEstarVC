@@ -175,7 +175,7 @@ namespace FIVESTARVC.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.ProgramTypeID = new SelectList(db.ProgramTypes, "ProgramTypeID", "ProgramDescription", programEvent.ProgramTypeID);
+            ViewBag.ProgramTypeID = new SelectList(db.ProgramTypes.Where(i => i.EventType == programEvent.ProgramType.EventType), "ProgramTypeID", "ProgramDescription", programEvent.ProgramTypeID);
             ViewBag.ResidentID = new SelectList(db.Residents, "ResidentID", "ClearLastName", programEvent.ResidentID);
             return View(programEvent);
         }

@@ -110,7 +110,7 @@ namespace FIVESTARVC.Models
             // Resident may not be discharged yet.
             TimeSpan span = GetDischargeDate().HasValue
                 ? GetDischargeDate().GetValueOrDefault().Subtract(GetAdmitDate().GetValueOrDefault())
-                : DateTime.Now.Subtract(GetAdmitDate().GetValueOrDefault());
+                : DateTime.Now.Date.Subtract(GetAdmitDate().GetValueOrDefault());
 
             return (int)Math.Abs(span.TotalDays);
         }
