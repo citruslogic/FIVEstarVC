@@ -79,10 +79,10 @@
                 <div class="form-group">
                     <div class="col-sm-6">
                         @Html.Label("Release Reason", htmlAttributes: new { @class = "control-label" })
-                        <div>
-                            @Html.DropDownList("ProgramTypeID", null, htmlAttributes: new { @class = "form-control" })
-                            @Html.ValidationMessageFor(model => model.ProgramEvents, "")
-                        </div>
+
+                        @Html.DropDownList("ProgramTypeID", null, htmlAttributes: new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.ProgramEvents, "")
+
                         @Html.LabelFor(model => model.Note, htmlAttributes: new { @class = "control-label" })
                         <div>
                             @Html.TextAreaFor(model => model.Note, htmlAttributes: new { @class = "form-control" })
@@ -94,21 +94,9 @@
 
         </div>
 
-
-        <div class="row">
-            <div class="form-group form-inline">
-                <div class="btn-toolbar mr-1">
-                    <button type="button" class="btn btn-default"
-                            data-dismiss="modal">
-                        Cancel
-                    </button>
-
-                    <input type="submit" value="Release"
-                           class="btn btn-danger"
-                           style="margin-left: 5px;" />
-                </div>
-
-            </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-danger">Release</button>
         </div>
 
     </div>
