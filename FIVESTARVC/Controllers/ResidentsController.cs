@@ -11,6 +11,7 @@ using PagedList;
 using FIVESTARVC.ViewModels;
 using DelegateDecompiler;
 using System.Globalization;
+using System.Threading.Tasks;
 
 namespace FIVESTARVC.Controllers
 {
@@ -272,21 +273,27 @@ namespace FIVESTARVC.Controllers
             return View(residentIncomeModel);
         }
 
-        public ActionResult ConfirmCreate(Resident resident)
+        public JsonResult CheckResident(ResidentIncomeModel resident)
         {
 
             /* Check for the possible pre-existence of the resident in the system. */
-            if (db.Residents.Any(r => r.ClearFirstMidName.Contains(resident.ClearFirstMidName)
-                && r.ClearLastName.Contains(resident.ClearLastName)
-                && r.ClearBirthdate.Date == resident.ClearBirthdate.Date
+            if (db.Residents.Any(r => r.ClearFirstMidName.Contains(resident.FirstMidName)
+                && r.ClearLastName.Contains(resident.LastName)
+                && r.ClearBirthdate.Date == resident.Birthdate.Date
                 && r.ServiceBranch == resident.ServiceBranch))
             {
 
                 // Found a match.
+                return Json(new
+                {
+                    Success = false,
+                    Message = "The resident, " + resident.FirstMidName + " " + resident.LastName
+                    + " may already exist in the system. Please review the list."
+                }, JsonRequestBehavior.AllowGet);
 
             }
 
-            return RedirectToAction("Create");
+            return Json("OK", JsonRequestBehavior.AllowGet);
         }
 
         // GET: Residents/Edit/5
