@@ -26,20 +26,14 @@ namespace FIVESTARVC.Models
         [NotMapped]
         public string ClearLastName
         {
-
             get
             {
-
                 return Encryptor.Decrypt(LastName);
-
-
             }
 
             set
             {
-
                 LastName = Encryptor.Encrypt(value);
-
             }
         }
 
@@ -50,17 +44,12 @@ namespace FIVESTARVC.Models
         {
             get
             {
-
                 return Encryptor.Decrypt(FirstMidName);
-
-
             }
 
             set
             {
-
                 FirstMidName = Encryptor.Encrypt(value);
-
             }
         }
 

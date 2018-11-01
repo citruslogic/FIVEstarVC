@@ -6,6 +6,7 @@ namespace FIVESTARVC.Models
 
     public class ProgramType
     {
+        [Key]
         public int ProgramTypeID { get; set; }
 
         [Required]

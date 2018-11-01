@@ -84,6 +84,12 @@
         <th>
 
         </th>
+        <th>
+           
+        </th>
+        <th>
+
+        </th>
     </tr>
 
     @foreach (var item in Model)
@@ -136,9 +142,15 @@
                     @Html.ActionLink("Assign Tracks", "Create","ProgramEvents", new { id = item.ResidentID },
                    htmlAttributes: new { @class = "btn btn-secondary btn-sm" })
 
+                } else
+                {
+                  
+                    
                 }
+                <td>
 
-
+                </td>
+            <td>
                 @Html.ActionLink("Details", "Details", new { id = item.ResidentID }, htmlAttributes: new { @class = "btn btn-secondary btn-sm" }) &nbsp;
 
                 @if (item.IsCurrent())
@@ -147,6 +159,11 @@
                     @:<input type="button" value="Release" class="modal-link btn btn-sm btn-danger"
                               @: data-toggle="modal" data-target="#QuickEventModal" onclick="showDischargeDialog(@item.ResidentID)" />
 
+                } else
+                {
+
+                    @:<input type="button" value="Re-admit" class="modal-link btn btn-sm btn-primary"
+                              @: data-toggle="modal" data-target="#QuickEventModal" onclick="showReadmitDialog(@item.ResidentID)" />
                 }
             </td>
         </tr>
@@ -220,6 +237,16 @@ Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.Page
                 $('.modal-body').html = '';
                 $('.modal-body').html(data);
                 $('.modal-title').html("Release from Center");
+                $('#QuickEventModal').modal('show');
+            });
+        }
+
+        function showReadmitDialog(resident) {
+
+            $.get('/Residents/Readmit/' + resident, function (data) {
+                $('.modal-body').html = '';
+                $('.modal-body').html(data);
+                $('.modal-title').html("Readmit to Center");
                 $('#QuickEventModal').modal('show');
             });
         }

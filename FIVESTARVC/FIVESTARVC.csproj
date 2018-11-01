@@ -873,6 +873,7 @@
     </Content>
     <Content Include="Views\Home\ImportData.cshtml" />
     <Content Include="Views\CenterOverview\_ServiceDischargeBreakdown.cshtml" />
+    <Content Include="Views\Shared\_Readmit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

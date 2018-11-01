@@ -604,6 +604,85 @@ namespace FIVESTARVC.Controllers
             return RedirectToAction("Index");
         }
 
+        // GET: Residents/Readmit/5
+        [HttpGet]
+        public ActionResult Readmit(int? id, int? RoomNumber, bool? saveChangesError = false)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            if (saveChangesError.GetValueOrDefault())
+            {
+                ViewBag.ErrorMessage = "Discharge failed. Try again, and if the problem persists see your system administrator.";
+            }
+
+            var residentToReadmit = db.Residents
+                .Include(p => p.ProgramEvents)
+                .Where(r => r.ResidentID == id)
+                .Single();
+
+            if (residentToReadmit == null)
+            {
+                return HttpNotFound();
+            }
+                                    
+            ViewBag.RoomNumber = new SelectList(db.Rooms.Where(rm => rm.IsOccupied == false), "RoomNumber", "RoomNumber");
+
+            return PartialView("_Readmit", residentToReadmit);
+        }
+
+        // POST: Residents/Readmit/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Readmit(int id, string ReadmitDate, int? RoomNumber)
+        {
+            ViewBag.RoomNumber = new SelectList(db.Rooms.Where(rm => rm.IsOccupied == false), "RoomNumber", "RoomNumber");
+
+            try
+            {
+                Resident residentToReadmit = db.Residents
+                .Include(p => p.ProgramEvents)
+                .Where(r => r.ResidentID == id)
+                .Single();
+                
+                // To close discharge events
+                var ev = db.ProgramEvents
+                    .Include(t => t.ProgramType)
+                    .ToList()
+                    .Where(i => i.ProgramType.EventType == EnumEventType.DISCHARGE)
+                    .LastOrDefault();
+                ev.ClearEndDate = DateTime.Parse(ReadmitDate);
+                db.Entry(ev).State = EntityState.Modified;
+
+                residentToReadmit.ProgramEvents.Add(new ProgramEvent
+                {
+                    ProgramTypeID = 3,
+                    ClearStartDate = DateTime.Parse(ReadmitDate)
+
+                });
+
+                residentToReadmit.RoomNumber = RoomNumber;
+                Room room = db.Rooms.Find(RoomNumber);
+
+                room.IsOccupied = true;
+
+                db.Entry(room).State = EntityState.Modified;
+                db.SaveChanges();
+
+                TempData["UserMessage"] = residentToReadmit.ClearLastName + " has been readmitted from your center.  ";
+            }
+            catch (DataException/* dex */)
+            {
+                TempData["UserMessage"] = "Failed to readmit the resident to the center.";
+
+                return RedirectToAction("Readmit", new { id = id, saveChangesError = true });
+            }
+
+            return RedirectToAction("Index");
+        }
+
         [HttpGet]
         public ActionResult GetRegionName(string id)
         {
