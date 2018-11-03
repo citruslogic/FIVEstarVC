@@ -22,11 +22,45 @@ namespace FIVESTARVC.Models
         public string WingName { get; set; }
 
         [Display(Name = "Days Occupied (current resident)")]
-        public int? DaysOccupied
+        public int DaysOccupied
         {
             get
             {
-                return db.Residents.FirstOrDefault(i => i.Room.RoomNumber == RoomNumber)?.DaysInCenter();
+                var resident = db.Residents.FirstOrDefault(i => i.Room.RoomNumber == RoomNumber);
+
+                if (resident != null)
+                    return resident.DaysInCenter();
+
+                return 0;
+            }
+        }
+
+        [Display(Name = "Resident")]
+        public string Resident
+        {
+            get
+            {
+                var resident = db.Residents.FirstOrDefault(i => i.Room.RoomNumber == RoomNumber);
+
+                if (resident != null)
+                    return resident.Fullname;
+
+                return "No occupant";
+            }
+        }
+
+        public bool HasLogDetails
+        {
+            get
+            {
+                var logs = db.RoomLogs.FirstOrDefault(i => i.RoomNumber == RoomNumber);
+
+                if (logs != null) 
+                {
+                    return true;
+                }
+
+                return false;
             }
         }
 

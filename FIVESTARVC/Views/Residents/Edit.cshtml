@@ -186,13 +186,14 @@
 
                                                 @:
 
+
                                                 <input type="checkbox"
                                                        class="biggerCheckBox campaign"
                                                        name="selectedCampaigns"
                                                        value="@campaign.MilitaryCampaignID"
                                                        @(Html.Raw(campaign.Assigned ? "checked=\"checked\"" : "")) />
                                                 @campaign.MilitaryCampaign @:<br />
-                            }
+                                            }
 
                                         }
                                     </div>
@@ -225,12 +226,8 @@
 
             </div>
 
+            <p style="position: relative; bottom: 5em;">
 
-
-
-
-
-            <p>
                 <input type="submit" value="Update" class="btn btn-secondary" />
                 @Html.ActionLink("Back to List", "Index", null, htmlAttributes: new { @class = "btn btn-primary" })
             </p>
@@ -295,7 +292,7 @@
                 } else {
                     $("#RoomNumber").val(null);
                     $("#RoomNumber").prop("disabled", true);
-                    
+
                 }
             });
         });

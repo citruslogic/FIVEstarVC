@@ -14,7 +14,11 @@ namespace FIVESTARVC.Models
         DISCHARGE,
         [Description("Program")]
         [Display(Name = "Track")]
-        TRACK
+        TRACK,
+        [Description("System")]
+        [Display(Name = "Maintenance")]
+        SYSTEM
+        
 
     }
 

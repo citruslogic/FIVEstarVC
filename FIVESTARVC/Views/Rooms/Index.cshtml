@@ -73,13 +73,15 @@
 <br />
 <div class="container">
     <div class="row">
-        <div class="col-md-8">
+        <div class="col-md-10">
             @using (Html.BeginForm("Index", "Rooms", FormMethod.Get))
-            {
-                <div class="form-inline" style="margin-bottom: 1em;">
+                {
 
-                    Find room(s) by date:&nbsp;
-                    <input class="form-control text-box single-line" data-val="true" id="searchString" name="searchString" type="date" value="" />
+                    <div>Find room(s) by admit date:<br /></div>
+                                        
+                        <div class="form-inline" style="margin-bottom: 1em;">
+
+                    <input class="form-control-sm" data-val="true" id="searchString" name="searchString" type="date" value="" />
 
                     @*@Html.TextBox("searchString", "", htmlAttributes: new { @class = "getdate" })*@
                     &nbsp;<input class="btn btn-sm btn-outline-secondary" type="submit" value="Search by Date" />
@@ -91,16 +93,19 @@
             <table class="rooms table table-sm table-striped" style="width: 100%;">
                 <thead style="margin-bottom: 5px;">
                     <tr>
-                        <th style="width: 20%">
+                        <th style="width: 22.5%">
                             @Html.DisplayNameFor(model => model.RoomNumber)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Resident)
                         </th>
                         <th>
                             @Html.DisplayNameFor(model => model.IsOccupied)
                         </th>
-                        <th>
+                        <th style="width: 25%">
                             @Html.DisplayNameFor(model => model.WingName)
                         </th>
-                        <th></th>
+                        
                     </tr>
                 </thead>
                 <tbody>
@@ -110,15 +115,22 @@
                             <td>
                                 @Html.DisplayFor(modelItem => item.RoomNumber)
                             </td>
+                            <td style="width: 25%">
+                                @Html.DisplayFor(modelItem => item.Resident)
+                            </td>
                             <td>
                                 @(item.IsOccupied ? "Yes" : "No")
                             </td>
-                            <td>
+                            <td style="width: 10%">
                                 @Html.DisplayFor(modelItem => item.WingName)
                             </td>
 
                             <td class="btn-block">
+                                @if (item.HasLogDetails)
+                                {
                                 <input type="button" class="btn btn-sm" value="Details" onclick="location.href='/Rooms/Details/@item.RoomNumber';" />
+                                }
+
                                 @if (!item.IsOccupied)
                                 {
                                     <input type="button" class="btn btn-sm btn-danger" value="Delete" onclick="location.href='/Rooms/Delete/@item.RoomNumber';" />

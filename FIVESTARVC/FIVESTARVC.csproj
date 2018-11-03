@@ -230,6 +230,14 @@
     <Compile Include="Migrations\201810201629342_EnumEventType_ProgramEvents.Designer.cs">
       <DependentUpon>201810201629342_EnumEventType_ProgramEvents.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201811031212345_RoomLogs.cs" />
+    <Compile Include="Migrations\201811031212345_RoomLogs.Designer.cs">
+      <DependentUpon>201811031212345_RoomLogs.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201811031325431_RoomLogs_Fix.cs" />
+    <Compile Include="Migrations\201811031325431_RoomLogs_Fix.Designer.cs">
+      <DependentUpon>201811031325431_RoomLogs_Fix.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AdAuthenticationService.cs" />
     <Compile Include="Models\Benefit.cs" />
@@ -247,6 +255,7 @@
     <Compile Include="Models\ProgramType.cs" />
     <Compile Include="Models\Resident.cs" />
     <Compile Include="Models\Room.cs" />
+    <Compile Include="Models\RoomLog.cs" />
     <Compile Include="Models\StateTerritory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Validators\Age.cs" />
@@ -903,6 +912,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201810201629342_EnumEventType_ProgramEvents.resx">
       <DependentUpon>201810201629342_EnumEventType_ProgramEvents.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201811031212345_RoomLogs.resx">
+      <DependentUpon>201811031212345_RoomLogs.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201811031325431_RoomLogs_Fix.resx">
+      <DependentUpon>201811031325431_RoomLogs_Fix.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

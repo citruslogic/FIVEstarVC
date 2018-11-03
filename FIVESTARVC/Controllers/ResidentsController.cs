@@ -1,21 +1,20 @@
-﻿using System;
+﻿using DelegateDecompiler;
+using FIVESTARVC.DAL;
+using FIVESTARVC.Models;
+using FIVESTARVC.ViewModels;
+using PagedList;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
+using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Web.Mvc;
-using FIVESTARVC.DAL;
-using FIVESTARVC.Models;
-using PagedList;
-using FIVESTARVC.ViewModels;
-using DelegateDecompiler;
-using System.Globalization;
-using System.Threading.Tasks;
 
 namespace FIVESTARVC.Controllers
 {
-    [Authorize]
+    //[Authorize]
     //[Authorize(Roles = "RTS-Group")]
     public class ResidentsController : Controller
     {
@@ -111,7 +110,7 @@ namespace FIVESTARVC.Controllers
 
             PopulateAssignedCampaignData(resident);
 
-            
+
 
             return View(resident);
         }
@@ -218,12 +217,15 @@ namespace FIVESTARVC.Controllers
                 if (ModelState.IsValid)
                 {
                     db.Residents.Add(resident);
-                    resident.ProgramEvents.Add(new ProgramEvent
+
+                    var admitEvent = new ProgramEvent
                     {
                         ProgramTypeID = AdmissionType,
                         ClearStartDate = residentIncomeModel.AdmitDate,
 
-                    });
+                    };
+
+                    resident.ProgramEvents.Add(admitEvent);
 
                     Room room = db.Rooms.Find(resident.RoomNumber);
 
@@ -231,6 +233,14 @@ namespace FIVESTARVC.Controllers
                     {
                         room.IsOccupied = true;
                     }
+
+                    RoomLog log = db.RoomLogs.Add(new RoomLog
+                    {
+                        Resident = resident,
+                        Room = resident.Room,
+                        Event = admitEvent,
+                        Comment = "Resident admitted."
+                    });
 
                     db.Benefits.Add(benefit);
                     resident.Benefit = benefit;
@@ -365,13 +375,15 @@ namespace FIVESTARVC.Controllers
                             ev.ClearEndDate = DateTime.Now.Date;
                             db.Entry(ev).State = EntityState.Modified;
 
-                            residentToUpdate.ProgramEvents.Add(new ProgramEvent
+                            var readmitEvent = new ProgramEvent
                             {
                                 ProgramTypeID = 3,
                                 ClearStartDate = DateTime.Now.Date
 
-                            });
-                            
+                            };
+
+                            residentToUpdate.ProgramEvents.Add(readmitEvent);
+
                             // Reassign the readmitted resident the given room number.
                             if (RoomNumber.HasValue)
                             {
@@ -379,6 +391,14 @@ namespace FIVESTARVC.Controllers
 
                                 room.IsOccupied = true;
                                 residentToUpdate.RoomNumber = RoomNumber;
+
+                                db.RoomLogs.Add(new RoomLog
+                                {
+                                    Resident = residentToUpdate,
+                                    Room = room,
+                                    Event = readmitEvent,
+                                    Comment = "Resident readmitted."
+                                });
                             }
                         }
                     }
@@ -390,6 +410,7 @@ namespace FIVESTARVC.Controllers
 
                         if (residentToUpdate.Room != null)
                         {
+                            var oldRoom = residentToUpdate.Room;
                             if (residentToUpdate.Room.RoomNumber != RoomNumber)
                             {
                                 /* Resident is changing rooms, if they have one */
@@ -397,8 +418,25 @@ namespace FIVESTARVC.Controllers
                                 {
                                     residentToUpdate.Room.IsOccupied = false;
                                     residentToUpdate.RoomNumber = RoomNumber;
+                                    
+                                    // Center log event
+                                    var program = db.ProgramTypes.FirstOrDefault(i => i.ProgramTypeID == 14);
 
                                     room.IsOccupied = true;
+
+                                    db.RoomLogs.Add(new RoomLog
+                                    {
+                                        Resident = residentToUpdate,
+                                        Room = room,
+                                        Event = new ProgramEvent
+                                        {
+                                            Resident = residentToUpdate,
+                                            ClearStartDate = DateTime.Now,
+                                            ClearEndDate = DateTime.Now,
+                                            ProgramType = program
+                                        },
+                                        Comment = "Resident moved from room " + oldRoom.RoomNumber
+                                    });
                                 }
                             }
                         }
@@ -580,12 +618,19 @@ namespace FIVESTARVC.Controllers
 
                 // To close admission events
                 var ev = db.ProgramEvents
-                    .Include(t => t.ProgramType)
+                    .Where(i => i.ResidentID == id && i.ProgramType.EventType == EnumEventType.ADMISSION)
                     .ToList()
-                    .Where(i => i.ProgramType.EventType == EnumEventType.ADMISSION)
                     .LastOrDefault();
                 ev.ClearEndDate = DateTime.Parse(DischargeDate);
                 db.Entry(ev).State = EntityState.Modified;
+
+                db.RoomLogs.Add(new RoomLog
+                {
+                    Resident = residentToDischarge,
+                    Room = roomToRelease,
+                    Event = ev,
+                    Comment = "Resident discharged; room released."
+                });
 
                 db.SaveChanges();
                 TempData["UserMessage"] = residentToDischarge.ClearLastName + " has been discharged from your center.  ";
@@ -627,7 +672,7 @@ namespace FIVESTARVC.Controllers
             {
                 return HttpNotFound();
             }
-                                    
+
             ViewBag.RoomNumber = new SelectList(db.Rooms.Where(rm => rm.IsOccupied == false), "RoomNumber", "RoomNumber");
 
             return PartialView("_Readmit", residentToReadmit);
@@ -646,22 +691,22 @@ namespace FIVESTARVC.Controllers
                 .Include(p => p.ProgramEvents)
                 .Where(r => r.ResidentID == id)
                 .Single();
-                
+
                 // To close discharge events
-                var ev = db.ProgramEvents
-                    .Include(t => t.ProgramType)
-                    .ToList()
+                var ev = residentToReadmit.ProgramEvents
                     .Where(i => i.ProgramType.EventType == EnumEventType.DISCHARGE)
                     .LastOrDefault();
                 ev.ClearEndDate = DateTime.Parse(ReadmitDate);
                 db.Entry(ev).State = EntityState.Modified;
 
-                residentToReadmit.ProgramEvents.Add(new ProgramEvent
+                var admitEvent = new ProgramEvent
                 {
                     ProgramTypeID = 3,
                     ClearStartDate = DateTime.Parse(ReadmitDate)
 
-                });
+                };
+
+                residentToReadmit.ProgramEvents.Add(admitEvent);
 
                 residentToReadmit.RoomNumber = RoomNumber;
                 Room room = db.Rooms.Find(RoomNumber);
@@ -669,6 +714,15 @@ namespace FIVESTARVC.Controllers
                 room.IsOccupied = true;
 
                 db.Entry(room).State = EntityState.Modified;
+
+                db.RoomLogs.Add(new RoomLog
+                {
+                    Resident = residentToReadmit,
+                    Room = room,
+                    Event = admitEvent,
+                    Comment = "Resident readmitted."
+                });
+
                 db.SaveChanges();
 
                 TempData["UserMessage"] = residentToReadmit.ClearLastName + " has been readmitted from your center.  ";

@@ -157,8 +157,10 @@ namespace FIVESTARVC.Migrations
                 new ProgramType { ProgramTypeID=12,EventType=EnumEventType.TRACK, ProgramDescription="Substance Abuse Program"},
                                                    
                 // EMERGENCY RESIDENT DISCHARGE TYPE
-                new ProgramType { ProgramTypeID=13, EventType=EnumEventType.DISCHARGE, ProgramDescription="Emergency Discharge"}
+                new ProgramType { ProgramTypeID=13, EventType=EnumEventType.DISCHARGE, ProgramDescription="Emergency Discharge"},
 
+                // SYSTEM MAINTENANCE TYPES
+                new ProgramType { ProgramTypeID=14, EventType=EnumEventType.SYSTEM, ProgramDescription="Room change" }
             };
 
             programs.ForEach(p => context.ProgramTypes.AddOrUpdate(i => i.ProgramTypeID, p));

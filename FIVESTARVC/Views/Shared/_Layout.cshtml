@@ -18,9 +18,21 @@
             /* 285 should be the height of your header + height of footer. */
         }
 
-        footer {
-            margin: 0;
-            padding: 1px; /* tweaked from 0 to 1px */
+
+        #footer {
+            position: fixed;
+            z-index: 10;
+            left: 0px;
+            bottom: 29px;
+            height: 30px;
+            width: 100%;
+            background: #999;
+        }
+
+        /* IE 6 */
+        * html #footer {
+            position: absolute;
+            top: expression((0-(footer.offsetHeight)+(document.documentElement.clientHeight ? document.documentElement.clientHeight : document.body.clientHeight)+(ignoreMe = document.documentElement.scrollTop ? document.documentElement.scrollTop : document.body.scrollTop))+'px');
         }
 
         .progress {
@@ -74,16 +86,18 @@
             </div>
         </div>
     </div>
+    <br />
 
-
-    <footer style="background-color: navy;">
-        <div style="margin-left: 1em;">
-            <p class="text-light" style="font-size: small">
-                &copy; @DateTime.Now.Year - FIVE STAR Veterans Center
-            </p>
-            <button class="btn btn-sm btn-primary" style="margin-top: -2em; font-size: small" onclick="aboutDialog()">Release @ViewContext.Controller.GetType().Assembly.GetName().Version</button>
-        </div>
-    </footer>
+    <div id="footer">
+        <footer style="background-color: navy;">
+            <div style="margin-left: 1em;">
+                <p class="text-light" style="font-size: small">
+                    &copy; @DateTime.Now.Year - FIVE STAR Veterans Center
+                </p>
+                <button class="btn btn-sm btn-primary" style="margin-top: -2em; font-size: small" onclick="aboutDialog()">Release @ViewContext.Controller.GetType().Assembly.GetName().Version</button>
+            </div>
+        </footer>
+    </div>
 
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")

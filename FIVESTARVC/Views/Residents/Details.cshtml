@@ -35,15 +35,15 @@
         /* fallback */
     }
 
-   
+
     .money-wide {
         width: 150px;
-        
     }
-        .events tbody td, .events thead th {
-            width: 15.2%;
-            float: left;
-        }
+
+    .events tbody td, .events thead th {
+        width: 15.2%;
+        float: left;
+    }
 </style>
 <h2>Details for @(Model.ClearLastName)</h2>
 
@@ -183,7 +183,7 @@
                         @Html.DisplayFor(model => model.Benefit.DisabilityPercentage)
 
                     </td>
-                    </tr>
+                </tr>
                 <tr>
                     <td class="col-form-label">
                         @Html.LabelFor(model => model.Benefit.DisabilityAmount, htmlAttributes: new { @class = "control-label" })
@@ -193,7 +193,7 @@
 
                     </td>
                 </tr>
-                    
+
                 <tr>
                     <td class="col-form-label">
                         @Html.LabelFor(model => model.Benefit.FoodStamp, htmlAttributes: new { @class = "control-label" })
@@ -203,7 +203,8 @@
                         {
                             @(Model.Benefit.FoodStamp ? "Yes" : "No")
 
-                        } else
+                        }
+                        else
                         {
                             <text>No</text>
                         }
@@ -321,6 +322,6 @@
 
 
 
-<p>
+<p style="position: relative; bottom: 5em;">
     @Html.ActionLink("Back to List", "Index", null, htmlAttributes: new { @class = "btn btn-primary" })
 </p>

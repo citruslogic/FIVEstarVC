@@ -19,6 +19,7 @@ namespace FIVESTARVC.DAL
         public DbSet<Benefit> Benefits { get; set; }
         public DbSet<Room> Rooms { get; set; }
         public DbSet<StateTerritory> States { get; set; }
+        public DbSet<RoomLog> RoomLogs { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

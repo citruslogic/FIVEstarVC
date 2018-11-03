@@ -1,13 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity.ModelConfiguration;
 using FIVESTARVC.Helpers;
-using System.Web.Mvc;
 
 namespace FIVESTARVC.Models
 {
@@ -69,9 +64,7 @@ namespace FIVESTARVC.Models
 
             }
         }
-
-
-
+               
         public Boolean Completed { get; set; }
 
         [NotMapped]

@@ -15,7 +15,7 @@ using System.Globalization;
 namespace FIVESTARVC.Controllers
 {
     //[Authorize(Roles = "RTS-Group")]
-    [Authorize]
+    //[Authorize]
     public class ProgramEventsController : Controller
     {
         private ResidentContext db = new ResidentContext();
@@ -25,7 +25,6 @@ namespace FIVESTARVC.Controllers
         {
             ViewBag.CurrentSort = sortOrder;
             ViewBag.NameSortParm = String.IsNullOrEmpty(sortOrder) ? "lname_desc" : "";
-            ViewBag.ProgramSortParm = sortOrder == "ProgramDescription" ? "ProgramDescription_desc" : "ProgramDescription";
             ViewBag.ProgramTypeID = new SelectList(db.ProgramTypes, "ProgramTypeID", "ProgramDescription");
 
 
@@ -55,14 +54,8 @@ namespace FIVESTARVC.Controllers
                 case "name_desc":
                     programEvents = programEvents.OrderByDescending(p => p.ClearLastName.Computed()).ToList();
                     break;
-                case "ProgramDescription":
-                    programEvents = programEvents.OrderBy(p => p.ProgramEvents).ToList();
-                    break;
-                case "ProgramDescription_desc":
-                    programEvents = programEvents.OrderByDescending(p => p.ProgramEvents).ToList();
-                    break;
-                default:
-                    programEvents = programEvents.OrderBy(p => p.ResidentID).ToList();
+
+                default: programEvents = programEvents.OrderBy(p => p.ResidentID).ToList();
                     break;
             }
 

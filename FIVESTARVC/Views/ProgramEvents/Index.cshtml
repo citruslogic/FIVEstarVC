@@ -35,7 +35,7 @@
 
         <tr>
             <th style="width: 17.7em">
-                @Html.ActionLink("Description", "Index", new { sortOrder = ViewBag.ProgramSortParm, currentFilter = ViewBag.CurrentFilter })
+                Description
             </th>
             @*<th>
                     @Html.ActionLink("Last Name", "Index", new { sortOrder = ViewBag.NameSortParm, currentFilter = ViewBag.CurrentFilter })
@@ -88,6 +88,11 @@
 
 
 <br />
-Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+<div style="position: relative; bottom: 1em;">
+    <p>
+        Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
 
-@Html.PagedListPager(Model, page => Url.Action("Index", new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
+        @Html.PagedListPager(Model, page => Url.Action("Index", new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
+    </p>
+
+</div>

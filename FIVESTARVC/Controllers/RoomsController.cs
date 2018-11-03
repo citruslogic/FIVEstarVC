@@ -13,23 +13,24 @@ namespace FIVESTARVC.Controllers
     public class RoomsController : Controller
     {
         private ResidentContext db = new ResidentContext();
-
-
-
+               
         // GET: Rooms
         public ActionResult Index(string searchString)
         {
             var rooms = db.Rooms.ToList();
-
             ViewBag.CurrentFilter = searchString;
+            
 
             if (!string.IsNullOrEmpty(searchString))
             {
                 var date = DateTime.Parse(searchString);
 
-                rooms = db.Residents.ToList()
-                    .Where(t => t.GetAdmitDate()?.ToShortDateString() == date.ToShortDateString())
-                    .Select(i => i.Room)
+                rooms = db.RoomLogs
+                    .Include(t => t.Resident)
+                    .ToList()
+                    .Where(t => t.Resident.GetAdmitDate()?.ToShortDateString() == date.ToShortDateString()
+                    && t.Resident.IsCurrent())
+                    .Select(t => t.Room).Distinct()
                     .ToList();
             }
 
@@ -44,21 +45,11 @@ namespace FIVESTARVC.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            var resident = db.Residents.Include(t => t.ProgramEvents).FirstOrDefault(i => i.RoomNumber == id);
-
-            if (resident != null)
-            {
-                ViewBag.Resident = resident.Fullname;
-                ViewBag.ResidentID = resident.ResidentID;
-                ViewBag.AdmitDate = resident?.ProgramEvents
-                                .Where(i => i.ProgramType.EventType == EnumEventType.ADMISSION)
-                                .LastOrDefault().ClearStartDate.ToLongDateString();
-            }
-            else
-            {
-                ViewBag.Resident = "NA";
-                ViewBag.AdmitDate = "None";
-            }
+            var residents = db.RoomLogs
+                .Include(t => t.Resident)
+                .Include(t => t.Room)
+                .Include(t => t.Event)
+                .Where(i => i.Room.RoomNumber == id).ToList();
 
             Room room = db.Rooms.Find(id);
 
@@ -67,8 +58,9 @@ namespace FIVESTARVC.Controllers
                 return HttpNotFound();
             }
 
+            ViewBag.room = room.RoomNumber;
 
-            return View(room);
+            return View(residents);
         }
 
         // GET: Rooms/Create
@@ -166,12 +158,18 @@ namespace FIVESTARVC.Controllers
             {
                 try
                 {
+                    var logs = db.RoomLogs.Where(s => s.Room.RoomNumber == id).ToList();
+
+                    db.RoomLogs.RemoveRange(logs);
+                    db.SaveChanges();
+
                     db.Rooms.Remove(room);
+                    db.Entry(room).State = EntityState.Deleted;
                     db.SaveChanges();
                 }
-                catch (DataException /* dex */)
+                catch (DataException dex)
                 {
-                    TempData["UserMessage"] = "Failed to remove the room from your center because it is in-use.";
+                    TempData["UserMessage"] = "Failed to remove the room from your center because it is in-use. " + dex.Message;
                     return RedirectToAction("Index", new { id = id, saveChangesError = true });
                 }
             }

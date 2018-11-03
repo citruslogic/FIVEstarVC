@@ -1,4 +1,4 @@
-﻿@model FIVESTARVC.Models.Room
+﻿@model IEnumerable<FIVESTARVC.Models.RoomLog>
 
 @{
     ViewBag.Title = "Details";
@@ -7,7 +7,7 @@
 <h2>Details</h2>
 
 <div>
-    <h4>@Html.DisplayNameFor(model => model.RoomNumber) @Html.DisplayFor(model => model.RoomNumber)</h4>
+    <h4>Occupancy log for @Html.DisplayNameFor(model => model.Room.RoomNumber) @ViewBag.room</h4>
     <hr />
 
     @*Disabled.  This field is for database purposes only.  It is used to assign and release rooms*@
@@ -20,51 +20,51 @@
             @Html.DisplayFor(model => model.IsOccupied)
         </dd>*@
     <div class="container">
-        <div class="row">
-            <div class="col-sm-6" style="box-shadow: 0 0 30px black;">
-                <table class="table table-sm table-striped">
-                    <thead>
-                        <tr>
-                            <td class="font-weight-bold">@Html.DisplayNameFor(model => model.WingName)</td>
-                            <td class="font-weight-bold">Occupant Name</td>
-                            <td class="font-weight-bold">@Html.DisplayNameFor(model => model.DaysOccupied)</td>
-                            <td class="font-weight-bold">Admit Date</td>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>@Html.DisplayFor(model => model.WingName)</td>
-                            @if (Model.IsOccupied == true)
+        @foreach (var group in Model.GroupBy(i => i.Resident.Fullname))
+        {
+            <div class="row">
+
+                <div class="col-sm-8">
+                    <table class="table table-bordered table-sm table-striped">
+                        <thead>
+                            <tr>
+                                <td style="width: 12em; background-color: antiquewhite">
+                                    <br /><h6><a href="/Residents/Details/@group.Select(i => i.ResidentID).First()">@Html.Encode(group.Key)</a></h6>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="font-weight-bold">@Html.DisplayNameFor(model => model.Room.WingName)</td>
+                                <td class="font-weight-bold">@Html.DisplayNameFor(model => model.Room.DaysOccupied)</td>
+                                <td class="font-weight-bold">@Html.DisplayNameFor(model => model.Comment)</td>
+                                <td class="font-weight-bold">Date</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in group)
                             {
-                                <td>
-                                    <a href="/Residents/Details/@ViewBag.ResidentID" class="page-link">@ViewBag.Resident</a>
-                                </td>
-                                <td>@Html.DisplayFor(model => model.DaysOccupied)</td>
-                                <td>@ViewBag.AdmitDate</td>
-                            }
-                            else
-                            {
-                                <td>
-                                    No current resident
-                                </td>
-                                <td>
-                                    None
-                                </td>
-                                <td>
+                                <tr>
+                                    <td>@Html.DisplayFor(model => item.Room.WingName)</td>
+
                                     
-                                </td>
+                                    <td>@Html.DisplayFor(model => item.Room.DaysOccupied)</td>
+                                    <td>@Html.DisplayFor(model => item.Comment)</td>
+                                    <td>@item.Event.GetShortStartDate()</td>
+
+                                </tr>
                             }
+                            
+                        </tbody>
+                        
+                    </table>
+                </div>
 
-                        </tr>
-                    </tbody>
-                </table>
             </div>
-        </div>
-
+        }
+        
     </div>
 </div>
 <br />
-<p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.RoomNumber }) |
-    @Html.ActionLink("Back to List", "Index")
+<p style="position: relative; bottom: 1em;">
+    @Html.ActionLink("Back to List", "Index", null, htmlAttributes: new { @class = "btn btn-primary" })
+
 </p>
