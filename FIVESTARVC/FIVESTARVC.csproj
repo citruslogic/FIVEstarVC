@@ -238,6 +238,10 @@
     <Compile Include="Migrations\201811031325431_RoomLogs_Fix.Designer.cs">
       <DependentUpon>201811031325431_RoomLogs_Fix.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201811040312334_ActualDaysInCenter.cs" />
+    <Compile Include="Migrations\201811040312334_ActualDaysInCenter.Designer.cs">
+      <DependentUpon>201811040312334_ActualDaysInCenter.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AdAuthenticationService.cs" />
     <Compile Include="Models\Benefit.cs" />
@@ -918,6 +922,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201811031325431_RoomLogs_Fix.resx">
       <DependentUpon>201811031325431_RoomLogs_Fix.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201811040312334_ActualDaysInCenter.resx">
+      <DependentUpon>201811040312334_ActualDaysInCenter.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

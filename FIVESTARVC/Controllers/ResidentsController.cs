@@ -69,7 +69,6 @@ namespace FIVESTARVC.Controllers
             int pageSize = 6;
             int pageNumber = (page ?? 1);
             return View(residents.ToPagedList(pageNumber, pageSize));
-
         }
 
         // GET: Residents/Details/5
@@ -110,8 +109,6 @@ namespace FIVESTARVC.Controllers
 
             PopulateAssignedCampaignData(resident);
 
-
-
             return View(resident);
         }
 
@@ -130,7 +127,6 @@ namespace FIVESTARVC.Controllers
             var allMilitaryCampaigns = db.MilitaryCampaigns;
             var viewModel = new List<AssignedCampaignData>();
 
-
             foreach (var militaryCampaign in allMilitaryCampaigns)
             {
                 viewModel.Add(new AssignedCampaignData
@@ -144,7 +140,6 @@ namespace FIVESTARVC.Controllers
             ViewBag.Campaigns = viewModel;
 
             return View();
-
         }
 
         // POST: Residents/Create
@@ -195,8 +190,6 @@ namespace FIVESTARVC.Controllers
                 MilitaryCampaigns = new List<MilitaryCampaign>(),
                 ProgramEvents = new List<ProgramEvent>(),
                 Benefit = new Benefit(),
-
-
             };
 
 
@@ -246,10 +239,7 @@ namespace FIVESTARVC.Controllers
                     resident.Benefit = benefit;
 
                     db.SaveChanges();
-
                 }
-
-
             }
             catch (DataException /*dex*/)
             {
@@ -263,11 +253,8 @@ namespace FIVESTARVC.Controllers
             {
                 try
                 {
-
                     UpdateResidentCampaigns(selectedCampaigns, resident);
                     db.SaveChanges();
-
-
 
                     TempData["UserMessage"] = residentIncomeModel.LastName + " has been admitted into your center.  ";
 
@@ -379,7 +366,6 @@ namespace FIVESTARVC.Controllers
                             {
                                 ProgramTypeID = 3,
                                 ClearStartDate = DateTime.Now.Date
-
                             };
 
                             residentToUpdate.ProgramEvents.Add(readmitEvent);
@@ -418,7 +404,7 @@ namespace FIVESTARVC.Controllers
                                 {
                                     residentToUpdate.Room.IsOccupied = false;
                                     residentToUpdate.RoomNumber = RoomNumber;
-                                    
+
                                     // Center log event
                                     var program = db.ProgramTypes.FirstOrDefault(i => i.ProgramTypeID == 14);
 
@@ -515,7 +501,6 @@ namespace FIVESTARVC.Controllers
         [HttpGet]
         public ActionResult AddCampaign()
         {
-
             MilitaryCampaign NewCampaign = new MilitaryCampaign();
 
             return PartialView(NewCampaign);
@@ -526,8 +511,6 @@ namespace FIVESTARVC.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult AddCampaign(MilitaryCampaign model)
         {
-
-
             if (ModelState.IsValid)
             {
                 db.MilitaryCampaigns.Add(model);
@@ -535,14 +518,12 @@ namespace FIVESTARVC.Controllers
                 TempData["UserMessage"] = "A new campaign has been added.  ";
 
                 return RedirectToAction("Index");
-
             }
             else
             {
                 // Failed
                 ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
             }
-
 
             return PartialView(model);
         }
@@ -571,7 +552,6 @@ namespace FIVESTARVC.Controllers
             if (roomToRelease != null)
             {
                 ViewBag.releaseRoom = roomToRelease.RoomNumber;
-
             }
             // The room may not be assigned. 
 
@@ -592,6 +572,8 @@ namespace FIVESTARVC.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Discharge(int id, int ProgramTypeID, string DischargeDate)
         {
+            DateTime date = DateTime.Parse(DischargeDate);
+
             try
             {
                 Resident residentToDischarge = db.Residents
@@ -606,13 +588,13 @@ namespace FIVESTARVC.Controllers
                 {
                     residentToDischarge.RoomNumber = null;
                     roomToRelease.IsOccupied = false;
-
                 }
 
+                // Discharge event
                 residentToDischarge.ProgramEvents.Add(new ProgramEvent
                 {
                     ProgramTypeID = ProgramTypeID,
-                    ClearStartDate = DateTime.Parse(DischargeDate)
+                    ClearStartDate = date
 
                 });
 
@@ -621,16 +603,32 @@ namespace FIVESTARVC.Controllers
                     .Where(i => i.ResidentID == id && i.ProgramType.EventType == EnumEventType.ADMISSION)
                     .ToList()
                     .LastOrDefault();
-                ev.ClearEndDate = DateTime.Parse(DischargeDate);
+                ev.ClearEndDate = date;
                 db.Entry(ev).State = EntityState.Modified;
 
                 db.RoomLogs.Add(new RoomLog
                 {
                     Resident = residentToDischarge,
                     Room = roomToRelease,
-                    Event = ev,
+                    Event = new ProgramEvent
+                    {
+                        Resident = residentToDischarge,
+                        ClearStartDate = date,
+                        ClearEndDate = date,
+                        ProgramType = db.ProgramTypes.FirstOrDefault(i => i.ProgramTypeID == 14)
+                    },
                     Comment = "Resident discharged; room released."
                 });
+
+                if (residentToDischarge.ActualDaysStayed == null)
+                {
+                    residentToDischarge.ActualDaysStayed = residentToDischarge.DaysInCenter;
+                }
+                else
+                {
+                    residentToDischarge.ActualDaysStayed += residentToDischarge.DaysInCenter;
+                }
+
 
                 db.SaveChanges();
                 TempData["UserMessage"] = residentToDischarge.ClearLastName + " has been discharged from your center.  ";
@@ -644,7 +642,6 @@ namespace FIVESTARVC.Controllers
 
             ViewBag.ProgramTypeID = new SelectList(db.ProgramTypes
                 .Where(t => t.EventType == EnumEventType.DISCHARGE), "ProgramTypeID", "ProgramDescription");
-
 
             return RedirectToAction("Index");
         }
@@ -744,8 +741,5 @@ namespace FIVESTARVC.Controllers
 
             return Json(RegionName, JsonRequestBehavior.AllowGet);
         }
-
-
-
     }
 }

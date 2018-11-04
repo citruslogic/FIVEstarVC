@@ -30,6 +30,9 @@ namespace FIVESTARVC.Models
         [StringLength(150)]
         public string Note { get; set; }
 
+        [Display(Name = "Actual Days In Center")]
+        public int? ActualDaysStayed { get; set; }
+
         public virtual ICollection<MilitaryCampaign> MilitaryCampaigns { get; set; }
         public virtual ICollection<ProgramEvent> ProgramEvents { get; set; }
         public virtual Room Room { get; set; }
@@ -105,14 +108,17 @@ namespace FIVESTARVC.Models
         }
 
 
-        public int DaysInCenter()
+        public int DaysInCenter
         {
-            // Resident may not be discharged yet.
-            TimeSpan span = GetDischargeDate().HasValue
-                ? GetDischargeDate().GetValueOrDefault().Subtract(GetAdmitDate().GetValueOrDefault())
-                : DateTime.Now.Date.Subtract(GetAdmitDate().GetValueOrDefault());
+            get
+            {
+                // Resident may not be discharged yet.
+                TimeSpan span = GetDischargeDate().HasValue
+                    ? GetDischargeDate().GetValueOrDefault().Subtract(GetAdmitDate().GetValueOrDefault())
+                    : DateTime.Now.Date.Subtract(GetAdmitDate().GetValueOrDefault());
 
-            return (int)Math.Abs(span.TotalDays);
+                return (int)Math.Abs(span.TotalDays);
+            }
         }
 
     }

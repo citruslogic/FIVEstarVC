@@ -29,7 +29,7 @@ namespace FIVESTARVC.Models
                 var resident = db.Residents.FirstOrDefault(i => i.Room.RoomNumber == RoomNumber);
 
                 if (resident != null)
-                    return resident.DaysInCenter();
+                    return resident.DaysInCenter;
 
                 return 0;
             }

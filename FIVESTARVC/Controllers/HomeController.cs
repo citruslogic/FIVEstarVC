@@ -1,16 +1,14 @@
-﻿using System;
+﻿using DelegateDecompiler;
+using FIVESTARVC.DAL;
+using FIVESTARVC.Models;
+using FIVESTARVC.ViewModels;
+using OfficeOpenXml;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
-using FIVESTARVC.Models;
-using FIVESTARVC.DAL;
-using FIVESTARVC.ViewModels;
-using DelegateDecompiler;
-using OfficeOpenXml;
 using System.IO;
+using System.Linq;
+using System.Web.Mvc;
 
 namespace FIVESTARVC.Controllers
 {
@@ -20,7 +18,7 @@ namespace FIVESTARVC.Controllers
         private ResidentContext db = new ResidentContext();
         public IEnumerable<Resident> NearestResidents { get; set; }           // Nearest birthdays.
 
-        [Authorize]
+        //[Authorize]
         public ActionResult Index()
         {
             var residents = db.Residents.Include(r => r.Room).ToList().Select(data => new DashboardData
@@ -133,4 +131,3 @@ namespace FIVESTARVC.Controllers
 
     }
 }
- 

@@ -1,21 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Data.Entity;
-using System.Web;
-using System.Web.Mvc;
-using FIVESTARVC.DAL;
-using FIVESTARVC.Models;
-using FIVESTARVC.ViewModels;
-using DelegateDecompiler;
-using System.Globalization;
-using System.Threading;
+﻿using DelegateDecompiler;
 using DotNet.Highcharts;
 using DotNet.Highcharts.Enums;
 using DotNet.Highcharts.Helpers;
 using DotNet.Highcharts.Options;
-using System.Drawing;
+using FIVESTARVC.DAL;
+using FIVESTARVC.Models;
+using FIVESTARVC.ViewModels;
 using Jitbit.Utils;
+using System;
+using System.Collections.Generic;
+using System.Data.Entity;
+using System.Drawing;
+using System.Linq;
+using System.Web.Mvc;
 
 namespace FIVESTARVC.Controllers
 {
@@ -46,7 +43,7 @@ namespace FIVESTARVC.Controllers
      * Last edited 4/19/2018
      */
 
-    [Authorize]
+    //[Authorize]
     public class ReportsController : Controller
     {
         private ResidentContext DB = new ResidentContext();
@@ -166,7 +163,7 @@ namespace FIVESTARVC.Controllers
                                                                             from Person p 
                                                                             join ProgramEvent pe on p.ResidentID = pe.ResidentID
                                                                                 where ProgramTypeId = '4'").Single();
-                                 
+
             ViewBag.Graduated = Graduated;
 
             //Finds number admitted
@@ -181,12 +178,13 @@ namespace FIVESTARVC.Controllers
                 //finds grad percent
                 double gradPercent = (Graduated / Admitted) * 100;
                 ViewBag.GraduatedPercent = gradPercent.ToString("0.##"); ; //Graduation Percentage
-            } else
+            }
+            else
             {
                 ViewBag.GraduatedPercent = 0;
             }
-            
-           
+
+
 
             //Counts cumulative residents
             ViewBag.CumulativeCount = DB.Residents.Count();
@@ -204,7 +202,7 @@ namespace FIVESTARVC.Controllers
 
             return View();
         }
-       
+
         /* Get the age of all residents that have been in the center. */
         public IEnumerable<ReportingResidentViewModel> GetResidentsAge()
         {
@@ -215,11 +213,12 @@ namespace FIVESTARVC.Controllers
 
                 return residentListing;
 
-            } else
+            }
+            else
             {
                 return null;
             }
-           
+
         }
         /* Get the average age of all residents that have been in the center.
          * If you want only the current residents, use IsCurrent() in a Where
@@ -227,15 +226,16 @@ namespace FIVESTARVC.Controllers
         public double GetAverageAge()
         {
 
-           if (GetResidentsAge().Any())
-           {
+            if (GetResidentsAge().Any())
+            {
                 return GetResidentsAge().Average(r => r.Age);
 
-           } else
-           {
+            }
+            else
+            {
 
                 return 0.0;
-           }
+            }
 
         }
 
@@ -275,7 +275,7 @@ namespace FIVESTARVC.Controllers
             //Sending query results to separate lists, then back to arrays, as seen below was how I was able to format the data in a way HighCharts would accept
             List<int> metricCounts = new List<int>();
             List<string> years = new List<string>();
-            
+
             //This loop takes the data from the query result and sends it to two lists for the X axis and Y axis 
             foreach (var r in Query)
             {
@@ -431,14 +431,14 @@ namespace FIVESTARVC.Controllers
             var events = DB.ProgramEvents.ToList();
 
             var Query = (from y in events
-                             where y.ProgramTypeID == 2
-                             group y by y.ClearStartDate.Year into typeGroup
-                             orderby typeGroup.Key ascending
-                             select new ChartData
-                             {
-                                 Year = typeGroup.Key,
-                                 Count = typeGroup.Count(),
-                             });
+                         where y.ProgramTypeID == 2
+                         group y by y.ClearStartDate.Year into typeGroup
+                         orderby typeGroup.Key ascending
+                         select new ChartData
+                         {
+                             Year = typeGroup.Key,
+                             Count = typeGroup.Count(),
+                         });
 
             Highcharts columnChart = new Highcharts("columnchart");
 
@@ -1336,15 +1336,15 @@ namespace FIVESTARVC.Controllers
             var events = DB.ProgramEvents.ToList();
 
             var Query = (from y in events
-                                join resident in DB.Residents on y.ResidentID equals resident.ResidentID
-                                where y.ProgramType.EventType == EnumEventType.ADMISSION && resident.InVetCourt.Equals(true)
-                                group y by y.ClearStartDate.Year into typeGroup
-                                orderby typeGroup.Key ascending
-                                select new ChartData
-                                {
-                                    Count = typeGroup.Count(),
-                                    Year = typeGroup.Key
-                                });
+                         join resident in DB.Residents on y.ResidentID equals resident.ResidentID
+                         where y.ProgramType.EventType == EnumEventType.ADMISSION && resident.InVetCourt.Equals(true)
+                         group y by y.ClearStartDate.Year into typeGroup
+                         orderby typeGroup.Key ascending
+                         select new ChartData
+                         {
+                             Count = typeGroup.Count(),
+                             Year = typeGroup.Key
+                         });
 
             Highcharts columnChart = new Highcharts("columnchart");
 
@@ -1565,7 +1565,7 @@ namespace FIVESTARVC.Controllers
                 var eventids = r.SelectMany(i => i.ProgramTypeID).ToList();
 
                 //This foreach is used to display all the events a resident is in
-                 foreach (var eid in eventids)
+                foreach (var eid in eventids)
                 {
                     int eventID = eid;
 
