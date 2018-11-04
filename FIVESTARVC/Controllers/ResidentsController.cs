@@ -1,6 +1,7 @@
 ﻿using DelegateDecompiler;
 using FIVESTARVC.DAL;
 using FIVESTARVC.Models;
+using FIVESTARVC.Services;
 using FIVESTARVC.ViewModels;
 using PagedList;
 using System;
@@ -19,6 +20,7 @@ namespace FIVESTARVC.Controllers
     public class ResidentsController : Controller
     {
         private ResidentContext db = new ResidentContext();
+        private ResidentService residentService = new ResidentService();
 
         // GET: Residents
         public ActionResult Index(string sortOrder, string currentFilter, string searchString, int? page)
@@ -39,32 +41,7 @@ namespace FIVESTARVC.Controllers
 
             ViewBag.CurrentFilter = searchString;
 
-            var residents = (from s in db.Residents
-                             select s).ToList();
-
-            if (!string.IsNullOrEmpty(searchString))
-            {
-                residents = residents.Where(s => CultureInfo.CurrentCulture.CompareInfo.IndexOf
-                                   (s.ClearLastName, searchString, CompareOptions.IgnoreCase) >= 0
-                                   || CultureInfo.CurrentCulture.CompareInfo.IndexOf
-                                   (s.ClearFirstMidName, searchString, CompareOptions.IgnoreCase) >= 0).ToList();
-            }
-
-            switch (sortOrder)
-            {
-                case "name_desc":
-                    residents = residents.OrderBy(s => s.ClearLastName.Computed()).ToList();
-                    break;
-                case "ServiceBranch":
-                    residents = residents.OrderBy(s => s.ServiceBranch).ToList();
-                    break;
-                case "ServiceBranch_desc":
-                    residents = residents.OrderByDescending(s => s.ServiceBranch).ToList();
-                    break;
-                default:
-                    residents = residents.OrderByDescending(s => s.ResidentID).ToList();
-                    break;
-            }
+            var residents = residentService.GetIndex(searchString, currentFilter, sortOrder, page, db);
 
             int pageSize = 6;
             int pageNumber = (page ?? 1);
@@ -74,40 +51,36 @@ namespace FIVESTARVC.Controllers
         // GET: Residents/Details/5
         public ActionResult Details(int? id)
         {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
             ViewBag.DateFirstAdmitted = db.ProgramEvents
                                             .Include(r => r.Resident).Where(r => r.ResidentID == id)
                                             .Include(t => t.ProgramType).Where(p => p.ProgramTypeID == 2 || p.ProgramTypeID == 1).ToList()
                                             .OrderBy(d => d.ClearStartDate.Computed())
                                             .Select(s => s.ClearStartDate.Computed())
                                             .FirstOrDefault().ToLongDateString();
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Resident resident = db.Residents
-                .Include(p => p.ProgramEvents)
-                .Include(i => i.Benefit)
-                .Where(r => r.ResidentID == id).Single();
 
-            var room = db.Rooms.Find(resident.RoomNumber);
-
-            if (resident.RoomNumber != null)
-            {
-                int roomNum = room.RoomNumber;
-
-                ViewBag.room = roomNum;
-            }
-            else
-            {
-                ViewBag.room = "No Room Assigned";
-            }
+            var resident = residentService.GetDetails(id, db);
+            var assignedCampaigns = residentService.PopulateAssignedCampaignData(resident, db);
 
             if (resident == null)
             {
                 return HttpNotFound();
             }
 
-            PopulateAssignedCampaignData(resident);
+            if (resident.RoomNumber != null)
+            {
+                ViewBag.room = resident.RoomNumber;
+            }
+            else
+            {
+                ViewBag.room = "No Room Assigned";
+            }
+
+            ViewBag.Campaigns = assignedCampaigns;
 
             return View(resident);
         }
@@ -310,7 +283,7 @@ namespace FIVESTARVC.Controllers
             .Single();
 
 
-            PopulateAssignedCampaignData(resident);
+            ViewBag.Campaigns = residentService.PopulateAssignedCampaignData(resident, db);
 
 
             if (resident == null)
@@ -444,27 +417,12 @@ namespace FIVESTARVC.Controllers
             ViewBag.RoomNumber = new SelectList(db.Rooms.Where(rm => rm.IsOccupied == false), "RoomNumber", "RoomNumber", residentToUpdate.RoomNumber);
             ViewBag.StateTerritoryID = new SelectList(db.States, "StateTerritoryID", "State", residentToUpdate.StateTerritoryID);
 
-            PopulateAssignedCampaignData(residentToUpdate);
+            ViewBag.Campaigns = residentService.PopulateAssignedCampaignData(residentToUpdate, db);
 
             return View(residentToUpdate);
         }
 
-        private void PopulateAssignedCampaignData(Resident resident)
-        {
-            var allMilitaryCampaigns = db.MilitaryCampaigns;
-            var residentCampaigns = new HashSet<int>(resident.MilitaryCampaigns.Select(c => c.MilitaryCampaignID));
-            var viewModel = new List<AssignedCampaignData>();
-            foreach (var militaryCampaign in allMilitaryCampaigns)
-            {
-                viewModel.Add(new AssignedCampaignData
-                {
-                    MilitaryCampaignID = militaryCampaign.MilitaryCampaignID,
-                    MilitaryCampaign = militaryCampaign.CampaignName,
-                    Assigned = residentCampaigns.Contains(militaryCampaign.MilitaryCampaignID)
-                });
-            }
-            ViewBag.Campaigns = viewModel;
-        }
+        
 
         private void UpdateResidentCampaigns(string[] selectedCampaigns, Resident residentToUpdate)
         {

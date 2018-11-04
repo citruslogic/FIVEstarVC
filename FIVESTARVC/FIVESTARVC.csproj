@@ -262,6 +262,7 @@
     <Compile Include="Models\RoomLog.cs" />
     <Compile Include="Models\StateTerritory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\ResidentService.cs" />
     <Compile Include="Validators\Age.cs" />
     <Compile Include="Validators\CheckBirthdate.cs" />
     <Compile Include="ViewModels\AgeGroups.cs" />
