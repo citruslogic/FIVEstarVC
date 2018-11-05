@@ -21,6 +21,10 @@ namespace FIVESTARVC.Models
         [Display(Name = "Wing")]
         public string WingName { get; set; }
 
+        [Display(Name = "Previous Resident")]
+        [StringLength(150)]
+        public string LastResident { get; set; }
+
         [Display(Name = "Days Occupied (current resident)")]
         public int DaysOccupied
         {
@@ -35,8 +39,8 @@ namespace FIVESTARVC.Models
             }
         }
 
-        [Display(Name = "Resident")]
-        public string Resident
+        [Display(Name = "Current Resident")]
+        public string CurrentResident
         {
             get
             {

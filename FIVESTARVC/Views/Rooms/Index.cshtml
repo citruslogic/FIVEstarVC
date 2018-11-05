@@ -47,7 +47,7 @@
     }
 
         .rooms tbody td, .rooms thead th {
-            width: 21.2%;
+            width: 15.2%;
             float: left;
         }
 </style>
@@ -93,17 +93,23 @@
             <table class="rooms table table-sm table-striped" style="width: 100%;">
                 <thead style="margin-bottom: 5px;">
                     <tr>
-                        <th style="width: 22.5%">
+                        <th style="width: 8em">
                             @Html.DisplayNameFor(model => model.RoomNumber)
                         </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.Resident)
+                        <th style="width: 12em">
+                            @Html.DisplayNameFor(model => model.CurrentResident)
                         </th>
-                        <th>
+                        <th style="width: 12em">
+                            @Html.DisplayNameFor(model => model.LastResident)
+                        </th>
+                        <th style="width: 8em">
                             @Html.DisplayNameFor(model => model.IsOccupied)
                         </th>
-                        <th style="width: 25%">
+                        <th style="width: 5em">
                             @Html.DisplayNameFor(model => model.WingName)
+                        </th>
+                        <th>
+
                         </th>
                         
                     </tr>
@@ -115,10 +121,20 @@
                             <td>
                                 @Html.DisplayFor(modelItem => item.RoomNumber)
                             </td>
-                            <td style="width: 25%">
-                                @Html.DisplayFor(modelItem => item.Resident)
+                            <td style="width: 12em;">
+                                @Html.DisplayFor(modelItem => item.CurrentResident)
                             </td>
-                            <td>
+                            <td style="width: 12em;">
+                                @if (string.IsNullOrEmpty(item.LastResident))
+                                {
+                                    <text>None</text>
+                                }
+                                else
+                                {
+                                    @Html.DisplayFor(modelItem => item.LastResident)
+                                }
+                            </td>
+                            <td style="width: 8em">
                                 @(item.IsOccupied ? "Yes" : "No")
                             </td>
                             <td style="width: 10%">

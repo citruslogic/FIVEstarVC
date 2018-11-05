@@ -18,7 +18,7 @@ namespace FIVESTARVC.Controllers
         private ResidentContext db = new ResidentContext();
         public IEnumerable<Resident> NearestResidents { get; set; }           // Nearest birthdays.
 
-        //[Authorize]
+        [Authorize]
         public ActionResult Index()
         {
             var residents = db.Residents.Include(r => r.Room).ToList().Select(data => new DashboardData
@@ -26,7 +26,8 @@ namespace FIVESTARVC.Controllers
                 ResidentID = data.ResidentID,
                 FirstMidName = data.ClearFirstMidName,
                 LastName = data.ClearLastName.Computed(),
-                RoomNumber = data.RoomNumber.GetValueOrDefault()
+                RoomNumber = data.RoomNumber.GetValueOrDefault(),
+                NumDaysInCenter = data.DaysInCenter
 
             }).OrderByDescending(r => r.ResidentID).Take(5);
 
@@ -127,6 +128,14 @@ namespace FIVESTARVC.Controllers
             return PartialView();
         }
 
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                db.Dispose();
+            }
+            base.Dispose(disposing);
+        }
 
 
     }

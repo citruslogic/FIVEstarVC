@@ -209,12 +209,14 @@ namespace FIVESTARVC.Controllers
             }
         }
 
-        // Rotativa 
-        //public ActionResult PrintAllReport()
-        //{
-        //    var report = new ActionAsPdf("Index");
-        //    return report;
-        //}
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                db.Dispose();
+            }
+            base.Dispose(disposing);
+        }
 
     }
 }

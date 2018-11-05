@@ -16,7 +16,7 @@ using System.Web.Mvc;
 namespace FIVESTARVC.Controllers
 {
     //[Authorize]
-    //[Authorize(Roles = "RTS-Group")]
+    [Authorize(Roles = "RTS-Group")]
     public class ResidentsController : Controller
     {
         private ResidentContext db = new ResidentContext();
@@ -204,7 +204,14 @@ namespace FIVESTARVC.Controllers
                     {
                         Resident = resident,
                         Room = resident.Room,
-                        Event = admitEvent,
+                        Event = new ProgramEvent
+                        {
+                            ProgramTypeID = 14,
+                            Resident = resident,
+                            ClearEndDate = admitEvent.ClearStartDate,
+                            ClearStartDate = admitEvent.ClearStartDate,
+                            Completed = true
+                        },
                         Comment = "Resident admitted."
                     });
 
@@ -355,7 +362,13 @@ namespace FIVESTARVC.Controllers
                                 {
                                     Resident = residentToUpdate,
                                     Room = room,
-                                    Event = readmitEvent,
+                                    Event = new ProgramEvent
+                                    {
+                                        ProgramTypeID = 14,
+                                        ClearStartDate = readmitEvent.ClearStartDate,
+                                        ClearEndDate = readmitEvent.ClearEndDate,
+                                        Completed = true
+                                    },
                                     Comment = "Resident readmitted."
                                 });
                             }
@@ -377,10 +390,8 @@ namespace FIVESTARVC.Controllers
                                 {
                                     residentToUpdate.Room.IsOccupied = false;
                                     residentToUpdate.RoomNumber = RoomNumber;
-
-                                    // Center log event
-                                    var program = db.ProgramTypes.FirstOrDefault(i => i.ProgramTypeID == 14);
-
+                                    oldRoom.LastResident = residentToUpdate.Fullname;
+                                    
                                     room.IsOccupied = true;
 
                                     db.RoomLogs.Add(new RoomLog
@@ -392,7 +403,8 @@ namespace FIVESTARVC.Controllers
                                             Resident = residentToUpdate,
                                             ClearStartDate = DateTime.Now,
                                             ClearEndDate = DateTime.Now,
-                                            ProgramType = program
+                                            ProgramTypeID = 14,
+                                            Completed = true
                                         },
                                         Comment = "Resident moved from room " + oldRoom.RoomNumber
                                     });
@@ -546,6 +558,7 @@ namespace FIVESTARVC.Controllers
                 {
                     residentToDischarge.RoomNumber = null;
                     roomToRelease.IsOccupied = false;
+                    roomToRelease.LastResident = residentToDischarge.Fullname;
                 }
 
                 // Discharge event
@@ -573,7 +586,8 @@ namespace FIVESTARVC.Controllers
                         Resident = residentToDischarge,
                         ClearStartDate = date,
                         ClearEndDate = date,
-                        ProgramType = db.ProgramTypes.FirstOrDefault(i => i.ProgramTypeID == 14)
+                        ProgramTypeID = 14,
+                        Completed = true
                     },
                     Comment = "Resident discharged; room released."
                 });
@@ -638,6 +652,7 @@ namespace FIVESTARVC.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Readmit(int id, string ReadmitDate, int? RoomNumber)
         {
+            var date = DateTime.Parse(ReadmitDate);
             ViewBag.RoomNumber = new SelectList(db.Rooms.Where(rm => rm.IsOccupied == false), "RoomNumber", "RoomNumber");
 
             try
@@ -657,8 +672,7 @@ namespace FIVESTARVC.Controllers
                 var admitEvent = new ProgramEvent
                 {
                     ProgramTypeID = 3,
-                    ClearStartDate = DateTime.Parse(ReadmitDate)
-
+                    ClearStartDate = date
                 };
 
                 residentToReadmit.ProgramEvents.Add(admitEvent);
@@ -674,7 +688,14 @@ namespace FIVESTARVC.Controllers
                 {
                     Resident = residentToReadmit,
                     Room = room,
-                    Event = admitEvent,
+                    Event = new ProgramEvent
+                    {
+                        Resident = residentToReadmit,
+                        ClearStartDate = date,
+                        ClearEndDate = date,
+                        ProgramTypeID = 14,
+                        Completed = true
+                    },
                     Comment = "Resident readmitted."
                 });
 
@@ -698,6 +719,15 @@ namespace FIVESTARVC.Controllers
             var RegionName = db.States.Find(Int32.Parse(id)).Region;
 
             return Json(RegionName, JsonRequestBehavior.AllowGet);
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                db.Dispose();
+            }
+            base.Dispose(disposing);
         }
     }
 }

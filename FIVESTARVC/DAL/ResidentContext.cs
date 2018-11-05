@@ -32,6 +32,7 @@ namespace FIVESTARVC.DAL
             .Map(t => t.MapLeftKey("MilitaryCampaignID")
             .MapRightKey("ResidentID")
             .ToTable("CampaignAssignment"));
+                                  
         }
     }
 }

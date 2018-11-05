@@ -34,15 +34,20 @@
                                 </td>
                                 @if (group.Select(i => i.Resident.IsCurrent()).First())
                                 {
-                                    <td class="font-weight-bold">Computed Days In Center (as of @DateTime.Now.ToShortDateString())</td>
-                                    <td>@group.Select(i => i.Resident.DaysInCenter).First()</td>
+                                    <td>
+                                        <b>Computed Days In Center (as of @DateTime.Now.ToShortDateString())</b>
+                                        <br />@group.Select(i => i.Resident.DaysInCenter).First()
+                                    </td>
                                 }
                                 else
                                 {
-                                    <td class="font-weight-bold">@Html.DisplayNameFor(model => model.Resident.ActualDaysStayed)</td>
-                                    <td>@group.Select(i => i.Resident.ActualDaysStayed).First()</td>
-                                }
-                                
+                                    <td>
+                                        <b>@Html.DisplayNameFor(model => model.Resident.ActualDaysStayed)</b>
+                                    <br />
+                                        @group.Select(i => i.Resident.ActualDaysStayed).First().GetValueOrDefault(0)
+                                </td>
+                            }
+
                             </tr>
                             <tr>
                                 <td class="font-weight-bold">@Html.DisplayNameFor(model => model.Comment)</td>
@@ -52,28 +57,29 @@
                         <tbody>
                             @foreach (var item in group)
                             {
-                            <tr>
-                                <td>@Html.DisplayFor(model => item.Comment)</td>
+                                <tr>
+                                    <td>@Html.DisplayFor(model => item.Comment)</td>
 
-                                @if (item.Event.ProgramType.EventType == FIVESTARVC.Models.EnumEventType.SYSTEM)
-                                { 
-                                   <td>@item.Event.GetShortEndDate()</td>
-                                } else
-                                {
-                                    <td>@item.Event.GetShortStartDate()</td>
-                                }
+                                    @if (item.Event.ProgramType.EventType == FIVESTARVC.Models.EnumEventType.SYSTEM)
+                                    {
+                                        <td>@item.Event.GetShortEndDate()</td>
+                                    }
+                                    else
+                                    {
+                                        <td>@item.Event.GetShortStartDate()</td>
+                                    }
 
-                            </tr>
+                                </tr>
                             }
-                            
+
                         </tbody>
-                        
+
                     </table>
                 </div>
 
             </div>
         }
-        
+
     </div>
 </div>
 <br />

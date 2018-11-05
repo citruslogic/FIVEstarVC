@@ -109,6 +109,7 @@ namespace FIVESTARVC.Models
             }
         }
 
+        [Display(Name = "Full Name")]
         public string Fullname
         {
             get { return ClearFirstMidName + " " + ClearLastName; }

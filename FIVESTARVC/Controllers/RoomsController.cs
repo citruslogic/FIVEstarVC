@@ -9,7 +9,7 @@ using System.Web.Mvc;
 
 namespace FIVESTARVC.Controllers
 {
-    //[Authorize(Roles = "RTS-Group")]
+    [Authorize(Roles = "RTS-Group")]
     public class RoomsController : Controller
     {
         private ResidentContext db = new ResidentContext();
@@ -28,9 +28,8 @@ namespace FIVESTARVC.Controllers
                 rooms = db.RoomLogs
                     .Include(t => t.Resident)
                     .ToList()
-                    .Where(t => t.Resident.GetAdmitDate()?.ToShortDateString() == date.ToShortDateString()
-                    && t.Resident.IsCurrent())
-                    .Select(t => t.Room).Distinct()
+                    .Where(t => t.Resident.GetAdmitDate()?.ToShortDateString() == date.ToShortDateString())
+                    .Select(t => t.Room)
                     .ToList();
             }
 
@@ -51,14 +50,7 @@ namespace FIVESTARVC.Controllers
                 .Include(t => t.Event)
                 .Where(i => i.Room.RoomNumber == id).ToList();
 
-            Room room = db.Rooms.Find(id);
-
-            if (room == null)
-            {
-                return HttpNotFound();
-            }
-
-            ViewBag.room = room.RoomNumber;
+            ViewBag.room = residents.Select(i => i.RoomNumber).Where(i => i.HasValue).First();
 
             return View(residents);
         }

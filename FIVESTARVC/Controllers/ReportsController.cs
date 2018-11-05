@@ -43,7 +43,7 @@ namespace FIVESTARVC.Controllers
      * Last edited 4/19/2018
      */
 
-    //[Authorize]
+    [Authorize]
     public class ReportsController : Controller
     {
         private ResidentContext DB = new ResidentContext();
@@ -1689,5 +1689,13 @@ namespace FIVESTARVC.Controllers
             return View("DisplayChart", columnChart);
         }
 
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                DB.Dispose();
+            }
+            base.Dispose(disposing);
+        }
     }
 }

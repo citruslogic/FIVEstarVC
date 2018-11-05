@@ -289,6 +289,8 @@
             <tbody>
                 @foreach (var item in Model.ProgramEvents)
                 {
+                    if (item.ProgramType.EventType != EnumEventType.SYSTEM)
+                    {
                     <tr>
                         <td style="width: 21.2em">
                             @Html.DisplayFor(modelItem => item.ProgramType.ProgramDescription)
@@ -310,6 +312,7 @@
                             }
                         </td>
                     </tr>
+                    }
                 }
             </tbody>
         </table>

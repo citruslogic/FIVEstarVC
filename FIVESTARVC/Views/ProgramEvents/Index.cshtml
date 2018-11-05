@@ -30,9 +30,6 @@
 {
     <h4>@Html.Encode(group.Key)</h4>
     <table class="table table-sm table-bordered table-striped">
-
-
-
         <tr>
             <th style="width: 17.7em">
                 Description
@@ -56,36 +53,40 @@
 
         @foreach (var item in group)
         {
+
+
             foreach (var track in item.ProgramEvents)
             {
                 <tr>
-                    <td>
-                        @if (track.ProgramType != null)
-                        {
+                    @if (track.ProgramType != null && track.ProgramType.EventType != EnumEventType.SYSTEM)
+                    {
+                        <td>
+
                             @(track.ProgramType.ProgramDescription)
-                        }
-                    </td>
-                    <td>
-                        @(track.GetShortStartDate())
-                    </td>
-                    <td>
-                        @(track.GetShortEndDate())
-                    </td>
-                    <td>
-                        @(track.Completed ? "Yes" : "No")
-                    </td>
-                    <td>
-                        @Html.ActionLink("Edit", "Edit", new { id = track.ProgramEventID }, htmlAttributes: new { @class = "btn btn-sm btn-outline-secondary btn-light" }) &nbsp;
-                        @Html.ActionLink("Details", "Details", new { id = track.ProgramEventID }, htmlAttributes: new { @class = "btn btn-sm btn-outline-secondary btn-light" }) &nbsp;
-                        @Html.ActionLink("Delete", "Delete", new { id = track.ProgramEventID }, htmlAttributes: new { @class = "btn btn-sm btn-danger" })
-                    </td>
+                        </td>
+                        <td>
+                            @(track.GetShortStartDate())
+                        </td>
+                        <td>
+                            @(track.GetShortEndDate())
+                        </td>
+                        <td>
+                            @(track.Completed ? "Yes" : "No")
+                        </td>
+                        <td>
+                            @Html.ActionLink("Edit", "Edit", new { id = track.ProgramEventID }, htmlAttributes: new { @class = "btn btn-sm btn-outline-secondary btn-light" }) &nbsp;
+                            @Html.ActionLink("Details", "Details", new { id = track.ProgramEventID }, htmlAttributes: new { @class = "btn btn-sm btn-outline-secondary btn-light" }) &nbsp;
+                            @Html.ActionLink("Delete", "Delete", new { id = track.ProgramEventID }, htmlAttributes: new { @class = "btn btn-sm btn-danger" })
+                        </td>
+                    }
                 </tr>
+
             }
+
 
         }
     </table>
 }
-
 
 <br />
 <div style="position: relative; bottom: 1em;">
@@ -94,5 +95,4 @@
 
         @Html.PagedListPager(Model, page => Url.Action("Index", new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
     </p>
-
 </div>
