@@ -1,4 +1,5 @@
 ﻿@model IEnumerable<FIVESTARVC.Models.Room>
+@using FIVESTARVC.Helpers
 
 @{
     ViewBag.Title = "Index";
@@ -125,13 +126,13 @@
                                 @Html.DisplayFor(modelItem => item.CurrentResident)
                             </td>
                             <td style="width: 12em;">
-                                @if (string.IsNullOrEmpty(item.LastResident))
+                                @if (string.IsNullOrEmpty(item.ClearLastResident))
                                 {
                                     <text>None</text>
                                 }
                                 else
                                 {
-                                    @Html.DisplayFor(modelItem => item.LastResident)
+                                    @Html.DisplayFor(modelItem => item.ClearLastResident)
                                 }
                             </td>
                             <td style="width: 8em">

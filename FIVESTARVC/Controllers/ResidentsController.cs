@@ -1,5 +1,6 @@
 ﻿using DelegateDecompiler;
 using FIVESTARVC.DAL;
+using FIVESTARVC.Helpers;
 using FIVESTARVC.Models;
 using FIVESTARVC.Services;
 using FIVESTARVC.ViewModels;
@@ -390,7 +391,7 @@ namespace FIVESTARVC.Controllers
                                 {
                                     residentToUpdate.Room.IsOccupied = false;
                                     residentToUpdate.RoomNumber = RoomNumber;
-                                    oldRoom.LastResident = residentToUpdate.Fullname;
+                                    oldRoom.ClearLastResident = residentToUpdate.Fullname;
                                     
                                     room.IsOccupied = true;
 
@@ -558,7 +559,7 @@ namespace FIVESTARVC.Controllers
                 {
                     residentToDischarge.RoomNumber = null;
                     roomToRelease.IsOccupied = false;
-                    roomToRelease.LastResident = residentToDischarge.Fullname;
+                    roomToRelease.ClearLastResident = residentToDischarge.Fullname;
                 }
 
                 // Discharge event

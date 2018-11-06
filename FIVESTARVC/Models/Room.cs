@@ -1,4 +1,5 @@
 ﻿using FIVESTARVC.DAL;
+using FIVESTARVC.Helpers;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
@@ -23,7 +24,14 @@ namespace FIVESTARVC.Models
 
         [Display(Name = "Previous Resident")]
         [StringLength(150)]
-        public string LastResident { get; set; }
+        public string LastResident { get; private set; }
+
+        [NotMapped]
+        public string ClearLastResident
+        {
+            get { return Encryptor.Decrypt(LastResident); }
+            set { LastResident = Encryptor.Encrypt(value); }
+        }
 
         [Display(Name = "Days Occupied (current resident)")]
         public int DaysOccupied
