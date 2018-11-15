@@ -273,6 +273,7 @@
     <Compile Include="ViewModels\AssignedCampaignData.cs" />
     <Compile Include="ViewModels\AssignedRoom.cs" />
     <Compile Include="ViewModels\CustomEvent.cs" />
+    <Compile Include="ViewModels\DemographicTableViewModel.cs" />
     <Compile Include="ViewModels\DischargeStatusGroups.cs" />
     <Compile Include="ViewModels\GenderGroup.cs" />
     <Compile Include="ViewModels\ImportedListData.cs" />

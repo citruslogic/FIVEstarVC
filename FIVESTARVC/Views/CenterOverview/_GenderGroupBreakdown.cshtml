@@ -1,11 +1,10 @@
-﻿@model IList<FIVESTARVC.ViewModels.GenderGroup>
+﻿@model FIVESTARVC.ViewModels.DemographicTableViewModel
 
 
 @{
     Layout = null;
 }
-<h4>Demographics</h4>
-<h5>Current Gender Composition</h5>
+<h5>@if (Model.IsCurrent) { @Html.Raw("Current") } else { @Html.Raw("Cumulative") } Gender Composition</h5>
 
 <table class="table table-sm">
     <thead>
@@ -13,14 +12,13 @@
             <th>
                 Gender
             </th>
-
             <th>
                 Count
             </th>
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model)
+        @foreach (var item in Model.GenderComposition)
         {
             <tr>
                 <td>
@@ -31,10 +29,6 @@
                 </td>
             </tr>
         }
-        
-
-
-
     </tbody>
 
 </table>

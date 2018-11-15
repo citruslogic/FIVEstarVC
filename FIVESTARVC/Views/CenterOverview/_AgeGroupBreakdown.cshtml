@@ -1,13 +1,13 @@
-﻿@model IList<FIVESTARVC.ViewModels.AgeGroups>
-@{
-    ViewBag.Title = "AgeBreakdown";
-}
+﻿@model FIVESTARVC.ViewModels.DemographicTableViewModel
 
 @{
     Layout = null;
 }
 
-<h5>Current Age Composition</h5>
+<h5>@if (Model.IsCurrent)
+{ @Html.Raw("Current") }
+else
+{ @Html.Raw("Cumulative") } Age Composition</h5>
 
 <table class="table table-sm">
     <thead>
@@ -22,7 +22,7 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model)
+        @foreach (var item in Model.AgeComposition)
         {
             <tr>
                 <td>
@@ -49,8 +49,6 @@
                 @ViewBag.AverageAge
             </td>
         </tr>
-        
-
 
     </tbody>
 
