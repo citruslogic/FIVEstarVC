@@ -54,13 +54,13 @@
 <br />
 @using (Html.BeginForm("Index", "Residents", FormMethod.Get))
 {
-<div class="form-inline" style="margin-bottom: 1em;">
+    <div class="form-inline" style="margin-bottom: 1em;">
 
-    Find by name:&nbsp;
+        Find by name:&nbsp;
 
-    @Html.TextBox("searchString", ViewBag.CurrentFilter as string, htmlAttributes: new { @class = "form-control" })
-    &nbsp;<input class="btn btn-sm btn-outline-secondary" type="submit" value="Search" />
-</div>
+        @Html.TextBox("searchString", ViewBag.CurrentFilter as string, htmlAttributes: new { @class = "form-control" })
+        &nbsp;<input class="btn btn-sm btn-outline-secondary" type="submit" value="Search" />
+    </div>
 
 }
 <br />
@@ -85,7 +85,7 @@
 
         </th>
         <th>
-           
+
         </th>
         <th>
 
@@ -94,80 +94,83 @@
 
     @foreach (var item in Model)
     {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.ClearLastName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ClearFirstMidName)
-            </td>
-            <td>
-                @{
-                    var serviceDescription = FSEnumHelper.GetDescription(item.ServiceBranch);
+        if (item != null)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ClearLastName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ClearFirstMidName)
+                </td>
+                <td>
+                    @{
+                        var serviceDescription = FSEnumHelper.GetDescription(item.ServiceBranch);
 
 
-                    @Html.DisplayFor(modelItem => serviceDescription)
-                }
+                        @Html.DisplayFor(modelItem => serviceDescription)
+                    }
 
-            </td>
-            <td>
-                @if (item.RoomNumber.HasValue)
-                {
-                    @Html.DisplayFor(modelItem => item.RoomNumber)
-
-                }
-                else
-                {
-                    <text>NA</text>
-                }
-            </td>
-            <td>
-                @{
-                    if (item.IsCurrent())
+                </td>
+                <td>
+                    @if (item.RoomNumber.HasValue)
                     {
-                        @Html.Raw("Yes")
+                        @Html.DisplayFor(modelItem => item.RoomNumber)
+
                     }
                     else
                     {
-                        @Html.Raw("No")
+                        <text>NA</text>
                     }
-                }
-            </td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { id = item.ResidentID }, htmlAttributes: new { @class = "btn btn-secondary btn-sm" }) &nbsp;
-
-                @*Trigger the modal with a button*@
-                @if (item.IsCurrent())
-                {
-                    @Html.ActionLink("Assign Tracks", "Create","ProgramEvents", new { id = item.ResidentID },
-                   htmlAttributes: new { @class = "btn btn-secondary btn-sm" })
-
-                } else
-                {
-                  
-                    
-                }
-                <td>
-
                 </td>
-            <td>
-                @Html.ActionLink("Details", "Details", new { id = item.ResidentID }, htmlAttributes: new { @class = "btn btn-secondary btn-sm" }) &nbsp;
+                <td>
+                    @{
+                        if (item.IsCurrent())
+                        {
+                            @Html.Raw("Yes")
+                        }
+                        else
+                        {
+                            @Html.Raw("No")
+                        }
+                    }
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id = item.ResidentID }, htmlAttributes: new { @class = "btn btn-secondary btn-sm" }) &nbsp;
 
-                @if (item.IsCurrent())
-                {
+                    @*Trigger the modal with a button*@
+                    @if (item.IsCurrent())
+                    {
+                        @Html.ActionLink("Assign Tracks", "Create", "ProgramEvents", new { id = item.ResidentID },
+                                        htmlAttributes: new { @class = "btn btn-secondary btn-sm" })
 
-                    @:<input type="button" value="Release" class="modal-link btn btn-sm btn-danger"
-                              @: data-toggle="modal" data-target="#QuickEventModal" onclick="showDischargeDialog(@item.ResidentID)" />
+                    }
+                    else
+                    {
 
-                } else
-                {
 
-                    @:<input type="button" value="Re-admit" class="modal-link btn btn-sm btn-primary"
-                              @: data-toggle="modal" data-target="#QuickEventModal" onclick="showReadmitDialog(@item.ResidentID)" />
-                }
-            </td>
-        </tr>
+                    }
+                <td></td>
+                <td>
+                    @Html.ActionLink("Details", "Details", new { id = item.ResidentID }, htmlAttributes: new { @class = "btn btn-secondary btn-sm" }) &nbsp;
 
+                    @if (item.IsCurrent())
+                    {
+
+                        @:<input type="button" value="Release" class="modal-link btn btn-sm btn-danger"
+                                  @: data-toggle="modal" data-target="#QuickEventModal" onclick="showDischargeDialog(@item.ResidentID)" />
+
+
+                    }
+                    else
+                    {
+
+                        @:<input type="button" value="Re-admit" class="modal-link btn btn-sm btn-primary"
+                                  @: data-toggle="modal" data-target="#QuickEventModal" onclick="showReadmitDialog(@item.ResidentID)" />
+                    }
+                </td>
+            </tr>
+        }
     }
 
 </table>

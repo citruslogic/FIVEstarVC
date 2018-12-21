@@ -86,12 +86,12 @@ namespace FIVESTARVC.Migrations
             {
                 //Rooms on the E/S Wing//
 
-               new Room { RoomNumber=102, IsOccupied = true, WingName = "South"},
-               new Room { RoomNumber=103, IsOccupied = true, WingName = "South"},
-               new Room { RoomNumber=105, IsOccupied = true, WingName = "South"},
-               new Room { RoomNumber=106, IsOccupied = true, WingName = "South"},
-               new Room { RoomNumber=107, IsOccupied = true, WingName = "South"},
-               new Room { RoomNumber=108, IsOccupied = true, WingName = "South"},
+               new Room { RoomNumber=102, IsOccupied = false, WingName = "South"},
+               new Room { RoomNumber=103, IsOccupied = false, WingName = "South"},
+               new Room { RoomNumber=105, IsOccupied = false, WingName = "South"},
+               new Room { RoomNumber=106, IsOccupied = false, WingName = "South"},
+               new Room { RoomNumber=107, IsOccupied = false, WingName = "South"},
+               new Room { RoomNumber=108, IsOccupied = false, WingName = "South"},
                new Room { RoomNumber=109, IsOccupied = false, WingName = "South"},
                new Room { RoomNumber=110, IsOccupied = false, WingName = "South"},
                new Room { RoomNumber=112, IsOccupied = false, WingName = "South"},

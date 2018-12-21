@@ -1,12 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using FIVESTARVC.Models;
-using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Web.Mvc;
 using FIVESTARVC.Validators;
 
 namespace FIVESTARVC.ViewModels
@@ -14,8 +10,7 @@ namespace FIVESTARVC.ViewModels
     public class ResidentIncomeModel
     {
         //Room
-        [Required]
-        public int RoomNumber { get; set; }
+        public int? RoomNumber { get; set; }
 
         // RESIDENT
         public int ResidentID { get; set; }

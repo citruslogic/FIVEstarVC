@@ -51,16 +51,22 @@ namespace FIVESTARVC.Models
                 .Where(t => t.ResidentID == ResidentID)
                 .ToList();
 
-            foreach (var item in ev)
+            if (ev != null)
             {
-                if (item.ProgramType.EventType == EnumEventType.ADMISSION)
+                foreach (var item in ev)
                 {
-                    current = true;
-                }
+                    if (item != null)
+                    {
+                        if (item.ProgramType.EventType == EnumEventType.ADMISSION)
+                        {
+                            current = true;
+                        }
 
-                if (item.ProgramType.EventType == EnumEventType.DISCHARGE)
-                {
-                    current = false;
+                        if (item.ProgramType.EventType == EnumEventType.DISCHARGE)
+                        {
+                            current = false;
+                        }
+                    }
                 }
             }
 

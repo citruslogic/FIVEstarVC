@@ -1,6 +1,5 @@
 ﻿using DelegateDecompiler;
 using FIVESTARVC.DAL;
-using FIVESTARVC.Helpers;
 using FIVESTARVC.Models;
 using FIVESTARVC.Services;
 using FIVESTARVC.ViewModels;
@@ -9,7 +8,6 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
-using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Web.Mvc;
@@ -96,7 +94,10 @@ namespace FIVESTARVC.Controllers
             ViewBag.AdmissionType = new SelectList(db.ProgramTypes
                 .Where(t => t.EventType == EnumEventType.ADMISSION), "ProgramTypeID", "ProgramDescription", 2);
 
-            ViewBag.RoomNumber = new SelectList(db.Rooms.Where(rm => rm.IsOccupied == false), "RoomNumber", "RoomNumber");
+            var rooms = new List<int?> { null };
+            rooms.AddRange(db.Rooms.Where(rm => rm.IsOccupied == false).Select(i => (int?)i.RoomNumber).ToList());
+
+            ViewBag.RoomNumber = new SelectList(rooms);
 
             var allMilitaryCampaigns = db.MilitaryCampaigns;
             var viewModel = new List<AssignedCampaignData>();
@@ -122,13 +123,16 @@ namespace FIVESTARVC.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create(ResidentIncomeModel residentIncomeModel, string[] selectedCampaigns,
-            int AdmissionType, int RoomNumber)
+            int AdmissionType, int? RoomNumber)
         {
             TempData["Duplicate"] = null;
             ViewBag.AdmissionType = new SelectList(db.ProgramTypes
                 .Where(t => t.EventType == EnumEventType.ADMISSION), "ProgramTypeID", "ProgramDescription", AdmissionType);
 
-            ViewBag.RoomNumber = new SelectList(db.Rooms.Where(rm => rm.IsOccupied == false), "RoomNumber", "RoomNumber");
+            var rooms = new List<int?> { null };
+            rooms.AddRange(db.Rooms.Where(rm => rm.IsOccupied == false).Select(i => (int?)i.RoomNumber).ToList());
+
+            ViewBag.RoomNumber = new SelectList(rooms);
             ViewBag.StateTerritoryID = new SelectList(db.States, "StateTerritoryID", "State", residentIncomeModel.StateTerritoryID);
 
             var allMilitaryCampaigns = db.MilitaryCampaigns;
@@ -196,25 +200,30 @@ namespace FIVESTARVC.Controllers
 
                     Room room = db.Rooms.Find(resident.RoomNumber);
 
-                    if (room.IsOccupied == false)
-                    {
-                        room.IsOccupied = true;
-                    }
-
-                    RoomLog log = db.RoomLogs.Add(new RoomLog
-                    {
-                        Resident = resident,
-                        Room = resident.Room,
-                        Event = new ProgramEvent
+                    if (room != null) {
+                        if (room.IsOccupied == false)
                         {
-                            ProgramTypeID = 14,
+                            room.IsOccupied = true;
+                        } else
+                        {
+                            throw new DataException("The room is already occupied and cannot be allocated.");
+                        }
+
+                        RoomLog log = db.RoomLogs.Add(new RoomLog
+                        {
                             Resident = resident,
-                            ClearEndDate = admitEvent.ClearStartDate,
-                            ClearStartDate = admitEvent.ClearStartDate,
-                            Completed = true
-                        },
-                        Comment = "Resident admitted."
-                    });
+                            Room = resident.Room,
+                            Event = new ProgramEvent
+                            {
+                                ProgramTypeID = 2181,
+                                Resident = resident,
+                                ClearEndDate = admitEvent.ClearStartDate,
+                                ClearStartDate = admitEvent.ClearStartDate,
+                                Completed = true
+                            },
+                            Comment = "Resident admitted."
+                        });
+                    }
 
                     db.Benefits.Add(benefit);
                     resident.Benefit = benefit;
@@ -222,10 +231,10 @@ namespace FIVESTARVC.Controllers
                     db.SaveChanges();
                 }
             }
-            catch (DataException /*dex*/)
+            catch (DataException dex)
             {
                 //Log the error (uncomment dex variable name and add a line here to write a log.
-                ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
+                ModelState.AddModelError(dex.Message, "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
             }
 
             if (TryUpdateModel(residentIncomeModel, "",
@@ -299,8 +308,10 @@ namespace FIVESTARVC.Controllers
                 return HttpNotFound();
             }
 
-            ViewBag.RoomNumber = new SelectList(db.Rooms.Where(rm => rm.IsOccupied == false
-            || rm.RoomNumber == resident.RoomNumber), "RoomNumber", "RoomNumber", resident.RoomNumber.GetValueOrDefault().ToString());
+            var rooms = new List<int?> { null };
+            rooms.AddRange(db.Rooms.Where(rm => rm.IsOccupied == false || rm.RoomNumber == resident.RoomNumber).Select(i => (int?)i.RoomNumber));
+
+            ViewBag.RoomNumber = new SelectList(rooms, resident.RoomNumber.GetValueOrDefault());
             ViewBag.StateTerritoryID = new SelectList(db.States, "StateTerritoryID", "State", resident.StateTerritoryID);
 
 
@@ -352,32 +363,29 @@ namespace FIVESTARVC.Controllers
                             residentToUpdate.ProgramEvents.Add(readmitEvent);
 
                             // Reassign the readmitted resident the given room number.
-                            if (RoomNumber.HasValue)
+                            Room room = db.Rooms.Find(RoomNumber);
+
+                            room.IsOccupied = true;
+                            residentToUpdate.RoomNumber = RoomNumber;
+
+                            db.RoomLogs.Add(new RoomLog
                             {
-                                Room room = db.Rooms.Find(RoomNumber);
-
-                                room.IsOccupied = true;
-                                residentToUpdate.RoomNumber = RoomNumber;
-
-                                db.RoomLogs.Add(new RoomLog
+                                Resident = residentToUpdate,
+                                Room = room,
+                                Event = new ProgramEvent
                                 {
-                                    Resident = residentToUpdate,
-                                    Room = room,
-                                    Event = new ProgramEvent
-                                    {
-                                        ProgramTypeID = 14,
-                                        ClearStartDate = readmitEvent.ClearStartDate,
-                                        ClearEndDate = readmitEvent.ClearEndDate,
-                                        Completed = true
-                                    },
-                                    Comment = "Resident readmitted."
-                                });
-                            }
+                                    ProgramTypeID = 2181,
+                                    ClearStartDate = readmitEvent.ClearStartDate,
+                                    ClearEndDate = readmitEvent.ClearEndDate,
+                                    Completed = true
+                                },
+                                Comment = "Resident readmitted."
+                            });
                         }
                     }
 
                     // For the case when a resident is currently in the center.
-                    if (RoomNumber.HasValue && (Readmit == null || Readmit == false))
+                    if (Readmit == null || Readmit == false)
                     {
                         Room room = db.Rooms.Find(RoomNumber);
 
@@ -392,25 +400,68 @@ namespace FIVESTARVC.Controllers
                                     residentToUpdate.Room.IsOccupied = false;
                                     residentToUpdate.RoomNumber = RoomNumber;
                                     oldRoom.ClearLastResident = residentToUpdate.Fullname;
-                                    
-                                    room.IsOccupied = true;
 
-                                    db.RoomLogs.Add(new RoomLog
-                                    {
-                                        Resident = residentToUpdate,
-                                        Room = room,
-                                        Event = new ProgramEvent
+                                    if (room != null) {
+                                        room.IsOccupied = true;
+
+                                        db.RoomLogs.Add(new RoomLog
                                         {
                                             Resident = residentToUpdate,
-                                            ClearStartDate = DateTime.Now,
-                                            ClearEndDate = DateTime.Now,
-                                            ProgramTypeID = 14,
-                                            Completed = true
-                                        },
-                                        Comment = "Resident moved from room " + oldRoom.RoomNumber
-                                    });
+                                            Room = room,
+                                            Event = new ProgramEvent
+                                            {
+                                                Resident = residentToUpdate,
+                                                ClearStartDate = DateTime.Now,
+                                                ClearEndDate = DateTime.Now,
+                                                ProgramTypeID = 2181,
+                                                Completed = true
+                                            },
+                                            Comment = "Resident moved from room " + oldRoom.RoomNumber
+                                        });
+                                    }
+                                    
                                 }
                             }
+                        }
+                        else
+                        {
+                            residentToUpdate.RoomNumber = RoomNumber;
+
+                            if (room != null) {
+                                room.IsOccupied = true;
+
+                                db.RoomLogs.Add(new RoomLog
+                                {
+                                    Resident = residentToUpdate,
+                                    Room = room,
+                                    Event = new ProgramEvent
+                                    {
+                                        Resident = residentToUpdate,
+                                        ClearEndDate = DateTime.Now,
+                                        ClearStartDate = DateTime.Now,
+                                        ProgramTypeID = 2181,
+                                        Completed = true
+                                    },
+                                    Comment = "Resident moved into room " + room.RoomNumber
+                                });
+                            } else
+                            {
+                                db.RoomLogs.Add(new RoomLog
+                                {
+                                    Resident = residentToUpdate,
+                                    Room = null,
+                                    Event = new ProgramEvent
+                                    {
+                                        Resident = residentToUpdate,
+                                        ClearEndDate = DateTime.Now,
+                                        ClearStartDate = DateTime.Now,
+                                        ProgramTypeID = 2181,
+                                        Completed = true
+                                    },
+                                    Comment = "Resident moved out of room."
+                                });
+                            }
+                            
                         }
                     }
 
@@ -420,14 +471,16 @@ namespace FIVESTARVC.Controllers
 
                     return RedirectToAction("Index");
                 }
-                catch (DataException /* dex */)
+                catch (DataException dex)
                 {
                     //Log the error (uncomment dex variable name and add a line here to write a log.
-                    ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
+                    ModelState.AddModelError(dex.Message, "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
                 }
             }
+            var rooms = new List<int?> { null };
+            rooms.AddRange(db.Rooms.Where(rm => rm.IsOccupied == false).Select(i => (int?)i.RoomNumber).ToList());
 
-            ViewBag.RoomNumber = new SelectList(db.Rooms.Where(rm => rm.IsOccupied == false), "RoomNumber", "RoomNumber", residentToUpdate.RoomNumber);
+            ViewBag.RoomNumber = new SelectList(rooms, residentToUpdate.RoomNumber);
             ViewBag.StateTerritoryID = new SelectList(db.States, "StateTerritoryID", "State", residentToUpdate.StateTerritoryID);
 
             ViewBag.Campaigns = residentService.PopulateAssignedCampaignData(residentToUpdate, db);
@@ -435,7 +488,7 @@ namespace FIVESTARVC.Controllers
             return View(residentToUpdate);
         }
 
-        
+
 
         private void UpdateResidentCampaigns(string[] selectedCampaigns, Resident residentToUpdate)
         {
@@ -587,7 +640,7 @@ namespace FIVESTARVC.Controllers
                         Resident = residentToDischarge,
                         ClearStartDate = date,
                         ClearEndDate = date,
-                        ProgramTypeID = 14,
+                        ProgramTypeID = 2181,
                         Completed = true
                     },
                     Comment = "Resident discharged; room released."
@@ -606,7 +659,7 @@ namespace FIVESTARVC.Controllers
                 db.SaveChanges();
                 TempData["UserMessage"] = residentToDischarge.ClearLastName + " has been discharged from your center.  ";
             }
-            catch (DataException/* dex */)
+            catch (DataException /*dex*/)
             {
                 TempData["UserMessage"] = "Failed to discharge the resident from the center.";
 
@@ -643,7 +696,9 @@ namespace FIVESTARVC.Controllers
                 return HttpNotFound();
             }
 
-            ViewBag.RoomNumber = new SelectList(db.Rooms.Where(rm => rm.IsOccupied == false), "RoomNumber", "RoomNumber");
+            var rooms = new List<int?> { null };
+            rooms.AddRange(db.Rooms.Where(rm => rm.IsOccupied == false).Select(i => (int?)i.RoomNumber).ToList());
+            ViewBag.RoomNumber = new SelectList(rooms);
 
             return PartialView("_Readmit", residentToReadmit);
         }
@@ -654,7 +709,10 @@ namespace FIVESTARVC.Controllers
         public ActionResult Readmit(int id, string ReadmitDate, int? RoomNumber)
         {
             var date = DateTime.Parse(ReadmitDate);
-            ViewBag.RoomNumber = new SelectList(db.Rooms.Where(rm => rm.IsOccupied == false), "RoomNumber", "RoomNumber");
+
+            var rooms = new List<int?> { null };
+            rooms.AddRange(db.Rooms.Where(rm => rm.IsOccupied == false).Select(i => (int?)i.RoomNumber).ToList());
+            ViewBag.RoomNumber = new SelectList(rooms);
 
             try
             {
@@ -681,24 +739,26 @@ namespace FIVESTARVC.Controllers
                 residentToReadmit.RoomNumber = RoomNumber;
                 Room room = db.Rooms.Find(RoomNumber);
 
-                room.IsOccupied = true;
+                if (room != null) {
+                    room.IsOccupied = true;
 
-                db.Entry(room).State = EntityState.Modified;
+                    db.Entry(room).State = EntityState.Modified;
 
-                db.RoomLogs.Add(new RoomLog
-                {
-                    Resident = residentToReadmit,
-                    Room = room,
-                    Event = new ProgramEvent
+                    db.RoomLogs.Add(new RoomLog
                     {
                         Resident = residentToReadmit,
-                        ClearStartDate = date,
-                        ClearEndDate = date,
-                        ProgramTypeID = 14,
-                        Completed = true
-                    },
-                    Comment = "Resident readmitted."
-                });
+                        Room = room,
+                        Event = new ProgramEvent
+                        {
+                            Resident = residentToReadmit,
+                            ClearStartDate = date,
+                            ClearEndDate = date,
+                            ProgramTypeID = 2181,
+                            Completed = true
+                        },
+                        Comment = "Resident readmitted."
+                    });
+                }
 
                 db.SaveChanges();
 
