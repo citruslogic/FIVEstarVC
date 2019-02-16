@@ -205,7 +205,7 @@ namespace FIVESTARVC.Controllers
         public ActionResult GetAverageStay()
         {
             //Variables to find average length of stay
-            int total = 0;
+            int? total = 0;
             int numbCount = 0;
 
             var residents = db.Residents.ToList();
@@ -217,7 +217,7 @@ namespace FIVESTARVC.Controllers
                 //    continue;
                 //}
                 numbCount++;
-                total += resident.DaysInCenter;
+                total += resident?.DaysInCenter;
             }
 
             /* Scenario is unlikely but possible. Thanks David! */

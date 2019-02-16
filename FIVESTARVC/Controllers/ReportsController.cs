@@ -139,17 +139,17 @@ namespace FIVESTARVC.Controllers
 
             foreach (var ProgramEvents in CurrentRes)
             {
-                if (ProgramEvents.ProgramType.EventType == EnumEventType.ADMISSION)
+                if (ProgramEvents.ProgramType?.EventType == EnumEventType.ADMISSION)
                 {
                     count++;
                     continue;
                 }
-                else if (ProgramEvents.ProgramType.EventType == EnumEventType.DISCHARGE)
+                else if (ProgramEvents.ProgramType?.EventType == EnumEventType.DISCHARGE)
                 {
                     count--;
                 }
 
-                if (ProgramEvents.ProgramType.EventType == EnumEventType.DISCHARGE)
+                if (ProgramEvents.ProgramType?.EventType == EnumEventType.DISCHARGE)
                 {
                     dischargeCount++;
                 }

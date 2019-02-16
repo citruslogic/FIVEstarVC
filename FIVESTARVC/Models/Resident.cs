@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
+using System.Data.Entity;
+
 
 namespace FIVESTARVC.Models
 {
@@ -48,6 +50,7 @@ namespace FIVESTARVC.Models
         {
             bool current = false;
             var ev = db.ProgramEvents
+                .Include(i => i.ProgramType)
                 .Where(t => t.ResidentID == ResidentID)
                 .ToList();
 
@@ -55,7 +58,7 @@ namespace FIVESTARVC.Models
             {
                 foreach (var item in ev)
                 {
-                    if (item != null)
+                    if (item != null && item.ProgramType != null)
                     {
                         if (item.ProgramType.EventType == EnumEventType.ADMISSION)
                         {
@@ -99,12 +102,13 @@ namespace FIVESTARVC.Models
         public DateTime? GetDischargeDate()
         {
             var events = db.ProgramEvents
+                .Include(i => i.ProgramType)
                 .Where(r => r.ResidentID == ResidentID)
                 .OrderByDescending(s => s.ProgramEventID).ToList();
 
             foreach (ProgramEvent ev in events)
             {
-                if (ev.ProgramType.EventType == EnumEventType.DISCHARGE)
+                if (ev.ProgramType?.EventType == EnumEventType.DISCHARGE)
                 {
                     return ev.ClearStartDate;
                 }
@@ -114,7 +118,7 @@ namespace FIVESTARVC.Models
         }
 
 
-        public int DaysInCenter
+        public int? DaysInCenter
         {
             get
             {
@@ -123,7 +127,7 @@ namespace FIVESTARVC.Models
                     ? GetDischargeDate().GetValueOrDefault().Subtract(GetAdmitDate().GetValueOrDefault())
                     : DateTime.Now.Date.Subtract(GetAdmitDate().GetValueOrDefault());
 
-                return (int)Math.Abs(span.TotalDays);
+                return (int?) Math.Abs(span.TotalDays);
             }
         }
 

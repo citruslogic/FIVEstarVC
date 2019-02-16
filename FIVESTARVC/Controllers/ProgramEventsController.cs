@@ -99,6 +99,8 @@ namespace FIVESTARVC.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
+            
+
             CustomEvent model = new CustomEvent();
             model.programEvents = new List<TempProgramEvent>
             {
@@ -108,6 +110,11 @@ namespace FIVESTARVC.Controllers
             ViewBag.ProgramTypeID = new SelectList(db.ProgramTypes.Where(t => t.EventType == EnumEventType.TRACK), "ProgramTypeID", "ProgramDescription");
 
             ViewBag.ResidentID = id;
+            ViewBag.CurrentTrackEvents = db.ProgramEvents
+                .Include(r => r.Resident)
+                .Include(r => r.ProgramType)
+                .Where(i => i.ResidentID == id && i.ProgramType.EventType == EnumEventType.TRACK)
+                .ToList();
             ViewBag.Fullname = db.Residents.Find(model.programEvents.First().ResidentID).Fullname;
 
             return View(model);

@@ -25,9 +25,9 @@ namespace FIVESTARVC.Controllers
             {
                 ResidentID = data.ResidentID,
                 FirstMidName = data.ClearFirstMidName,
-                LastName = data.ClearLastName.Computed(),
+                LastName = data.ClearLastName,
                 RoomNumber = data.RoomNumber.GetValueOrDefault(),
-                NumDaysInCenter = data.DaysInCenter
+                NumDaysInCenter = data.DaysInCenter ?? 0
 
             }).OrderByDescending(r => r.ResidentID).Take(5);
 

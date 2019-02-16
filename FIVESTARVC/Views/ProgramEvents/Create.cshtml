@@ -8,10 +8,52 @@
     <h5>
         @ViewBag.Fullname
     </h5>
-    <p> This resident can be enrolled in one or more tracks.</p>
 
     <input type="hidden" name="ResidentID" value="@ViewBag.ResidentID" />
+    if (ViewBag.CurrentTrackEvents.Count > 0)
+    {
+        <p> Current tracks</p>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-10">
+                    <table class="table table-sm table-striped">
+                        <thead>
+                            <tr>
+                                <th>Track Name</th>
+                                <th>Start Date</th>
+                                <th>End Date</th>
+                                <th>Completed?</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var curtrack in ViewBag.CurrentTrackEvents)
+                            {
+                                <tr>
+                                    <td>
+                                        @(curtrack.ProgramType?.ProgramDescription)
+                                    </td>
+                                    <td>
+                                        @curtrack.ClearStartDate
+                                    </td>
+                                    <td>
+                                        @curtrack.ClearEndDate
+                                    </td>
+                                    <td>
+                                        @(curtrack.Completed ? "Yes" : "No")
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    } else
+    {
+        <p> This resident is currently not in any tracks.</p>
+    }
 
+    <p> This resident can be enrolled in one or more tracks.</p>
 
     <div class="container">
         <div class="form-row">
@@ -41,7 +83,7 @@
 
     </div>
 
-<br />
+    <br />
 }
 @section Scripts {
     <script type="text/javascript">
@@ -85,7 +127,7 @@
 
         });
 
-        
+
 
 
 

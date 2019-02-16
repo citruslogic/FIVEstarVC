@@ -723,7 +723,7 @@ namespace FIVESTARVC.Controllers
 
                 // To close discharge events
                 var ev = residentToReadmit.ProgramEvents
-                    .Where(i => i.ProgramType.EventType == EnumEventType.DISCHARGE)
+                    .Where(i => i.ProgramType?.EventType == EnumEventType.DISCHARGE)
                     .LastOrDefault();
                 ev.ClearEndDate = DateTime.Parse(ReadmitDate);
                 db.Entry(ev).State = EntityState.Modified;

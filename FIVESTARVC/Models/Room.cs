@@ -34,14 +34,14 @@ namespace FIVESTARVC.Models
         }
 
         [Display(Name = "Days Occupied (current resident)")]
-        public int DaysOccupied
+        public int? DaysOccupied
         {
             get
             {
                 var resident = db.Residents.FirstOrDefault(i => i.Room.RoomNumber == RoomNumber);
 
                 if (resident != null)
-                    return resident.DaysInCenter;
+                    return resident.DaysInCenter ?? 0;
 
                 return 0;
             }
