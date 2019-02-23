@@ -13,14 +13,14 @@
 <script type="text/javascript" src="~/Scripts/umd/popper.js"></script>
 
 <div class="btn-group d-print-none mt-lg-1">
-    <button class="btn" style="margin-right: 10px;" onclick="location.href = '/Reports/DownloadData';">
+    <button class="btn btn-secondary" style="margin-right: 10px;" onclick="location.href = '/Reports/DownloadData';">
         <i class="fa fa-arrow-down fa-fw"></i> Download Data
     </button>
 
-    <button class="btn" style="margin-right: 10px;" onclick="location.href = '/Reports/campaigns';"><i class="fa fa-line-chart fa-fw"></i> Campaigns Chart</button>
+    <button class="btn btn-sm btn-secondary" style="margin-right: 10px;" onclick="location.href = '/Reports/campaigns';"><i class="fa fa-line-chart fa-fw"></i> Campaigns Chart</button>
 
     <div class="dropdown">
-        <button style="margin-right: 10px;" class="btn dropdown-toggle" type="button" data-toggle="dropdown">
+        <button style="margin-right: 10px;" class="btn btn-secondary dropdown-toggle" type="button" data-toggle="dropdown">
             <i class="fa fa-line-chart fa-fw"></i> Chart Data by Year
             <span class="caret"></span>
         </button>
@@ -37,7 +37,7 @@
     </div>
 
     <div class="dropdown">
-        <button style="margin-right: 10px;" class="btn dropdown-toggle" type="button" data-toggle="dropdown">
+        <button style="margin-right: 10px;" class="btn btn-secondary dropdown-toggle" type="button" data-toggle="dropdown">
             <i class="fa fa-line-chart fa-fw"></i> Cumulative Charts
             <span class="caret"></span>
         </button>
@@ -56,7 +56,7 @@
 @using (Html.BeginForm("Export", "CenterOverview", FormMethod.Post))
 {
 
-    <button class="btn mt-lg-1" style="margin-right: 10px;" onclick="printReport()"><i class="fa fa-file-pdf-o fa-fw"></i> Report PDF</button>
+    <button class="btn btn-secondary mt-lg-1" style="margin-right: 10px;" onclick="printReport()"><i class="fa fa-file-pdf-o fa-fw"></i> Report PDF</button>
     <input type="hidden" name="report" />
     <hr />
     <h2>Center Summary</h2>
@@ -88,8 +88,7 @@
 
 
                 <div class="col-sm-4">
-                    <br />
-                    <div id="AgeGroups">
+                                     <div id="AgeGroups">
                     </div>
                     <div id="AgeGroupsCumulative">
                     </div>
@@ -102,7 +101,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-sm-4">
-                    <br />
+              
                     <h4>Center Performance</h4>
                     <h5>Resident Intake vs. Success</h5>
                     <table class="table table-sm">
@@ -223,7 +222,7 @@
                     </table>
                 </div>
                 <div class="col-sm-4">
-                    <br />
+                   
                     <h4>Military Service Statistics</h4>
                     <div id="ServiceDischargeGroups"></div>
                     <h5>Branches</h5>
@@ -336,7 +335,7 @@
         </div>
     </div>
 }
-<br />
+
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")

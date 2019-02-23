@@ -58,7 +58,7 @@
 <li class="btn-block">
     <button class="btn btn-success" onclick="location.href='/Rooms/Create';"><i class="fa fa-plus fa-fw"></i> Room</button>
 
-    <button class="btn" onclick="location.href='/Residents/Index';"><i class="fa fa-arrow-left fa-fw"></i> Residents</button>
+    <button class="btn btn-secondary" onclick="location.href='/Residents/Index';"><i class="fa fa-arrow-left fa-fw"></i> Residents</button>
     &nbsp;
 
 </li>
@@ -145,7 +145,7 @@
                             <td class="btn-block">
                                 @if (item.HasLogDetails)
                                 {
-                                <input type="button" class="btn btn-sm" value="Details" onclick="location.href='/Rooms/Details/@item.RoomNumber';" />
+                                <input type="button" class="btn btn-sm btn-link" value="Details" onclick="location.href='/Rooms/Details/@item.RoomNumber';" />
                                 }
 
                                 @if (!item.IsOccupied)
