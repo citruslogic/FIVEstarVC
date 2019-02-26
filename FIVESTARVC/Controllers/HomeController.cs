@@ -21,7 +21,7 @@ namespace FIVESTARVC.Controllers
         [Authorize]
         public ActionResult Index()
         {
-            var residents = db.Residents.Include(r => r.Room).ToList().Select(data => new DashboardData
+            var residents = db.Residents.Include(r => r.Room).OrderByDescending(r => r.ResidentID).Take(5).ToList().Select(data => new DashboardData
             {
                 ResidentID = data.ResidentID,
                 FirstMidName = data.ClearFirstMidName,
@@ -29,7 +29,7 @@ namespace FIVESTARVC.Controllers
                 RoomNumber = data.RoomNumber.GetValueOrDefault(),
                 NumDaysInCenter = data.DaysInCenter ?? 0
 
-            }).OrderByDescending(r => r.ResidentID).Take(5);
+            });
 
             ViewBag.pop = db.Residents.ToList().Where(r => r.IsCurrent()).Count();
             ViewBag.allpop = db.Residents.ToList().Count();

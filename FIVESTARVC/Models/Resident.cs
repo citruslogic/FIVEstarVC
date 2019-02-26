@@ -83,14 +83,6 @@ namespace FIVESTARVC.Models
                 .OrderByDescending(s => s.ProgramEventID)
                 .FirstOrDefault(i => i.ProgramType.EventType == EnumEventType.ADMISSION);
 
-            //foreach (ProgramEvent ev in events)
-            //{
-            //    if (ev.ProgramType.EventType == EnumEventType.ADMISSION)
-            //    {
-            //        return ev.ClearStartDate;
-            //    }
-            //}
-
             if (ev != null)
             {
                 return ev.ClearStartDate;
@@ -117,15 +109,14 @@ namespace FIVESTARVC.Models
             return null;
         }
 
-
         public int? DaysInCenter
         {
             get
             {
                 // Resident may not be discharged yet.
                 TimeSpan span = GetDischargeDate().HasValue
-                    ? GetDischargeDate().GetValueOrDefault().Subtract(GetAdmitDate().GetValueOrDefault())
-                    : DateTime.Now.Date.Subtract(GetAdmitDate().GetValueOrDefault());
+                    ? GetDischargeDate().Value.Subtract(GetAdmitDate().GetValueOrDefault(DateTime.Today))
+                    : DateTime.Now.Date.Subtract(GetAdmitDate().GetValueOrDefault(DateTime.Today));
 
                 return (int?) Math.Abs(span.TotalDays);
             }

@@ -5,9 +5,9 @@
 }
 
 <h5>@if (Model.IsCurrent)
-{ @Html.Raw("Current") }
+{ @Html.Raw("Current Resident") }
 else
-{ @Html.Raw("Cumulative") } Age Composition</h5>
+{ @Html.Raw("Cumulative Resident") } Age Composition</h5>
 
 <table class="table table-sm">
     <thead>
@@ -15,7 +15,6 @@ else
             <th>
                 Age group
             </th>
-
             <th>
                 Count
             </th>

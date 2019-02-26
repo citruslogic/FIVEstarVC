@@ -212,12 +212,13 @@ namespace FIVESTARVC.Controllers
 
             foreach (Resident resident in residents)
             {
-                //if (resident.IsCurrent())
-                //{
-                //    continue;
-                //}
+                if (resident == null)
+                {
+                    continue;
+                }
+
                 numbCount++;
-                total += resident?.DaysInCenter;
+                total += resident.DaysInCenter;
             }
 
             /* Scenario is unlikely but possible. Thanks David! */

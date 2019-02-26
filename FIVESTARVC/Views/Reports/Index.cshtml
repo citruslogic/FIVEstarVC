@@ -60,7 +60,7 @@
     <input type="hidden" name="report" />
     <hr />
     <h2>Center Summary</h2>
-    <div class="mb-lg-2">
+    <div class="mb-lg-3">
         <p>
             <strong>Cumulative Residents: </strong> @ViewBag.CumulativeCount,
             <strong>Current Residents: </strong> @ViewBag.TotalCount,
@@ -78,30 +78,42 @@
                 <div class="col-sm-3">
 
                     <div id="GenderGroups">
+                        Getting demographic data...
                     </div>
                     <div id="GenderGroupsCumulative">
+                        Getting demographic data...
+
                     </div>
 
                     <div id="AverageStay">
+                        Getting stay data...
+
                     </div>
                 </div>
 
 
-                <div class="col-sm-4">
-                                     <div id="AgeGroups">
+                <div class="col-sm-3">
+                    <div id="AgeGroups">
+                        Getting demographic data...
+
                     </div>
+
+                </div>
+
+                <div class="col-sm-3">
                     <div id="AgeGroupsCumulative">
+                        Getting demographic data...
                     </div>
                 </div>
-                
+
             </div>
-            </div>
+        </div>
         <h4></h4>
         <hr />
         <div class="container">
             <div class="row">
                 <div class="col-sm-4">
-              
+
                     <h4>Center Performance</h4>
                     <h5>Resident Intake vs. Success</h5>
                     <table class="table table-sm">
@@ -222,10 +234,11 @@
                     </table>
                 </div>
                 <div class="col-sm-4">
-                   
                     <h4>Military Service Statistics</h4>
-                    <div id="ServiceDischargeGroups"></div>
-                    <h5>Branches</h5>
+                    <div id="ServiceDischargeGroups">Getting demographic data...</div>
+                </div>
+                <div class="col-sm-4">
+                    <h5 style="margin-top: 1.81em;">Branches</h5>
                     <table class="table table-sm">
                         <tr>
                             <th>
