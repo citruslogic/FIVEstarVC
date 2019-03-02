@@ -1,0 +1,79 @@
+﻿@model FIVESTARVC.ViewModels.CustomEvent
+@{
+    Layout = null;
+}
+
+<style>
+    .biggerCheckBox {
+        transform: scale(1.5);
+        -webkit-transform: scale(1.5);
+        margin-left: 5px;
+    }
+</style>
+<div id="statusMessage"></div>
+@using (Ajax.BeginForm("Release", FormMethod.Post, new AjaxOptions
+{
+    InsertionMode = InsertionMode.Replace,
+    UpdateTargetId = "statusMessage"
+}, new { id = "releaseForm" }))
+{
+
+    if (Model.currentProgramEvents.Count() > 0)
+    {
+        <p> Current tracks</p>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-10">
+                    <table class="table table-sm table-striped">
+                        <thead>
+                            <tr>
+                                <th>Select</th>
+                                <th>Track Name</th>
+                                <th>Start Date</th>
+                                <th>End Date</th>
+                                <th>Completed?</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            @Html.EditorForModel(Model.currentProgramEvents)
+
+                        </tbody>
+                    </table>
+                    <br />
+                    <input type="submit" class="btn btn-danger btn-sm" value="Release" />
+
+                </div>
+            </div>
+        </div>
+
+    }
+    else
+    {
+        <p> This resident is currently not in any tracks.</p>
+    }
+}
+
+@*<script type="text/javascript">
+    $("#releaseBtn").on("click", function (ev) {
+        ev.preventDefault();
+        $.ajax({
+            "url": "/ProgramEvents/Release/",
+            "type": "post",
+            "cache": false,
+            "dataType": "json",
+            "content": "application/json; charset=utf-8",
+            "data": $("#releaseForm").serialize(),
+            "success": function (s) {
+                if (s.success == true) {
+                    window.location.reload();
+                } else { }
+
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                // TODO: Show error
+            }
+
+        });
+    });
+</script>*@

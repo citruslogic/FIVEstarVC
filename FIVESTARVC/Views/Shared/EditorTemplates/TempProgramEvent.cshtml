@@ -1,0 +1,48 @@
+﻿@model IEnumerable<FIVESTARVC.ViewModels.TempProgramEvent>
+
+@foreach (var model in Model)
+{
+    <tr>
+
+        @Html.Hidden("ProgramEventID", model.ProgramEventID)
+
+        @if (!model.EndDate.HasValue)
+        {
+            <td>
+                @Html.CheckBoxFor(m => model.CanRemove, htmlAttributes: new { @class = "biggerCheckBox" })
+                @Html.ValidationMessageFor(m => model.CanRemove, "")
+            </td>
+        }
+        else
+        {
+            @Html.Raw("&nbsp;")
+        }
+        <td>
+            @Html.HiddenFor(m => model.ProgramType.ProgramDescription)
+            @(model.ProgramType?.ProgramDescription)
+        </td>
+        <td>
+            @Html.HiddenFor(m => model.StartDate)
+            @model.StartDate.ToShortDateString()
+        </td>
+        <td>
+            @Html.LabelFor(m => model.EndDate, htmlAttributes: new { @class = "control-label" })
+            <div>
+                @Html.EditorFor(m => model.EndDate, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(m => model.EndDate, "")
+
+            </div>
+        </td>
+        <td>
+            @Html.LabelFor(m => model.Completed, htmlAttributes: new { @class = "control-label" })
+            <div>
+
+                <div>
+                    @Html.CheckBoxFor(m => model.Completed, htmlAttributes: new { @class = "biggerCheckBox" })
+                    @Html.ValidationMessageFor(m => model.Completed, "")
+                </div>
+            </div>
+        </td>
+    </tr>
+}
+

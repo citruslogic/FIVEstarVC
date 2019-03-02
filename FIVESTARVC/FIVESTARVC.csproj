@@ -956,7 +956,7 @@
     <Content Include="Views\CenterOverview\_AverageStay.cshtml" />
     <Content Include="Views\CenterOverview\_GenderGroupBreakdown.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\Collection.cshtml" />
-    <Content Include="Views\ProgramEvents\Create.cshtml" />
+    <Content Include="Views\ProgramEvents\Manage.cshtml" />
     <Content Include="Views\Shared\_ProgramTrack.cshtml" />
     <Content Include="Views\Shared\DisplayChart.cshtml" />
     <Content Include="secure.config">
@@ -966,6 +966,7 @@
     <Content Include="Views\CenterOverview\_ServiceDischargeBreakdown.cshtml" />
     <Content Include="Views\Shared\_Readmit.cshtml" />
     <Content Include="Scripts\README.md" />
+    <Content Include="Views\Shared\_ReleaseTracks.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

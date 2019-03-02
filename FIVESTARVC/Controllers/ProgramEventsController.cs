@@ -11,6 +11,7 @@ using FIVESTARVC.Models;
 using FIVESTARVC.ViewModels;
 using DelegateDecompiler;
 using System.Globalization;
+using System.Web.Routing;
 
 namespace FIVESTARVC.Controllers
 {
@@ -92,17 +93,15 @@ namespace FIVESTARVC.Controllers
 
 
         // GET: ProgramEvents/Create
-        public ActionResult Create(int? id)
+        public ActionResult Manage(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            
-
             CustomEvent model = new CustomEvent();
-            model.programEvents = new List<TempProgramEvent>
+            model.ProgramEvents = new List<TempProgramEvent>
             {
                 new TempProgramEvent{ ResidentID = id.Value, StartDate = DateTime.Now },
             };
@@ -110,25 +109,34 @@ namespace FIVESTARVC.Controllers
             ViewBag.ProgramTypeID = new SelectList(db.ProgramTypes.Where(t => t.EventType == EnumEventType.TRACK), "ProgramTypeID", "ProgramDescription");
 
             ViewBag.ResidentID = id;
-            ViewBag.CurrentTrackEvents = db.ProgramEvents
+            model.EnrolledTracks = db.ProgramEvents
                 .Include(r => r.Resident)
                 .Include(r => r.ProgramType)
                 .Where(i => i.ResidentID == id && i.ProgramType.EventType == EnumEventType.TRACK)
-                .ToList();
-            ViewBag.Fullname = db.Residents.Find(model.programEvents.First().ResidentID).Fullname;
+                .ToList().Select(e => new TempProgramEvent
+                {
+                    ProgramEventID = e.ProgramEventID,
+                    Resident = e.Resident,
+                    StartDate = e.ClearStartDate,
+                    EndDate = e.ClearEndDate,
+                    Completed = e.Completed,
+                    ProgramType = e.ProgramType
+
+                }).ToList();
+            ViewBag.Fullname = db.Residents.Find(model.ProgramEvents.First().ResidentID).Fullname;
 
             return View(model);
         }
 
-        // POST: ProgramEvents/Create
+        // POST: ProgramEvents/Manage
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(int ResidentID, CustomEvent model)
+        public ActionResult Manage(int ResidentID, CustomEvent model)
         {
 
-            IEnumerable<TempProgramEvent> newPrograms = model.programEvents.Where(s => s.ProgramEventID == 0);
+            IEnumerable<TempProgramEvent> newPrograms = model.ProgramEvents.Where(s => s.ProgramEventID == 0 && s.ProgramTypeID > 0);
 
             foreach (TempProgramEvent track in newPrograms)
             {
@@ -158,9 +166,41 @@ namespace FIVESTARVC.Controllers
             ViewBag.ProgramTypeID = new SelectList(db.ProgramTypes.Where(t => t.EventType == EnumEventType.TRACK), "ProgramTypeID", "ProgramDescription");
 
 
-            return RedirectToAction("Index", "Residents"); ;
+            return RedirectToAction("Manage", new RouteValueDictionary(
+                   new { controller = "ProgramEvents", action = "Manage", Id = ResidentID }));
+        }
 
+        [HttpPost]
+        public ActionResult ReleaseTrack(int ResidentID, CustomEvent customEvent)
+        {
+            if (customEvent != null && customEvent.EnrolledTracks?.Count > 0)
+            {
+                try
+                {
+                    var idList = customEvent.EnrolledTracks.Select(i => i.ProgramEventID).ToArray();
+                    var peList = db.ProgramEvents
+                        .Join(idList, pe => pe.ProgramEventID, id => id, (pe, id) => pe)
+                        .ToList();
 
+                    foreach (var track in customEvent.EnrolledTracks)
+                    {
+                        var pe = peList.Single(i => i.ProgramEventID == track.ProgramEventID);
+                        pe.ClearEndDate = track.EndDate;
+                        pe.Completed = track.Completed;
+                        db.Entry(pe).State = EntityState.Modified;
+                    }
+
+                    db.SaveChanges();
+                    return RedirectToAction("Manage", new RouteValueDictionary(
+                        new { controller = "ProgramEvents", action = "Manage", Id = ResidentID }));
+
+                } catch (Exception e)
+                {
+                    return Json("Resident's tracks could not be updated. ERROR: " + e.Message);
+                }
+               
+            }
+            return Json("Resident's tracks could not be updated.");
         }
 
         // GET: ProgramEvents/Edit/5

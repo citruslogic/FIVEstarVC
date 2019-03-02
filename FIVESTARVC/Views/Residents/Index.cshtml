@@ -138,10 +138,9 @@
                 <td>
                     @Html.ActionLink("Edit", "Edit", new { id = item.ResidentID }, htmlAttributes: new { @class = "btn btn-secondary btn-sm" }) &nbsp;
 
-                    @*Trigger the modal with a button*@
                     @if (item.IsCurrent())
                     {
-                        @Html.ActionLink("Assign Tracks", "Create", "ProgramEvents", new { id = item.ResidentID },
+                        @Html.ActionLink("Manage Tracks", "Manage", "ProgramEvents", new { id = item.ResidentID },
                                         htmlAttributes: new { @class = "btn btn-secondary btn-sm" })
 
                     }

@@ -1,0 +1,98 @@
+﻿@model FIVESTARVC.ViewModels.CustomEvent
+
+
+<h5>
+    @ViewBag.Fullname
+</h5>
+
+@if (Model.EnrolledTracks.Count > 0)
+{
+    <p> Current tracks</p>
+
+    @Html.Partial("_ReleaseTracks", Model)
+
+}
+else
+{
+    <p> This resident is currently not in any tracks.</p>
+}
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <p> This resident can be enrolled in one or more tracks.</p>
+    <input type="hidden" name="ResidentID" value="@ViewBag.ResidentID" />
+
+    <div class="container">
+        <div class="form-row">
+            <div class="col-md-10">
+                <table id="tracks" class="table table-sm">
+                    <tbody>
+
+                        @foreach (var track in Model.ProgramEvents)
+                        {
+                            @Html.Partial("_ProgramTrack", track)
+                        }
+
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-md-2 pull-right">
+                <button type="button" class="btn btn-sm btn-secondary" id="addTrack"><i class="fa fa-plus fa-fw"></i>  New Track</button><br />
+                <button type="submit" class="savebtn btn btn-sm btn-secondary" style="margin-top: 0.5em;"><i class="fa fa-check fa-fw"></i> Enroll</button>
+            </div>
+        </div>
+
+    </div>
+    <div class="btn-group-sm">
+        <button type="button" class="btn btn-sm btn-secondary" onclick="location.href='/Residents'"><i class="fa fa-arrow-left fa-fw"></i> Back to List</button>
+    </div>
+}
+<hr />
+
+
+
+<br />
+
+@section Scripts {
+    <script type="text/javascript">
+
+
+
+        $("#addTrack").on("click", function () {
+            $.ajax({
+                "url": "/ProgramEvents/AddMultiTrack/",
+                "type": "get",
+                "cache": false,
+                "dataType": "html",
+                "success": function (data) {
+                    $('#tracks').find('tbody:last').append('<tr>' + data + '</tr>');
+                }
+            });
+
+            $(".savebtn").show();
+        });
+
+        $('#tracks').on('click', 'input.removeRow', function () {
+
+            $(this).closest('tr').remove();
+
+            var x = document.getElementById("tracks").rows.length;
+            if (x < 1) {
+                $(".savebtn").hide();
+            } else {
+                $(".savebtn").show();
+            }
+
+
+
+        });
+
+
+
+
+
+    </script>
+
+}

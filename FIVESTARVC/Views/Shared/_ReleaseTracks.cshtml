@@ -1,0 +1,54 @@
+﻿@model FIVESTARVC.ViewModels.CustomEvent
+@{
+    Layout = null;
+}
+<div id="ReleaseStatus"></div>
+@using (Ajax.BeginForm("ReleaseTrack", "ProgramEvents", new AjaxOptions
+{
+    UpdateTargetId = "ReleaseStatus",
+    InsertionMode = InsertionMode.Replace
+}))
+{
+    <input type="hidden" name="ResidentID" value="@ViewBag.ResidentID" />
+    <div class="container">
+        <div class="row">
+            <div class="col-md-10">
+                <table class="table table-sm table-striped">
+                    <thead>
+                        <tr>
+                            <th>Track Name</th>
+                            <th>Start Date</th>
+                            <th>End Date</th>
+                            <th>Completed?</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (var track = 0; track < Model.EnrolledTracks.Count; track++)
+                        {
+                            <tr>
+                                @Html.HiddenFor(modelItem => Model.EnrolledTracks[track].ProgramEventID)
+                                <td>
+                                    @Html.DisplayFor(modelItem => Model.EnrolledTracks[track].ProgramType.ProgramDescription)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => Model.EnrolledTracks[track].StartDate)
+                                </td>
+                                <td>
+                                    @Html.EditorFor(modelItem => Model.EnrolledTracks[track].EndDate, new { htmlAttributes = new { @class = "form-control" } })
+                                </td>
+                                <td>
+                                    @Html.CheckBoxFor(modelItem => Model.EnrolledTracks[track].Completed, htmlAttributes: new { @class = "biggerCheckBox" })
+                                    @Html.ValidationMessageFor(modelItem => Model.EnrolledTracks[track].Completed, "")
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-md-2 pull-right">
+                <button type="submit" class="btn btn-sm btn-secondary"><i class="fa fa-pencil fa-fw"></i> Update</button>
+            </div>
+        </div>
+    </div>
+
+}
