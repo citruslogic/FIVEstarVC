@@ -3,7 +3,7 @@
 @using FIVESTARVC.Models;
 
 @{
-    ViewBag.Title = "Event Log";
+    ViewBag.Title = "Track Log";
 }
 <link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
 
@@ -51,7 +51,7 @@
         </tr>
 
 
-        @foreach (var item in group)
+        @foreach (var item in group.Where(i => i.ProgramEvents.Count > 0))
         {
 
 
@@ -75,7 +75,6 @@
                         </td>
                         <td>
                             @Html.ActionLink("Edit", "Edit", new { id = track.ProgramEventID }, htmlAttributes: new { @class = "btn btn-sm btn-outline-secondary btn-light" }) &nbsp;
-                            @Html.ActionLink("Details", "Details", new { id = track.ProgramEventID }, htmlAttributes: new { @class = "btn btn-sm btn-outline-secondary btn-light" }) &nbsp;
                             @Html.ActionLink("Delete", "Delete", new { id = track.ProgramEventID }, htmlAttributes: new { @class = "btn btn-sm btn-danger" })
                         </td>
                     }

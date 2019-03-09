@@ -45,11 +45,10 @@ namespace FIVESTARVC.Services
 
         public Resident GetDetails(int? id, ResidentContext db)
         {
-           
             Resident resident = db.Residents
                 .Include("ProgramEvents")
                 .Include("Benefit")
-                .Where(r => r.ResidentID == id).Single();
+                .Where(r => r.ResidentID == id).SingleOrDefault();
 
             return resident;
         }

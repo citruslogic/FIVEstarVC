@@ -28,9 +28,7 @@ namespace FIVESTARVC.Controllers
             ViewBag.NameSortParm = String.IsNullOrEmpty(sortOrder) ? "lname_desc" : "";
             ViewBag.ProgramTypeID = new SelectList(db.ProgramTypes, "ProgramTypeID", "ProgramDescription");
 
-
-            //var programEvents = db.ProgramEvents.Include(p => p.ProgramType).Where(t => t.ProgramTypeID >= 8).Include(p => p.Resident).ToList();
-            var programEvents = db.Residents.Include(p => p.ProgramEvents).ToList();
+            var programEvents = db.Residents.Include(p => p.ProgramEvents).Where(i => i.ProgramEvents.Count > 0).ToList();
             if (searchString != null)
             {
                 page = 1;
@@ -64,21 +62,6 @@ namespace FIVESTARVC.Controllers
             int pageNumber = (page ?? 1);
 
             return View(programEvents.ToPagedList(pageNumber, pageSize));
-        }
-
-        // GET: ProgramEvents/Details/5
-        public ActionResult Details(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            ProgramEvent programEvent = db.ProgramEvents.Find(id);
-            if (programEvent == null)
-            {
-                return HttpNotFound();
-            }
-            return View(programEvent);
         }
 
         /*

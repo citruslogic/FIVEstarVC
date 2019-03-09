@@ -8,14 +8,17 @@ namespace FIVESTARVC.Models
 {
     public class ProgramEvent
     {
-        
         public int ProgramEventID { get; set; }
+
         [ForeignKey("Resident")]
         public int ResidentID { get; set; }
+
         [ForeignKey("ProgramType")]
         public int? ProgramTypeID { get; set; }
 
+        [Required]
         private string StartDate { get; set; }
+
         private string EndDate { get; set; }
 
         [Display(Name = "Start Date")]

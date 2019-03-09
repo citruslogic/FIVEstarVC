@@ -3,6 +3,13 @@
 @{
     ViewBag.Title = "Edit";
 }
+<style>
+    .biggerCheckBox {
+        transform: scale(1.5);
+        -webkit-transform: scale(1.5);
+        margin-left: 5px;
+    }
+</style>
 
 @using (Html.BeginForm())
 {
@@ -21,9 +28,9 @@
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.ProgramTypeID, "Event", htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.ProgramTypeID, "Track", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-3">
-                @Html.DropDownList("ProgramTypeID", null, htmlAttributes: new { @class = "form-control", @title = "You can only select events of the same type." })
+                @Html.DropDownList("ProgramTypeID", null, htmlAttributes: new { @class = "form-control", @title = "You can only select tracks of the same type." })
                 @Html.ValidationMessageFor(model => model.ProgramTypeID, "")
             </div>
         </div>
@@ -54,7 +61,7 @@
             @Html.LabelFor(model => model.Completed, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 <div class="checkbox">
-                    @Html.EditorFor(model => model.Completed)
+                    @Html.EditorFor(model => model.Completed, new { htmlAttributes = new { @class = "biggerCheckBox" } })
                     @Html.ValidationMessageFor(model => model.Completed, "")
                 </div>
             </div>
@@ -62,9 +69,9 @@
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Update" class="btn btn-default" />
+                <input type="submit" value="Update" class="btn btn-secondary" />
                 &nbsp;
-                <input type="button" class="btn btn-success" value="Back to Tracks" onclick="location.href='/ProgramEvents/Index';" />
+                <input type="button" class="btn btn-primary" value="Back to Tracks" onclick="location.href='/ProgramEvents/Index';" />
                 &nbsp;
             </div>
         </div>

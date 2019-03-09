@@ -84,7 +84,6 @@
                 else
                 {
                     @(Model.ClearBirthdate.ToLongDateString())
-
                 }
             }
         </div>
@@ -105,7 +104,13 @@
         </div>
         <div class="col-form-label">
             @Html.Label("First Admitted", htmlAttributes: new { @class = "font-weight-bold" })
-            @(ViewBag.DateFirstAdmitted)
+            @if (!ViewBag.DateFirstAdmitted.Contains("0001"))
+            {
+                @ViewBag.DateFirstAdmitted
+            } else
+            {
+                @Html.Raw("No admittance dates found. Readmit this resident and change their admission track if necessary.")
+            }
 
         </div>
         <div class="col-form-label">

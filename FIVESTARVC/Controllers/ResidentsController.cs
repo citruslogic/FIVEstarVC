@@ -55,12 +55,26 @@ namespace FIVESTARVC.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            ViewBag.DateFirstAdmitted = db.ProgramEvents
+            var dateFirstAdmitted = db.ProgramEvents
                                             .Include(r => r.Resident).Where(r => r.ResidentID == id)
                                             .Include(t => t.ProgramType).Where(p => p.ProgramTypeID == 2 || p.ProgramTypeID == 1).ToList()
                                             .OrderBy(d => d.ClearStartDate.Computed())
                                             .Select(s => s.ClearStartDate.Computed())
                                             .FirstOrDefault().ToLongDateString();
+
+            if (!dateFirstAdmitted.Contains("0001"))
+            {
+                ViewBag.DateFirstAdmitted = dateFirstAdmitted;
+            } else
+            {
+                // draw from the re-admittance date, ask for a readmission if there are no admittance dates. 
+                ViewBag.DateFirstAdmitted = db.ProgramEvents
+                                            .Include(r => r.Resident).Where(r => r.ResidentID == id)
+                                            .Include(t => t.ProgramType).Where(p => p.ProgramTypeID == 3).ToList()
+                                            .OrderBy(d => d.ClearStartDate.Computed())
+                                            .Select(s => s.ClearStartDate.Computed())
+                                            .FirstOrDefault().ToLongDateString() + " (readmit)";
+            }
 
             var resident = residentService.GetDetails(id, db);
             var assignedCampaigns = residentService.PopulateAssignedCampaignData(resident, db);
@@ -200,11 +214,13 @@ namespace FIVESTARVC.Controllers
 
                     Room room = db.Rooms.Find(resident.RoomNumber);
 
-                    if (room != null) {
+                    if (room != null)
+                    {
                         if (room.IsOccupied == false)
                         {
                             room.IsOccupied = true;
-                        } else
+                        }
+                        else
                         {
                             throw new DataException("The room is already occupied and cannot be allocated.");
                         }
@@ -401,7 +417,8 @@ namespace FIVESTARVC.Controllers
                                     residentToUpdate.RoomNumber = RoomNumber;
                                     oldRoom.ClearLastResident = residentToUpdate.Fullname;
 
-                                    if (room != null) {
+                                    if (room != null)
+                                    {
                                         room.IsOccupied = true;
 
                                         db.RoomLogs.Add(new RoomLog
@@ -419,7 +436,7 @@ namespace FIVESTARVC.Controllers
                                             Comment = "Resident moved from room " + oldRoom.RoomNumber
                                         });
                                     }
-                                    
+
                                 }
                             }
                         }
@@ -427,7 +444,8 @@ namespace FIVESTARVC.Controllers
                         {
                             residentToUpdate.RoomNumber = RoomNumber;
 
-                            if (room != null) {
+                            if (room != null)
+                            {
                                 room.IsOccupied = true;
 
                                 db.RoomLogs.Add(new RoomLog
@@ -444,7 +462,8 @@ namespace FIVESTARVC.Controllers
                                     },
                                     Comment = "Resident moved into room " + room.RoomNumber
                                 });
-                            } else
+                            }
+                            else
                             {
                                 db.RoomLogs.Add(new RoomLog
                                 {
@@ -461,7 +480,7 @@ namespace FIVESTARVC.Controllers
                                     Comment = "Resident moved out of room."
                                 });
                             }
-                            
+
                         }
                     }
 
@@ -725,8 +744,11 @@ namespace FIVESTARVC.Controllers
                 var ev = residentToReadmit.ProgramEvents
                     .Where(i => i.ProgramType?.EventType == EnumEventType.DISCHARGE)
                     .LastOrDefault();
-                ev.ClearEndDate = DateTime.Parse(ReadmitDate);
-                db.Entry(ev).State = EntityState.Modified;
+                if (ev != null)
+                {
+                    ev.ClearEndDate = DateTime.Parse(ReadmitDate);
+                    db.Entry(ev).State = EntityState.Modified;
+                }
 
                 var admitEvent = new ProgramEvent
                 {
@@ -739,7 +761,8 @@ namespace FIVESTARVC.Controllers
                 residentToReadmit.RoomNumber = RoomNumber;
                 Room room = db.Rooms.Find(RoomNumber);
 
-                if (room != null) {
+                if (room != null)
+                {
                     room.IsOccupied = true;
 
                     db.Entry(room).State = EntityState.Modified;

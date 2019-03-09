@@ -316,6 +316,10 @@
     <Compile Include="Migrations\201811050248120_RoomLastResident.Designer.cs">
       <DependentUpon>201811050248120_RoomLastResident.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201903090955252_require_event_startdate.cs" />
+    <Compile Include="Migrations\201903090955252_require_event_startdate.Designer.cs">
+      <DependentUpon>201903090955252_require_event_startdate.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AdAuthenticationService.cs" />
     <Compile Include="Models\Benefit.cs" />
@@ -1008,6 +1012,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201811050248120_RoomLastResident.resx">
       <DependentUpon>201811050248120_RoomLastResident.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201903090955252_require_event_startdate.resx">
+      <DependentUpon>201903090955252_require_event_startdate.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
