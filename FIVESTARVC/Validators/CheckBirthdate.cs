@@ -18,8 +18,6 @@ namespace FIVESTARVC.Validators
             {
                  if (DateTime.TryParse(dt.ToString(), out DateTime date))
                 {
-
-                  
                     return date <= DateTime.Now;
                 }
             }

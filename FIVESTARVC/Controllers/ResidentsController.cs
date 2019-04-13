@@ -420,6 +420,7 @@ namespace FIVESTARVC.Controllers
                                     if (room != null)
                                     {
                                         room.IsOccupied = true;
+                                        oldRoom.IsOccupied = false;
 
                                         db.RoomLogs.Add(new RoomLog
                                         {
@@ -442,6 +443,7 @@ namespace FIVESTARVC.Controllers
                         }
                         else
                         {
+                            // resident does not have a room.
                             residentToUpdate.RoomNumber = RoomNumber;
 
                             if (room != null)

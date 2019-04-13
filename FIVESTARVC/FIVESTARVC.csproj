@@ -344,6 +344,7 @@
     <Compile Include="Services\ResidentService.cs" />
     <Compile Include="Validators\Age.cs" />
     <Compile Include="Validators\CheckBirthdate.cs" />
+    <Compile Include="Validators\CheckTrackDates.cs" />
     <Compile Include="ViewModels\AgeGroups.cs" />
     <Compile Include="ViewModels\AssignedCampaignData.cs" />
     <Compile Include="ViewModels\AssignedRoom.cs" />

@@ -17,12 +17,13 @@
 }
 
 .field-validation-error {
+    margin-left: 1em;
     color: #ecf0f1;
-    font-size: .9em;
+    width: 640px;
+    font-size: 11pt;
     background-color: #e74c3c;
-    padding: 10px;
-}
-}
+  }
+
 /* Set width on the form input elements since they're 100% wide by default */
 input,
 select,

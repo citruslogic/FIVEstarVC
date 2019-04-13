@@ -3,9 +3,11 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity.ModelConfiguration;
 using FIVESTARVC.Helpers;
+using FIVESTARVC.Validators;
 
 namespace FIVESTARVC.Models
 {
+    [CheckTrackDates("ClearStartDate", "ClearEndDate")]
     public class ProgramEvent
     {
         public int ProgramEventID { get; set; }

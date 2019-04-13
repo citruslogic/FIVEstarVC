@@ -40,7 +40,7 @@ namespace FIVESTARVC.Controllers
 
             ViewBag.CurrentFilter = searchString;
 
-            if (!String.IsNullOrEmpty(searchString))
+            if (!string.IsNullOrEmpty(searchString))
             {
                 programEvents = programEvents.Where(r => CultureInfo.CurrentCulture.CompareInfo.IndexOf
                                    (r.ClearLastName, searchString, CompareOptions.IgnoreCase) >= 0
@@ -125,6 +125,15 @@ namespace FIVESTARVC.Controllers
             {
                 if (ModelState.IsValid)
                 {
+                    if (track.EndDate.HasValue && track.EndDate.Value < track.StartDate)
+                    {
+                        TempData["UserMessage"] = "CRITICAL: The track start date for " + track.ProgramType.ProgramDescription
+                            + " cannot come after the end date.";
+
+                        return RedirectToAction("Manage", new RouteValueDictionary(
+                            new { controller = "ProgramEvents", action = "Manage", Id = ResidentID }));
+                    }
+
                     db.ProgramEvents.Add(new ProgramEvent {
 
                         ResidentID = ResidentID,
