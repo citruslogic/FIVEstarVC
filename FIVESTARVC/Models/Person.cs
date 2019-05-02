@@ -73,9 +73,7 @@ namespace FIVESTARVC.Models
             }
 
         }
-
-
-
+               
         [Display(Name = "Gender")]
         public GenderType Gender { get; set; }
         [Display(Name = "Ethnicity")]
@@ -120,10 +118,6 @@ namespace FIVESTARVC.Models
         {
             get
             {
-
-                DateTime today = DateTime.Today;
-
-
                 DateTime nextBirthday = ClearBirthdate.AddYears(Age + 1);
 
                 TimeSpan difference = nextBirthday - DateTime.Today;

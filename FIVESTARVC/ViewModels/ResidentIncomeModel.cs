@@ -7,6 +7,7 @@ using FIVESTARVC.Validators;
 
 namespace FIVESTARVC.ViewModels
 {
+    [CheckTrackDates("AdmitDate", "AdmitDate")]
     public class ResidentIncomeModel
     {
         //Room

@@ -17,7 +17,7 @@
     @Html.AntiForgeryToken()
 
     <h2> Admit Resident </h2>
-    @Html.ValidationSummary(true, "")
+    @Html.ValidationSummary(true, "ERROR", htmlAttributes: new { @class = "field-validation-error" })
 
     <div class="container">
         <div class="row col-md-10">
