@@ -24,10 +24,6 @@ namespace FIVESTARVC.Models
         [Display(Name = "In Veterans Court?")]
         public Boolean InVetCourt { get; set; }
 
-        [Display(Name = "Room Number")]
-        [ForeignKey("Room")]
-        public int? RoomNumber { get; set; }
-
         [Display(Name = "Note")]
         [StringLength(150)]
         public string Note { get; set; }
@@ -37,7 +33,6 @@ namespace FIVESTARVC.Models
 
         public virtual ICollection<MilitaryCampaign> MilitaryCampaigns { get; set; }
         public virtual ICollection<ProgramEvent> ProgramEvents { get; set; }
-        public virtual Room Room { get; set; }
 
         [ForeignKey("Benefit")]
         public int? BenefitID { get; set; }
@@ -114,7 +109,7 @@ namespace FIVESTARVC.Models
             get
             {
                 var admitDate = GetAdmitDate().GetValueOrDefault(DateTime.Today);
-                var dischargeDate = GetDischargeDate().HasValue ? GetDischargeDate().Value : GetAdmitDate().GetValueOrDefault(DateTime.Today);
+                var dischargeDate = GetDischargeDate().HasValue ? GetDischargeDate().Value : DateTime.Today;
                 // Resident may not be discharged yet.
                 TimeSpan span = dischargeDate.Subtract(admitDate);
 

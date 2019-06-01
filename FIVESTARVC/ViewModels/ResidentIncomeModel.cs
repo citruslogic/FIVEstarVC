@@ -10,9 +10,7 @@ namespace FIVESTARVC.ViewModels
     [CheckTrackDates("AdmitDate", "AdmitDate")]
     public class ResidentIncomeModel
     {
-        //Room
-        public int? RoomNumber { get; set; }
-
+  
         // RESIDENT
         public int ResidentID { get; set; }
         [Required]
@@ -61,8 +59,6 @@ namespace FIVESTARVC.ViewModels
 
         public virtual ICollection<MilitaryCampaign> MilitaryCampaigns { get; set; }
         public virtual ICollection<ProgramEvent> ProgramEvents { get; set; }
-        public virtual Room Room { get; set; }
-
 
         // BENEFIT
         public int BenefitID { get; set; }

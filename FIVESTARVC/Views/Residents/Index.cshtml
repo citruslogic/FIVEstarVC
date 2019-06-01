@@ -44,9 +44,6 @@
                     <i class="fa fa-plus fa-fw"></i> Track
                 </button>
             </li>
-            <li class="dropdown-divider"></li>
-            <li><button class="dropdown-item" onclick="location.href = '/Rooms/Index';"><i class="fa fa-edit fa-fw"></i> Rooms </button></li>
-
         </ul>
     </div>
 </div>
@@ -76,19 +73,11 @@
             @Html.ActionLink("Service Branch", "Index", new { sortOrder = ViewBag.BranchSortParm, currentFilter = ViewBag.CurrentFilter })
         </th>
         <th>
-            Room Number
-        </th>
-        <th>
             Current?
         </th>
         <th>
-
         </th>
         <th>
-
-        </th>
-        <th>
-
         </th>
     </tr>
 
@@ -113,17 +102,6 @@
 
                 </td>
                 <td>
-                    @if (item.RoomNumber.HasValue)
-                    {
-                        @Html.DisplayFor(modelItem => item.RoomNumber)
-
-                    }
-                    else
-                    {
-                        <text>NA</text>
-                    }
-                </td>
-                <td>
                     @{
                         if (item.IsCurrent())
                         {
@@ -145,7 +123,6 @@
 
                     }
                   
-                <td></td>
                 <td>
                     @Html.ActionLink("Details", "Details", new { id = item.ResidentID }, htmlAttributes: new { @class = "btn btn-secondary btn-sm" }) &nbsp;
 

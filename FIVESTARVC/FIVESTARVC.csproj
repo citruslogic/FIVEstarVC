@@ -27,7 +27,7 @@
     <UseGlobalApplicationHostFile />
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
-    <TypeScriptToolsVersion>2.5</TypeScriptToolsVersion>
+    <TypeScriptToolsVersion>Latest</TypeScriptToolsVersion>
     <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -38,6 +38,19 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <TypeScriptTarget>ES5</TypeScriptTarget>
+    <TypeScriptJSXEmit>React</TypeScriptJSXEmit>
+    <TypeScriptModuleKind />
+    <TypeScriptCompileOnSaveEnabled>True</TypeScriptCompileOnSaveEnabled>
+    <TypeScriptNoImplicitAny>False</TypeScriptNoImplicitAny>
+    <TypeScriptRemoveComments>False</TypeScriptRemoveComments>
+    <TypeScriptOutFile />
+    <TypeScriptOutDir />
+    <TypeScriptGeneratesDeclarations>False</TypeScriptGeneratesDeclarations>
+    <TypeScriptNoEmitOnError>True</TypeScriptNoEmitOnError>
+    <TypeScriptSourceMap>True</TypeScriptSourceMap>
+    <TypeScriptMapRoot />
+    <TypeScriptSourceRoot />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -284,7 +297,6 @@
     <Compile Include="Controllers\ProgramEventsController.cs" />
     <Compile Include="Controllers\ReportsController.cs" />
     <Compile Include="Controllers\ResidentsController.cs" />
-    <Compile Include="Controllers\RoomsController.cs" />
     <Compile Include="CsvExport.cs" />
     <Compile Include="DAL\CenterInitializer.cs" />
     <Compile Include="DAL\ResidentContext.cs" />
@@ -320,6 +332,10 @@
     <Compile Include="Migrations\201903090955252_require_event_startdate.Designer.cs">
       <DependentUpon>201903090955252_require_event_startdate.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201906010127450_remove_room_support.cs" />
+    <Compile Include="Migrations\201906010127450_remove_room_support.Designer.cs">
+      <DependentUpon>201906010127450_remove_room_support.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AdAuthenticationService.cs" />
     <Compile Include="Models\Benefit.cs" />
@@ -336,9 +352,6 @@
     <Compile Include="Models\ProgramEvent.cs" />
     <Compile Include="Models\ProgramType.cs" />
     <Compile Include="Models\Resident.cs" />
-    <Compile Include="Models\Room.cs" />
-    <Compile Include="Models\RoomLog.cs" />
-    <Compile Include="Models\RoomSwapModel.cs" />
     <Compile Include="Models\StateTerritory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\ResidentService.cs" />
@@ -347,7 +360,6 @@
     <Compile Include="Validators\CheckTrackDates.cs" />
     <Compile Include="ViewModels\AgeGroups.cs" />
     <Compile Include="ViewModels\AssignedCampaignData.cs" />
-    <Compile Include="ViewModels\AssignedRoom.cs" />
     <Compile Include="ViewModels\CustomEvent.cs" />
     <Compile Include="ViewModels\DemographicTableViewModel.cs" />
     <Compile Include="ViewModels\DischargeStatusGroups.cs" />
@@ -937,12 +949,6 @@
     <Content Include="Views\Shared\BenefitPartialViewCreate.cshtml" />
     <Content Include="Views\Shared\_Discharge.cshtml" />
     <Content Include="Views\Shared\AddCampaign.cshtml" />
-    <Content Include="Views\Shared\AddRoom.cshtml" />
-    <Content Include="Views\Rooms\Create.cshtml" />
-    <Content Include="Views\Rooms\Delete.cshtml" />
-    <Content Include="Views\Rooms\Details.cshtml" />
-    <Content Include="Views\Rooms\Edit.cshtml" />
-    <Content Include="Views\Rooms\Index.cshtml" />
     <Content Include="Views\Shared\CampaignChart.cshtml" />
     <Content Include="Views\Reports\campaigns.cshtml" />
     <Content Include="Scripts\jquery-3.3.1.slim.min.map" />
@@ -1016,6 +1022,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201903090955252_require_event_startdate.resx">
       <DependentUpon>201903090955252_require_event_startdate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201906010127450_remove_room_support.resx">
+      <DependentUpon>201906010127450_remove_room_support.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

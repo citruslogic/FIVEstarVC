@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using FIVESTARVC.Models;
+using FIVESTARVC.Validators;
 
 namespace FIVESTARVC.ViewModels
 {

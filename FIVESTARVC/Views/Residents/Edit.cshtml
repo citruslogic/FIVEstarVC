@@ -129,23 +129,6 @@
                                     <td class="col-form-label">@Html.Label("Readmit?")</td>
                                     <td>@Html.CheckBox("Readmit", htmlAttributes: new { @class = "biggerCheckBox" })</td>
                                 </tr>
-                                <tr>
-                                    <td class="col-form-label"> @Html.Label("Room", htmlAttributes: new { @class = "control-label" })</td>
-                                    <td>
-                                        @Html.DropDownList("RoomNumber", null, htmlAttributes: new { @class = "form-control", @disabled = "disabled" })
-                                        @Html.ValidationMessageFor(model => model.RoomNumber, "")
-                                    </td>
-                                </tr>
-                            }
-                            else
-                            {
-                                <tr>
-                                    <td class="col-form-label"> @Html.Label("Room", htmlAttributes: new { @class = "control-label" })</td>
-                                    <td>
-                                        @Html.DropDownList("RoomNumber", null, htmlAttributes: new { @class = "form-control" })
-                                        @Html.ValidationMessageFor(model => model.RoomNumber, "")
-                                    </td>
-                                </tr>
                             }
 
                             <tr>
@@ -279,15 +262,15 @@
             });
             /* Disable the room dropdown if we're not readmitting the resident. */
 
-            $("#Readmit").click(function () {
-                if ($(this).is(":checked")) {
-                    $("#RoomNumber").prop("disabled", false);
-                } else {
-                    $("#RoomNumber").val(null);
-                    $("#RoomNumber").prop("disabled", true);
+            //$("#Readmit").click(function () {
+            //    if ($(this).is(":checked")) {
+            //        $("#RoomNumber").prop("disabled", false);
+            //    } else {
+            //        $("#RoomNumber").val(null);
+            //        $("#RoomNumber").prop("disabled", true);
 
-                }
-            });
+            //    }
+            //});
         });
 
         $('#StateTerritoryID').on("change", function () {
@@ -329,15 +312,6 @@
             }
 
         });
-
-
-
-
-
-
-
-
-
 
     </script>
 }

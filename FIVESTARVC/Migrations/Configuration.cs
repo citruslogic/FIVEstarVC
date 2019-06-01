@@ -81,61 +81,6 @@ namespace FIVESTARVC.Migrations
             States.ForEach(s => context.States.AddOrUpdate(i => i.StateTerritoryID, s));
             context.SaveChanges();
 
-
-            var Rooms = new List<Room>
-            {
-                //Rooms on the E/S Wing//
-
-               new Room { RoomNumber=102, IsOccupied = false, WingName = "South"},
-               new Room { RoomNumber=103, IsOccupied = false, WingName = "South"},
-               new Room { RoomNumber=105, IsOccupied = false, WingName = "South"},
-               new Room { RoomNumber=106, IsOccupied = false, WingName = "South"},
-               new Room { RoomNumber=107, IsOccupied = false, WingName = "South"},
-               new Room { RoomNumber=108, IsOccupied = false, WingName = "South"},
-               new Room { RoomNumber=109, IsOccupied = false, WingName = "South"},
-               new Room { RoomNumber=110, IsOccupied = false, WingName = "South"},
-               new Room { RoomNumber=112, IsOccupied = false, WingName = "South"},
-               new Room { RoomNumber=114, IsOccupied = false, WingName = "South"},
-               new Room { RoomNumber=115, IsOccupied = false, WingName = "South"},
-               new Room { RoomNumber=116, IsOccupied = false, WingName = "South"},
-               new Room { RoomNumber=117, IsOccupied = false, WingName = "South"},
-               new Room { RoomNumber=118, IsOccupied = false, WingName = "South"},
-               new Room { RoomNumber=119, IsOccupied = false, WingName = "South"},
-               new Room { RoomNumber=120, IsOccupied = false, WingName = "South"},
-               new Room { RoomNumber=121, IsOccupied = false, WingName = "South"},
-               new Room { RoomNumber=122, IsOccupied = false, WingName = "South"},
-               new Room { RoomNumber=123, IsOccupied = false, WingName = "South"},
-               new Room { RoomNumber=124, IsOccupied = false, WingName = "South"},
-               new Room { RoomNumber=125, IsOccupied = false, WingName = "South"},
-               new Room { RoomNumber=126, IsOccupied = false, WingName = "South"},
-
-               //Rooms on the West Wing//
-
-               new Room { RoomNumber=202, IsOccupied = false, WingName = "West"},
-               new Room { RoomNumber=203, IsOccupied = false, WingName = "West"},
-               new Room { RoomNumber=204, IsOccupied = false, WingName = "West"},
-               new Room { RoomNumber=205, IsOccupied = false, WingName = "West"},
-               new Room { RoomNumber=206, IsOccupied = false, WingName = "West"},
-               new Room { RoomNumber=207, IsOccupied = false, WingName = "West"},
-               new Room { RoomNumber=208, IsOccupied = false, WingName = "West"},
-               new Room { RoomNumber=209, IsOccupied = false, WingName = "West"},
-
-               //Rooms on the North Wing//
-
-               new Room { RoomNumber=301, IsOccupied = false, WingName = "North"},
-               new Room { RoomNumber=303, IsOccupied = false, WingName = "North"},
-               new Room { RoomNumber=304, IsOccupied = false, WingName = "North"},
-               new Room { RoomNumber=305, IsOccupied = false, WingName = "North"},
-               new Room { RoomNumber=306, IsOccupied = false, WingName = "North"},
-               new Room { RoomNumber=307, IsOccupied = false, WingName = "North"},
-               new Room { RoomNumber=308, IsOccupied = false, WingName = "North"},
-               new Room { RoomNumber=310, IsOccupied = false, WingName = "North"},
-
-            };
-
-            Rooms.ForEach(m => context.Rooms.AddOrUpdate(i => i.RoomNumber, m));
-            context.SaveChanges();
-
             var programs = new List<ProgramType>
             {
                 // RESIDENT ADMISSION TYPES

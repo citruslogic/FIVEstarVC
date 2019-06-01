@@ -1,5 +1,13 @@
 ﻿@model FIVESTARVC.ViewModels.CustomEvent
 
+@if (TempData["UserMessage"] != null)
+{
+    var message = TempData["UserMessage"];
+    <div class="alert alert-warning alert-dismissable" style="position: absolute; right: 80px; top: 30px;">
+        <a href="#" class="close" data-dismiss="alert" aria-label="close"> &times;</a>
+        @message &nbsp;
+    </div>
+}
 
 <h5>
     @ViewBag.Fullname

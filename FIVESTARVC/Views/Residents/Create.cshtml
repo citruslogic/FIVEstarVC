@@ -128,14 +128,6 @@
             <table class="table-sm">
                 <tbody>
                     <tr>
-
-                        <td class="col-form-label"> @Html.Label("Room", htmlAttributes: new { @class = "control-label" })</td>
-                        <td>
-                            @Html.DropDownList("RoomNumber", null, htmlAttributes: new { @class = "form-control" })
-                            @Html.ValidationMessageFor(model => model.RoomNumber, "")
-                        </td>
-                    </tr>
-                    <tr>
                         <td class="col-form-label">@Html.Label("In Veteran's Court?", htmlAttributes: new { @class = "control-label" })</td>
                         <td>
                             @Html.CheckBoxFor(model => model.InVetCourt, htmlAttributes: new { @class = "biggerCheckBox" })

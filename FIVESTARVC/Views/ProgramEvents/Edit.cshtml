@@ -17,16 +17,11 @@
 
     <div class="form-horizontal">
         <br />
-        <h6>Change admittance, discharge, or track for the resident or set its start and end dates. Click Update to finalize your changes. </h6>
+        <h6>Change @ViewBag.AdmissionType for <b>@Model.Resident.Fullname</b>, or set different start and end dates. Click Update to finalize your changes. </h6>
         <hr />
         @Html.ValidationSummary(true, "ERROR", htmlAttributes: new { @class = "field-validation-error" })
         @Html.HiddenFor(model => model.ProgramEventID)
-
-        <div class="form-group">
-            For resident <strong>@String.Concat(Model.Resident.ClearFirstMidName, " ", Model.Resident.ClearLastName)</strong>
-            @Html.HiddenFor(model => model.ResidentID)
-        </div>
-
+       
         <div class="form-group">
             @Html.LabelFor(model => model.ProgramTypeID, "Track", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-3">

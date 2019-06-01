@@ -19,7 +19,7 @@ namespace FIVESTARVC.Controllers
     //[Authorize]
     public class ProgramEventsController : Controller
     {
-        private ResidentContext db = new ResidentContext();
+        private readonly ResidentContext db = new ResidentContext();
 
         // GET: ProgramEvents
         public ActionResult Index(string sortOrder, string currentFilter, string searchString, int? page)
@@ -28,7 +28,7 @@ namespace FIVESTARVC.Controllers
             ViewBag.NameSortParm = String.IsNullOrEmpty(sortOrder) ? "lname_desc" : "";
             ViewBag.ProgramTypeID = new SelectList(db.ProgramTypes, "ProgramTypeID", "ProgramDescription");
 
-            var programEvents = db.Residents.Include(p => p.ProgramEvents).Where(i => i.ProgramEvents.Count > 0).ToList();
+            var programEvents = db.Residents.AsNoTracking().Include(p => p.ProgramEvents).Where(i => i.ProgramEvents.Count > 0).ToList().OrderBy(i => i.ClearLastName).ToList();
             if (searchString != null)
             {
                 page = 1;
@@ -71,7 +71,7 @@ namespace FIVESTARVC.Controllers
         {
             ViewBag.ProgramTypeID = new SelectList(db.ProgramTypes.Where(t => t.EventType == EnumEventType.TRACK), "ProgramTypeID", "ProgramDescription");
 
-            return PartialView("_ProgramTrack", new TempProgramEvent());
+            return PartialView("_ProgramTrack", new TempProgramEvent { ProgramTypeID = 8, StartDate = DateTime.Today });
         }
 
 
@@ -123,17 +123,26 @@ namespace FIVESTARVC.Controllers
 
             foreach (TempProgramEvent track in newPrograms)
             {
+                if (track.StartDate.Year < 2012 || (track.EndDate.HasValue && track.EndDate.Value.Year < 2012))
+                {
+                    TempData["UserMessage"] = "CRITICAL: Dates for " + track.StartDate.ToShortDateString() + " and " + track.EndDate?.ToShortDateString() 
+                            + " cannot be before 2012.";
+
+                    return RedirectToAction("Manage", new RouteValueDictionary(
+                        new { controller = "ProgramEvents", action = "Manage", Id = ResidentID }));
+                }
+
+                if (track.EndDate.HasValue && track.EndDate.Value < track.StartDate)
+                {
+                    TempData["UserMessage"] = "CRITICAL: Dates for " + track.StartDate.ToShortDateString() + " and " + track.EndDate?.ToShortDateString()
+                        + " -- start date cannot come after the end date.";
+
+                    return RedirectToAction("Manage", new RouteValueDictionary(
+                        new { controller = "ProgramEvents", action = "Manage", Id = ResidentID }));
+                }
+
                 if (ModelState.IsValid)
                 {
-                    if (track.EndDate.HasValue && track.EndDate.Value < track.StartDate)
-                    {
-                        TempData["UserMessage"] = "CRITICAL: The track start date for " + track.ProgramType.ProgramDescription
-                            + " cannot come after the end date.";
-
-                        return RedirectToAction("Manage", new RouteValueDictionary(
-                            new { controller = "ProgramEvents", action = "Manage", Id = ResidentID }));
-                    }
-
                     db.ProgramEvents.Add(new ProgramEvent {
 
                         ResidentID = ResidentID,
@@ -207,6 +216,8 @@ namespace FIVESTARVC.Controllers
             {
                 return HttpNotFound();
             }
+
+            ViewBag.AdmissionType = programEvent.ProgramType.EventType.ToString();
             ViewBag.ProgramTypeID = new SelectList(db.ProgramTypes.Where(i => i.EventType == programEvent.ProgramType.EventType), "ProgramTypeID", "ProgramDescription", programEvent.ProgramTypeID);
             ViewBag.ResidentID = new SelectList(db.Residents, "ResidentID", "ClearLastName", programEvent.ResidentID);
             return View(programEvent);
@@ -238,6 +249,7 @@ namespace FIVESTARVC.Controllers
                     return RedirectToAction("Index");
                 }
             }
+
             ViewBag.ProgramTypeID = new SelectList(db.ProgramTypes, "ProgramTypeID", "ProgramDescription", db.ProgramTypes);
             ViewBag.ResidentID = new SelectList(db.Residents, "ResidentID", "ClearLastName", db.Residents);
             return View(eventToUpdate);
