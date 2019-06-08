@@ -166,7 +166,6 @@ namespace FIVESTARVC.Controllers
 
             ViewBag.ProgramTypeID = new SelectList(db.ProgramTypes.Where(t => t.EventType == EnumEventType.TRACK), "ProgramTypeID", "ProgramDescription");
 
-
             return RedirectToAction("Manage", new RouteValueDictionary(
                    new { controller = "ProgramEvents", action = "Manage", Id = ResidentID }));
         }

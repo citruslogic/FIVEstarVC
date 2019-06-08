@@ -5,6 +5,7 @@ using DotNet.Highcharts.Helpers;
 using DotNet.Highcharts.Options;
 using FIVESTARVC.DAL;
 using FIVESTARVC.Models;
+using FIVESTARVC.Services;
 using FIVESTARVC.ViewModels;
 using Jitbit.Utils;
 using System;
@@ -46,7 +47,7 @@ namespace FIVESTARVC.Controllers
     [Authorize]
     public class ReportsController : Controller
     {
-        private ResidentContext DB = new ResidentContext();
+        private readonly ResidentContext DB = new ResidentContext();
 
         // GET: Reports
         public ActionResult Index()
@@ -1605,12 +1606,20 @@ namespace FIVESTARVC.Controllers
 
         public ActionResult campaigns()
         {
-            var BarChartData = from mc in DB.MilitaryCampaigns
-                               select new
-                               {
-                                   MilitaryCampaign = mc.CampaignName,
-                                   ResidentCount = mc.Residents.Count()
-                               };
+            var BarChartData = (from mc in DB.MilitaryCampaigns
+                                select new
+                                {
+                                    MilitaryCampaign = mc.CampaignName,
+                                    ResidentCount = mc.Residents.Count()
+                                }).ToList();
+
+            var residentNonCombatCount = DB.Residents.ToList().Where(i => i.MilitaryCampaigns == null || i.MilitaryCampaigns.Count < 1).ToList().Count();
+            BarChartData.Add(new
+            {
+                MilitaryCampaign = "Non-Combat",
+                ResidentCount = residentNonCombatCount
+
+            });
 
             List<string> campaignNames = new List<string>();
             List<int> resCounts = new List<int>();
@@ -1680,13 +1689,18 @@ namespace FIVESTARVC.Controllers
                     Name = "Residents",
                     Data = new Data(residentCount)
                 },
-
-
-
-            }
-            );
+            });
 
             return View("DisplayChart", columnChart);
+        }
+
+        public ActionResult DaysInResidenceReport()
+        {
+            ReportService residencyReport = new ReportService();
+
+            var daysInResidence = residencyReport.GetResidencyData();
+
+            return View(daysInResidence);
         }
 
         protected override void Dispose(bool disposing)

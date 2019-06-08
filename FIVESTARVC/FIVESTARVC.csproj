@@ -303,6 +303,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\Calendar.cs" />
     <Compile Include="Helpers\Encryptor.cs" />
     <Compile Include="Migrations\201805142017563_InitialCreate.cs" />
     <Compile Include="Migrations\201805142017563_InitialCreate.Designer.cs">
@@ -354,6 +355,7 @@
     <Compile Include="Models\Resident.cs" />
     <Compile Include="Models\StateTerritory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\ReportService.cs" />
     <Compile Include="Services\ResidentService.cs" />
     <Compile Include="Validators\Age.cs" />
     <Compile Include="Validators\CheckBirthdate.cs" />
@@ -365,6 +367,7 @@
     <Compile Include="ViewModels\DischargeStatusGroups.cs" />
     <Compile Include="ViewModels\GenderGroup.cs" />
     <Compile Include="ViewModels\ImportedListData.cs" />
+    <Compile Include="ViewModels\ResidencyReportViewModel.cs" />
     <Compile Include="ViewModels\TempProgramEvent.cs" />
     <Compile Include="ViewModels\ReportingResidentViewModel.cs" />
     <Compile Include="ViewModels\DashboardData.cs" />
@@ -978,6 +981,7 @@
     <Content Include="Views\Shared\_Readmit.cshtml" />
     <Content Include="Scripts\README.md" />
     <Content Include="Views\Shared\_ReleaseTracks.cshtml" />
+    <Content Include="Views\Reports\DaysInResidenceReport.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -53,10 +53,9 @@
     </div>
 
 </div>
-@using (Html.BeginForm("Export", "CenterOverview", FormMethod.Post))
-{
 
-    <button class="btn btn-secondary mt-lg-1" style="margin-right: 10px;" onclick="printReport()"><i class="fa fa-file-pdf-o fa-fw"></i> Report PDF</button>
+    @*<button class="btn btn-secondary mt-lg-1" style="margin-right: 10px;" onclick="printReport()"><i class="fa fa-file-pdf-o fa-fw"></i> Report PDF</button>*@
+    <button class="btn btn-secondary mt-lg-1" style="margin-right: 10px;" onclick="location.href = '/Reports/DaysInResidenceReport';"><i class="fa fa-file-o fa-fw"></i> Residency Report</button>
     <input type="hidden" name="report" />
     <hr />
     <h2>Center Summary</h2>
@@ -347,7 +346,7 @@
             </div>
         </div>
     </div>
-}
+
 
 
 @section Scripts {

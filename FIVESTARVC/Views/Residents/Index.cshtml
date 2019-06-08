@@ -172,8 +172,6 @@ Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.Page
     @Scripts.Render("~/bundles/jqueryval")
 
     <script type="text/javascript">
-
-
         $('#AddModal').on('shown.bs.modal', function () {
             jQuery.validator.unobtrusive.parse($(this));
         })
