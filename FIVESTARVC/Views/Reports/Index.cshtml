@@ -156,7 +156,7 @@
                         </tr>
                         <tr>
                             <td>
-                                Discharged
+                                Total Discharged
                             </td>
                             <td>
                                 @{
@@ -167,38 +167,57 @@
                                     @Html.Raw(ViewBag.DischargeCount)
                                 }
                                 }
+                                <p>
+                                    <em>Graduated</em><br />
+                                    @{
+                                        if (ViewBag.Graduated == null)
+                                        { <text>0</text> }
+                                    else
+                                    {
+                                        @Html.Raw(ViewBag.Graduated) <text> (</text>@Html.Raw(ViewBag.GraduatedPercent) <text>%)</text>
+
+                                    }
+                                    }
+                                </p>
+                                <p>
+                                    <em>Self Discharge</em><br />
+                                    @{ if (ViewBag.SelfDischarge == null)
+                                        { <text>0</text> }
+                                    else
+                                    {
+                                        @Html.Raw(ViewBag.SelfDischarge)<text> (</text>@Html.Raw(ViewBag.SelfDischargePercent) <text>%)</text>
+                                    }
+
+                                    }
+                                </p>
+                                <p>
+                                    <em>Discharge for Cause</em><br />
+                                    @{ if (ViewBag.DischargeForCause == null)
+                                        { <text>0</text> }
+                                    else
+                                    {
+                                        @Html.Raw(ViewBag.DischargeForCause)<text> (</text>@Html.Raw(ViewBag.DischargeForCausePercent) <text>%)</text>
+                                    }
+
+                                    }
+                                </p>
+                                <p>
+                                    <em>Higher Level of Care</em><br />
+                                    @{ if (ViewBag.DischargeHigherLevelOfCare == null)
+                                        { <text>0</text> }
+                                    else
+                                    {
+                                        @Html.Raw(ViewBag.DischargeHigherLevelOfCare)<text> (</text> @Html.Raw(ViewBag.DischargeHigherLevelOfCarePercent) <text>%)</text> 
+                                    }
+
+                                    }
+                                </p>
                             </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                Graduated
-                            </td>
-                            <td>
-                                @{
-                                    if (ViewBag.Graduated == null)
-                                    { <text>0</text> }
-                                else
-                                {
-                                    @Html.Raw(ViewBag.Graduated)
-                                }
-                                }
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                Graduation Percent
-                            </td>
-                            <td>
-                                @{
-                                    if (ViewBag.GraduatedPercent == null)
-                                    { <text>0</text> }
-                                else
-                                {
-                                    @Html.Raw(ViewBag.GraduatedPercent)
-                                }
-                                }
-                                %
-                            </td>
+                            
+                                
+                            
+                            
+                           
                         </tr>
                         <tr>
                             <td>

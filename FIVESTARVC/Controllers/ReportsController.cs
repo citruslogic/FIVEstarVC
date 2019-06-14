@@ -133,8 +133,13 @@ namespace FIVESTARVC.Controllers
                 }
             }
 
-            //Counts number of current residents by increasing count by 1 for every admit event, and decreasing for any discharge event
-            var CurrentRes = DB.ProgramEvents.Include(t => t.ProgramType).ToList();
+            //Counts number of residents by increasing count by 1 for every admit event, and decreasing for any discharge event
+            var CurrentRes = DB.ProgramEvents
+                .Include(t => t.ProgramType)
+                .Include(t => t.Resident)
+                .AsNoTracking()
+                .ToList();
+
             int count = 0;
             int dischargeCount = 0;
 
@@ -160,15 +165,42 @@ namespace FIVESTARVC.Controllers
             ViewBag.DischargeCount = dischargeCount;
 
             //Finds graduation percent
-            var Graduated = DB.Database.SqlQuery<double>(@"select convert(float, count(distinct p.ResidentID))
-                                                                            from Person p 
-                                                                            join ProgramEvent pe on p.ResidentID = pe.ResidentID
-                                                                                where ProgramTypeId = '4'").Single();
+            //var Graduated = DB.Database.SqlQuery<double>(@"select convert(float, count(p.ResidentID))
+            //                                                                from Person p
+            //                                                                join ProgramEvent pe on p.ResidentID = pe.ResidentID
+            //                                                                where ProgramTypeId = '4'").Single();
 
+            var Graduated = DB.ProgramEvents.Count(i => i.ProgramTypeID == 4);
             ViewBag.Graduated = Graduated;
 
+
+            //var SelfDischarge = DB.Database.SqlQuery<double>(@"select convert(float, count(p.ResidentID))
+            //                                                                 from Person p
+            //                                                                 join ProgramEvent pe on p.ResidentID = pe.ResidentID
+            //                                                                 where ProgramTypeId = '5'").Single();
+
+            var SelfDischarge = DB.ProgramEvents.Count(i => i.ProgramTypeID == 5);
+            ViewBag.SelfDischarge = SelfDischarge;
+
+            //var DischargeForCause = DB.Database.SqlQuery<double>(@"select convert(float, count(p.ResidentID))
+            //                                                                 from Person p
+            //                                                                 join ProgramEvent pe on p.ResidentID = pe.ResidentID
+            //                                                                 where ProgramTypeId = '6'").Single();
+
+            var DischargeForCause = DB.ProgramEvents.Count(i => i.ProgramTypeID == 6);
+            ViewBag.DischargeForCause = DischargeForCause;
+
+            //var DischargeHigherLevelOfCare = DB.Database.SqlQuery<double>(@"select convert(float, count(p.ResidentID))
+            //                                                                 from Person p
+            //                                                                 join ProgramEvent pe on p.ResidentID = pe.ResidentID
+            //                                                                 where ProgramTypeId = '7'").Single();
+
+            var DischargeHigherLevelOfCare = DB.ProgramEvents.Count(i => i.ProgramTypeID == 7);
+            ViewBag.DischargeHigherLevelOfCare = DischargeHigherLevelOfCare;
+
+
             //Finds number admitted
-            var Admitted = DB.Database.SqlQuery<double>(@"select convert(float, count(distinct p.ResidentID))
+            var Admitted = DB.Database.SqlQuery<double>(@"select convert(float, count(p.ResidentID))
                                                                            from Person p 
                                                                            join ProgramEvent pe on p.ResidentID = pe.ResidentID
                                                                                 where ProgramTypeId in ('1', '2', '3')").Single();
@@ -179,6 +211,10 @@ namespace FIVESTARVC.Controllers
                 //finds grad percent
                 double gradPercent = (Graduated / Admitted) * 100;
                 ViewBag.GraduatedPercent = gradPercent.ToString("0.##"); ; //Graduation Percentage
+                ViewBag.SelfDischargePercent = (SelfDischarge / Admitted * 100).ToString("0.##");
+                ViewBag.DischargeForCausePercent = (DischargeForCause / Admitted * 100).ToString("0.##");
+                ViewBag.DischargeHigherLevelOfCarePercent = (DischargeHigherLevelOfCare / Admitted * 100).ToString("0.##");
+
             }
             else
             {
