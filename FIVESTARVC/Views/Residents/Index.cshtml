@@ -39,6 +39,7 @@
         </button>
         <ul class="dropdown-menu">
             <li><button class="dropdown-item" onclick="addCampaign()"><i class="fa fa-plus fa-fw"></i> Campaign</button></li>
+            <li><button class="dropdown-item" onclick="addReferral()"><i class="fa fa-plus fa-fw"></i> Referral</button></li>
             <li>
                 <button class="dropdown-item" onclick="showQuickEventDialog()">
                     <i class="fa fa-plus fa-fw"></i> Track
@@ -122,7 +123,7 @@
                                         htmlAttributes: new { @class = "btn btn-secondary btn-sm" })
 
                     }
-                  
+
                 <td>
                     @Html.ActionLink("Details", "Details", new { id = item.ResidentID }, htmlAttributes: new { @class = "btn btn-secondary btn-sm" }) &nbsp;
 
@@ -131,6 +132,8 @@
 
                         @:<input type="button" value="Release" class="modal-link btn btn-sm btn-danger"
                                   @: data-toggle="modal" data-target="#QuickEventModal" onclick="showDischargeDialog(@item.ResidentID)" />
+
+
 
 
                     }
@@ -199,6 +202,17 @@ Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.Page
                 $('.modal-body').html = '';
                 $('.modal-body').html(data);
                 $('.modal-title').html("Add Campaign");
+                $('#AddModal').modal('show');
+
+            });
+        }
+
+        function addReferral() {
+
+            $.get('/Residents/AddReferral/', function (data) {
+                $('.modal-body').html = '';
+                $('.modal-body').html(data);
+                $('.modal-title').html("Add Referral Option");
                 $('#AddModal').modal('show');
 
             });

@@ -54,317 +54,313 @@
 
 </div>
 
-    @*<button class="btn btn-secondary mt-lg-1" style="margin-right: 10px;" onclick="printReport()"><i class="fa fa-file-pdf-o fa-fw"></i> Report PDF</button>*@
-    <button class="btn btn-secondary mt-lg-1" style="margin-right: 10px;" onclick="location.href = '/Reports/DaysInResidenceReport';"><i class="fa fa-file-o fa-fw"></i> Residency Report</button>
-    <input type="hidden" name="report" />
-    <hr />
-    <h2>Center Summary</h2>
-    <div class="mb-lg-3">
-        <p>
-            <strong>Cumulative Residents: </strong> @ViewBag.CumulativeCount,
-            <strong>Current Residents: </strong> @ViewBag.TotalCount,
-            <strong>Total Graduated: </strong> @ViewBag.Graduated
-        </p>
-    </div>
-    <hr />
+@*<button class="btn btn-secondary mt-lg-1" style="margin-right: 10px;" onclick="printReport()"><i class="fa fa-file-pdf-o fa-fw"></i> Report PDF</button>*@
+<button class="btn btn-secondary mt-lg-1" style="margin-right: 10px;" onclick="location.href = '/Reports/DaysInResidenceReport';"><i class="fa fa-file-o fa-fw"></i> Residency Report</button>
+<input type="hidden" name="report" />
+<hr />
+<h2>Center Summary</h2>
+<div class="mb-lg-3">
+    <p>
+        <strong>Cumulative Residents: </strong> @ViewBag.CumulativeCount,
+        <strong>Current Residents: </strong> @ViewBag.TotalCount,
+        <strong>Total Graduated: </strong> @ViewBag.Graduated
+    </p>
+</div>
+<hr />
 
 
-    <div id="reportHtml">
+<div id="reportHtml">
 
-        <div class="container">
-            <div class="row">
+    <div class="container">
+        <div class="row">
 
-                <div class="col-sm-3">
+            <div class="col-md-4">
 
-                    <div id="GenderGroups">
-                        Getting demographic data...
-                    </div>
-                    <div id="GenderGroupsCumulative">
-                        Getting demographic data...
-
-                    </div>
-
-                    <div id="AverageStay">
-                        Getting stay data...
-
-                    </div>
+                <div id="GenderGroups">
+                    Getting demographic data...
                 </div>
-
-
-                <div class="col-sm-3">
-                    <div id="AgeGroups">
-                        Getting demographic data...
-
-                    </div>
+                <div id="GenderGroupsCumulative">
+                    Getting demographic data...
 
                 </div>
 
-                <div class="col-sm-3">
-                    <div id="AgeGroupsCumulative">
-                        Getting demographic data...
-                    </div>
-                </div>
-
-            </div>
-        </div>
-        <h4></h4>
-        <hr />
-        <div class="container">
-            <div class="row">
-                <div class="col-sm-4">
-
-                    <h4>Center Performance</h4>
-                    <h5>Resident Intake vs. Success</h5>
-                    <table class="table table-sm">
-                        <tr>
-                            <th>
-                                Metric
-                            </th>
-                            <th>
-                                Cumulative Total
-                            </th>
-                        </tr>
-                        <tr>
-                            <td>
-                                Admitted
-                            </td>
-                            <td>
-                                @{
-                                    if (ViewBag.Admitted == null)
-                                    { <text>0</text> }
-                                else
-                                {
-                                    @Html.Raw(ViewBag.Admitted)
-                                }
-                                }
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                Emergency Shelter
-                            </td>
-                            <td>
-                                @{
-                                    if (ViewBag.EmergencyShelter == null)
-                                    { <text>0</text> }
-                                else
-                                {
-                                    @Html.Raw(ViewBag.EmergencyShelter)
-                                }
-                                }
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                Total Discharged
-                            </td>
-                            <td>
-                                @{
-                                    if (ViewBag.DischargeCount == null)
-                                    { <text>0</text> }
-                                else
-                                {
-                                    @Html.Raw(ViewBag.DischargeCount)
-                                }
-                                }
-                                <p>
-                                    <em>Graduated</em><br />
-                                    @{
-                                        if (ViewBag.Graduated == null)
-                                        { <text>0</text> }
-                                    else
-                                    {
-                                        @Html.Raw(ViewBag.Graduated) <text> (</text>@Html.Raw(ViewBag.GraduatedPercent) <text>%)</text>
-
-                                    }
-                                    }
-                                </p>
-                                <p>
-                                    <em>Self Discharge</em><br />
-                                    @{ if (ViewBag.SelfDischarge == null)
-                                        { <text>0</text> }
-                                    else
-                                    {
-                                        @Html.Raw(ViewBag.SelfDischarge)<text> (</text>@Html.Raw(ViewBag.SelfDischargePercent) <text>%)</text>
-                                    }
-
-                                    }
-                                </p>
-                                <p>
-                                    <em>Discharge for Cause</em><br />
-                                    @{ if (ViewBag.DischargeForCause == null)
-                                        { <text>0</text> }
-                                    else
-                                    {
-                                        @Html.Raw(ViewBag.DischargeForCause)<text> (</text>@Html.Raw(ViewBag.DischargeForCausePercent) <text>%)</text>
-                                    }
-
-                                    }
-                                </p>
-                                <p>
-                                    <em>Higher Level of Care</em><br />
-                                    @{ if (ViewBag.DischargeHigherLevelOfCare == null)
-                                        { <text>0</text> }
-                                    else
-                                    {
-                                        @Html.Raw(ViewBag.DischargeHigherLevelOfCare)<text> (</text> @Html.Raw(ViewBag.DischargeHigherLevelOfCarePercent) <text>%)</text> 
-                                    }
-
-                                    }
-                                </p>
-                            </td>
-                            
-                                
-                            
-                            
-                           
-                        </tr>
-                        <tr>
-                            <td>
-                                Vet Court
-                            </td>
-                            <td>
-                                @{
-                                    if (ViewBag.VeteransCourt == null)
-                                    { <text>0</text> }
-                                else
-                                {
-                                    @Html.Raw(ViewBag.VeteransCourt)
-                                }
-                                }
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                P2I
-                            </td>
-                            <td>
-                                @{
-                                    if (ViewBag.P2I == null)
-                                    { <text>0</text> }
-                                else
-                                {
-                                    @Html.Raw(ViewBag.P2I)
-                                }
-                                }
-                            </td>
-                        </tr>
-                    </table>
-                </div>
-                <div class="col-sm-4">
-                    <h4>Military Service Statistics</h4>
-                    <div id="ServiceDischargeGroups">Getting demographic data...</div>
-                </div>
-                <div class="col-sm-4">
-                    <h5 style="margin-top: 1.81em;">Branches</h5>
-                    <table class="table table-sm">
-                        <tr>
-                            <th>
-                                Service Branch
-                            </th>
-                            <th>
-                                Cumulative Residents
-                            </th>
-                            <th>
-                                Current Residents
-                            </th>
-                        </tr>
-                        <tr>
-                            <td>
-                                Navy
-                            </td>
-                            <td>
-                                @Html.Raw(ViewBag.NavyCount)
-                            </td>
-                            <td>
-                                @{
-                                    if (ViewBag.CurrentNavy == null)
-                                    { <text>0</text> }
-                                else
-                                {
-                                    @Html.Raw(ViewBag.CurrentNavy)
-                                }
-                                }
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                Army
-                            </td>
-                            <td>
-                                @Html.Raw(ViewBag.ArmyCount)
-                            </td>
-                            <td>
-                                @{
-                                    if (ViewBag.CurrentArmy == null)
-                                    { <text>0</text> }
-                                else
-                                {
-                                    @Html.Raw(ViewBag.CurrentArmy)
-                                }
-                                }
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                Marines
-                            </td>
-                            <td>
-                                @Html.Raw(ViewBag.MarineCount)
-                            </td>
-                            <td>
-                                @{
-                                    if (ViewBag.CurrentMarine == null)
-                                    { <text>0</text> }
-                                else
-                                {
-                                    @Html.Raw(ViewBag.CurrentMarine)
-                                }
-                                }
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                Air Force
-                            </td>
-                            <td>
-                                @Html.Raw(ViewBag.AirForceCount)
-                            </td>
-                            <td>
-                                @{
-                                    if (ViewBag.CurrentAF == null)
-                                    { <text>0</text> }
-                                else
-                                {
-                                    @Html.Raw(ViewBag.CurrentAF)
-                                }
-                                }
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                Coast Guard
-                            </td>
-                            <td>
-                                @Html.Raw(ViewBag.CoastGuardCount)
-                            </td>
-                            <td>
-                                @{
-                                    if (ViewBag.CurrentCG == null)
-                                    { <text>0</text> }
-                                else
-                                {
-                                    @Html.Raw(ViewBag.CurrentCG)
-                                }
-                                }
-                            </td>
-                        </tr>
-                    </table>
+                <div id="AverageStay">
+                    Getting stay data...
 
                 </div>
             </div>
+            <div class="col-md-4">
+                <div id="AgeGroups">
+                    Getting demographic data...
+
+                </div>
+                <div id="AgeGroupsCumulative">
+                    Getting demographic data...
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div id="Referrals">
+                    Getting referrals data...
+                </div>
+            </div>
+
+        </div>
+       
+
+        <div class="row">
+            <div class="col-md-4">
+
+                <h4>Center Performance</h4>
+                <h5>Resident Intake vs. Success</h5>
+                <table class="table table-sm">
+                    <tr>
+                        <th>
+                            Metric
+                        </th>
+                        <th>
+                            Cumulative Total
+                        </th>
+                    </tr>
+                    <tr>
+                        <td>
+                            Admitted
+                        </td>
+                        <td>
+                            @{
+                                if (ViewBag.Admitted == null)
+                                { <text>0</text> }
+                            else
+                            {
+                                @Html.Raw(ViewBag.Admitted)
+                            }
+                            }
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Emergency Shelter
+                        </td>
+                        <td>
+                            @{
+                                if (ViewBag.EmergencyShelter == null)
+                                { <text>0</text> }
+                            else
+                            {
+                                @Html.Raw(ViewBag.EmergencyShelter)
+                            }
+                            }
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Total Discharged
+                        </td>
+                        <td>
+                            @{
+                                if (ViewBag.DischargeCount == null)
+                                { <text>0</text> }
+                            else
+                            {
+                                @Html.Raw(ViewBag.DischargeCount)
+                            }
+                            }
+                            <p>
+                                <em>Graduated</em><br />
+                                @{
+                                    if (ViewBag.Graduated == null)
+                                    { <text>0</text> }
+                                else
+                                {
+                                    @Html.Raw(ViewBag.Graduated) <text> (</text>@Html.Raw(ViewBag.GraduatedPercent) <text>%)</text>
+
+                                }
+                                }
+                            </p>
+                            <p>
+                                <em>Self Discharge</em><br />
+                                @{ if (ViewBag.SelfDischarge == null)
+                                    { <text>0</text> }
+                                else
+                                {
+                                    @Html.Raw(ViewBag.SelfDischarge)<text> (</text>@Html.Raw(ViewBag.SelfDischargePercent) <text>%)</text>
+                                }
+
+                                }
+                            </p>
+                            <p>
+                                <em>Discharge for Cause</em><br />
+                                @{ if (ViewBag.DischargeForCause == null)
+                                    { <text>0</text> }
+                                else
+                                {
+                                    @Html.Raw(ViewBag.DischargeForCause)<text> (</text>@Html.Raw(ViewBag.DischargeForCausePercent) <text>%)</text>
+                                }
+
+                                }
+                            </p>
+                            <p>
+                                <em>Higher Level of Care</em><br />
+                                @{ if (ViewBag.DischargeHigherLevelOfCare == null)
+                                    { <text>0</text> }
+                                else
+                                {
+                                    @Html.Raw(ViewBag.DischargeHigherLevelOfCare)<text> (</text> @Html.Raw(ViewBag.DischargeHigherLevelOfCarePercent) <text>%)</text>
+                                }
+
+                                }
+                            </p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Vet Court
+                        </td>
+                        <td>
+                            @{
+                                if (ViewBag.VeteransCourt == null)
+                                { <text>0</text> }
+                            else
+                            {
+                                @Html.Raw(ViewBag.VeteransCourt)
+                            }
+                            }
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            P2I
+                        </td>
+                        <td>
+                            @{
+                                if (ViewBag.P2I == null)
+                                { <text>0</text> }
+                            else
+                            {
+                                @Html.Raw(ViewBag.P2I)
+                            }
+                            }
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="col-md-4">
+
+                <h4>Military Service Statistics</h4>
+                <div id="ServiceDischargeGroups">Getting demographic data...</div>
+            </div>
+            <div class="col-md-4">
+                <h5 style="margin-top: 1.81em;">Branches</h5>
+                <table class="table table-sm">
+                    <tr>
+                        <th>
+                            Service Branch
+                        </th>
+                        <th>
+                            Cumulative Residents
+                        </th>
+                        <th>
+                            Current Residents
+                        </th>
+                    </tr>
+                    <tr>
+                        <td>
+                            Navy
+                        </td>
+                        <td>
+                            @Html.Raw(ViewBag.NavyCount)
+                        </td>
+                        <td>
+                            @{
+                                if (ViewBag.CurrentNavy == null)
+                                { <text>0</text> }
+                            else
+                            {
+                                @Html.Raw(ViewBag.CurrentNavy)
+                            }
+                            }
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Army
+                        </td>
+                        <td>
+                            @Html.Raw(ViewBag.ArmyCount)
+                        </td>
+                        <td>
+                            @{
+                                if (ViewBag.CurrentArmy == null)
+                                { <text>0</text> }
+                            else
+                            {
+                                @Html.Raw(ViewBag.CurrentArmy)
+                            }
+                            }
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Marines
+                        </td>
+                        <td>
+                            @Html.Raw(ViewBag.MarineCount)
+                        </td>
+                        <td>
+                            @{
+                                if (ViewBag.CurrentMarine == null)
+                                { <text>0</text> }
+                            else
+                            {
+                                @Html.Raw(ViewBag.CurrentMarine)
+                            }
+                            }
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Air Force
+                        </td>
+                        <td>
+                            @Html.Raw(ViewBag.AirForceCount)
+                        </td>
+                        <td>
+                            @{
+                                if (ViewBag.CurrentAF == null)
+                                { <text>0</text> }
+                            else
+                            {
+                                @Html.Raw(ViewBag.CurrentAF)
+                            }
+                            }
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Coast Guard
+                        </td>
+                        <td>
+                            @Html.Raw(ViewBag.CoastGuardCount)
+                        </td>
+                        <td>
+                            @{
+                                if (ViewBag.CurrentCG == null)
+                                { <text>0</text> }
+                            else
+                            {
+                                @Html.Raw(ViewBag.CurrentCG)
+                            }
+                            }
+                        </td>
+                    </tr>
+                </table>
+
+            </div>
         </div>
     </div>
+</div>
+
+
 
 
 
@@ -432,6 +428,15 @@
                 "dataType": "html",
                 "success": function (data) {
                     $('#GenderGroupsCumulative').html(data);
+                }
+            });
+
+            $.ajax({
+                "url": "/Reports/ResidentReferralsReport/",
+                "type": "get",
+                "dataType": "html",
+                "success": function (data) {
+                    $('#Referrals').html(data);
                 }
             });
         });

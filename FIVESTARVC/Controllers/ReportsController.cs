@@ -1739,6 +1739,14 @@ namespace FIVESTARVC.Controllers
             return View(daysInResidence);
         }
 
+        public ActionResult ResidentReferralsReport()
+        {
+            ReportService residentReferralsReport = new ReportService();
+
+            var report = residentReferralsReport.GetReferralReport();
+            return View("ResidentReferralsReport", report);
+        }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)

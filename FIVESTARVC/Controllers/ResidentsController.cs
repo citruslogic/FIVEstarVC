@@ -99,6 +99,8 @@ namespace FIVESTARVC.Controllers
             ViewBag.AdmissionType = new SelectList(db.ProgramTypes
                 .Where(t => t.EventType == EnumEventType.ADMISSION), "ProgramTypeID", "ProgramDescription", 2);
 
+            ViewBag.ReferralID = new SelectList(db.Referrals, "ReferralID", "ReferralName", 1);
+
             var allMilitaryCampaigns = db.MilitaryCampaigns;
             var viewModel = new List<AssignedCampaignData>();
 
@@ -131,6 +133,8 @@ namespace FIVESTARVC.Controllers
 
             ViewBag.StateTerritoryID = new SelectList(db.States, "StateTerritoryID", "State", residentIncomeModel.StateTerritoryID);
 
+            ViewBag.ReferralID = new SelectList(db.Referrals, "ReferralID", "ReferralName", residentIncomeModel.ReferralID);
+
             var allMilitaryCampaigns = db.MilitaryCampaigns;
             var viewModel = new List<AssignedCampaignData>();
 
@@ -159,6 +163,7 @@ namespace FIVESTARVC.Controllers
                 InVetCourt = residentIncomeModel.InVetCourt,
                 IsNoncombat = residentIncomeModel.IsNoncombat,
                 StateTerritoryID = residentIncomeModel.StateTerritoryID,
+                ReferralID = residentIncomeModel.ReferralID,
                 Note = residentIncomeModel.Note,
                 MilitaryCampaigns = new List<MilitaryCampaign>(),
                 ProgramEvents = new List<ProgramEvent>(),
@@ -206,7 +211,7 @@ namespace FIVESTARVC.Controllers
             }
 
             if (TryUpdateModel(residentIncomeModel, "",
-                 new string[] { "LastName", "FirstMidName", "Ethnicity", "StateTerritoryID", "Gender", "Religion", "ClearBirthdate", "ServiceBranch", "Note", "IsNoncombat", "InVetCourt",
+                 new string[] { "LastName", "FirstMidName", "Ethnicity", "StateTerritoryID", "ReferralID", "Gender", "Religion", "ClearBirthdate", "ServiceBranch", "Note", "IsNoncombat", "InVetCourt",
                      "Benefit", "MilitaryCampaigns", "TotalBenefitAmount" }))
             {
                 try
@@ -264,6 +269,7 @@ namespace FIVESTARVC.Controllers
             .Include(c => c.MilitaryCampaigns)
             .Include(b => b.Benefit)
             .Include(s => s.StateTerritory)
+            .Include(r => r.Referral)
             .Where(c => c.ResidentID == id)
             .Single();
 
@@ -277,6 +283,8 @@ namespace FIVESTARVC.Controllers
             }
 
             ViewBag.StateTerritoryID = new SelectList(db.States, "StateTerritoryID", "State", resident.StateTerritoryID);
+            ViewBag.ReferralID = new SelectList(db.Referrals, "ReferralID", "ReferralName", resident.ReferralID);
+
 
             return View(resident);
         }
@@ -297,11 +305,12 @@ namespace FIVESTARVC.Controllers
             Resident residentToUpdate = db.Residents
                 .Include(c => c.MilitaryCampaigns)
                 .Include(b => b.Benefit)
+                .Include(r => r.Referral)
                 .Where(c => c.ResidentID == id)
                 .Single();
 
             if (TryUpdateModel(residentToUpdate, "",
-               new string[] { "ClearLastName", "ClearFirstMidName", "Gender", "Religion", "Ethnicity", "StateTerritoryID", "ClearBirthdate",
+               new string[] { "ClearLastName", "ClearFirstMidName", "Gender", "Religion", "Ethnicity", "StateTerritoryID", "ReferralID", "ClearBirthdate",
                    "ServiceBranch", "Note", "InVetCourt", "IsNoncombat", "Benefit", "MilitaryCampaigns", "TotalBenefitAmount" }))
             {
                 try
@@ -342,6 +351,7 @@ namespace FIVESTARVC.Controllers
             }
 
             ViewBag.StateTerritoryID = new SelectList(db.States, "StateTerritoryID", "State", residentToUpdate.StateTerritoryID);
+            ViewBag.ReferralID = new SelectList(db.Referrals, "ReferralID", "ReferralName", residentToUpdate.ReferralID);
 
             ViewBag.Campaigns = residentService.PopulateAssignedCampaignData(residentToUpdate, db);
 
@@ -381,6 +391,32 @@ namespace FIVESTARVC.Controllers
             }
         }
 
+        [HttpGet]
+        public ActionResult AddReferral()
+        {
+            Referral referral = new Referral();
+
+            return PartialView(referral);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult AddReferral(Referral model)
+        {
+            if (ModelState.IsValid)
+            {
+                db.Referrals.Add(model);
+                db.SaveChanges();
+                TempData["UserMessage"] = "A new referral option has been added.  ";
+
+                return RedirectToAction("Index");
+            } else
+            {
+                ModelState.AddModelError("", "Unable to save the new referral option. Check the form input and try again.");
+            }
+
+            return PartialView(model);
+        }
         // GET: Residents/AddCampaign/5
         [HttpGet]
         public ActionResult AddCampaign()

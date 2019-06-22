@@ -1,0 +1,25 @@
+﻿@model List<FIVESTARVC.ViewModels.ResidentReferralViewModel>
+@{
+    Layout = null;
+}
+<table class="table table-sm">
+    <tr>
+        <th>
+            Referral Type
+        </th>
+        <th>
+            Current Resident Count
+        </th>
+        <th>
+            Cumulative Resident Count
+        </th>
+    </tr>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@Html.DisplayFor(modelItem => item.ReferralName)</td>
+            <td>@Html.DisplayFor(modelItem => item.CurrentCount)</td>
+            <td>@Html.DisplayFor(modelItem => item.CumulCount)</td>
+        </tr>
+    }
+</table>

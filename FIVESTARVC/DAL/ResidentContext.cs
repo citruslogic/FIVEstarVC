@@ -19,6 +19,8 @@ namespace FIVESTARVC.DAL
         public DbSet<Benefit> Benefits { get; set; }
         public DbSet<StateTerritory> States { get; set; }
 
+        public DbSet<Referral> Referrals { get; set; }
+
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();

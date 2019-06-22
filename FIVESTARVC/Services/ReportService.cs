@@ -30,5 +30,18 @@ namespace FIVESTARVC.Services
 
         }
 
+        public List<ResidentReferralViewModel> GetReferralReport()
+        {
+            var referralModel = context.Referrals.Include(i => i.Residents)
+                .ToList().Select(i => new ResidentReferralViewModel
+                {
+                    ReferralName = i.ReferralName,
+                    CumulCount = i.Residents.Count,
+                    CurrentCount = i.Residents.Where(j => j.IsCurrent()).Count()
+                }).ToList();
+
+            return referralModel;
+        }
+
     }
 }

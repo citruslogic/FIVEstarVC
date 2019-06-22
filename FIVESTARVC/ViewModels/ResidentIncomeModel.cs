@@ -57,6 +57,11 @@ namespace FIVESTARVC.ViewModels
         [StringLength(150)]
         public string Note { get; set; }
 
+        [Display(Name = "Referral")]
+        public int? ReferralID { get; set; }
+
+        public virtual Referral Referral { get; set; }
+
         public virtual ICollection<MilitaryCampaign> MilitaryCampaigns { get; set; }
         public virtual ICollection<ProgramEvent> ProgramEvents { get; set; }
 

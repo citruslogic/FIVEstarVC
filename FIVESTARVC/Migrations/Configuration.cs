@@ -122,6 +122,23 @@ namespace FIVESTARVC.Migrations
 
             militaryCampaigns.ForEach(m => context.MilitaryCampaigns.AddOrUpdate(i => i.MilitaryCampaignID, m));
             context.SaveChanges();
+
+            var referrals = new List<Referral>
+            {
+                new Referral { ReferralID = 1, ReferralName = "None" },
+                new Referral { ReferralID = 2, ReferralName = "VA" },
+                new Referral { ReferralID = 3, ReferralName = "Wounded Warrior" },
+                new Referral { ReferralID = 4, ReferralName = "Sulzbacher" },
+                new Referral { ReferralID = 5, ReferralName = "Clara White" },
+                new Referral { ReferralID = 6, ReferralName = "family/friend" },
+                new Referral { ReferralID = 7, ReferralName = "Wekiva Springs" },
+                new Referral { ReferralID = 8, ReferralName = "Changing Homelessness" },
+                new Referral { ReferralID = 9, ReferralName = "Mental Health Counselor" },
+                new Referral { ReferralID = 10, ReferralName = "Other" }
+            };
+
+            referrals.ForEach(r => context.Referrals.AddOrUpdate(i => i.ReferralID, r));
+            context.SaveChanges();
         }
     }
 }

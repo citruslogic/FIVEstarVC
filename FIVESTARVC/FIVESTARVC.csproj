@@ -337,6 +337,10 @@
     <Compile Include="Migrations\201906010127450_remove_room_support.Designer.cs">
       <DependentUpon>201906010127450_remove_room_support.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201906221547412_residentReferral.cs" />
+    <Compile Include="Migrations\201906221547412_residentReferral.Designer.cs">
+      <DependentUpon>201906221547412_residentReferral.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AdAuthenticationService.cs" />
     <Compile Include="Models\Benefit.cs" />
@@ -352,6 +356,7 @@
     <Compile Include="Models\Person.cs" />
     <Compile Include="Models\ProgramEvent.cs" />
     <Compile Include="Models\ProgramType.cs" />
+    <Compile Include="Models\Referral.cs" />
     <Compile Include="Models\Resident.cs" />
     <Compile Include="Models\StateTerritory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -368,6 +373,7 @@
     <Compile Include="ViewModels\GenderGroup.cs" />
     <Compile Include="ViewModels\ImportedListData.cs" />
     <Compile Include="ViewModels\ResidencyReportViewModel.cs" />
+    <Compile Include="ViewModels\ResidentReferralViewModel.cs" />
     <Compile Include="ViewModels\TempProgramEvent.cs" />
     <Compile Include="ViewModels\ReportingResidentViewModel.cs" />
     <Compile Include="ViewModels\DashboardData.cs" />
@@ -982,6 +988,8 @@
     <Content Include="Scripts\README.md" />
     <Content Include="Views\Shared\_ReleaseTracks.cshtml" />
     <Content Include="Views\Reports\DaysInResidenceReport.cshtml" />
+    <Content Include="Views\Shared\AddReferral.cshtml" />
+    <Content Include="Views\Reports\ResidentReferralsReport.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -1029,6 +1037,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201906010127450_remove_room_support.resx">
       <DependentUpon>201906010127450_remove_room_support.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201906221547412_residentReferral.resx">
+      <DependentUpon>201906221547412_residentReferral.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

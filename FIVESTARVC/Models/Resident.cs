@@ -39,6 +39,11 @@ namespace FIVESTARVC.Models
 
         public virtual Benefit Benefit { get; set; }
 
+        [ForeignKey("Referral")]
+        [Display(Name = "Referral")]
+        public int? ReferralID { get; set; }
+
+        public virtual Referral Referral { get; set; }
 
         //[Computed]
         public bool IsCurrent()
