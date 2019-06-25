@@ -13,8 +13,7 @@ namespace FIVESTARVC.Services
         public List<Resident> GetIndex(string searchString, string currentFilter, string sortOrder, int? page, ResidentContext db)
         {
 
-            var residents = (from s in db.Residents
-                             select s).ToList();
+            var residents = db.Residents.AsNoTracking().ToList();
 
             if (!string.IsNullOrEmpty(searchString))
             {
@@ -27,7 +26,7 @@ namespace FIVESTARVC.Services
             switch (sortOrder)
             {
                 case "name_desc":
-                    residents = residents.OrderBy(s => s.ClearLastName.Computed()).ToList();
+                    residents = residents.OrderByDescending(s => s.ClearLastName.Computed()).ToList();
                     break;
                 case "ServiceBranch":
                     residents = residents.OrderBy(s => s.ServiceBranch).ToList();
@@ -36,7 +35,7 @@ namespace FIVESTARVC.Services
                     residents = residents.OrderByDescending(s => s.ServiceBranch).ToList();
                     break;
                 default:
-                    residents = residents.OrderByDescending(s => s.ResidentID).ToList();
+                    residents = residents.OrderBy(s => s.ClearLastName.Computed()).ToList();
                     break;
             }
 
