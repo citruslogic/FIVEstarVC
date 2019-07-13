@@ -45,7 +45,7 @@ namespace FIVESTARVC.Models
         
         /* Other forms of disability as income */
         [Display(Name = "Other Income (Description)")]
-        public String OtherDescription { get; set; }
+        public string OtherDescription { get; set; }
 
         [DataType(DataType.Currency)]
         [Column(TypeName = "money")]

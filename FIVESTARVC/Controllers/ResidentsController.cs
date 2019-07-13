@@ -65,7 +65,8 @@ namespace FIVESTARVC.Controllers
             if (!dateFirstAdmitted.Contains("0001"))
             {
                 ViewBag.DateFirstAdmitted = dateFirstAdmitted;
-            } else
+            }
+            else
             {
                 // draw from the re-admittance date, ask for a readmission if there are no admittance dates. 
                 ViewBag.DateFirstAdmitted = db.ProgramEvents
@@ -83,7 +84,7 @@ namespace FIVESTARVC.Controllers
             {
                 return HttpNotFound();
             }
-           
+
             ViewBag.Campaigns = assignedCampaigns;
 
             return View(resident);
@@ -169,6 +170,11 @@ namespace FIVESTARVC.Controllers
                 ProgramEvents = new List<ProgramEvent>(),
                 Benefit = new Benefit(),
             };
+
+            if (string.IsNullOrEmpty(residentIncomeModel.ReferralOther))
+            {
+                resident.OptionalReferralDescription = residentIncomeModel.ReferralOther;
+            }
 
 
             Benefit benefit = new Benefit
@@ -310,7 +316,7 @@ namespace FIVESTARVC.Controllers
                 .Single();
 
             if (TryUpdateModel(residentToUpdate, "",
-               new string[] { "ClearLastName", "ClearFirstMidName", "Gender", "Religion", "Ethnicity", "StateTerritoryID", "ReferralID", "ClearBirthdate",
+               new string[] { "ClearLastName", "ClearFirstMidName", "Gender", "Religion", "Ethnicity", "StateTerritoryID", "ReferralID", "OptionalReferralDescription", "ClearBirthdate",
                    "ServiceBranch", "Note", "InVetCourt", "IsNoncombat", "Benefit", "MilitaryCampaigns", "TotalBenefitAmount" }))
             {
                 try
@@ -333,7 +339,7 @@ namespace FIVESTARVC.Controllers
                             };
 
                             residentToUpdate.ProgramEvents.Add(readmitEvent);
-                                                      
+
                         }
                     }
 
@@ -410,7 +416,8 @@ namespace FIVESTARVC.Controllers
                 TempData["UserMessage"] = "A new referral option has been added.  ";
 
                 return RedirectToAction("Index");
-            } else
+            }
+            else
             {
                 ModelState.AddModelError("", "Unable to save the new referral option. Check the form input and try again.");
             }
@@ -450,16 +457,11 @@ namespace FIVESTARVC.Controllers
 
         // GET: Residents/Discharge/5
         [HttpGet]
-        public ActionResult Discharge(int? id, bool? saveChangesError = false)
+        public ActionResult Discharge(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-
-            if (saveChangesError.GetValueOrDefault())
-            {
-                ViewBag.ErrorMessage = "Discharge failed. Try again, and if the problem persists see your system administrator.";
             }
 
             var residentToDischarge = db.Residents
@@ -467,45 +469,52 @@ namespace FIVESTARVC.Controllers
                 .Where(r => r.ResidentID == id)
                 .Single();
 
-            if (residentToDischarge == null)
+            var dischargeModel = new DischargeViewModel
             {
-                return HttpNotFound();
-            }
+                ResidentID = residentToDischarge.ResidentID,
+                DischargeDate = null,
+                FullName = residentToDischarge.Fullname,
+                Birthdate = residentToDischarge.ClearBirthdate.ToShortDateString(),
+                Note = residentToDischarge.Note,
+                ServiceBranch = residentToDischarge.ServiceBranch,
+            };
 
             ViewBag.ProgramTypeID = new SelectList(db.ProgramTypes
                 .Where(t => t.EventType == EnumEventType.DISCHARGE), "ProgramTypeID", "ProgramDescription");
 
-            return PartialView("_Discharge", residentToDischarge);
+            return PartialView(dischargeModel);
         }
 
         // POST: Residents/Discharge/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Discharge(int id, int ProgramTypeID, string DischargeDate)
+        public ActionResult Discharge(DischargeViewModel model)
         {
-            DateTime date = DateTime.Parse(DischargeDate);
+            ViewBag.ProgramTypeID = new SelectList(db.ProgramTypes
+                .Where(t => t.EventType == EnumEventType.DISCHARGE), "ProgramTypeID", "ProgramDescription");
 
-            try
+
+            if (ModelState.IsValid)
             {
                 Resident residentToDischarge = db.Residents
                 .Include(p => p.ProgramEvents)
-                .Where(r => r.ResidentID == id)
+                .Where(r => r.ResidentID == model.ResidentID)
                 .Single();
 
                 // Discharge event
                 residentToDischarge.ProgramEvents.Add(new ProgramEvent
                 {
-                    ProgramTypeID = ProgramTypeID,
-                    ClearStartDate = date
+                    ProgramTypeID = model.ProgramTypeID,
+                    ClearStartDate = model.DischargeDate.Value
 
                 });
 
                 // To close admission events
-                var ev = db.ProgramEvents
-                    .Where(i => i.ResidentID == id && i.ProgramType.EventType == EnumEventType.ADMISSION)
+                var ev = residentToDischarge.ProgramEvents
+                    .Where(i => i.ProgramType.EventType == EnumEventType.ADMISSION)
                     .ToList()
                     .LastOrDefault();
-                ev.ClearEndDate = date;
+                ev.ClearEndDate = model.DischargeDate;
                 db.Entry(ev).State = EntityState.Modified;
 
                 if (residentToDischarge.ActualDaysStayed == null)
@@ -517,21 +526,16 @@ namespace FIVESTARVC.Controllers
                     residentToDischarge.ActualDaysStayed += residentToDischarge.DaysInCenter;
                 }
 
-
                 db.SaveChanges();
                 TempData["UserMessage"] = residentToDischarge.ClearLastName + " has been discharged from your center.  ";
-            }
-            catch (DataException /*dex*/)
+                return RedirectToAction("Index");
+
+            } else
             {
-                TempData["UserMessage"] = "Failed to discharge the resident from the center.";
-
-                return RedirectToAction("Discharge", new { id = id, saveChangesError = true });
+                ModelState.AddModelError("", $"The release form cannot be submitted because it has invalid data.");
             }
 
-            ViewBag.ProgramTypeID = new SelectList(db.ProgramTypes
-                .Where(t => t.EventType == EnumEventType.DISCHARGE), "ProgramTypeID", "ProgramDescription");
-
-            return RedirectToAction("Index");
+            return PartialView(model);
         }
 
         // GET: Residents/Readmit/5
@@ -567,7 +571,7 @@ namespace FIVESTARVC.Controllers
         public ActionResult Readmit(int id, string ReadmitDate)
         {
             var date = DateTime.Parse(ReadmitDate);
-                        
+
             try
             {
                 Resident residentToReadmit = db.Residents
@@ -592,7 +596,7 @@ namespace FIVESTARVC.Controllers
                 };
 
                 residentToReadmit.ProgramEvents.Add(admitEvent);
-                                
+
                 db.SaveChanges();
 
                 TempData["UserMessage"] = residentToReadmit.ClearLastName + " has been readmitted from your center.  ";
@@ -610,7 +614,7 @@ namespace FIVESTARVC.Controllers
         [HttpGet]
         public ActionResult GetRegionName(string id)
         {
-            var RegionName = db.States.Find(Int32.Parse(id)).Region;
+            var RegionName = db.States.Find(int.Parse(id)).Region;
 
             return Json(RegionName, JsonRequestBehavior.AllowGet);
         }

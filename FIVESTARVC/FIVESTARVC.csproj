@@ -341,6 +341,10 @@
     <Compile Include="Migrations\201906221547412_residentReferral.Designer.cs">
       <DependentUpon>201906221547412_residentReferral.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201907130758133_resident_add_other_description.cs" />
+    <Compile Include="Migrations\201907130758133_resident_add_other_description.Designer.cs">
+      <DependentUpon>201907130758133_resident_add_other_description.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AdAuthenticationService.cs" />
     <Compile Include="Models\Benefit.cs" />
@@ -363,6 +367,7 @@
     <Compile Include="Services\ReportService.cs" />
     <Compile Include="Services\ResidentService.cs" />
     <Compile Include="Validators\Age.cs" />
+    <Compile Include="Validators\CheckDischargeDate.cs" />
     <Compile Include="Validators\CheckBirthdate.cs" />
     <Compile Include="Validators\CheckTrackDates.cs" />
     <Compile Include="ViewModels\AgeGroups.cs" />
@@ -370,6 +375,7 @@
     <Compile Include="ViewModels\CustomEvent.cs" />
     <Compile Include="ViewModels\DemographicTableViewModel.cs" />
     <Compile Include="ViewModels\DischargeStatusGroups.cs" />
+    <Compile Include="ViewModels\DischargeViewModel.cs" />
     <Compile Include="ViewModels\GenderGroup.cs" />
     <Compile Include="ViewModels\ImportedListData.cs" />
     <Compile Include="ViewModels\ResidencyReportViewModel.cs" />
@@ -956,7 +962,7 @@
     <Content Include="Views\Reports\Historic.cshtml" />
     <Content Include="Views\Shared\BenefitPartialViewEdit.cshtml" />
     <Content Include="Views\Shared\BenefitPartialViewCreate.cshtml" />
-    <Content Include="Views\Shared\_Discharge.cshtml" />
+    <Content Include="Views\Shared\Discharge.cshtml" />
     <Content Include="Views\Shared\AddCampaign.cshtml" />
     <Content Include="Views\Shared\CampaignChart.cshtml" />
     <Content Include="Views\Reports\campaigns.cshtml" />
@@ -1040,6 +1046,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201906221547412_residentReferral.resx">
       <DependentUpon>201906221547412_residentReferral.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201907130758133_resident_add_other_description.resx">
+      <DependentUpon>201907130758133_resident_add_other_description.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

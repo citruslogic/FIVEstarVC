@@ -8,7 +8,7 @@ namespace FIVESTARVC
 {
     public static class FIVESTARAuthentication
     {
-        public const String ApplicationCookie = "FIVESTARAuthenticationType";
+        public const string ApplicationCookie = "FIVESTARAuthenticationType";
     }
 
     public partial class Startup

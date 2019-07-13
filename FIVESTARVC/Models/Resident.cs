@@ -19,10 +19,10 @@ namespace FIVESTARVC.Models
         public MilitaryDischargeType MilitaryDischarge { get; set; }
 
         [Display(Name = "Non-combat?")]
-        public Boolean IsNoncombat { get; set; }
+        public bool IsNoncombat { get; set; }
 
         [Display(Name = "In Veterans Court?")]
-        public Boolean InVetCourt { get; set; }
+        public bool InVetCourt { get; set; }
 
         [Display(Name = "Note")]
         [StringLength(150)]
@@ -44,6 +44,9 @@ namespace FIVESTARVC.Models
         public int? ReferralID { get; set; }
 
         public virtual Referral Referral { get; set; }
+
+        [Display(Name = "Other Referral")]
+        public string OptionalReferralDescription { get; set; }
 
         //[Computed]
         public bool IsCurrent()

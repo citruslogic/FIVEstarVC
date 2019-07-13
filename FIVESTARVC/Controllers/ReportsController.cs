@@ -320,7 +320,7 @@ namespace FIVESTARVC.Controllers
                 years.Add(r.Year.ToString());
             }
 
-            String[] chartYears = years.Cast<string>().ToArray();
+            string[] chartYears = years.Cast<string>().ToArray();
             object[] metric = metricCounts.Cast<object>().ToArray();
 
             columnChart.SetXAxis(new XAxis()
@@ -419,7 +419,7 @@ namespace FIVESTARVC.Controllers
                 years.Add(r.Year.ToString());
             }
 
-            String[] chartYears = years.Cast<string>().ToArray();
+            string[] chartYears = years.Cast<string>().ToArray();
             object[] metric = rates.Cast<object>().ToArray();
 
             columnChart.SetXAxis(new XAxis()
@@ -504,7 +504,7 @@ namespace FIVESTARVC.Controllers
                 years.Add(r.Year.ToString());
             }
 
-            String[] chartYears = years.Cast<string>().ToArray();
+            string[] chartYears = years.Cast<string>().ToArray();
             object[] metric = metricCounts.Cast<object>().ToArray();
 
             columnChart.SetXAxis(new XAxis()
@@ -600,7 +600,7 @@ namespace FIVESTARVC.Controllers
                 years.Add(r.Year.ToString());
             }
 
-            String[] chartYears = years.Cast<string>().ToArray();
+            string[] chartYears = years.Cast<string>().ToArray();
             object[] metric = rates.Cast<object>().ToArray();
 
             columnChart.SetXAxis(new XAxis()
@@ -685,7 +685,7 @@ namespace FIVESTARVC.Controllers
                 years.Add(r.Year.ToString());
             }
 
-            String[] chartYears = years.Cast<string>().ToArray();
+            string[] chartYears = years.Cast<string>().ToArray();
             object[] metric = metricCounts.Cast<object>().ToArray();
 
             columnChart.SetXAxis(new XAxis()
@@ -781,7 +781,7 @@ namespace FIVESTARVC.Controllers
                 years.Add(r.Year.ToString());
             }
 
-            String[] chartYears = years.Cast<string>().ToArray();
+            string[] chartYears = years.Cast<string>().ToArray();
             object[] metric = rates.Cast<object>().ToArray();
 
             columnChart.SetXAxis(new XAxis()
@@ -866,7 +866,7 @@ namespace FIVESTARVC.Controllers
                 years.Add(r.Year.ToString());
             }
 
-            String[] chartYears = years.Cast<string>().ToArray();
+            string[] chartYears = years.Cast<string>().ToArray();
             object[] metric = metricCounts.Cast<object>().ToArray();
 
             columnChart.SetXAxis(new XAxis()
@@ -962,7 +962,7 @@ namespace FIVESTARVC.Controllers
                 years.Add(r.Year.ToString());
             }
 
-            String[] chartYears = years.Cast<string>().ToArray();
+            string[] chartYears = years.Cast<string>().ToArray();
             object[] metric = rates.Cast<object>().ToArray();
 
             columnChart.SetXAxis(new XAxis()
@@ -1047,7 +1047,7 @@ namespace FIVESTARVC.Controllers
                 years.Add(r.Year.ToString());
             }
 
-            String[] chartYears = years.Cast<string>().ToArray();
+            string[] chartYears = years.Cast<string>().ToArray();
             object[] metric = metricCounts.Cast<object>().ToArray();
 
             columnChart.SetXAxis(new XAxis()
@@ -1143,7 +1143,7 @@ namespace FIVESTARVC.Controllers
                 years.Add(r.Year.ToString());
             }
 
-            String[] chartYears = years.Cast<string>().ToArray();
+            string[] chartYears = years.Cast<string>().ToArray();
             object[] metric = rates.Cast<object>().ToArray();
 
             columnChart.SetXAxis(new XAxis()
@@ -1228,7 +1228,7 @@ namespace FIVESTARVC.Controllers
                 years.Add(r.Year.ToString());
             }
 
-            String[] chartYears = years.Cast<string>().ToArray();
+            string[] chartYears = years.Cast<string>().ToArray();
             object[] metric = metricCounts.Cast<object>().ToArray();
 
             columnChart.SetXAxis(new XAxis()
@@ -1324,7 +1324,7 @@ namespace FIVESTARVC.Controllers
                 years.Add(r.Year.ToString());
             }
 
-            String[] chartYears = years.Cast<string>().ToArray();
+            string[] chartYears = years.Cast<string>().ToArray();
             object[] metric = rates.Cast<object>().ToArray();
 
             columnChart.SetXAxis(new XAxis()
@@ -1410,7 +1410,7 @@ namespace FIVESTARVC.Controllers
                 years.Add(r.Year.ToString());
             }
 
-            String[] chartYears = years.Cast<string>().ToArray();
+            string[] chartYears = years.Cast<string>().ToArray();
             object[] metric = metricCounts.Cast<object>().ToArray();
 
             columnChart.SetXAxis(new XAxis()
@@ -1507,7 +1507,7 @@ namespace FIVESTARVC.Controllers
                 years.Add(r.Year.ToString());
             }
 
-            String[] chartYears = years.Cast<string>().ToArray();
+            string[] chartYears = years.Cast<string>().ToArray();
             object[] metric = rates.Cast<object>().ToArray();
 
             columnChart.SetXAxis(new XAxis()
@@ -1620,7 +1620,7 @@ namespace FIVESTARVC.Controllers
                     }
 
                     //Grabs the name of a matching program and adds it to the excel sheet with a '1' to indicate a resident is in it
-                    String programName = prgm[0];
+                    string programName = prgm[0];
 
 
                     myExport[programName.ToString()] = "1";

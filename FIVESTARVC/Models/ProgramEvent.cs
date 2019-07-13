@@ -70,7 +70,7 @@ namespace FIVESTARVC.Models
             }
         }
                
-        public Boolean Completed { get; set; }
+        public bool Completed { get; set; }
 
         [NotMapped]
         public bool IsDeleted { get; set; }
@@ -78,12 +78,12 @@ namespace FIVESTARVC.Models
         public virtual Resident Resident { get; set; }
         public virtual ProgramType ProgramType { get; set; }
 
-        public String GetShortStartDate()
+        public string GetShortStartDate()
         {
             return ClearStartDate.ToShortDateString();
         }
 
-        public String GetShortEndDate()
+        public string GetShortEndDate()
         {
             if (ClearEndDate.HasValue)
             {
@@ -97,12 +97,12 @@ namespace FIVESTARVC.Models
 
         }
 
-        public String GetLongStartDate()
+        public string GetLongStartDate()
         {
             return ClearStartDate.ToLongDateString();
         }
 
-        public String GetLongEndDate()
+        public string GetLongEndDate()
         {
             if (ClearEndDate.HasValue)
             {

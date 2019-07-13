@@ -16,8 +16,8 @@ namespace FIVESTARVC.Models
                 ErrorMessage = errorMessage;
             }
 
-            public String ErrorMessage { get; private set; }
-            public Boolean IsSuccess => String.IsNullOrEmpty(ErrorMessage);
+            public string ErrorMessage { get; private set; }
+            public bool IsSuccess => string.IsNullOrEmpty(ErrorMessage);
         }
 
         private readonly IAuthenticationManager authenticationManager;
@@ -34,7 +34,7 @@ namespace FIVESTARVC.Models
         /// <param name="username"></param>
         /// <param name="password"></param>
         /// <returns></returns>
-        public AuthenticationResult SignIn(String username, String password)
+        public AuthenticationResult SignIn(string username, string password)
         {
 #if DEBUG
             // authenticates against your local machine - for development time
@@ -98,7 +98,7 @@ namespace FIVESTARVC.Models
             identity.AddClaim(new Claim("http://schemas.microsoft.com/accesscontrolservice/2010/07/claims/identityprovider", "Active Directory"));
             identity.AddClaim(new Claim(ClaimTypes.Name, userPrincipal.SamAccountName));
             identity.AddClaim(new Claim(ClaimTypes.NameIdentifier, userPrincipal.SamAccountName));
-            if (!String.IsNullOrEmpty(userPrincipal.EmailAddress))
+            if (!string.IsNullOrEmpty(userPrincipal.EmailAddress))
             {
                 identity.AddClaim(new Claim(ClaimTypes.Email, userPrincipal.EmailAddress));
             }

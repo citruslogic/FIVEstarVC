@@ -101,13 +101,18 @@
                         @Html.DropDownList("StateTerritoryID", null, htmlAttributes: new { @class = "form-control" })
                         @Html.ValidationMessageFor(model => model.StateTerritory)
                     </td>
-                   
+
                     <td class="col-form-label">
-                        @Html.LabelFor(model => model.ReferralID, htmlAttributes: new { @class = "control-label"})
+                        @Html.LabelFor(model => model.ReferralID, htmlAttributes: new { @class = "control-label" })
                     </td>
                     <td>
-                        @Html.DropDownList("ReferralID", null, htmlAttributes: new { @class = "form-control"})
+                        @Html.DropDownList("ReferralID", null, htmlAttributes: new { @class = "form-control" })
                         @Html.ValidationMessageFor(model => model.Referral)
+                    </td>
+
+                    <td colspan="2">
+                        @Html.EditorFor(model => model.ReferralOther, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.ReferralOther)
                     </td>
                 </tr>
                 <tr>
@@ -241,6 +246,8 @@
 
         }
 
+        $('#ReferralOther').hide();
+
         $("#IsNoncombat").click(function () {
             if ($(this).is(":checked")) {
                 $(".campaign").prop('checked', false);
@@ -291,6 +298,16 @@
 
         });
 
+        $('#ReferralID').on("change", function () {
+
+            if ($('#ReferralID option:selected').text() === "Other") {
+                $('#ReferralOther').show();
+            } else {
+                $('#ReferralOther').val('');
+                $('#ReferralOther').hide();
+            }
+        });
+
         $("#DisabilityPercentage").focusout(function () {
 
             if ($(this).val().length > 0) {
@@ -328,29 +345,6 @@
                 $(".campaign").attr("disabled", false);
             }
         });
-
-        $('.DropDownClear').on("onload", function () {
-            document.getElementById('RoomID').length = 0;
-
-            roomsort();
-
-        });
-
-            //Clear the rooms dropdown
-
-        function roomsort() {
-            //Call the GET method again and run the query
-            //By calling it now, you ensure the Rooms
-            //Dropdown is updated everytime the page is loaded.
-
-            $.ajax({
-
-                type: "GET",
-                url: '@Url.Action("Create", "Resident")'
-
-            });
-        }
-
 
     </script>
 }

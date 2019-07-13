@@ -125,7 +125,7 @@ namespace FIVESTARVC.Migrations
 
             var referrals = new List<Referral>
             {
-                new Referral { ReferralID = 1, ReferralName = "None" },
+                new Referral { ReferralID = 1, ReferralName = "Internet/Google" },
                 new Referral { ReferralID = 2, ReferralName = "VA" },
                 new Referral { ReferralID = 3, ReferralName = "Wounded Warrior" },
                 new Referral { ReferralID = 4, ReferralName = "Sulzbacher" },

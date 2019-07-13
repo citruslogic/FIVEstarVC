@@ -5,7 +5,8 @@
 <link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
 @*Required for the Bootstrap dropdown.*@
 <script type="text/javascript" src="~/Scripts/umd/popper.js"></script>
-
+<script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.js")" type="text/javascript"></script>
 <style>
     .modal-content {
         /*width: 400px !important;*/
@@ -130,10 +131,8 @@
                     @if (item.IsCurrent())
                     {
 
-                        @:<input type="button" value="Release" class="modal-link btn btn-sm btn-danger"
-                                  @: data-toggle="modal" data-target="#QuickEventModal" onclick="showDischargeDialog(@item.ResidentID)" />
-
-
+                        @:<input type="button" value="Release" class="btn btn-sm btn-danger"
+                                  @: onclick="showDischargeDialog(@item.ResidentID)" />
 
 
                     }
@@ -224,7 +223,7 @@ Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.Page
                 $('.modal-body').html = '';
                 $('.modal-body').html(data);
                 $('.modal-title').html("Release from Center");
-                $('#QuickEventModal').modal('show');
+                $('#AddModal').modal('show');
             });
         }
 

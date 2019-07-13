@@ -29,8 +29,8 @@ namespace FIVESTARVC.ViewModels
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public DateTime? EndDate { get; set; }
 
-        public Boolean Completed { get; set; }
-        public Boolean CanRemove { get; set; }
+        public bool Completed { get; set; }
+        public bool CanRemove { get; set; }
 
         public virtual Resident Resident { get; set; }
         public virtual ProgramType ProgramType { get; set; }

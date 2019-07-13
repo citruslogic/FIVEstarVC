@@ -50,9 +50,9 @@ namespace FIVESTARVC.ViewModels
         public virtual StateTerritory StateTerritory { get; set; }
 
         [Display(Name = "In Veterans Court?")]
-        public Boolean InVetCourt { get; set; }
+        public bool InVetCourt { get; set; }
         [Display(Name = "Non-combat?")]
-        public Boolean IsNoncombat { get; set; }
+        public bool IsNoncombat { get; set; }
         [Display(Name = "Note")]
         [StringLength(150)]
         public string Note { get; set; }
@@ -61,6 +61,9 @@ namespace FIVESTARVC.ViewModels
         public int? ReferralID { get; set; }
 
         public virtual Referral Referral { get; set; }
+
+        [Display(Name = "Other")]
+        public string ReferralOther { get; set; }
 
         public virtual ICollection<MilitaryCampaign> MilitaryCampaigns { get; set; }
         public virtual ICollection<ProgramEvent> ProgramEvents { get; set; }
@@ -99,7 +102,7 @@ namespace FIVESTARVC.ViewModels
 
         /* Other forms of disability as income */
         [Display(Name = "Other Income (Description)")]
-        public String OtherDescription { get; set; }
+        public string OtherDescription { get; set; }
 
         [DataType(DataType.Currency)]
         [Column(TypeName = "money")]

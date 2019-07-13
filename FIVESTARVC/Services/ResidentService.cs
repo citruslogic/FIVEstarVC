@@ -35,7 +35,7 @@ namespace FIVESTARVC.Services
                     residents = residents.OrderByDescending(s => s.ServiceBranch).ToList();
                     break;
                 default:
-                    residents = residents.OrderBy(s => s.ClearLastName.Computed()).ToList();
+                    residents = residents.OrderBy(s => s.ClearLastName).ToList();
                     break;
             }
 

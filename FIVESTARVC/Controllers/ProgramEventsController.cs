@@ -25,7 +25,7 @@ namespace FIVESTARVC.Controllers
         public ActionResult Index(string sortOrder, string currentFilter, string searchString, int? page)
         {
             ViewBag.CurrentSort = sortOrder;
-            ViewBag.NameSortParm = String.IsNullOrEmpty(sortOrder) ? "lname_desc" : "";
+            ViewBag.NameSortParm = string.IsNullOrEmpty(sortOrder) ? "lname_desc" : "";
             ViewBag.ProgramTypeID = new SelectList(db.ProgramTypes, "ProgramTypeID", "ProgramDescription");
 
             var programEvents = db.Residents.AsNoTracking().Include(p => p.ProgramEvents).Where(i => i.ProgramEvents.Count > 0).ToList().OrderBy(i => i.ClearLastName).ToList();
