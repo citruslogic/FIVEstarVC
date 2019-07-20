@@ -466,7 +466,7 @@ namespace FIVESTARVC.Controllers
             }
 
             var residentToDischarge = db.Residents
-                .Include(p => p.ProgramEvents)
+                .Include(p => p.ProgramEvents.Select(j => j.ProgramType))
                 .Where(r => r.ResidentID == id)
                 .Single();
 
@@ -478,12 +478,13 @@ namespace FIVESTARVC.Controllers
                 Birthdate = residentToDischarge.ClearBirthdate.ToShortDateString(),
                 Note = residentToDischarge.Note,
                 ServiceBranch = residentToDischarge.ServiceBranch,
+                LastAdmitted = residentToDischarge.ProgramEvents.LastOrDefault(i => i.ProgramType.EventType == EnumEventType.ADMISSION).ClearStartDate.Date
             };
 
             ViewBag.ProgramTypeID = new SelectList(db.ProgramTypes
                 .Where(t => t.EventType == EnumEventType.DISCHARGE), "ProgramTypeID", "ProgramDescription");
 
-            return PartialView(dischargeModel);
+            return View("Discharge", dischargeModel);
         }
 
         // POST: Residents/Discharge/5
@@ -528,10 +529,9 @@ namespace FIVESTARVC.Controllers
                 db.SaveChanges();
                 TempData["UserMessage"] = residentToDischarge.ClearLastName + " has been discharged from your center.  ";
                 return RedirectToAction("Index");
-
             } 
 
-            return PartialView(model);
+            return View("Discharge", model);
         }
 
         // GET: Residents/Readmit/5

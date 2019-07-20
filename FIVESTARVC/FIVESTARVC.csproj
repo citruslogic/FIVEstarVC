@@ -369,7 +369,7 @@
     <Compile Include="Validators\Age.cs" />
     <Compile Include="Validators\CheckBirthdate.cs" />
     <Compile Include="Validators\CheckTrackDates.cs" />
-    <Compile Include="Validators\DischargeDateCheck.cs" />
+    <Compile Include="Validators\IsDateAfter.cs" />
     <Compile Include="ViewModels\AgeGroups.cs" />
     <Compile Include="ViewModels\AssignedCampaignData.cs" />
     <Compile Include="ViewModels\CustomEvent.cs" />

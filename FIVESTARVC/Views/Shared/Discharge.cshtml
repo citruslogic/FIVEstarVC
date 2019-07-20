@@ -1,108 +1,102 @@
 ﻿@model FIVESTARVC.ViewModels.DischargeViewModel
 @using FIVESTARVC.Models;
 
-@{
-    Layout = null;
 
-    AjaxOptions options = new AjaxOptions();
-    options.HttpMethod = "POST";
-    options.UpdateTargetId = "dischargeForm";
-    options.InsertionMode = InsertionMode.Replace;
-}
-
-
-@using (Ajax.BeginForm("Discharge", "Residents", options, new { @class = "form-horizontal", role = "form" }))
+@using (Html.BeginForm("Discharge", "Residents", new { @class = "form-horizontal", role = "form" }))
 {
     @Html.AntiForgeryToken()
 
-    <div id="dischargeForm">
-        <h4>Release @Model.FullName</h4>
-        <p> Are you sure you want to release this resident from your center?</p>
-        <br />
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        <div id="customErrorMessage"></div>
-        @Html.HiddenFor(model => model.ResidentID)
+    <h4>Release @Model.FullName</h4>
+    <p> Are you sure you want to release this resident from your center?</p>
+    <br />
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    <div id="customErrorMessage"></div>
+    @Html.HiddenFor(model => model.ResidentID)
+    @Html.HiddenFor(model => model.LastAdmitted)
 
-        <div class="container">
-            <div class="row">
+<div class="container">
+    <div class="row">
+        <div class="col-md-6">
 
-                <div class="table-responsive">
-                    @Html.Label("Release Date")
-                    @Html.ValidationMessageFor(model => model.DischargeDate, "")
-                    <div class="input-group mb-2 col-sm-9">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text fa fa-calendar fa-fw" style="width:40px;"></span>
-                        </div>
-
-                        @Html.EditorFor(model => model.DischargeDate, new { htmlAttributes = new { @class = "form-control" } })
-
+            <div class="table-responsive">
+                @Html.LabelFor(m => m.LastAdmitted)
+                @Html.Raw(Model.LastAdmitted.ToShortDateString())
+                <br />@Html.Label("Release Date")
+                @Html.ValidationMessageFor(model => model.DischargeDate, "")
+                
+                <div class="input-group mb-2 col-sm-9">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text fa fa-calendar fa-fw" style="width:40px;"></span>
                     </div>
-                    <table class="table table-sm">
 
-                        <tbody>
-                            <tr>
+                    @Html.EditorFor(model => model.DischargeDate, new { htmlAttributes = new { @class = "form-control" } })
 
-                                <td class="col-form-label">
+                </div>
+                <table class="table table-sm">
 
-                                    @Html.Label("Full name", htmlAttributes: new { @class = "control-label" })
-                                </td>
-                                <td>
-                                    @(Model.FullName)
-                                </td>
+                    <tbody>
+                        <tr>
 
-                            </tr>
+                            <td class="col-form-label">
 
-                            <tr>
-                                <td class="col-form-label">@Html.LabelFor(model => model.Birthdate, htmlAttributes: new { @class = "control-label" })</td>
-                                <td>
-                                    @(Model.Birthdate)
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="col-form-label"> @Html.LabelFor(model => model.ServiceBranch, htmlAttributes: new { @class = "control-label" })</td>
-                                <td>
-                                    @{
-                                        var serviceDescription = FSEnumHelper.GetDescription(Model.ServiceBranch);
+                                @Html.Label("Full name", htmlAttributes: new { @class = "control-label" })
+                            </td>
+                            <td>
+                                @(Model.FullName)
+                            </td>
+
+                        </tr>
+
+                        <tr>
+                            <td class="col-form-label">@Html.LabelFor(model => model.Birthdate, htmlAttributes: new { @class = "control-label" })</td>
+                            <td>
+                                @(Model.Birthdate)
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="col-form-label"> @Html.LabelFor(model => model.ServiceBranch, htmlAttributes: new { @class = "control-label" })</td>
+                            <td>
+                                @{
+                                    var serviceDescription = FSEnumHelper.GetDescription(Model.ServiceBranch);
 
 
-                                        @Html.DisplayFor(modelItem => serviceDescription)
-                                    }
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+                                    @Html.DisplayFor(modelItem => serviceDescription)
+                                }
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
 
-                    <div class="form-group">
-                        <div class="col-sm-6">
-                            @Html.Label("Release Reason", htmlAttributes: new { @class = "control-label" })
+                <div class="form-group">
+                    <div class="col-sm-6">
+                        @Html.Label("Release Reason", htmlAttributes: new { @class = "control-label" })
 
-                            @Html.DropDownList("ProgramTypeID", null, htmlAttributes: new { @class = "form-control" })
-                            \
-                            @Html.LabelFor(model => model.Note, htmlAttributes: new { @class = "control-label" })
-                            <div>
-                                @Html.TextAreaFor(model => model.Note, htmlAttributes: new { @class = "form-control" })
-                                @Html.ValidationMessageFor(model => model.Note, "")
-                            </div>
+                        @Html.DropDownList("ProgramTypeID", null, htmlAttributes: new { @class = "form-control" })
+
+                        @Html.LabelFor(model => model.Note, htmlAttributes: new { @class = "control-label" })
+                        <div>
+                            @Html.TextAreaFor(model => model.Note, htmlAttributes: new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.Note, "")
                         </div>
                     </div>
                 </div>
-
             </div>
-
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="submit" class="btn btn-danger">Release</button>
-            </div>
-
+            <input type="submit" value="Confirm Release" class="btn btn-danger" />
+            @Html.ActionLink("Back to List", "Index", null, htmlAttributes: new { @class = "btn btn-primary" })
+            <br />
         </div>
-
     </div>
 
-}
+</div>
+
+                                }
 
 @section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
-    @Scripts.Render("~/Scripts/discharge.js")
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+    <script src="@Url.Content("~/Scripts/discharge.js")" type="text/javascript"></script>
+
     <script type="text/javascript">
 
         $.validator.unobtrusive.parse($("form"));

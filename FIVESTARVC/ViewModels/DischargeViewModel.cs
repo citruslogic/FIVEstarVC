@@ -5,15 +5,21 @@ using System.ComponentModel.DataAnnotations;
 
 namespace FIVESTARVC.ViewModels
 {
-    public class DischargeViewModel
+     public class DischargeViewModel
     {
         public int ResidentID { get; set; }
 
         [Required]
         [DataType(DataType.Date)]
-        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
+        [DisplayFormat(DataFormatString = "{0:MM/dd/yyyy}", ApplyFormatInEditMode = true)]
         [Display(Name = "Discharge Date")]
+        [IsDateAfter("LastAdmitted", true, ErrorMessage = "Discharge Date must come after or on Last Admitted Date")]
         public DateTime? DischargeDate { get; set; }
+
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:MM/dd/yyyy", ApplyFormatInEditMode = true)]
+        [Display(Name = "Last Admit Date")]
+        public DateTime LastAdmitted { get; set; }
 
         [Display(Name = "Full name")]
         public string FullName { get; set; }
