@@ -301,9 +301,8 @@ namespace FIVESTARVC.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost, ActionName("Edit")]
         [ValidateAntiForgeryToken]
-        public ActionResult EditPost(int? id, string[] selectedCampaigns, bool? Readmit)
+        public ActionResult EditPost(int? id, string[] selectedCampaigns, bool? Readmit, string readmitDate)
         {
-
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -315,6 +314,10 @@ namespace FIVESTARVC.Controllers
                 .Include(r => r.Referral)
                 .Where(c => c.ResidentID == id)
                 .Single();
+
+            ViewBag.StateTerritoryID = new SelectList(db.States, "StateTerritoryID", "State", residentToUpdate.StateTerritoryID);
+            ViewBag.ReferralID = new SelectList(db.Referrals, "ReferralID", "ReferralName", residentToUpdate.ReferralID);
+            ViewBag.Campaigns = residentService.PopulateAssignedCampaignData(residentToUpdate, db);
 
             if (TryUpdateModel(residentToUpdate, "",
                new string[] { "ClearLastName", "ClearFirstMidName", "Gender", "Religion", "Ethnicity", "StateTerritoryID", "ReferralID", "OptionalReferralDescription", "ClearBirthdate",
@@ -328,15 +331,22 @@ namespace FIVESTARVC.Controllers
                     {
                         if (Readmit == true)
                         {
+                            if (string.IsNullOrEmpty(readmitDate))
+                            {
+                                ModelState.AddModelError("", "Readmission Date is required if you are readmitting this resident.");
+                                return View(residentToUpdate);
+                            }
+                            var date = DateTime.Parse(readmitDate);
+                           
                             var ev = residentToUpdate.ProgramEvents
                                 .LastOrDefault(i => i.ProgramType.EventType == EnumEventType.DISCHARGE);    // Emergency Discharge to be readmited.
-                            ev.ClearEndDate = DateTime.Now.Date;
+                            ev.ClearEndDate = date;
                             db.Entry(ev).State = EntityState.Modified;
 
                             var readmitEvent = new ProgramEvent
                             {
                                 ProgramTypeID = 3,
-                                ClearStartDate = DateTime.Now.Date
+                                ClearStartDate = date
                             };
 
                             residentToUpdate.ProgramEvents.Add(readmitEvent);
@@ -356,11 +366,6 @@ namespace FIVESTARVC.Controllers
                     ModelState.AddModelError(dex.Message, "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
                 }
             }
-
-            ViewBag.StateTerritoryID = new SelectList(db.States, "StateTerritoryID", "State", residentToUpdate.StateTerritoryID);
-            ViewBag.ReferralID = new SelectList(db.Referrals, "ReferralID", "ReferralName", residentToUpdate.ReferralID);
-
-            ViewBag.Campaigns = residentService.PopulateAssignedCampaignData(residentToUpdate, db);
 
             return View(residentToUpdate);
         }
