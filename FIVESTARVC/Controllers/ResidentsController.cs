@@ -2,6 +2,7 @@
 using FIVESTARVC.DAL;
 using FIVESTARVC.Models;
 using FIVESTARVC.Services;
+using FIVESTARVC.Validators;
 using FIVESTARVC.ViewModels;
 using PagedList;
 using System;
@@ -497,25 +498,23 @@ namespace FIVESTARVC.Controllers
             if (ModelState.IsValid)
             {
                 Resident residentToDischarge = db.Residents
-                .Include(p => p.ProgramEvents)
+                .Include(p => p.ProgramEvents.Select(i => i.ProgramType))
                 .Where(r => r.ResidentID == model.ResidentID)
                 .Single();
+
+                // To close admission events
+                var ev = residentToDischarge.ProgramEvents
+                    .LastOrDefault(i => i.ProgramType.EventType == EnumEventType.ADMISSION);
+                    
+                ev.ClearEndDate = model.DischargeDate;
+                db.Entry(ev).State = EntityState.Modified;
 
                 // Discharge event
                 residentToDischarge.ProgramEvents.Add(new ProgramEvent
                 {
                     ProgramTypeID = model.ProgramTypeID,
                     ClearStartDate = model.DischargeDate.Value
-
                 });
-
-                // To close admission events
-                var ev = residentToDischarge.ProgramEvents
-                    .Where(i => i.ProgramType.EventType == EnumEventType.ADMISSION)
-                    .ToList()
-                    .LastOrDefault();
-                ev.ClearEndDate = model.DischargeDate;
-                db.Entry(ev).State = EntityState.Modified;
 
                 if (residentToDischarge.ActualDaysStayed == null)
                 {
@@ -530,10 +529,7 @@ namespace FIVESTARVC.Controllers
                 TempData["UserMessage"] = residentToDischarge.ClearLastName + " has been discharged from your center.  ";
                 return RedirectToAction("Index");
 
-            } else
-            {
-                ModelState.AddModelError("", $"The release form cannot be submitted because it has invalid data.");
-            }
+            } 
 
             return PartialView(model);
         }
@@ -617,6 +613,25 @@ namespace FIVESTARVC.Controllers
             var RegionName = db.States.Find(int.Parse(id)).Region;
 
             return Json(RegionName, JsonRequestBehavior.AllowGet);
+        }
+
+
+        [HttpGet]
+        public ActionResult ValidateDischargeDate(string date, int residentID)
+        {
+            Resident residentToDischarge = db.Residents
+                .Include(p => p.ProgramEvents.Select(i => i.ProgramType))
+                .Where(r => r.ResidentID == residentID)
+                .Single();
+
+            var lastAdmissionDate = residentToDischarge.ProgramEvents.LastOrDefault(i => i.ProgramType.EventType == EnumEventType.ADMISSION).ClearStartDate;
+            if (DateTime.Parse(date) < lastAdmissionDate)
+            {
+                var error = $"The discharge date cannot be less than the resident's admit date, {lastAdmissionDate}.";
+                return Json(new { Success = false, message = error }, JsonRequestBehavior.AllowGet);
+            }
+
+            return Json("Discharge date OK", JsonRequestBehavior.AllowGet);
         }
 
         protected override void Dispose(bool disposing)

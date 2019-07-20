@@ -10,7 +10,6 @@ namespace FIVESTARVC.ViewModels
         public int ResidentID { get; set; }
 
         [Required]
-        [DischargeDateCheck]
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         [Display(Name = "Discharge Date")]
@@ -29,5 +28,7 @@ namespace FIVESTARVC.ViewModels
         [Display(Name = "Reason")]
         public int ProgramTypeID { get; set; }
 
+        public string ErrorMessage { get; set; }
+       
     }
 }
