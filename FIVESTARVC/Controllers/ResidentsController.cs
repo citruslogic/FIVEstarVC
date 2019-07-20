@@ -340,6 +340,13 @@ namespace FIVESTARVC.Controllers
                            
                             var ev = residentToUpdate.ProgramEvents
                                 .LastOrDefault(i => i.ProgramType.EventType == EnumEventType.DISCHARGE);    // Emergency Discharge to be readmited.
+
+                            if (date < ev.ClearStartDate)
+                            {
+                                ModelState.AddModelError("", "Readmission date cannot be prior to last discharge date, " + ev.ClearStartDate.ToShortDateString());
+                                return View(residentToUpdate);
+                            }
+
                             ev.ClearEndDate = date;
                             db.Entry(ev).State = EntityState.Modified;
 
