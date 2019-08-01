@@ -345,6 +345,10 @@
     <Compile Include="Migrations\201907130758133_resident_add_other_description.Designer.cs">
       <DependentUpon>201907130758133_resident_add_other_description.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201907312333083_AgeAtRelease.cs" />
+    <Compile Include="Migrations\201907312333083_AgeAtRelease.Designer.cs">
+      <DependentUpon>201907312333083_AgeAtRelease.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AdAuthenticationService.cs" />
     <Compile Include="Models\Benefit.cs" />
@@ -1050,6 +1054,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201907130758133_resident_add_other_description.resx">
       <DependentUpon>201907130758133_resident_add_other_description.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201907312333083_AgeAtRelease.resx">
+      <DependentUpon>201907312333083_AgeAtRelease.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

@@ -107,6 +107,9 @@ namespace FIVESTARVC.Models
             }
         }
 
+        // The last known age of the resident upon release from the center. 
+        public int AgeAtRelease { get; set; }
+
         [Display(Name = "Full Name")]
         public string Fullname
         {

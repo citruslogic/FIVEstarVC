@@ -273,12 +273,12 @@ namespace FIVESTARVC.Controllers
             }
 
             Resident resident = db.Residents
-            .Include(c => c.MilitaryCampaigns)
-            .Include(b => b.Benefit)
-            .Include(s => s.StateTerritory)
-            .Include(r => r.Referral)
-            .Where(c => c.ResidentID == id)
-            .Single();
+                .Include(c => c.MilitaryCampaigns)
+                .Include(b => b.Benefit)
+                .Include(s => s.StateTerritory)
+                .Include(r => r.Referral)
+                .Where(c => c.ResidentID == id)
+                .Single();
 
 
             ViewBag.Campaigns = residentService.PopulateAssignedCampaignData(resident, db);
@@ -320,8 +320,9 @@ namespace FIVESTARVC.Controllers
             ViewBag.Campaigns = residentService.PopulateAssignedCampaignData(residentToUpdate, db);
 
             if (TryUpdateModel(residentToUpdate, "",
-               new string[] { "ClearLastName", "ClearFirstMidName", "Gender", "Religion", "Ethnicity", "StateTerritoryID", "ReferralID", "OptionalReferralDescription", "ClearBirthdate",
-                   "ServiceBranch", "Note", "InVetCourt", "IsNoncombat", "Benefit", "MilitaryCampaigns", "TotalBenefitAmount" }))
+               new string[] { "ClearLastName", "ClearFirstMidName", "Gender", "Religion", "Ethnicity", "StateTerritoryID", "ReferralID", "AgeAtRelease",
+                   "OptionalReferralDescription", "ClearBirthdate", "ServiceBranch", "Note", "InVetCourt", "IsNoncombat", "Benefit", "MilitaryCampaigns",
+                   "TotalBenefitAmount" }))
             {
                 try
                 {
@@ -348,6 +349,8 @@ namespace FIVESTARVC.Controllers
                             }
 
                             ev.ClearEndDate = date;
+                            residentToUpdate.AgeAtRelease = 0;      // reset the age at release for the readmitted resident.
+
                             db.Entry(ev).State = EntityState.Modified;
 
                             var readmitEvent = new ProgramEvent
@@ -357,7 +360,6 @@ namespace FIVESTARVC.Controllers
                             };
 
                             residentToUpdate.ProgramEvents.Add(readmitEvent);
-
                         }
                     }
 
@@ -518,6 +520,9 @@ namespace FIVESTARVC.Controllers
                 // To close admission events
                 var ev = residentToDischarge.ProgramEvents
                     .LastOrDefault(i => i.ProgramType.EventType == EnumEventType.ADMISSION);
+
+                // Set age at release for resident for reporting more accurate cumulative age.
+                residentToDischarge.AgeAtRelease = residentToDischarge.Age;
                     
                 ev.ClearEndDate = model.DischargeDate;
                 db.Entry(ev).State = EntityState.Modified;
@@ -604,6 +609,7 @@ namespace FIVESTARVC.Controllers
                 };
 
                 residentToReadmit.ProgramEvents.Add(admitEvent);
+                residentToReadmit.AgeAtRelease = 0;     // resident is readmitted, reset Age At Release.
 
                 db.SaveChanges();
 
@@ -626,25 +632,7 @@ namespace FIVESTARVC.Controllers
 
             return Json(RegionName, JsonRequestBehavior.AllowGet);
         }
-
-
-        [HttpGet]
-        public ActionResult ValidateDischargeDate(string date, int residentID)
-        {
-            Resident residentToDischarge = db.Residents
-                .Include(p => p.ProgramEvents.Select(i => i.ProgramType))
-                .Where(r => r.ResidentID == residentID)
-                .Single();
-
-            var lastAdmissionDate = residentToDischarge.ProgramEvents.LastOrDefault(i => i.ProgramType.EventType == EnumEventType.ADMISSION).ClearStartDate;
-            if (DateTime.Parse(date) < lastAdmissionDate)
-            {
-                var error = $"The discharge date cannot be less than the resident's admit date, {lastAdmissionDate}.";
-                return Json(new { Success = false, message = error }, JsonRequestBehavior.AllowGet);
-            }
-
-            return Json("Discharge date OK", JsonRequestBehavior.AllowGet);
-        }
+                    
 
         protected override void Dispose(bool disposing)
         {

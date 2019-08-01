@@ -44,15 +44,9 @@ namespace FIVESTARVC.Controllers
         // GET: GenderGroupBreakdown
         public ActionResult GenderGroupBreakdown()
         {
-            //var GenderGroups = db.Residents.ToList().Where(cur => cur.IsCurrent()).GroupBy(r => r.Gender).Select(group => new GenderGroup
-            //{
-            //    Gender = FSEnumHelper.GetDescription(group.Key),
-            //    Count = group.Count()
-            //});
-
             var demographicTable = new DemographicTableViewModel();
             List<GenderGroup> genders = new List<GenderGroup>();
-            IEnumerable<Resident> residents = db.Residents.ToList().Where(cur => cur.IsCurrent());
+            IEnumerable<Resident> residents = db.Residents.AsNoTracking().ToList().Where(cur => cur.IsCurrent());
 
             genders = GenerateGenderComposition(residents);
 
@@ -65,10 +59,9 @@ namespace FIVESTARVC.Controllers
         public ActionResult CumulativeGenderGroupBreakdown()
         {
             var demographicTable = new DemographicTableViewModel();
-            List<GenderGroup> genders = new List<GenderGroup>();
-            IEnumerable<Resident> residents = db.Residents.ToList();
+            IEnumerable<Resident> residents = db.Residents.AsNoTracking().ToList();
 
-            genders = GenerateGenderComposition(residents);
+            List<GenderGroup> genders = GenerateGenderComposition(residents);
 
             demographicTable.GenderComposition = genders;
 
@@ -78,7 +71,7 @@ namespace FIVESTARVC.Controllers
         public ActionResult GetServiceDischargeCounts()
         {
             List<DischargeStatusGroups> serviceDischargeGroups = new List<DischargeStatusGroups>();
-            IEnumerable<Resident> residents = db.Residents.ToList();
+            IEnumerable<Resident> residents = db.Residents.AsNoTracking().ToList();
 
             serviceDischargeGroups.Add(new DischargeStatusGroups
             {
@@ -108,63 +101,105 @@ namespace FIVESTARVC.Controllers
 
         }
 
-        public List<AgeGroups> GenerateAgeComposition(IEnumerable<Resident> residents)
+        public List<AgeGroups> GenerateAgeComposition(IEnumerable<Resident> residents, bool cumulative = false)
         {
 
-            return new List<AgeGroups> {
-                new AgeGroups
-                {
-                    AgeGroup = "19 - 29",
-                    Count = residents.Where(r => r.Age >= 19 && r.Age <= 29).Count()
-                },
+            if (cumulative)
+            {
+                return new List<AgeGroups> {
+                    new AgeGroups
+                    {
+                        AgeGroup = "19 - 29",
+                        Count = residents.Where(r => r.IsCurrent() && r.Age >= 19 && r.Age <= 29).Count()
+                                        + residents.Where(r => !r.IsCurrent() && r.AgeAtRelease >= 19 && r.AgeAtRelease <= 29).Count()
+                    },
 
-                new AgeGroups
-                {
-                    AgeGroup = "30 - 39",
-                    Count = residents.Where(r => r.Age >= 30 && r.Age <= 39).Count()
-                },
+                    new AgeGroups
+                    {
+                        AgeGroup = "30 - 39",
+                        Count = residents.Where(r => r.IsCurrent() && r.Age >= 30 && r.Age <= 39).Count()
+                            + residents.Where(r => !r.IsCurrent() && r.AgeAtRelease >= 30 && r.AgeAtRelease <= 39).Count()
+                    },
 
-                new AgeGroups
-                {
-                    AgeGroup = "40 - 49",
-                    Count = residents.Where(r => r.Age >= 40 && r.Age <= 49).Count()
-                },
+                    new AgeGroups
+                    {
+                        AgeGroup = "40 - 49",
+                        Count = residents.Where(r => r.IsCurrent() && r.Age >= 40 && r.Age <= 49).Count()
+                            + residents.Where(r => !r.IsCurrent() && r.AgeAtRelease >= 40 && r.AgeAtRelease <= 49).Count()
+                    },
 
-                new AgeGroups
-                {
-                    AgeGroup = "50 - 59",
-                    Count = residents.Where(r => r.Age >= 50 && r.Age <= 59).Count()
-                },
+                    new AgeGroups
+                    {
+                        AgeGroup = "50 - 59",
+                        Count = residents.Where(r => r.IsCurrent() && r.Age >= 50 && r.Age <= 59).Count()
+                            + residents.Where(r => !r.IsCurrent() && r.AgeAtRelease >= 50 && r.AgeAtRelease <= 59).Count()
+                    },
 
-                new AgeGroups
-                {
-                    AgeGroup = "60 - 69",
-                    Count = residents.Where(r => r.Age >= 60 && r.Age <= 69).Count()
-                },
+                    new AgeGroups
+                    {
+                        AgeGroup = "60 - 69",
+                        Count = residents.Where(r => r.IsCurrent() && r.Age >= 60 && r.Age <= 69).Count()
+                            + residents.Where(r => !r.IsCurrent() && r.AgeAtRelease >= 60 && r.AgeAtRelease <= 69).Count()
+                    },
 
-                new AgeGroups
-                {
-                    AgeGroup = "> 70",
-                    Count = residents.Where(r => r.Age > 70).Count()
-                }
-            };
+                    new AgeGroups
+                    {
+                        AgeGroup = "> 70",
+                        Count = residents.Where(r => r.Age > 70).Count() + residents.Where(r => !r.IsCurrent() && r.AgeAtRelease > 70).Count()
+                    }
+                };
+            }
+            else
+            {
+                return new List<AgeGroups> {
+                    new AgeGroups
+                    {
+                        AgeGroup = "19 - 29",
+                        Count = residents.Where(r => r.IsCurrent() && r.Age >= 19 && r.Age <= 29).Count()
+                    },
+
+                    new AgeGroups
+                    {
+                        AgeGroup = "30 - 39",
+                        Count = residents.Where(r => r.IsCurrent() && r.Age >= 30 && r.Age <= 39).Count()
+                    },
+
+                    new AgeGroups
+                    {
+                        AgeGroup = "40 - 49",
+                        Count = residents.Where(r => r.IsCurrent() && r.Age >= 40 && r.Age <= 49).Count()
+                    },
+
+                    new AgeGroups
+                    {
+                        AgeGroup = "50 - 59",
+                        Count = residents.Where(r => r.IsCurrent() && r.Age >= 50 && r.Age <= 59).Count()
+                    },
+
+                    new AgeGroups
+                    {
+                        AgeGroup = "60 - 69",
+                        Count = residents.Where(r => r.IsCurrent() && r.Age >= 60 && r.Age <= 69).Count()
+                    },
+
+                    new AgeGroups
+                    {
+                        AgeGroup = "> 70",
+                        Count = residents.Where(r => r.Age > 70).Count()
+                    }
+                };
+            }
+
         }
+
 
         // GET: AgeGroupBreakdown
         public ActionResult AgeGroupBreakdown()
         {
-            // Not what was asked for.
-
-            //var AgeGroups = db.Residents.ToList().Where(cur => cur.IsCurrent()).GroupBy(r => r.Age > 70 ? 5 : (r.Age - 18) / 10).Select(group => new AgeGroups
-            //{ 
-            //    AgeGroup = group.Key == 5 ? "> 70" : string.Format("{0} - {1}", group.Key * 10 + 18, group.Key * 10 + 29),
-            //    Count = group.Count()
-            //}).OrderByDescending(a => a.AgeGroup);
-
             var demographicTable = new DemographicTableViewModel();
             List<AgeGroups> ageGroups = new List<AgeGroups>();
 
-            IEnumerable<Resident> residents = db.Residents.ToList().Where(cur => cur.IsCurrent());
+            IEnumerable<Resident> residents = db.Residents.AsNoTracking().ToList().Where(cur => cur.IsCurrent());
 
             ageGroups = GenerateAgeComposition(residents);
 
@@ -178,20 +213,12 @@ namespace FIVESTARVC.Controllers
 
         public ActionResult CumulativeAgeGroupBreakdown()
         {
-            // Not what was asked for.
-
-            //var AgeGroups = db.Residents.ToList().Where(cur => cur.IsCurrent()).GroupBy(r => r.Age > 70 ? 5 : (r.Age - 18) / 10).Select(group => new AgeGroups
-            //{ 
-            //    AgeGroup = group.Key == 5 ? "> 70" : string.Format("{0} - {1}", group.Key * 10 + 18, group.Key * 10 + 29),
-            //    Count = group.Count()
-            //}).OrderByDescending(a => a.AgeGroup);
-
             var demographicTable = new DemographicTableViewModel();
             List<AgeGroups> ageGroups = new List<AgeGroups>();
 
-            IEnumerable<Resident> residents = db.Residents.ToList();
+            IEnumerable<Resident> residents = db.Residents.AsNoTracking().ToList();
 
-            ageGroups = GenerateAgeComposition(residents);
+            ageGroups = GenerateAgeComposition(residents, true);
 
             ViewBag.Sum = ageGroups.Sum(group => group.Count);
             ViewBag.AverageAge = GetCurrentAverageAge();
@@ -208,7 +235,7 @@ namespace FIVESTARVC.Controllers
             int? total = 0;
             int numbCount = 0;
 
-            var residents = db.Residents.ToList();
+            var residents = db.Residents.AsNoTracking().ToList();
 
             foreach (Resident resident in residents)
             {
@@ -238,9 +265,9 @@ namespace FIVESTARVC.Controllers
 
         public double GetCurrentAverageAge()
         {
-            if (db.Residents.ToList().Where(cur => cur.IsCurrent()).Any())
+            if (db.Residents.AsNoTracking().ToList().Where(cur => cur.IsCurrent()).Any())
             {
-                IEnumerable<ReportingResidentViewModel> residentListing = db.Residents.ToList().Where(cur => cur.IsCurrent())
+                IEnumerable<ReportingResidentViewModel> residentListing = db.Residents.AsNoTracking().ToList().Where(cur => cur.IsCurrent())
                     .Select(r => new ReportingResidentViewModel { ID = r.ResidentID, Age = r.Age.Computed() });
 
                 return Math.Round(residentListing.Average(r => r.Age), 2);
