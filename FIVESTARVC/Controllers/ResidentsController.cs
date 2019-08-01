@@ -277,12 +277,15 @@ namespace FIVESTARVC.Controllers
                 .Include(b => b.Benefit)
                 .Include(s => s.StateTerritory)
                 .Include(r => r.Referral)
+                .Include(p => p.ProgramEvents.Select(e => e.ProgramType))
                 .Where(c => c.ResidentID == id)
                 .Single();
 
 
             ViewBag.Campaigns = residentService.PopulateAssignedCampaignData(resident, db);
-
+            ViewBag.DischargeInfo = resident.ProgramEvents
+                                        .Where(i => i.ProgramType.EventType == EnumEventType.DISCHARGE)
+                                        .OrderByDescending(i => i.ProgramEventID).FirstOrDefault(); 
 
             if (resident == null)
             {
@@ -314,6 +317,10 @@ namespace FIVESTARVC.Controllers
                 .Include(r => r.Referral)
                 .Where(c => c.ResidentID == id)
                 .Single();
+
+            ViewBag.DischargeInfo = residentToUpdate.ProgramEvents
+                                        .Where(i => i.ProgramType.EventType == EnumEventType.DISCHARGE)
+                                        .OrderByDescending(i => i.ProgramEventID).FirstOrDefault();
 
             ViewBag.StateTerritoryID = new SelectList(db.States, "StateTerritoryID", "State", residentToUpdate.StateTerritoryID);
             ViewBag.ReferralID = new SelectList(db.Referrals, "ReferralID", "ReferralName", residentToUpdate.ReferralID);

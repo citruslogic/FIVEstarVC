@@ -1,4 +1,5 @@
 ﻿@model FIVESTARVC.Models.Resident
+@using FIVESTARVC.Models
 
 @{
     ViewBag.Title = "Edit Resident";
@@ -82,17 +83,23 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-xs-4">
-            <table class="table table-borderless table-sm">
+        <div class="col-xs-1">
+            <table class="table table-sm" style="width: 50%">
                 <tbody>
                     @if (!Model.IsCurrent())
                     {
                         <tr>
-                            <td class="col-form-label">@Html.Label("Readmit?")</td>
-
-                            <td>@Html.CheckBox("Readmit", htmlAttributes: new { @class = "biggerCheckBox" })</td>
-                            <td class="col-form-label">@Html.Label("Readmit Date")</td>
-                            <td>
+                            <td>Last Discharge Date: @ViewBag.DischargeInfo.GetShortStartDate()</td>
+                        </tr>
+                        <tr>
+                            <td>Reason: @ViewBag.DischargeInfo.ProgramType.ProgramDescription</td>
+                        </tr>
+                        <tr>
+                            <td class="col-form-label">
+                                @Html.Label("Readmit?")
+                                @Html.CheckBox("Readmit", htmlAttributes: new { @class = "biggerCheckBox" })<br />
+                            
+                                @Html.Label("Readmit Date")
                                 <input type="date" id="ReadmitDate" class="form-control"
                                        name="readmitDate"
                                        placeholder=""
@@ -100,11 +107,14 @@
                             </td>
                         </tr>
                         <tr>
-                            <td class="col-form-label">@Html.Label("Age at Release")</td>
-                            <td>@Html.EditorFor(model => model.AgeAtRelease, new { htmlAttributes = new { @class = "form-control" } })</td>
+                            <td class="col-form-label">@Html.Label("Age at Release")
+                            @Html.EditorFor(model => model.AgeAtRelease, new { htmlAttributes = new { @class = "form-control" } })</td>
                         </tr>
                     }
-
+                </tbody>
+            </table>
+            <table class="table table-borderless table-sm" style="margin-top: 45px;">
+                <tbody>
                     <tr>
                         <td class="col-form-label">
                             @Html.LabelFor(model => model.Religion, htmlAttributes: new { @class = "control-label" })
@@ -183,6 +193,13 @@
                                     {
                                         @:
 
+
+
+
+
+
+
+
                                         <input type="checkbox"
                                                class="biggerCheckBox campaign"
                                                name="selectedCampaigns"
@@ -194,16 +211,20 @@
                                 }
                             </div>
                         </td>
+
+                    </tr>
+                    <tr>
                         <td class="col-form-label">@Html.LabelFor(model => model.Note, htmlAttributes: new { @class = "control-label" }) </td>
                         <td>
                             @Html.TextAreaFor(model => model.Note, htmlAttributes: new { @class = "form-control" })
                             @Html.ValidationMessageFor(model => model.Note, "")
                         </td>
 
+                    </tr>
                 </tbody>
             </table>
         </div>
-        <div class="col-xs-4" style="padding-left:15px;">
+        <div class="col-xs-2" style="padding-left: 15px;">
             @Html.Partial("BenefitPartialViewEdit")
         </div>
 
@@ -285,7 +306,7 @@
                     $("#ReadmitDate").val(null);
                     $("#ReadmiDate").prop("placeholder", "Readmit date not required.")
                     $("#ReadmitDate").prop("disabled", true);
-                    
+
                     $("#AgeAtRelease").prop("disabled", false);
                 }
             });
