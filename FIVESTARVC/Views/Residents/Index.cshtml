@@ -33,6 +33,7 @@
 <div class="btn-group" style="margin-bottom: 1em;">
 
     <button type="button" style="margin-right: 10px;" class="btn btn-success" onclick="location.href = '/Residents/Create';"><i class="fa fa-pencil-square fa-fw"></i> Admit Resident</button>
+    <button type="button" style="margin-right: 10px;" class="btn btn-secondary" onclick="location.href = '/Residents/ConfirmDelete';"><i class="fa fa-recycle fa-fw"></i> Recycle Bin</button>
     <div class="dropdown">
         <button style="margin-right: 10px;" class="btn btn-warning dropdown-toggle" type="button" data-toggle="dropdown">
             <i class="fa fa-gears fa-fw"></i> Utilities
@@ -85,7 +86,7 @@
 
     @foreach (var item in Model)
     {
-        if (item != null)
+        if (item != null && item.ToDelete == false)
         {
             <tr>
                 <td>
@@ -131,7 +132,7 @@
                     @if (item.IsCurrent())
                     {
 
-                    @Html.ActionLink("Release", "Discharge", new { id = item.ResidentID }, htmlAttributes: new { @class = "btn btn-danger btn-sm"})  
+                        @Html.ActionLink("Release", "Discharge", new { id = item.ResidentID }, htmlAttributes: new { @class = "btn btn-danger btn-sm" })
 
 
                     }
@@ -141,6 +142,14 @@
                         @:<input type="button" value="Re-admit" class="modal-link btn btn-sm btn-primary"
                                   @: data-toggle="modal" data-target="#QuickEventModal" onclick="showReadmitDialog(@item.ResidentID)" />
                     }
+                </td>
+                <td>
+                    @if (item.ToDelete == false)
+                    {
+                        @:<input type="button" value="Mark to Delete" class="modal-link btn btn-sm btn-danger"
+                                  @: data-toggle="modal" data-target="#QuickEventModal" onclick="showDeleteDialog(@item.ResidentID)" />
+                    }
+                    
                 </td>
             </tr>
         }
@@ -233,6 +242,23 @@ Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.Page
                 $('.modal-body').html(data);
                 $('.modal-title').html("Readmit to Center");
                 $('#QuickEventModal').modal('show');
+            });
+        }
+
+        function showDeleteDialog(resident) {
+
+            $.get('/Residents/Delete/' + resident, function (data) {
+                $('.modal-body').html = '';
+                $('.modal-body').html(data);
+                $('.modal-title').html("Mark to Delete from Center?");
+                $('#QuickEventModal').modal('show');
+            });
+        }
+
+        function undelete(resident) {
+
+            $.post('/Residents/Undelete/' + resident, function () {
+                document.location.reload();
             });
         }
 

@@ -349,6 +349,10 @@
     <Compile Include="Migrations\201907312333083_AgeAtRelease.Designer.cs">
       <DependentUpon>201907312333083_AgeAtRelease.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201909011040583_resident_todelete.cs" />
+    <Compile Include="Migrations\201909011040583_resident_todelete.Designer.cs">
+      <DependentUpon>201909011040583_resident_todelete.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AdAuthenticationService.cs" />
     <Compile Include="Models\Benefit.cs" />
@@ -384,6 +388,7 @@
     <Compile Include="ViewModels\ImportedListData.cs" />
     <Compile Include="ViewModels\ResidencyReportViewModel.cs" />
     <Compile Include="ViewModels\ResidentReferralViewModel.cs" />
+    <Compile Include="ViewModels\SelectedResidentModel.cs" />
     <Compile Include="ViewModels\TempProgramEvent.cs" />
     <Compile Include="ViewModels\ReportingResidentViewModel.cs" />
     <Compile Include="ViewModels\DashboardData.cs" />
@@ -1001,6 +1006,9 @@
     <Content Include="Views\Reports\DaysInResidenceReport.cshtml" />
     <Content Include="Views\Shared\AddReferral.cshtml" />
     <Content Include="Views\Reports\ResidentReferralsReport.cshtml" />
+    <Compile Include="ViewModels\DeleteResidentModel.cs" />
+    <Content Include="Views\Residents\ConfirmDelete.cshtml" />
+    <Content Include="Views\Shared\_SelectedResident.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -1057,6 +1065,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201907312333083_AgeAtRelease.resx">
       <DependentUpon>201907312333083_AgeAtRelease.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201909011040583_resident_todelete.resx">
+      <DependentUpon>201909011040583_resident_todelete.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

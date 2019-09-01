@@ -43,6 +43,7 @@ namespace FIVESTARVC.Models
             // authenticates against your Domain AD
             ContextType authenticationType = ContextType.Domain;
 #endif
+            
             PrincipalContext principalContext = new PrincipalContext(authenticationType);
             bool isAuthenticated = false;
             UserPrincipal userPrincipal = null;

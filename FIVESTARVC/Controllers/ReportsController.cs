@@ -1562,7 +1562,7 @@ namespace FIVESTARVC.Controllers
                     ID = r.ResidentID,
                     FirstName = r.ClearFirstMidName,
                     LastName = r.ClearLastName,
-                    Birthdate = r.ClearBirthdate,
+                    Birthdate = r.ClearBirthdate.GetValueOrDefault(),
                     Age = r.Age.Computed(),
                     ServiceType = r.ServiceBranch,
                     InVetCourt = r.InVetCourt,

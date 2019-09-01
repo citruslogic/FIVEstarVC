@@ -7,8 +7,10 @@ using iTextSharp.text.pdf;
 using iTextSharp.tool.xml;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 
 namespace FIVESTARVC.Controllers
@@ -42,11 +44,12 @@ namespace FIVESTARVC.Controllers
         }
         // For the current residents.
         // GET: GenderGroupBreakdown
-        public ActionResult GenderGroupBreakdown()
+        public async Task<ActionResult> GenderGroupBreakdown()
         {
             var demographicTable = new DemographicTableViewModel();
             List<GenderGroup> genders = new List<GenderGroup>();
-            IEnumerable<Resident> residents = db.Residents.AsNoTracking().ToList().Where(cur => cur.IsCurrent());
+            var residents = await db.Residents.AsNoTracking().ToListAsync();
+            var currentResidents = residents.Where(cur => cur.IsCurrent().Computed());
 
             genders = GenerateGenderComposition(residents);
 
@@ -56,10 +59,10 @@ namespace FIVESTARVC.Controllers
             return PartialView("_GenderGroupBreakdown", demographicTable);
         }
 
-        public ActionResult CumulativeGenderGroupBreakdown()
+        public async Task<ActionResult> CumulativeGenderGroupBreakdown()
         {
             var demographicTable = new DemographicTableViewModel();
-            IEnumerable<Resident> residents = db.Residents.AsNoTracking().ToList();
+            IEnumerable<Resident> residents = await db.Residents.AsNoTracking().ToListAsync();
 
             List<GenderGroup> genders = GenerateGenderComposition(residents);
 
@@ -68,10 +71,10 @@ namespace FIVESTARVC.Controllers
             return PartialView("_GenderGroupBreakdown", demographicTable);
         }
 
-        public ActionResult GetServiceDischargeCounts()
+        public async Task<ActionResult> GetServiceDischargeCounts()
         {
             List<DischargeStatusGroups> serviceDischargeGroups = new List<DischargeStatusGroups>();
-            IEnumerable<Resident> residents = db.Residents.AsNoTracking().ToList();
+            IEnumerable<Resident> residents = await db.Residents.AsNoTracking().ToListAsync();
 
             serviceDischargeGroups.Add(new DischargeStatusGroups
             {
@@ -194,12 +197,13 @@ namespace FIVESTARVC.Controllers
 
 
         // GET: AgeGroupBreakdown
-        public ActionResult AgeGroupBreakdown()
+        public async Task<ActionResult> AgeGroupBreakdown()
         {
             var demographicTable = new DemographicTableViewModel();
             List<AgeGroups> ageGroups = new List<AgeGroups>();
 
-            IEnumerable<Resident> residents = db.Residents.AsNoTracking().ToList().Where(cur => cur.IsCurrent());
+            IEnumerable<Resident> residents = await db.Residents.AsNoTracking().ToListAsync();
+            IEnumerable<Resident> currentResidents = residents.Where(cur => cur.IsCurrent().Computed());
 
             ageGroups = GenerateAgeComposition(residents);
 
@@ -211,12 +215,12 @@ namespace FIVESTARVC.Controllers
             return PartialView("_AgeGroupBreakdown", demographicTable);
         }
 
-        public ActionResult CumulativeAgeGroupBreakdown()
+        public async Task<ActionResult> CumulativeAgeGroupBreakdown()
         {
             var demographicTable = new DemographicTableViewModel();
             List<AgeGroups> ageGroups = new List<AgeGroups>();
 
-            IEnumerable<Resident> residents = db.Residents.AsNoTracking().ToList();
+            IEnumerable<Resident> residents = await db.Residents.AsNoTracking().ToListAsync();
 
             ageGroups = GenerateAgeComposition(residents, true);
 
@@ -229,13 +233,13 @@ namespace FIVESTARVC.Controllers
             return PartialView("_AgeGroupBreakdown", demographicTable);
         }
         // GET: GetAverageStay
-        public ActionResult GetAverageStay()
+        public async Task<ActionResult> GetAverageStay()
         {
             //Variables to find average length of stay
             int? total = 0;
             int numbCount = 0;
 
-            var residents = db.Residents.AsNoTracking().ToList();
+            var residents = await db.Residents.AsNoTracking().ToListAsync();
 
             foreach (Resident resident in residents)
             {
@@ -265,7 +269,8 @@ namespace FIVESTARVC.Controllers
 
         public double GetCurrentAverageAge()
         {
-            if (db.Residents.AsNoTracking().ToList().Where(cur => cur.IsCurrent()).Any())
+            var currentResidents = db.Residents.AsNoTracking().ToList().Where(cur => cur.IsCurrent().Computed());
+            if (currentResidents.Any())
             {
                 IEnumerable<ReportingResidentViewModel> residentListing = db.Residents.AsNoTracking().ToList().Where(cur => cur.IsCurrent())
                     .Select(r => new ReportingResidentViewModel { ID = r.ResidentID, Age = r.Age.Computed() });

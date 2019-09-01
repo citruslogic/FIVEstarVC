@@ -50,12 +50,9 @@
             <th></th>
         </tr>
 
-
         @foreach (var item in group.Where(i => i.ProgramEvents.Count > 0))
         {
-
-
-            foreach (var track in item.ProgramEvents)
+            foreach (var track in item.ProgramEvents.OrderBy(i => i.ClearStartDate))
             {
                 <tr>
                     @if (track.ProgramType != null && track.ProgramType.EventType != EnumEventType.SYSTEM)

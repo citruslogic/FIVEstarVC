@@ -1,48 +1,91 @@
 ﻿@model FIVESTARVC.Models.Resident
+@using FIVESTARVC.Models;
 
 @{
-    ViewBag.Title = "Delete";
+    Layout = null;
 }
 
-<h2>Delete</h2>
 
-<h3>Are you sure you want to delete this?</h3>
-<div>
-    <h4>Resident</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.ClearLastName)
-        </dt>
+@using (Html.BeginForm("Delete", "Residents"))
+{
+    @Html.AntiForgeryToken()
 
-        <dd>
-            @Html.DisplayFor(model => model.ClearLastName)
-        </dd>
+    <h4>Mark to Delete @Model.Fullname</h4>
+    <p> Are you sure you want to mark this resident for deletion from your center?</p>
+    <br />
+    @Html.ValidationSummary(true, "")
+    @Html.HiddenFor(model => model.ResidentID)
 
-        <dt>
-            @Html.DisplayNameFor(model => model.ClearFirstMidName)
-        </dt>
+    <div class="container">
+        <div class="row">
 
-        <dd>
-            @Html.DisplayFor(model => model.ClearFirstMidName)
-        </dd>
+            <div class="table-responsive">
+                <table class="table table-sm">
 
-        <dt>
-            @Html.DisplayNameFor(model => model.ServiceBranch)
-        </dt>
+                    <tbody>
+                        <tr>
+                            <td class="col-form-label">
 
-        <dd>
-            @Html.DisplayFor(model => model.ServiceBranch)
-        </dd>
+                                @Html.Label("Full name", htmlAttributes: new { @class = "control-label" })
+                            </td>
+                            <td>
+                                @(Model.Fullname)
+                            </td>
 
-    </dl>
+                        </tr>
 
-    @using (Html.BeginForm()) {
-        @Html.AntiForgeryToken()
+                        <tr>
+                            <td class="col-form-label">@Html.LabelFor(model => model.ClearBirthdate, htmlAttributes: new { @class = "control-label" })</td>
+                            <td>
+                                @(Model.ClearBirthdate?.ToShortDateString())
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="col-form-label"> @Html.LabelFor(model => model.ServiceBranch, htmlAttributes: new { @class = "control-label" })</td>
+                            <td>
+                                @{
+                                    var serviceDescription = FSEnumHelper.GetDescription(Model.ServiceBranch);
 
-        <div class="form-actions no-color">
-            <input type="submit" value="Delete" class="btn btn-default" /> |
-            @Html.ActionLink("Back to List", "Index")
+
+                                    @Html.DisplayFor(modelItem => serviceDescription)
+                                }
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+            </div>
+
         </div>
-    }
-</div>
+
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-success">Mark Deleted</button>
+        </div>
+
+    </div>
+}
+
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script type="text/javascript">
+
+        if (!Modernizr.inputtypes.date) {
+            $('input[type=date]')
+                .attr('type', 'text')
+                .datepicker({
+                    // Consistent format with the HTML5 picker
+                    dateFormat: 'mm-dd-yy'
+                });
+        }
+
+        $(function () {
+            $('#submit-btn').click(function () {
+                $('#modal-container').modal('hide');
+            });
+        });
+    </script>
+
+}

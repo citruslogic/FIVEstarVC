@@ -59,12 +59,17 @@ namespace FIVESTARVC.Models
         [Age(ErrorMessage = "Applicant must be 18 years or older.")]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         [NotMapped]
-        public DateTime ClearBirthdate
+        public DateTime? ClearBirthdate
         {
             get
             {
-                return DateTime.Parse(Encryptor.Decrypt(Birthdate.ToString()));
+                if (Birthdate != null)
+                {
+                    return DateTime.Parse(Encryptor.Decrypt(Birthdate.ToString()));
 
+                }
+
+                return null;
             }
 
             set
@@ -86,6 +91,9 @@ namespace FIVESTARVC.Models
         public int StateTerritoryID { get; set; }
         public virtual StateTerritory StateTerritory { get; set; }
 
+        [Display(Name = "Marked to Delete?")]
+        public bool ToDelete { get; set; }
+
         /* return the age of a veteran (in years)S and do not store in the database. */
         public int Age
         {
@@ -93,7 +101,7 @@ namespace FIVESTARVC.Models
             {
                 try
                 {
-                    TimeSpan span = DateTime.Now - ClearBirthdate.Date;
+                    TimeSpan span = DateTime.Now - ClearBirthdate.GetValueOrDefault().Date;
                     DateTime age = DateTime.MinValue + span;
 
                     return age.Year - 1;
@@ -121,7 +129,7 @@ namespace FIVESTARVC.Models
         {
             get
             {
-                DateTime nextBirthday = ClearBirthdate.AddYears(Age + 1);
+                DateTime nextBirthday = ClearBirthdate.GetValueOrDefault().AddYears(Age + 1);
 
                 TimeSpan difference = nextBirthday - DateTime.Today;
 
@@ -135,7 +143,7 @@ namespace FIVESTARVC.Models
             {
                 CultureInfo ci = new CultureInfo("en-US");
 
-                return ClearBirthdate.ToString("MMMM", ci);
+                return ClearBirthdate?.ToString("MMMM", ci);
             }
         }
 

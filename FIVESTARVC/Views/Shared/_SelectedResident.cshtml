@@ -1,0 +1,42 @@
+﻿@model FIVESTARVC.ViewModels.SelectedResidentModel
+
+<style>
+    .biggerCheckBox {
+        transform: scale(1.5);
+        -webkit-transform: scale(1.5);
+        margin-left: 5px;
+    }
+</style>
+@using (Html.BeginCollectionItem("SelectedResidentModel"))
+{
+
+
+    <td>
+        @Html.LabelFor(model => model.Fullname, "Resident name", htmlAttributes: new { @class = "control-label" })
+        <div>
+            @Model.Fullname
+        </div>
+        
+     </td>
+    <td>
+        @Html.Label("Restore/Undelete", htmlAttributes: new { @class = "control-label" })
+        <div>
+
+            <div>
+                @Html.CheckBoxFor(model => model.ToRestore, htmlAttributes: new { @class = "biggerCheckBox" })
+                @Html.ValidationMessageFor(model => model.ToRestore, "")
+            </div>
+        </div>
+    </td>
+
+    <td>
+        @Html.Label("Confirm Delete", htmlAttributes: new { @class = "control-label" })
+        <div>
+
+            <div>
+                @Html.CheckBoxFor(model => model.ToDelete, htmlAttributes: new { @class = "biggerCheckBox" })
+                @Html.ValidationMessageFor(model => model.ToDelete, "")
+            </div>
+        </div>
+    </td>
+}

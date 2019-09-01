@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Data.Entity;
 using FIVESTARVC.Helpers;
+using DelegateDecompiler;
 
 namespace FIVESTARVC.Models
 {
@@ -48,7 +49,7 @@ namespace FIVESTARVC.Models
         [Display(Name = "Other Referral")]
         public string OptionalReferralDescription { get; set; }
 
-        //[Computed]
+        [Computed]
         public bool IsCurrent()
         {
             bool current = false;

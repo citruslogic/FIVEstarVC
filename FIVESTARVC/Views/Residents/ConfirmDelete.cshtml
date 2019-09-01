@@ -1,0 +1,73 @@
+﻿@model List<FIVESTARVC.ViewModels.DeleteResidentModel>
+
+@if (TempData["UserMessage"] != null)
+{
+    var message = TempData["UserMessage"];
+    <div class="alert alert-warning alert-dismissable" style="position: absolute; right: 80px; top: 30px;">
+        <a href="#" class="close" data-dismiss="alert" aria-label="close"> &times;</a>
+        @message &nbsp;
+    </div>
+}
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <p> These residents are marked for deletion from the system and can be restored or permanently removed.</p>
+
+    <div class="container">
+        <div class="form-row">
+            <div class="col-md-10">
+                <table id="tracks" class="table table-sm">
+                    <tbody>
+                        @for (var i = 0; i < Model.Count(); i++)
+                        {
+                        <tr>
+                            <td>
+                                @Html.HiddenFor(modelItem => modelItem[i].ResidentID)
+                                @Html.LabelFor(model => model[i].Fullname, "Resident name", htmlAttributes: new { @class = "control-label" })
+                                <div>
+                                    @Html.DisplayFor(modelItem => modelItem[i].Fullname)
+
+                                </div>
+
+                            </td>
+                            <td>
+                                @Html.Label("Restore/Undelete", htmlAttributes: new { @class = "control-label" })
+                                <div>
+
+                                    <div>
+                                        @Html.CheckBoxFor(modelItem => modelItem[i].ToRestore, htmlAttributes: new { @class = "biggerCheckBox" })
+                                        @Html.ValidationMessageFor(modelItem => modelItem[i].ToRestore, "")
+                                    </div>
+                                </div>
+                            </td>
+
+                            <td>
+                                @Html.Label("Confirm Delete", htmlAttributes: new { @class = "control-label" })
+                                <div>
+
+                                    <div>
+                                        @Html.CheckBoxFor(modelItem => modelItem[i].ToDelete, htmlAttributes: new { @class = "biggerCheckBox" })
+                                        @Html.ValidationMessageFor(modelItem => modelItem[i].ToDelete, "")
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-md-2 pull-right">
+                <button type="submit" class="savebtn btn btn-sm btn-secondary" style="margin-top: 0.5em;"><i class="fa fa-check fa-fw"></i>Confirm Changes</button>
+            </div>
+        </div>
+
+    </div>
+    <div class="btn-group-sm">
+        <button type="button" class="btn btn-sm btn-secondary" onclick="location.href='/Residents'"><i class="fa fa-arrow-left fa-fw"></i> Back to List</button>
+    </div>
+}
+<hr />
+
+<br />

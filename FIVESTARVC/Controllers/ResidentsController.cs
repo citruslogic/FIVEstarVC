@@ -11,6 +11,7 @@ using System.Data;
 using System.Data.Entity;
 using System.Linq;
 using System.Net;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 
 namespace FIVESTARVC.Controllers
@@ -23,7 +24,7 @@ namespace FIVESTARVC.Controllers
         private ResidentService residentService = new ResidentService();
 
         // GET: Residents
-        public ActionResult Index(string sortOrder, string currentFilter, string searchString, int? page)
+        public async Task<ActionResult> Index(string sortOrder, string currentFilter, string searchString, int? page)
         {
             ViewBag.CurrentSort = sortOrder;
             ViewBag.NameSortParm = string.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
@@ -41,7 +42,7 @@ namespace FIVESTARVC.Controllers
 
             ViewBag.CurrentFilter = searchString;
 
-            var residents = residentService.GetIndex(searchString, currentFilter, sortOrder, page, db);
+            var residents = await Task.Run(() => residentService.GetIndex(searchString, currentFilter, sortOrder, page, db));
 
             int pageSize = 6;
             int pageNumber = (page ?? 1);
@@ -129,7 +130,6 @@ namespace FIVESTARVC.Controllers
         public ActionResult Create(ResidentIncomeModel residentIncomeModel, string[] selectedCampaigns,
             int AdmissionType)
         {
-            TempData["Duplicate"] = null;
             ViewBag.AdmissionType = new SelectList(db.ProgramTypes
                 .Where(t => t.EventType == EnumEventType.ADMISSION), "ProgramTypeID", "ProgramDescription", AdmissionType);
 
@@ -194,21 +194,29 @@ namespace FIVESTARVC.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    db.Residents.Add(resident);
-
-                    var admitEvent = new ProgramEvent
+                    if (!IsDuplicateResident(residentIncomeModel))
                     {
-                        ProgramTypeID = AdmissionType,
-                        ClearStartDate = residentIncomeModel.AdmitDate,
+                        db.Residents.Add(resident);
 
-                    };
+                        var admitEvent = new ProgramEvent
+                        {
+                            ProgramTypeID = AdmissionType,
+                            ClearStartDate = residentIncomeModel.AdmitDate,
 
-                    resident.ProgramEvents.Add(admitEvent);
+                        };
 
-                    db.Benefits.Add(benefit);
-                    resident.Benefit = benefit;
+                        resident.ProgramEvents.Add(admitEvent);
 
-                    db.SaveChanges();
+                        db.Benefits.Add(benefit);
+                        resident.Benefit = benefit;
+
+                        db.SaveChanges();
+                    }
+                    else
+                    {
+                        ModelState.AddModelError("", "This resident may already exist in the system. Please check their full name, birthdate, and service branch. Try to add another resident to continue.");
+                        return View(residentIncomeModel);
+                    }
                 }
             }
             catch (DataException dex)
@@ -240,27 +248,22 @@ namespace FIVESTARVC.Controllers
             return View(residentIncomeModel);
         }
 
-        public JsonResult CheckResident(ResidentIncomeModel resident)
+        public bool IsDuplicateResident(ResidentIncomeModel resident)
         {
 
             /* Check for the possible pre-existence of the resident in the system. */
-            if (db.Residents.Any(r => r.ClearFirstMidName.Contains(resident.FirstMidName)
+            if (db.Residents.AsNoTracking().ToList().Any(r => r.ClearFirstMidName.Contains(resident.FirstMidName)
                 && r.ClearLastName.Contains(resident.LastName)
-                && r.ClearBirthdate.Date == resident.Birthdate.Date
+                && r.ClearBirthdate?.Date == resident.Birthdate.Date
                 && r.ServiceBranch == resident.ServiceBranch))
             {
 
                 // Found a match.
-                return Json(new
-                {
-                    Success = false,
-                    Message = "The resident, " + resident.FirstMidName + " " + resident.LastName
-                    + " may already exist in the system. Please review the list."
-                }, JsonRequestBehavior.AllowGet);
+                return true;
 
             }
 
-            return Json("OK", JsonRequestBehavior.AllowGet);
+            return false;
         }
 
         // GET: Residents/Edit/5
@@ -477,6 +480,123 @@ namespace FIVESTARVC.Controllers
             return PartialView(model);
         }
 
+        // GET: Residents/Delete
+        [HttpGet]
+        public ActionResult ConfirmDelete()
+        {
+            var selectableResidents = new List<DeleteResidentModel>();
+
+            var residentsMarkedForDeletion = db.Residents
+                .AsNoTracking()
+                .ToList()
+                .Where(i => i.ToDelete)
+                .ToList();
+
+            foreach (var residentToDelete in residentsMarkedForDeletion)
+            {
+                selectableResidents.Add(new DeleteResidentModel
+                {
+                    ResidentID = residentToDelete.ResidentID,
+                    Fullname = residentToDelete.Fullname
+                });
+            }
+                        
+            return View(selectableResidents);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult ConfirmDelete(List<DeleteResidentModel> residents)
+        {
+            foreach (var resident in residents)
+            {
+                var residentToDelete = db.Residents.Find(resident.ResidentID);
+
+                if (residentToDelete != null && resident.ToDelete == true)
+                {
+                    db.Entry(residentToDelete).State = EntityState.Deleted;
+                } else if (residentToDelete != null && resident.ToRestore == true)
+                {
+                    residentToDelete.ToDelete = false;
+                } 
+            }
+
+            db.SaveChanges();
+            return RedirectToAction("Index");
+        }
+
+        // GET: Residents/Undelete
+        [HttpGet]
+        public ActionResult Delete(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            var residentToDelete = db.Residents
+                .Include(p => p.ProgramEvents)
+                .Where(r => r.ResidentID == id)
+                .Single();
+
+            return PartialView("Delete", residentToDelete);
+        }
+
+        // POST: Residents/Readmit/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Delete(Resident model)
+        {
+            try
+            {
+                var residentToDelete = db.Residents.Find(model.ResidentID);
+
+                if (residentToDelete != null)
+                {
+                    residentToDelete.ToDelete = true;
+                    db.SaveChanges();
+                    TempData["UserMessage"] = model.Fullname + " has been marked for deletion from your center.  ";
+                } else
+                {
+                    TempData["UserMessage"] = "Could not find the resident, " + model.Fullname + ", in the system.";
+                    return RedirectToAction("Index");
+                }
+
+                
+            }
+            catch (DataException/* dex */)
+            {
+                TempData["UserMessage"] = "Failed to mark the resident for deletion from the center.";
+
+                return RedirectToAction("Delete", new { id = model.ResidentID, saveChangesError = true });
+            }
+
+            return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        public ActionResult Undelete(int? id)
+        {
+            try
+            {
+                var residentToUndelete = db.Residents.Find(id);
+
+                if (residentToUndelete != null)
+                {
+                    residentToUndelete.ToDelete = false;
+                    db.SaveChanges();
+                }
+            } catch (DataException /* dex */)
+            {
+                TempData["UserMessage"] = "Could not unmark resident for deletion from the center.";
+
+                return RedirectToAction("Delete", new { id = id, saveChangesError = true });
+            }
+
+            return RedirectToAction("Index");
+        }
+
+
         // GET: Residents/Discharge/5
         [HttpGet]
         public ActionResult Discharge(int? id)
@@ -496,7 +616,7 @@ namespace FIVESTARVC.Controllers
                 ResidentID = residentToDischarge.ResidentID,
                 DischargeDate = null,
                 FullName = residentToDischarge.Fullname,
-                Birthdate = residentToDischarge.ClearBirthdate.ToShortDateString(),
+                Birthdate = residentToDischarge.ClearBirthdate?.ToShortDateString(),
                 Note = residentToDischarge.Note,
                 ServiceBranch = residentToDischarge.ServiceBranch,
                 LastAdmitted = residentToDischarge.ProgramEvents.LastOrDefault(i => i.ProgramType.EventType == EnumEventType.ADMISSION).ClearStartDate.Date
