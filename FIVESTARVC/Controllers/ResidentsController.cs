@@ -480,6 +480,20 @@ namespace FIVESTARVC.Controllers
             return PartialView(model);
         }
 
+        public JsonResult IsCampaignNameExist(string CampaignName, int? MilitaryCampaignID)
+        {
+            var validateName = db.MilitaryCampaigns.FirstOrDefault
+                                (x => x.CampaignName == CampaignName && x.MilitaryCampaignID != MilitaryCampaignID);
+            if (validateName != null)
+            {
+                return Json(false, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                return Json(true, JsonRequestBehavior.AllowGet);
+            }
+        }
+
         // GET: Residents/Delete
         [HttpGet]
         public ActionResult ConfirmDelete()
