@@ -189,6 +189,12 @@ namespace FIVESTARVC.Models
             }
         }
 
+        [NotMapped]
+        public int? FromPage
+        {
+            get; set;
+        }
+
     }
 }
 

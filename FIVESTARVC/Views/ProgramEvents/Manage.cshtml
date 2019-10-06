@@ -31,7 +31,7 @@ else
 
     <p> This resident can be enrolled in one or more tracks.</p>
     <input type="hidden" name="ResidentID" value="@ViewBag.ResidentID" />
-
+    
     <div class="container">
         <div class="form-row">
             <div class="col-md-10">
@@ -54,7 +54,7 @@ else
 
     </div>
     <div class="btn-group-sm">
-        <button type="button" class="btn btn-sm btn-secondary" onclick="location.href='/Residents'"><i class="fa fa-arrow-left fa-fw"></i> Back to List</button>
+        <button type="button" class="btn btn-sm btn-secondary" onclick="location.href='/Residents/?page=@Model.FromPage'"><i class="fa fa-arrow-left fa-fw"></i> Back to List</button>
     </div>
 }
 <hr />

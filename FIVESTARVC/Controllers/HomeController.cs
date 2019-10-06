@@ -76,7 +76,7 @@ namespace FIVESTARVC.Controllers
         /* https://www.ict.social/csharp/wpf/course-birthday-reminder-in-csharp-net-wpf-logic-layer */
         private void FindNearest()
         {
-            var sortedResidents = db.Residents.AsNoTracking().ToList().OrderBy(o => o.RemainingDays);
+            var sortedResidents = db.Residents.AsNoTracking().ToList().Where(i => i.IsCurrent()).OrderBy(o => o.RemainingDays);
 
             if (sortedResidents.Count() > 0)
                 NearestResidents = sortedResidents.Take(2);

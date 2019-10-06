@@ -2,7 +2,6 @@
 using FIVESTARVC.DAL;
 using FIVESTARVC.Models;
 using FIVESTARVC.Services;
-using FIVESTARVC.Validators;
 using FIVESTARVC.ViewModels;
 using PagedList;
 using System;
@@ -20,12 +19,13 @@ namespace FIVESTARVC.Controllers
     [Authorize(Roles = "RTS-Group")]
     public class ResidentsController : Controller
     {
-        private ResidentContext db = new ResidentContext();
-        private ResidentService residentService = new ResidentService();
+        private readonly ResidentContext db = new ResidentContext();
+        private readonly ResidentService residentService = new ResidentService();
 
         // GET: Residents
         public async Task<ActionResult> Index(string sortOrder, string currentFilter, string searchString, int? page)
         {
+            
             ViewBag.CurrentSort = sortOrder;
             ViewBag.NameSortParm = string.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
             ViewBag.BranchSortParm = sortOrder == "ServiceBranch" ? "ServiceBranch_desc" : "ServiceBranch";
@@ -42,15 +42,13 @@ namespace FIVESTARVC.Controllers
 
             ViewBag.CurrentFilter = searchString;
 
-            var residents = await Task.Run(() => residentService.GetIndex(searchString, currentFilter, sortOrder, page, db));
+            var residents = await Task.Run(() => residentService.GetIndex(searchString, sortOrder, db, page));
 
-            int pageSize = 6;
-            int pageNumber = (page ?? 1);
-            return View(residents.ToPagedList(pageNumber, pageSize));
+            return View(residents);
         }
 
         // GET: Residents/Details/5
-        public ActionResult Details(int? id)
+        public ActionResult Details(int? id, int? fromPage)
         {
             if (id == null)
             {
@@ -80,6 +78,7 @@ namespace FIVESTARVC.Controllers
             }
 
             var resident = residentService.GetDetails(id, db);
+            resident.FromPage = fromPage;
             var assignedCampaigns = residentService.PopulateAssignedCampaignData(resident, db);
 
             if (resident == null)
@@ -119,7 +118,7 @@ namespace FIVESTARVC.Controllers
 
             ViewBag.Campaigns = viewModel;
 
-            return View();
+            return View(new ResidentIncomeModel());
         }
 
         // POST: Residents/Create
@@ -267,7 +266,7 @@ namespace FIVESTARVC.Controllers
         }
 
         // GET: Residents/Edit/5
-        public ActionResult Edit(int? id)
+        public ActionResult Edit(int? id, int? fromPage)
         {
 
             if (id == null)
@@ -298,7 +297,7 @@ namespace FIVESTARVC.Controllers
             ViewBag.StateTerritoryID = new SelectList(db.States, "StateTerritoryID", "State", resident.StateTerritoryID);
             ViewBag.ReferralID = new SelectList(db.Referrals, "ReferralID", "ReferralName", resident.ReferralID);
 
-
+            resident.FromPage = fromPage;
             return View(resident);
         }
 
@@ -307,7 +306,7 @@ namespace FIVESTARVC.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost, ActionName("Edit")]
         [ValidateAntiForgeryToken]
-        public ActionResult EditPost(int? id, string[] selectedCampaigns, bool? Readmit, string readmitDate)
+        public ActionResult EditPost(int? id, int? fromPage, string[] selectedCampaigns, bool? Readmit, string readmitDate)
         {
             if (id == null)
             {
@@ -377,7 +376,7 @@ namespace FIVESTARVC.Controllers
 
                     TempData["UserMessage"] = residentToUpdate.ClearLastName + " has been updated.  ";
 
-                    return RedirectToAction("Index");
+                    return RedirectToAction("Index", new { page = fromPage });
                 }
                 catch (DataException dex)
                 {
@@ -496,7 +495,7 @@ namespace FIVESTARVC.Controllers
 
         // GET: Residents/Delete
         [HttpGet]
-        public ActionResult ConfirmDelete()
+        public ActionResult ConfirmDelete(int? fromPage)
         {
             var selectableResidents = new List<DeleteResidentModel>();
 
@@ -514,7 +513,8 @@ namespace FIVESTARVC.Controllers
                     Fullname = residentToDelete.Fullname
                 });
             }
-                        
+
+            ViewData["page"] = fromPage;
             return View(selectableResidents);
         }
 

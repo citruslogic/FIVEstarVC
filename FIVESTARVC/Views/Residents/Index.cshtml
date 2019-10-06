@@ -33,7 +33,7 @@
 <div class="btn-group" style="margin-bottom: 1em;">
 
     <button type="button" style="margin-right: 10px;" class="btn btn-success" onclick="location.href = '/Residents/Create';"><i class="fa fa-pencil-square fa-fw"></i> Admit Resident</button>
-    <button type="button" style="margin-right: 10px;" class="btn btn-secondary" onclick="location.href = '/Residents/ConfirmDelete';"><i class="fa fa-recycle fa-fw"></i> Recycle Bin</button>
+    <button type="button" style="margin-right: 10px;" class="btn btn-secondary" onclick="location.href = '/Residents/ConfirmDelete?fromPage=' + @Model.PageNumber;"><i class="fa fa-recycle fa-fw"></i> Recycle Bin</button>
     <div class="dropdown">
         <button style="margin-right: 10px;" class="btn btn-warning dropdown-toggle" type="button" data-toggle="dropdown">
             <i class="fa fa-gears fa-fw"></i> Utilities
@@ -82,6 +82,8 @@
         </th>
         <th>
         </th>
+        <th>
+        </th>
     </tr>
 
     @foreach (var item in Model)
@@ -117,17 +119,17 @@
                     }
                 </td>
                 <td>
-                    @Html.ActionLink("Edit", "Edit", new { id = item.ResidentID }, htmlAttributes: new { @class = "btn btn-secondary btn-sm" }) &nbsp;
+                    @Html.ActionLink("Edit", "Edit", new { id = item.ResidentID, fromPage = Model.PageNumber }, htmlAttributes: new { @class = "btn btn-secondary btn-sm" }) &nbsp;
 
                     @if (item.IsCurrent())
                     {
-                        @Html.ActionLink("Manage Tracks", "Manage", "ProgramEvents", new { id = item.ResidentID },
+                        @Html.ActionLink("Manage Tracks", "Manage", "ProgramEvents", new { id = item.ResidentID, fromPage = Model.PageNumber },
                                         htmlAttributes: new { @class = "btn btn-secondary btn-sm" })
 
                     }
 
                 <td>
-                    @Html.ActionLink("Details", "Details", new { id = item.ResidentID }, htmlAttributes: new { @class = "btn btn-secondary btn-sm" }) &nbsp;
+                    @Html.ActionLink("Details", "Details", new { id = item.ResidentID, fromPage = Model.PageNumber }, htmlAttributes: new { @class = "btn btn-secondary btn-sm" }) &nbsp;
 
                     @if (item.IsCurrent())
                     {
@@ -197,7 +199,7 @@ Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.Page
             $.get('/ProgramEvents/ViewQuickEvent/', function (data) {
                 $('.modal-body').html = '';
                 $('.modal-body').html(data);
-                $('.modal-title').html("Quick Event")
+                $('.modal-title').html("Track")
                 $('#AddModal').modal('show');
             });
 

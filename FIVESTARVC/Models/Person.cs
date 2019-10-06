@@ -1,17 +1,25 @@
-﻿using FIVESTARVC.DAL;
+﻿using DelegateDecompiler;
+using FIVESTARVC.DAL;
 using FIVESTARVC.Helpers;
 using FIVESTARVC.Validators;
+using Microsoft.Linq.Translations;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity.ModelConfiguration;
 using System.Globalization;
+using System.Linq.Expressions;
+using System.Reflection;
 
 namespace FIVESTARVC.Models
 {
     public abstract class Person
     {
         protected readonly ResidentContext db = new ResidentContext();
+
+        private static readonly CompiledExpression<Person, string> lastNameExpression =
+            DefaultTranslationOf<Person>.Property(e => e.ClearLastName)
+            .Is(e => Encryptor.Decrypt(e.LastName));
 
         [Key]
         public int ResidentID { get; set; }
@@ -26,9 +34,10 @@ namespace FIVESTARVC.Models
         [NotMapped]
         public string ClearLastName
         {
+
             get
             {
-                return Encryptor.Decrypt(LastName);
+                return lastNameExpression.Evaluate(this);
             }
 
             set
@@ -36,6 +45,8 @@ namespace FIVESTARVC.Models
                 LastName = Encryptor.Encrypt(value);
             }
         }
+
+        
 
         [Required]
         [Display(Name = "First Name")]

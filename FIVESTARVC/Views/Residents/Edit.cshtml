@@ -22,6 +22,7 @@
 
     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
     @Html.HiddenFor(model => model.ResidentID)
+    @Html.HiddenFor(model => model.FromPage)
 
 
 
@@ -192,14 +193,7 @@
                                     foreach (var campaign in campaigns)
                                     {
                                         @:
-
-
-
-
-
-
-
-
+                                                                                                                                                                                                                                                                   
                                         <input type="checkbox"
                                                class="biggerCheckBox campaign"
                                                name="selectedCampaigns"
@@ -233,7 +227,7 @@
 
         <div class="form-group">
             <input type="submit" value="Update" class="btn btn-secondary" />
-            @Html.ActionLink("Back to List", "Index", null, htmlAttributes: new { @class = "btn btn-primary" })
+            @Html.ActionLink("Back to List", "Index", new { page = Model.FromPage }, htmlAttributes: new { @class = "btn btn-primary" })
 
         </div>
 

@@ -1,7 +1,10 @@
 ﻿using DelegateDecompiler;
 using FIVESTARVC.DAL;
+using FIVESTARVC.Helpers;
 using FIVESTARVC.Models;
 using FIVESTARVC.ViewModels;
+using Microsoft.Linq.Translations;
+using PagedList;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -10,36 +13,38 @@ namespace FIVESTARVC.Services
 {
     public class ResidentService
     {
-        public List<Resident> GetIndex(string searchString, string currentFilter, string sortOrder, int? page, ResidentContext db)
+        public IPagedList<Resident> GetIndex(string searchString, string sortOrder, ResidentContext db, int? page)
         {
-
-            var residents = db.Residents.AsNoTracking().ToList();
+            int pageSize = 6;
+            int pageNumber = (page ?? 1);
+            
+            var residents = db.Residents.AsNoTracking().AsEnumerable();
 
             if (!string.IsNullOrEmpty(searchString))
             {
-                residents = residents.Where(s => CultureInfo.CurrentCulture.CompareInfo.IndexOf
-                                   (s.ClearLastName, searchString, CompareOptions.IgnoreCase) >= 0
-                                   || CultureInfo.CurrentCulture.CompareInfo.IndexOf
-                                   (s.ClearFirstMidName, searchString, CompareOptions.IgnoreCase) >= 0).ToList();
+                residents = residents.Where(s => CultureInfo.CurrentCulture.CompareInfo
+                                    .IndexOf(s.ClearLastName, searchString, CompareOptions.IgnoreCase) >= 0
+                                    || CultureInfo.CurrentCulture.CompareInfo
+                                   .IndexOf(s.ClearFirstMidName, searchString, CompareOptions.IgnoreCase) >= 0) ;
             }
 
             switch (sortOrder)
             {
                 case "name_desc":
-                    residents = residents.OrderByDescending(s => s.ClearLastName.Computed()).ToList();
+                    residents = residents.OrderByDescending(s => s.ClearLastName);
                     break;
                 case "ServiceBranch":
-                    residents = residents.OrderBy(s => s.ServiceBranch).ToList();
+                    residents = residents.OrderBy(s => s.ServiceBranch);
                     break;
                 case "ServiceBranch_desc":
-                    residents = residents.OrderByDescending(s => s.ServiceBranch).ToList();
+                    residents = residents.OrderByDescending(s => s.ServiceBranch);
                     break;
                 default:
-                    residents = residents.OrderBy(s => s.ClearLastName).ToList();
+                    residents = residents.AsEnumerable().OrderBy(s => s.ClearLastName);
                     break;
             }
 
-            return residents;
+            return residents.ToPagedList(pageNumber, pageSize);
         }
 
         public Resident GetDetails(int? id, ResidentContext db)

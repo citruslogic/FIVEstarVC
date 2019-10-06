@@ -8,5 +8,7 @@ namespace FIVESTARVC.ViewModels
         //TODO: change "Event" to "Track" at a later date.
         public List<TempProgramEvent> ProgramEvents { get; set; } = new List<TempProgramEvent>();
         public List<TempProgramEvent> EnrolledTracks { get; set; } = new List<TempProgramEvent>(); 
+
+        public int FromPage { get; set; }
     }
 }

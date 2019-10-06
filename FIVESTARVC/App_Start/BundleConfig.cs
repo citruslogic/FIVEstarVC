@@ -48,6 +48,8 @@ namespace FIVESTARVC
               "~/Content/themes/base/theme.css"));
 
             bundles.Add(new LessBundle("~/Content/less").Include("~/Content/*.less"));
+
+            BundleTable.EnableOptimizations = true;
         }
     }
 }
