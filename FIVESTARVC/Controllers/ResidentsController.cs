@@ -12,6 +12,7 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using System.Web.Routing;
 
 namespace FIVESTARVC.Controllers
 {
@@ -235,7 +236,8 @@ namespace FIVESTARVC.Controllers
 
                     TempData["UserMessage"] = residentIncomeModel.LastName + " has been admitted into your center.  ";
 
-                    return RedirectToAction("Index");
+                    return RedirectToAction("Manage", new RouteValueDictionary(
+                        new { controller = "ProgramEvents", action = "Manage", Id = resident.ResidentID, FromPage = 1 }));
                 }
                 catch (DataException /* dex */)
                 {
@@ -385,6 +387,7 @@ namespace FIVESTARVC.Controllers
                 }
             }
 
+            residentToUpdate.FromPage = fromPage;
             return View(residentToUpdate);
         }
 

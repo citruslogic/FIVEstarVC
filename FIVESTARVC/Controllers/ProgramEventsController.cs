@@ -91,7 +91,9 @@ namespace FIVESTARVC.Controllers
 
             ViewBag.ProgramTypeID = new SelectList(db.ProgramTypes.Where(t => t.EventType == EnumEventType.TRACK), "ProgramTypeID", "ProgramDescription");
 
+            ViewBag.FromPage = fromPage.GetValueOrDefault(1);
             ViewBag.ResidentID = id;
+
             model.EnrolledTracks = db.ProgramEvents
                 .Include(r => r.Resident)
                 .Include(r => r.ProgramType)
@@ -106,8 +108,9 @@ namespace FIVESTARVC.Controllers
                     ProgramType = e.ProgramType
 
                 }).ToList();
+
             ViewBag.Fullname = db.Residents.Find(model.ProgramEvents.First().ResidentID).Fullname;
-            model.FromPage = fromPage.GetValueOrDefault();
+            model.FromPage = fromPage.GetValueOrDefault(1);
 
             return View(model);
         }
@@ -130,7 +133,7 @@ namespace FIVESTARVC.Controllers
                             + " cannot be before 2012.";
 
                     return RedirectToAction("Manage", new RouteValueDictionary(
-                        new { controller = "ProgramEvents", action = "Manage", Id = ResidentID, fromPage }));
+                        new { controller = "ProgramEvents", action = "Manage", Id = ResidentID, FromPage = fromPage }));
                 }
 
                 if (track.EndDate.HasValue && track.EndDate.Value < track.StartDate)
@@ -139,7 +142,7 @@ namespace FIVESTARVC.Controllers
                         + " -- start date cannot come after the end date.";
 
                     return RedirectToAction("Manage", new RouteValueDictionary(
-                        new { controller = "ProgramEvents", action = "Manage", Id = ResidentID, fromPage }));
+                        new { controller = "ProgramEvents", action = "Manage", Id = ResidentID, FromPage = fromPage }));
                 }
 
                 if (ModelState.IsValid)
@@ -171,11 +174,11 @@ namespace FIVESTARVC.Controllers
             ViewBag.ProgramTypeID = new SelectList(db.ProgramTypes.Where(t => t.EventType == EnumEventType.TRACK), "ProgramTypeID", "ProgramDescription");
 
             return RedirectToAction("Manage", new RouteValueDictionary(
-                   new { controller = "ProgramEvents", action = "Manage", Id = ResidentID, page = fromPage }));
+                   new { controller = "ProgramEvents", action = "Manage", Id = ResidentID, FromPage = fromPage }));
         }
 
         [HttpPost]
-        public ActionResult ReleaseTrack(int ResidentID, CustomEvent customEvent)
+        public ActionResult ReleaseTrack(int ResidentID, int? FromPage, CustomEvent customEvent)
         {
             if (customEvent != null && customEvent.EnrolledTracks?.Count > 0)
             {
@@ -195,8 +198,10 @@ namespace FIVESTARVC.Controllers
                     }
 
                     db.SaveChanges();
+
+                    TempData["UserMessage"] = "Track information updated. ";
                     return RedirectToAction("Manage", new RouteValueDictionary(
-                        new { controller = "ProgramEvents", action = "Manage", Id = ResidentID }));
+                        new { controller = "ProgramEvents", action = "Manage", Id = ResidentID, fromPage = FromPage }));
 
                 } catch (Exception e)
                 {

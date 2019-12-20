@@ -31,7 +31,7 @@ else
 
     <p> This resident can be enrolled in one or more tracks.</p>
     <input type="hidden" name="ResidentID" value="@ViewBag.ResidentID" />
-    
+    @*<input type="hidden" name="FromPage" value="@ViewBag.FromPage" />*@
     <div class="container">
         <div class="form-row">
             <div class="col-md-10">
@@ -48,7 +48,7 @@ else
             </div>
             <div class="col-md-2 pull-right">
                 <button type="button" class="btn btn-sm btn-secondary" id="addTrack"><i class="fa fa-plus fa-fw"></i>  New Track</button><br />
-                <button type="submit" class="savebtn btn btn-sm btn-secondary" style="margin-top: 0.5em;"><i class="fa fa-check fa-fw"></i> Enroll</button>
+                <button type="submit" class="savebtn btn btn-sm btn-primary" style="margin-top: 0.5em;"><i class="fa fa-check fa-fw"></i> Finalize Enrollment</button>
             </div>
         </div>
 

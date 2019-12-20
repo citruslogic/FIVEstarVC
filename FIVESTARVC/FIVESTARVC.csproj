@@ -389,6 +389,8 @@
     <Compile Include="Validators\IsDateAfter.cs" />
     <Compile Include="ViewModels\AgeGroups.cs" />
     <Compile Include="ViewModels\AssignedCampaignData.cs" />
+    <Compile Include="ViewModels\CurrentResidentOverviewViewModel.cs" />
+    <Compile Include="ViewModels\CurrentResidentViewModel.cs" />
     <Compile Include="ViewModels\CustomEvent.cs" />
     <Compile Include="ViewModels\DemographicTableViewModel.cs" />
     <Compile Include="ViewModels\DischargeStatusGroups.cs" />
@@ -1017,6 +1019,7 @@
     <Compile Include="ViewModels\DeleteResidentModel.cs" />
     <Content Include="Views\Residents\ConfirmDelete.cshtml" />
     <Content Include="Views\Shared\_SelectedResident.cshtml" />
+    <Content Include="Views\Reports\CurrentResidentReport.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Code\" />

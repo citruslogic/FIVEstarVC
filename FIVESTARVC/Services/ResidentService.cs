@@ -17,30 +17,32 @@ namespace FIVESTARVC.Services
         {
             int pageSize = 6;
             int pageNumber = (page ?? 1);
-            
-            var residents = db.Residents.AsNoTracking().AsEnumerable();
+
+            //var residents = db.Residents.AsNoTracking().AsEnumerable();
+            var residents = db.Database.SqlQuery<Resident>("SELECT * FROM Person").ToList();
+
 
             if (!string.IsNullOrEmpty(searchString))
             {
                 residents = residents.Where(s => CultureInfo.CurrentCulture.CompareInfo
                                     .IndexOf(s.ClearLastName, searchString, CompareOptions.IgnoreCase) >= 0
                                     || CultureInfo.CurrentCulture.CompareInfo
-                                   .IndexOf(s.ClearFirstMidName, searchString, CompareOptions.IgnoreCase) >= 0) ;
+                                   .IndexOf(s.ClearFirstMidName, searchString, CompareOptions.IgnoreCase) >= 0).ToList();
             }
 
             switch (sortOrder)
             {
                 case "name_desc":
-                    residents = residents.OrderByDescending(s => s.ClearLastName);
+                    residents = residents.OrderByDescending(s => s.ClearLastName).ToList();
                     break;
                 case "ServiceBranch":
-                    residents = residents.OrderBy(s => s.ServiceBranch);
+                    residents = residents.OrderBy(s => s.ServiceBranch).ToList();
                     break;
                 case "ServiceBranch_desc":
-                    residents = residents.OrderByDescending(s => s.ServiceBranch);
+                    residents = residents.OrderByDescending(s => s.ServiceBranch).ToList();
                     break;
                 default:
-                    residents = residents.AsEnumerable().OrderBy(s => s.ClearLastName);
+                    residents = residents.AsEnumerable().OrderBy(s => s.ClearLastName).ToList();
                     break;
             }
 

@@ -11,7 +11,7 @@ using System.Data.Entity;
 
 namespace FIVESTARVC.Services
 {
-    public class ReportService
+    public class ReportService : IDisposable
     {
         private readonly ResidentContext context = new ResidentContext();
         public List<ResidencyReportViewModel> GetResidencyData()
@@ -43,5 +43,47 @@ namespace FIVESTARVC.Services
             return referralModel;
         }
 
+        public CurrentResidentOverviewViewModel GetCurrentResidentReport()
+        {
+            var currentResidents = context.Residents
+                .AsNoTracking()
+                .ToList()
+                .Where(i => i.IsCurrent()).Select(i => new CurrentResidentViewModel 
+                {
+                    LastName = i.ClearLastName,
+                    FirstName = i.ClearFirstMidName,
+                    Age = i.AgeAtRelease > 0 ? i.AgeAtRelease : i.Age,
+                    Campaigns = i.MilitaryCampaigns?.Select(j => j.CampaignName).ToList(),
+                    Service = i.ServiceBranch.ToString(),
+                    Ethnicity = i.Ethnicity
+                }).ToList();
+
+            return new CurrentResidentOverviewViewModel
+            {
+                CurrentResidents = currentResidents,
+                AverageAge = (int) currentResidents.Select(i => i.Age).Average(),
+                ArmyCount = currentResidents.Where(i => i.Service == ServiceType.ARMY.ToString()).Count(),
+                NavyCount = currentResidents.Where(i => i.Service == ServiceType.NAVY.ToString()).Count(),
+                AirForceCount = currentResidents.Where(i => i.Service == ServiceType.AIRFORCE.ToString()).Count(),
+                MarineCount = currentResidents.Where(i => i.Service == ServiceType.MARINES.ToString()).Count(),
+                CoastGuardCount = currentResidents.Where(i => i.Service == ServiceType.COASTGUARD.ToString()).Count(),
+
+                //Post9_11Count = currentResidents.Where(i => i.Campaigns.Any(j => j == "Persian Gulf - 2001+")).Count(),
+
+
+                BlackCount = currentResidents.Where(i => i.Ethnicity == EthnicityType.AFAM).Count(),
+                CaucCount = currentResidents.Where(i => i.Ethnicity == EthnicityType.CAUCASIAN).Count(),
+                HispCount = currentResidents.Where(i => i.Ethnicity == EthnicityType.HISPLATIN).Count(),
+                AsianCount = currentResidents.Where(i => i.Ethnicity == EthnicityType.ASIAN_PACIFIC).Count(),
+                NativeCount = currentResidents.Where(i => i.Ethnicity == EthnicityType.NATIVE).Count(),
+                OtherCount = currentResidents.Where(i => i.Ethnicity == EthnicityType.OTHER).Count()
+            };
+        }
+
+
+        public void Dispose()
+        {
+           context.Dispose();
+        }
     }
 }

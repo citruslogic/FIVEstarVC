@@ -121,12 +121,11 @@
                 <td>
                     @Html.ActionLink("Edit", "Edit", new { id = item.ResidentID, fromPage = Model.PageNumber }, htmlAttributes: new { @class = "btn btn-secondary btn-sm" }) &nbsp;
 
-                    @if (item.IsCurrent())
-                    {
-                        @Html.ActionLink("Manage Tracks", "Manage", "ProgramEvents", new { id = item.ResidentID, fromPage = Model.PageNumber },
-                                        htmlAttributes: new { @class = "btn btn-secondary btn-sm" })
 
-                    }
+                    @Html.ActionLink("Manage Tracks", "Manage", "ProgramEvents", new { id = item.ResidentID, fromPage = Model.PageNumber },
+                                    htmlAttributes: new { @class = "btn btn-secondary btn-sm" })
+
+
 
                 <td>
                     @Html.ActionLink("Details", "Details", new { id = item.ResidentID, fromPage = Model.PageNumber }, htmlAttributes: new { @class = "btn btn-secondary btn-sm" }) &nbsp;
@@ -151,7 +150,7 @@
                         @:<input type="button" value="Mark to Delete" class="modal-link btn btn-sm btn-danger"
                                   @: data-toggle="modal" data-target="#QuickEventModal" onclick="showDeleteDialog(@item.ResidentID)" />
                     }
-                    
+
                 </td>
             </tr>
         }

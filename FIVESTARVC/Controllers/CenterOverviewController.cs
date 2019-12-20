@@ -51,7 +51,7 @@ namespace FIVESTARVC.Controllers
             var residents = await db.Residents.AsNoTracking().ToListAsync();
             var currentResidents = residents.Where(cur => cur.IsCurrent().Computed());
 
-            genders = GenerateGenderComposition(residents);
+            genders = GenerateGenderComposition(currentResidents);
 
             demographicTable.IsCurrent = true;
             demographicTable.GenderComposition = genders;

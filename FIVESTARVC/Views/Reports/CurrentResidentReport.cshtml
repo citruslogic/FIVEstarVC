@@ -1,0 +1,121 @@
+﻿@model FIVESTARVC.ViewModels.CurrentResidentOverviewViewModel
+
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@{
+    /**/
+
+    ViewBag.Title = "Current Resident Report";
+}
+<div class="float-right text-uppercase">As Of: @DateTime.Today.ToShortDateString()</div>
+<div style="margin-top: 10px; margin-bottom: 10px;">
+    <button class="btn btn-default" onclick="location.href='/Reports/Index';" style="background-color: lightsteelblue"> Return to Reports </button><br>
+</div>
+
+
+<table class="table table-sm table-striped">
+    <tr>
+        <th>
+            Last Name
+        </th>
+        <th>
+            First Name
+        </th>
+        <th>
+            Age
+        </th>
+        <th>
+            Service
+        </th>
+        <th>
+            Campaigns
+        </th>
+    </tr>
+
+    @foreach (var item in Model.CurrentResidents)
+    {
+        <tr>
+            <td>@Html.DisplayFor(modelItem  => item.LastName)</td>
+            <td>@Html.DisplayFor(modelItem  => item.FirstName)</td>
+            <td>@Html.DisplayFor(modelItem  => item.Age)</td>
+            <td>@Html.DisplayFor(modelItem  => item.Service)</td>
+            <td>@foreach (var campaign in item.Campaigns) { @Html.Encode(campaign)<br /> } </td>
+        </tr>
+    }
+
+</table>
+
+<dt>
+    Average Age
+</dt>
+<dd>@Model.AverageAge</dd>
+<p>@Model.ArmyCount Army, @Model.NavyCount Navy, @Model.AirForceCount Air Force, @Model.MarineCount Marines, @Model.CoastGuardCount Coast Guard</p>
+
+<table>
+    <tr>
+        <td>
+            @Model.Post9_11Count
+        </td>
+        <td>
+            Post 9-11 
+        </td>
+    </tr>
+</table>
+
+<table>
+    <tr>
+        <td>
+            @Model.BlackCount
+        </td>
+        <td>
+            Black / African American
+        </td>
+    </tr>
+    <tr>
+        <td>
+            @Model.CaucCount
+        </td>
+        <td>
+            Caucasian
+        </td>
+        </tr>
+    <tr>
+        <td>
+            @Model.HispCount
+        </td>
+        <td>
+            Hispanic / Latin American
+        </td>
+    </tr>
+    <tr>
+        <td>
+            @Model.AsianCount
+        </td>
+        <td>
+            Asian 
+        </td>
+    </tr>
+    <tr>
+        <td>
+            @Model.NativeCount
+        </td>
+        <td>
+            Native American
+        </td>
+    </tr>
+    <tr>
+        <td>
+            @Model.OtherCount
+        </td>
+        <td>
+            Other
+        </td>
+    </tr>
+</table>
+<div style="margin-bottom: 25px;">
+    <button class="btn btn-default" onclick="location.href='/Reports/Index';" style="background-color: lightsteelblue"> Return to Reports </button><br>
+</div>
+
