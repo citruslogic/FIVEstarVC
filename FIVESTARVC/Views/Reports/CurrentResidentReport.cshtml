@@ -54,18 +54,25 @@
 <dd>@Model.AverageAge</dd>
 <p>@Model.ArmyCount Army, @Model.NavyCount Navy, @Model.AirForceCount Air Force, @Model.MarineCount Marines, @Model.CoastGuardCount Coast Guard</p>
 
-<table>
+<table class="table table-sm table-striped">
     <tr>
-        <td>
-            @Model.Post9_11Count
-        </td>
-        <td>
-            Post 9-11 
-        </td>
+        <th>Campaign</th>
+        <th>Current Count</th>
     </tr>
+    @foreach (var campaign in Model.Campaigns)
+    {
+        <tr>
+            <td>@Html.DisplayFor(modelItem => campaign.CampaignName)</td>
+            <td>@Html.DisplayFor(modelItem => campaign.Count)</td>
+        </tr>
+    }
 </table>
 
-<table>
+<table class="table table-sm table-striped">
+    <tr>
+        <th>Ethnicity</th>
+        <th>Current Count</th>
+    </tr>
     <tr>
         <td>
             @Model.BlackCount

@@ -106,14 +106,15 @@ namespace FIVESTARVC.DAL
 
             var militaryCampaigns = new List<MilitaryCampaign>
             {
-                new MilitaryCampaign { CampaignName="Persian Gulf", Residents = new List<Resident>() },
-                new MilitaryCampaign { CampaignName="OEF", Residents = new List<Resident>() },
-                new MilitaryCampaign { CampaignName="Vietnam", Residents = new List<Resident>() },
-                new MilitaryCampaign { CampaignName="OIF", Residents = new List<Resident>() },
-                new MilitaryCampaign { CampaignName="Bosnia", Residents = new List<Resident>() }
+                new MilitaryCampaign { MilitaryCampaignID = 1, CampaignName="Persian Gulf (before 9/11)", Residents = new List<Resident>() },
+                new MilitaryCampaign { MilitaryCampaignID = 2, CampaignName="Persian Gulf (after 9/11)", Residents = new List<Resident>() },
+                new MilitaryCampaign { MilitaryCampaignID = 3, CampaignName="OEF", Residents = new List<Resident>() },
+                new MilitaryCampaign { MilitaryCampaignID = 4, CampaignName="Vietnam", Residents = new List<Resident>() },
+                new MilitaryCampaign { MilitaryCampaignID = 5, CampaignName="OIF", Residents = new List<Resident>() },
+                new MilitaryCampaign { MilitaryCampaignID = 6, CampaignName="Bosnia", Residents = new List<Resident>() }
             };
 
-            militaryCampaigns.ForEach(m => context.MilitaryCampaigns.AddOrUpdate(i => i.CampaignName, m));
+            militaryCampaigns.ForEach(m => context.MilitaryCampaigns.AddOrUpdate(i => i.MilitaryCampaignID, m));
             context.SaveChanges();
         }
     }

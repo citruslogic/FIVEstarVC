@@ -32,6 +32,9 @@ namespace FIVESTARVC.ViewModels
 
         public int OtherCount { get; set; }
 
+        public List<CampaignCountViewModel> Campaigns { get; set; }
+
+
 
     }
 }

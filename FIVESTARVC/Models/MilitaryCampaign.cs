@@ -14,7 +14,7 @@ namespace FIVESTARVC.Models
 
         [Display(Name = "Campaign")]
         [Required]
-        [RegularExpression("^\\s?([a-zA-Z]+\\s?){1,3}$", ErrorMessage = "Campaigns can only contain at most 3 words, with a single space between them.")]
+        //[RegularExpression("^\\s?([a-zA-Z]+\\s?){1,3}$", ErrorMessage = "Campaigns can only contain at most 3 words, with a single space between them.")]
         [Remote("IsCampaignNameExist", "Residents", AdditionalFields = "MilitaryCampaignID", ErrorMessage = "Campaign name already exists. Choose another or click Close to close the form without submitting.")]
         public string CampaignName { get; set; }
 

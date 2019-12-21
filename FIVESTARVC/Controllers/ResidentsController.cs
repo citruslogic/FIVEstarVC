@@ -117,7 +117,7 @@ namespace FIVESTARVC.Controllers
                 });
             }
 
-            ViewBag.Campaigns = viewModel;
+            ViewBag.Campaigns = viewModel.OrderBy(i => i.MilitaryCampaign).ToList();
 
             return View(new ResidentIncomeModel());
         }
@@ -150,7 +150,7 @@ namespace FIVESTARVC.Controllers
                 });
             }
 
-            ViewBag.Campaigns = viewModel;
+            ViewBag.Campaigns = viewModel.OrderBy(i => i.MilitaryCampaign).ToList();
 
             Resident resident = new Resident
             {
@@ -286,7 +286,7 @@ namespace FIVESTARVC.Controllers
                 .Single();
 
 
-            ViewBag.Campaigns = residentService.PopulateAssignedCampaignData(resident, db);
+            ViewBag.Campaigns = residentService.PopulateAssignedCampaignData(resident, db).OrderBy(i => i.MilitaryCampaign).ToList();
             ViewBag.DischargeInfo = resident.ProgramEvents
                                         .Where(i => i.ProgramType.EventType == EnumEventType.DISCHARGE)
                                         .OrderByDescending(i => i.ProgramEventID).FirstOrDefault(); 
@@ -328,7 +328,7 @@ namespace FIVESTARVC.Controllers
 
             ViewBag.StateTerritoryID = new SelectList(db.States, "StateTerritoryID", "State", residentToUpdate.StateTerritoryID);
             ViewBag.ReferralID = new SelectList(db.Referrals, "ReferralID", "ReferralName", residentToUpdate.ReferralID);
-            ViewBag.Campaigns = residentService.PopulateAssignedCampaignData(residentToUpdate, db);
+            ViewBag.Campaigns = residentService.PopulateAssignedCampaignData(residentToUpdate, db).OrderBy(i => i.MilitaryCampaign).ToList();
 
             if (TryUpdateModel(residentToUpdate, "",
                new string[] { "ClearLastName", "ClearFirstMidName", "Gender", "Religion", "Ethnicity", "StateTerritoryID", "ReferralID", "AgeAtRelease",

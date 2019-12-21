@@ -58,6 +58,12 @@ namespace FIVESTARVC.Services
                     Ethnicity = i.Ethnicity
                 }).ToList();
 
+            var campaignCounts = context.MilitaryCampaigns.ToList().Select(i => new CampaignCountViewModel
+            {
+                CampaignName = i.CampaignName,
+                Count = i.Residents.Where(j => j.IsCurrent()).Count() > 0 ? i.Residents.Where(j => j.IsCurrent()).Count() : 0
+            }).ToList();
+
             return new CurrentResidentOverviewViewModel
             {
                 CurrentResidents = currentResidents,
@@ -68,8 +74,7 @@ namespace FIVESTARVC.Services
                 MarineCount = currentResidents.Where(i => i.Service == ServiceType.MARINES.ToString()).Count(),
                 CoastGuardCount = currentResidents.Where(i => i.Service == ServiceType.COASTGUARD.ToString()).Count(),
 
-                //Post9_11Count = currentResidents.Where(i => i.Campaigns.Any(j => j == "Persian Gulf - 2001+")).Count(),
-
+                Campaigns = campaignCounts,
 
                 BlackCount = currentResidents.Where(i => i.Ethnicity == EthnicityType.AFAM).Count(),
                 CaucCount = currentResidents.Where(i => i.Ethnicity == EthnicityType.CAUCASIAN).Count(),

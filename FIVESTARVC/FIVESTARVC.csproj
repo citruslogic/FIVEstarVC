@@ -389,6 +389,7 @@
     <Compile Include="Validators\IsDateAfter.cs" />
     <Compile Include="ViewModels\AgeGroups.cs" />
     <Compile Include="ViewModels\AssignedCampaignData.cs" />
+    <Compile Include="ViewModels\CampaignCountViewModel.cs" />
     <Compile Include="ViewModels\CurrentResidentOverviewViewModel.cs" />
     <Compile Include="ViewModels\CurrentResidentViewModel.cs" />
     <Compile Include="ViewModels\CustomEvent.cs" />
