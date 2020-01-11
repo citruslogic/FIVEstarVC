@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using FIVESTARVC.Models;
 
 namespace FIVESTARVC.ViewModels
@@ -12,6 +13,8 @@ namespace FIVESTARVC.ViewModels
         public int? Age { get; set; }
 
         public string Service { get; set; }
+
+        public string DateAdmitted { get; set; }
 
         public EthnicityType Ethnicity { get; set; }
 

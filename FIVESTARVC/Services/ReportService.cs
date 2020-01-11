@@ -16,7 +16,10 @@ namespace FIVESTARVC.Services
         private readonly ResidentContext context = new ResidentContext();
         public List<ResidencyReportViewModel> GetResidencyData()
         {
-            return context.Residents.Include(i => i.ProgramEvents.Select(j => j.ProgramType)).AsNoTracking().ToList().Select(i => new ResidencyReportViewModel
+            return context.Residents
+                .Include(i => i.ProgramEvents.Select(j => j.ProgramType))
+                .AsNoTracking().ToList()
+                .Select(i => new ResidencyReportViewModel
             {
                 LastName = i.ClearLastName,
                 FirstName = i.ClearFirstMidName,
@@ -32,7 +35,8 @@ namespace FIVESTARVC.Services
 
         public List<ResidentReferralViewModel> GetReferralReport()
         {
-            var referralModel = context.Referrals.Include(i => i.Residents)
+            var referralModel = context.Referrals
+                .Include(i => i.Residents)
                 .ToList().Select(i => new ResidentReferralViewModel
                 {
                     ReferralName = i.ReferralName,
@@ -85,6 +89,42 @@ namespace FIVESTARVC.Services
             };
         }
 
+        public CurrentResidentOverviewViewModel ResidentsByYear(string year = null)
+        {
+            int yearValue = 0;
+            List<CurrentResidentViewModel> residents = new List<CurrentResidentViewModel>();
+
+            if (string.IsNullOrEmpty(year))
+            {
+                return new CurrentResidentOverviewViewModel
+                {
+                    CurrentResidents = residents,
+                    Total = 0
+                };
+            } else if (int.TryParse(year, out yearValue) != true)
+            {
+                yearValue = DateTime.Now.Year;
+            }
+
+            residents = context.Residents
+                .AsNoTracking()
+                .Include(i => i.ProgramEvents)
+                .ToList()
+                .Where(i => i.ProgramEvents.Any(j => j.ClearStartDate.Year == yearValue && j.ProgramType.EventType == EnumEventType.ADMISSION))
+                .Select(i => new CurrentResidentViewModel
+                {
+                    LastName = i.ClearLastName,
+                    FirstName = i.ClearFirstMidName,
+                    Service = FSEnumHelper.GetDescription(i.ServiceBranch),
+                    DateAdmitted = i.ProgramEvents.LastOrDefault(j => j.ClearStartDate.Year == yearValue && j.ProgramType.EventType == EnumEventType.ADMISSION).GetShortStartDate()
+                }).ToList();
+
+            return new CurrentResidentOverviewViewModel
+            {
+                CurrentResidents = residents,
+                Total = residents.Count()
+            };
+        }
 
         public void Dispose()
         {

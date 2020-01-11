@@ -1,5 +1,4 @@
-﻿using DelegateDecompiler;
-using FIVESTARVC.DAL;
+﻿using FIVESTARVC.DAL;
 using FIVESTARVC.Helpers;
 using FIVESTARVC.Validators;
 using Microsoft.Linq.Translations;
@@ -8,8 +7,6 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity.ModelConfiguration;
 using System.Globalization;
-using System.Linq.Expressions;
-using System.Reflection;
 
 namespace FIVESTARVC.Models
 {

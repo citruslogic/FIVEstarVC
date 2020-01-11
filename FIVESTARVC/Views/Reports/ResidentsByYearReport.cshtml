@@ -1,0 +1,73 @@
+﻿@model FIVESTARVC.ViewModels.CurrentResidentOverviewViewModel
+
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@{
+    /**/
+
+    ViewBag.Title = "Resident Listing by Year Report";
+}
+<br />
+
+@using (Html.BeginForm("ResidentsByYearReport", "Reports", FormMethod.Get))
+{
+    <div class="form-inline" style="margin-bottom: 1em;">
+
+        Residents listing by year:&nbsp;
+
+        @Html.TextBox("yearFilter", ViewBag.YearFilter as string, htmlAttributes: new { @class = "form-control", @style = "width: 60px; margin-left: 5px;", @maxlength=4, @minlength=4 })
+        <input class="btn btn-sm btn-outline-primary" type="submit" value="Get" style="margin-left: 15px"/>
+    </div>
+
+}
+<div style="margin-top: 10px; margin-bottom: 10px;">
+    <button class="btn btn-default" onclick="location.href='/Reports/Index';" style="background-color: lightsteelblue"> Return to Reports </button><br>
+</div>
+
+@if (Model.CurrentResidents.Count < 1)
+{
+    @Html.Raw("There are no residents for the provided year, " + ViewBag.YearFilter + ". Providing an invalid year (or no year at all) results in " +
+    + DateTime.Now.Year + " being used instead. Try a different year.");
+}
+else
+{
+    <p> Total residents: @Html.Encode(Model.Total)</p>
+    <table class="table table-sm table-striped">
+        <tr>
+            <th>
+                Last Name
+            </th>
+            <th>
+                First Name
+            </th>
+            <th>
+                Service
+            </th>
+            <th>
+                Last Admit Date
+            </th>
+        </tr>
+
+        @foreach (var item in Model.CurrentResidents)
+        {
+            <tr>
+                <td>@Html.DisplayFor(modelItem => item.LastName)</td>
+                <td>@Html.DisplayFor(modelItem => item.FirstName)</td>
+                <td>@Html.DisplayFor(modelItem => item.Service)</td>
+                <td>@Html.DisplayFor(modelItem => item.DateAdmitted)</td>
+            </tr>
+        }
+
+    </table>
+
+    <div style="margin-bottom: 25px;">
+        <button class="btn btn-default" onclick="location.href='/Reports/Index';" style="background-color: lightsteelblue"> Return to Reports </button><br>
+    </div>
+
+}
+
+
+

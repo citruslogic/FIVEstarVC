@@ -1738,6 +1738,15 @@ namespace FIVESTARVC.Controllers
             };
         }
 
+        public ActionResult ResidentsByYearReport(string yearFilter)
+        {
+            ViewBag.YearFilter = yearFilter;
+            using (ReportService residentsByYear = new ReportService())
+            {
+                return View("ResidentsByYearReport", residentsByYear.ResidentsByYear(yearFilter));
+            }
+        }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)

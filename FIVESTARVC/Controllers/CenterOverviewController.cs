@@ -19,7 +19,7 @@ namespace FIVESTARVC.Controllers
     //[Authorize(Roles = "RTS-Group")]
     public class CenterOverviewController : Controller
     {
-        ResidentContext db = new ResidentContext();
+        readonly ResidentContext db = new ResidentContext();
 
         public List<GenderGroup> GenerateGenderComposition(IEnumerable<Resident> residents)
         {
@@ -62,7 +62,7 @@ namespace FIVESTARVC.Controllers
         public async Task<ActionResult> CumulativeGenderGroupBreakdown()
         {
             var demographicTable = new DemographicTableViewModel();
-            IEnumerable<Resident> residents = await db.Residents.AsNoTracking().ToListAsync();
+            IEnumerable<Resident> residents = await db.Residents.Include(i => i.ProgramEvents).AsNoTracking().ToListAsync();
 
             List<GenderGroup> genders = GenerateGenderComposition(residents);
 
@@ -113,42 +113,37 @@ namespace FIVESTARVC.Controllers
                     new AgeGroups
                     {
                         AgeGroup = "19 - 29",
-                        Count = residents.Where(r => r.IsCurrent() && r.Age >= 19 && r.Age <= 29).Count()
-                                        + residents.Where(r => !r.IsCurrent() && r.AgeAtRelease >= 19 && r.AgeAtRelease <= 29).Count()
+                        Count = residents.Where(r => r.AgeAtRelease >= 19 && r.AgeAtRelease <= 29).Count()
                     },
 
                     new AgeGroups
                     {
                         AgeGroup = "30 - 39",
-                        Count = residents.Where(r => r.IsCurrent() && r.Age >= 30 && r.Age <= 39).Count()
-                            + residents.Where(r => !r.IsCurrent() && r.AgeAtRelease >= 30 && r.AgeAtRelease <= 39).Count()
+                        Count = residents.Where(r => r.AgeAtRelease >= 30 && r.AgeAtRelease <= 39).Count()
                     },
 
                     new AgeGroups
                     {
                         AgeGroup = "40 - 49",
-                        Count = residents.Where(r => r.IsCurrent() && r.Age >= 40 && r.Age <= 49).Count()
-                            + residents.Where(r => !r.IsCurrent() && r.AgeAtRelease >= 40 && r.AgeAtRelease <= 49).Count()
+                        Count = residents.Where(r => r.AgeAtRelease >= 40 && r.AgeAtRelease <= 49).Count()
                     },
 
                     new AgeGroups
                     {
                         AgeGroup = "50 - 59",
-                        Count = residents.Where(r => r.IsCurrent() && r.Age >= 50 && r.Age <= 59).Count()
-                            + residents.Where(r => !r.IsCurrent() && r.AgeAtRelease >= 50 && r.AgeAtRelease <= 59).Count()
+                        Count = residents.Where(r => r.AgeAtRelease >= 50 && r.AgeAtRelease <= 59).Count()
                     },
 
                     new AgeGroups
                     {
                         AgeGroup = "60 - 69",
-                        Count = residents.Where(r => r.IsCurrent() && r.Age >= 60 && r.Age <= 69).Count()
-                            + residents.Where(r => !r.IsCurrent() && r.AgeAtRelease >= 60 && r.AgeAtRelease <= 69).Count()
+                        Count = residents.Where(r => r.AgeAtRelease >= 60 && r.AgeAtRelease <= 69).Count()
                     },
 
                     new AgeGroups
                     {
                         AgeGroup = "> 70",
-                        Count = residents.Where(r => r.Age > 70).Count() + residents.Where(r => !r.IsCurrent() && r.AgeAtRelease > 70).Count()
+                        Count = residents.Where(r => r.AgeAtRelease > 70).Count()
                     }
                 };
             }
@@ -208,7 +203,7 @@ namespace FIVESTARVC.Controllers
             ageGroups = GenerateAgeComposition(residents);
 
             ViewBag.Sum = ageGroups.Sum(group => group.Count);
-            ViewBag.AverageAge = GetCurrentAverageAge();
+            ViewBag.AverageAge = GetAverageAge();
 
             demographicTable.AgeComposition = ageGroups;
             demographicTable.IsCurrent = true;
@@ -225,7 +220,7 @@ namespace FIVESTARVC.Controllers
             ageGroups = GenerateAgeComposition(residents, true);
 
             ViewBag.Sum = ageGroups.Sum(group => group.Count);
-            ViewBag.AverageAge = GetCurrentAverageAge();
+            ViewBag.AverageAge = GetAverageAge(false);
 
             demographicTable.IsCurrent = false;
             demographicTable.AgeComposition = ageGroups;
@@ -267,13 +262,25 @@ namespace FIVESTARVC.Controllers
             return PartialView("_AverageStay");
         }
 
-        public double GetCurrentAverageAge()
+        public double GetAverageAge(bool current = true)
         {
-            var currentResidents = db.Residents.AsNoTracking().ToList().Where(cur => cur.IsCurrent().Computed());
-            if (currentResidents.Any())
+            List<Resident> residents;
+            if (current)
             {
-                IEnumerable<ReportingResidentViewModel> residentListing = db.Residents.AsNoTracking().ToList().Where(cur => cur.IsCurrent())
-                    .Select(r => new ReportingResidentViewModel { ID = r.ResidentID, Age = r.Age.Computed() });
+                residents = db.Residents.AsNoTracking().ToList().Where(cur => cur.IsCurrent().Computed()).ToList();
+                
+            } else
+            {
+                residents = db.Residents.AsNoTracking().ToList();
+            }
+
+            if (residents.Any())
+            {
+                List<ReportingResidentViewModel> residentListing = residents.Select(r => new ReportingResidentViewModel 
+                {
+                    ID = r.ResidentID, 
+                    Age = r.IsCurrent().Computed() ? r.Age : r.AgeAtRelease
+                }).ToList();
 
                 return Math.Round(residentListing.Average(r => r.Age), 2);
 

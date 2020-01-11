@@ -1021,6 +1021,7 @@
     <Content Include="Views\Residents\ConfirmDelete.cshtml" />
     <Content Include="Views\Shared\_SelectedResident.cshtml" />
     <Content Include="Views\Reports\CurrentResidentReport.cshtml" />
+    <Content Include="Views\Reports\ResidentsByYearReport.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Code\" />
