@@ -1,19 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 
 namespace FIVESTARVC.Validators
 {
-    public sealed class IsDateAfter : ValidationAttribute, IClientValidatable
+    public sealed class IsDateAfterAttribute : ValidationAttribute, IClientValidatable
     {
 
         private readonly string testedPropertyName;
         private readonly bool allowEqualDates;
 
-        public IsDateAfter(string testedPropertyName, bool allowEqualDates = false)
+        public IsDateAfterAttribute(string testedPropertyName, bool allowEqualDates = false)
         {
             this.testedPropertyName = testedPropertyName;
             this.allowEqualDates = allowEqualDates;
@@ -53,17 +51,6 @@ namespace FIVESTARVC.Validators
             {
                 return ValidationResult.Success;
             }
-            //if ((DateTime)value >= (DateTime)propertyTestedValue)
-            //{
-            //    if (this.allowEqualDates)
-            //    {
-            //        return ValidationResult.Success;
-            //    }
-            //    if ((DateTime)value > (DateTime)propertyTestedValue)
-            //    {
-            //        return ValidationResult.Success;
-            //    }
-            //}
 
             return new
      ValidationResult(FormatErrorMessage(validationContext.DisplayName));

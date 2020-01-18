@@ -83,10 +83,12 @@ namespace FIVESTARVC.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            CustomEvent model = new CustomEvent();
-            model.ProgramEvents = new List<TempProgramEvent>
+            CustomEvent model = new CustomEvent
+            {
+                ProgramEvents = new List<TempProgramEvent>
             {
                 new TempProgramEvent{ ResidentID = id.Value, StartDate = DateTime.Now },
+            }
             };
 
             ViewBag.ProgramTypeID = new SelectList(db.ProgramTypes.Where(t => t.EventType == EnumEventType.TRACK), "ProgramTypeID", "ProgramDescription");
@@ -122,96 +124,79 @@ namespace FIVESTARVC.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Manage(int ResidentID, CustomEvent model, int? fromPage = 1)
         {
-
-            IEnumerable<TempProgramEvent> newPrograms = model.ProgramEvents.Where(s => s.ProgramEventID == 0 && s.ProgramTypeID > 0);
-
-            foreach (TempProgramEvent track in newPrograms)
+            if (model != null)
             {
-                if (track.StartDate.Year < 2012 || (track.EndDate.HasValue && track.EndDate.Value.Year < 2012))
-                {
-                    TempData["UserMessage"] = "CRITICAL: Dates for " + track.StartDate.ToShortDateString() + " and " + track.EndDate?.ToShortDateString() 
-                            + " cannot be before 2012.";
+                IEnumerable<TempProgramEvent> newPrograms = model.ProgramEvents.Where(s => s.ProgramEventID == 0 && s.ProgramTypeID > 0);
 
-                    return RedirectToAction("Manage", new RouteValueDictionary(
-                        new { controller = "ProgramEvents", action = "Manage", Id = ResidentID, FromPage = fromPage }));
+                var idList = model.EnrolledTracks.Select(i => i.ProgramEventID).ToArray();
+                var peList = db.ProgramEvents
+                    .Join(idList, pe => pe.ProgramEventID, id => id, (pe, id) => pe)
+                    .ToList();
+
+                foreach (var track in model.EnrolledTracks)
+                {
+                    var pe = peList.Single(i => i.ProgramEventID == track.ProgramEventID);
+                    pe.ClearEndDate = track.EndDate;
+                    pe.Completed = track.Completed;
+                    db.Entry(pe).State = EntityState.Modified;
                 }
 
-                if (track.EndDate.HasValue && track.EndDate.Value < track.StartDate)
+                foreach (TempProgramEvent track in newPrograms)
                 {
-                    TempData["UserMessage"] = "CRITICAL: Dates for " + track.StartDate.ToShortDateString() + " and " + track.EndDate?.ToShortDateString()
-                        + " -- start date cannot come after the end date.";
-
-                    return RedirectToAction("Manage", new RouteValueDictionary(
-                        new { controller = "ProgramEvents", action = "Manage", Id = ResidentID, FromPage = fromPage }));
-                }
-
-                if (ModelState.IsValid)
-                {
-                    db.ProgramEvents.Add(new ProgramEvent {
-
-                        ResidentID = ResidentID,
-                        ProgramTypeID = track.ProgramTypeID,
-                        ClearStartDate = track.StartDate,
-                        ClearEndDate = track.EndDate,
-                        Completed = track.Completed
-                    });
-                }
-                
-            }
-
-            db.SaveChanges();
-            if (newPrograms.Count() > 1)
-            {
-                TempData["UserMessage"] = db.Residents.Find(ResidentID).Fullname + " has new tracks.  ";
-            } else if (newPrograms.Count() == 1)
-            {
-                TempData["UserMessage"] = db.Residents.Find(ResidentID).Fullname + " has a new track.  ";
-            } else
-            {
-                TempData["UserMessage"] = db.Residents.Find(ResidentID).Fullname + " was not enrolled in any new tracks. ";
-            }
-
-            ViewBag.ProgramTypeID = new SelectList(db.ProgramTypes.Where(t => t.EventType == EnumEventType.TRACK), "ProgramTypeID", "ProgramDescription");
-
-            return RedirectToAction("Manage", new RouteValueDictionary(
-                   new { controller = "ProgramEvents", action = "Manage", Id = ResidentID, FromPage = fromPage }));
-        }
-
-        [HttpPost]
-        public ActionResult ReleaseTrack(int ResidentID, int? FromPage, CustomEvent customEvent)
-        {
-            if (customEvent != null && customEvent.EnrolledTracks?.Count > 0)
-            {
-                try
-                {
-                    var idList = customEvent.EnrolledTracks.Select(i => i.ProgramEventID).ToArray();
-                    var peList = db.ProgramEvents
-                        .Join(idList, pe => pe.ProgramEventID, id => id, (pe, id) => pe)
-                        .ToList();
-
-                    foreach (var track in customEvent.EnrolledTracks)
+                    if (track.StartDate.Year < 2012 || (track.EndDate.HasValue && track.EndDate.Value.Year < 2012))
                     {
-                        var pe = peList.Single(i => i.ProgramEventID == track.ProgramEventID);
-                        pe.ClearEndDate = track.EndDate;
-                        pe.Completed = track.Completed;
-                        db.Entry(pe).State = EntityState.Modified;
+                        TempData["UserMessage"] = "CRITICAL: Dates for " + track.StartDate.ToShortDateString() + " and " + track.EndDate?.ToShortDateString()
+                                + " cannot be before 2012.";
+
+                        return RedirectToAction("Manage", new RouteValueDictionary(
+                            new { controller = "ProgramEvents", action = "Manage", Id = ResidentID, FromPage = fromPage }));
+                    }
+
+                    if (track.EndDate.HasValue && track.EndDate.Value < track.StartDate)
+                    {
+                        TempData["UserMessage"] = "CRITICAL: Dates for " + track.StartDate.ToShortDateString() + " and " + track.EndDate?.ToShortDateString()
+                            + " -- start date cannot come after the end date.";
+
+                        return RedirectToAction("Manage", new RouteValueDictionary(
+                            new { controller = "ProgramEvents", action = "Manage", Id = ResidentID, FromPage = fromPage }));
+                    }
+
+                    if (ModelState.IsValid)
+                    {
+                        db.ProgramEvents.Add(new ProgramEvent
+                        {
+
+                            ResidentID = ResidentID,
+                            ProgramTypeID = track.ProgramTypeID,
+                            ClearStartDate = track.StartDate,
+                            ClearEndDate = track.EndDate,
+                            Completed = track.Completed
+                        });
                     }
 
                     db.SaveChanges();
+                    if (newPrograms.Count() > 1)
+                    {
+                        TempData["UserMessage"] = db.Residents.Find(ResidentID).Fullname + " has new tracks.  ";
+                    }
+                    else if (newPrograms.Count() == 1)
+                    {
+                        TempData["UserMessage"] = db.Residents.Find(ResidentID).Fullname + " has a new track.  ";
+                    }
+                    else
+                    {
+                        TempData["UserMessage"] = db.Residents.Find(ResidentID).Fullname + " was not enrolled in any new tracks. ";
+                    }
 
-                    TempData["UserMessage"] = "Track information updated. ";
-                    return RedirectToAction("Manage", new RouteValueDictionary(
-                        new { controller = "ProgramEvents", action = "Manage", Id = ResidentID, fromPage = FromPage }));
-
-                } catch (Exception e)
-                {
-                    return Json("Resident's tracks could not be updated. ERROR: " + e.Message);
+                    ViewBag.ProgramTypeID = new SelectList(db.ProgramTypes.Where(t => t.EventType == EnumEventType.TRACK), "ProgramTypeID", "ProgramDescription");
                 }
-               
             }
-            return Json("Resident's tracks could not be updated.");
-        }
 
+            TempData["UserMessage"] = "Track information updated. ";
+            return RedirectToAction("Manage", new RouteValueDictionary(
+                   new { controller = "ProgramEvents", action = "Manage", Id = ResidentID, FromPage = fromPage }));
+        }
+        
         // GET: ProgramEvents/Edit/5
         public ActionResult Edit(int? id)
         {

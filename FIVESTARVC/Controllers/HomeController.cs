@@ -78,7 +78,7 @@ namespace FIVESTARVC.Controllers
         {
             var sortedResidents = db.Residents.AsNoTracking().ToList().Where(i => i.IsCurrent()).OrderBy(o => o.RemainingDays);
 
-            if (sortedResidents.Count() > 0)
+            if (sortedResidents.Any())
                 NearestResidents = sortedResidents.Take(2);
             else
                 NearestResidents = null;

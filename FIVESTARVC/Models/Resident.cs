@@ -6,12 +6,14 @@ using System.Linq;
 using System.Data.Entity;
 using FIVESTARVC.Helpers;
 using DelegateDecompiler;
+using FIVESTARVC.DAL;
 
 namespace FIVESTARVC.Models
 {
 
     public class Resident : Person
     {
+        readonly ResidentContext db = new ResidentContext();
 
         [Display(Name = "Service Branch")]
         public ServiceType ServiceBranch { get; set; }
@@ -147,7 +149,7 @@ namespace FIVESTARVC.Models
             get
             {
                 var admitDate = GetAdmitDate().GetValueOrDefault(DateTime.Today);
-                var dischargeDate = GetDischargeDate().HasValue ? GetDischargeDate().Value : DateTime.Today;
+                var dischargeDate = GetDischargeDate() ?? DateTime.Today;
                 // Resident may not be discharged yet.
                 TimeSpan span = dischargeDate.Subtract(admitDate);
 

@@ -13,21 +13,22 @@
     @ViewBag.Fullname
 </h5>
 
-@if (Model.EnrolledTracks.Count > 0)
-{
-    <p> Current tracks</p>
-
-    @Html.Partial("_ReleaseTracks", Model)
-
-}
-else
-{
-    <p> This resident is currently not in any tracks.</p>
-}
-
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
+    if (Model.EnrolledTracks.Count > 0)
+    {
+        <p> Current tracks</p>
+
+        @Html.Partial("_ReleaseTracks", Model)
+
+    }
+    else
+    {
+        <p> This resident is currently not in any tracks.</p>
+    }
+
+
 
     <p> This resident can be enrolled in one or more tracks.</p>
     <input type="hidden" name="ResidentID" value="@ViewBag.ResidentID" />
@@ -48,7 +49,8 @@ else
             </div>
             <div class="col-md-2 pull-right">
                 <button type="button" class="btn btn-sm btn-secondary" id="addTrack"><i class="fa fa-plus fa-fw"></i>  New Track</button><br />
-                <button type="submit" class="savebtn btn btn-sm btn-primary" style="margin-top: 0.5em;"><i class="fa fa-check fa-fw"></i> Finalize Enrollment</button>
+                <button type="submit" class="savebtn btn btn-sm btn-primary" style="margin-top: 0.5em;"><i class="fa fa-check fa-fw"></i> Update Enrollment</button>
+                <button type="button" class="btn btn-sm btn-success" onclick="location.href='/Residents/Create'" style="margin-top: 5px;"><i class="fa fa-address-card fa-fw"></i> Admit Another Resident</button>
             </div>
         </div>
 

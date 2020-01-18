@@ -59,7 +59,7 @@ namespace FIVESTARVC.Validators
             {
                 return new ValidationResult("The end date year for a track cannot be a year ahead of " + DateTime.Now.Year);
             }
-            else if (endDateValue.HasValue && endDateValue.Value < startDateValue)
+            else if (endDateValue.HasValue && !string.Equals(DateTime.Today.ToShortTimeString(), endDateValue.Value.ToShortDateString(), StringComparison.InvariantCulture) && endDateValue.Value < startDateValue)
             {
                 return new ValidationResult("The end date cannot come before the start date.");
             }

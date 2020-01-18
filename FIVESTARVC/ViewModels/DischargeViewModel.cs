@@ -13,7 +13,7 @@ namespace FIVESTARVC.ViewModels
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:MM/dd/yyyy}", ApplyFormatInEditMode = true)]
         [Display(Name = "Discharge Date")]
-        [IsDateAfter("LastAdmitted", true, ErrorMessage = "Discharge Date must come after or on Last Admitted Date")]
+        [IsDateAfterAttribute("LastAdmitted", true, ErrorMessage = "Discharge Date must come after or on Last Admitted Date")]
         public DateTime? DischargeDate { get; set; }
 
         [DataType(DataType.Date)]

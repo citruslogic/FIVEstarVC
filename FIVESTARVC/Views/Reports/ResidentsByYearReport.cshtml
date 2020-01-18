@@ -18,7 +18,7 @@
 
         Residents listing by year:&nbsp;
 
-        @Html.TextBox("yearFilter", ViewBag.YearFilter as string, htmlAttributes: new { @class = "form-control", @style = "width: 60px; margin-left: 5px;", @maxlength=4, @minlength=4 })
+        @Html.TextBox("yearFilter", ViewBag.YearFilter as string, htmlAttributes: new { @class = "form-control", @style = "width: 60px; margin-left: 5px;", @required="required", @maxlength=4, @minlength=4 })
         <input class="btn btn-sm btn-outline-primary" type="submit" value="Get" style="margin-left: 15px"/>
     </div>
 

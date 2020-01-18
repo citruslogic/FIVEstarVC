@@ -368,7 +368,7 @@
       <DependentUpon>201909011040583_resident_todelete.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
-    <Compile Include="Models\AdAuthenticationService.cs" />
+    <Compile Include="Services\AdAuthenticationService.cs" />
     <Compile Include="Models\Benefit.cs" />
     <Compile Include="Models\ChartData.cs" />
     <Compile Include="Models\EnumEventType.cs" />
@@ -377,7 +377,7 @@
     <Compile Include="Models\EnumGenderType.cs" />
     <Compile Include="Models\EnumEthnicityType.cs" />
     <Compile Include="Models\EnumServiceType.cs" />
-    <Compile Include="Models\FSEnumHelper.cs" />
+    <Compile Include="Helpers\FSEnumHelper.cs" />
     <Compile Include="Models\MilitaryCampaign.cs" />
     <Compile Include="Models\Person.cs" />
     <Compile Include="Models\ProgramEvent.cs" />

@@ -93,6 +93,7 @@ namespace FIVESTARVC.Controllers
         }
 
         // GET: Residents/Create
+        [HttpGet]
         public ActionResult Create()
         {
             ResidentIncomeModel residentIncomeModel = new ResidentIncomeModel();
@@ -268,6 +269,7 @@ namespace FIVESTARVC.Controllers
         }
 
         // GET: Residents/Edit/5
+        [HttpGet]
         public ActionResult Edit(int? id, int? fromPage)
         {
 

@@ -12,8 +12,6 @@ namespace FIVESTARVC.Models
 {
     public abstract class Person
     {
-        protected readonly ResidentContext db = new ResidentContext();
-
         private static readonly CompiledExpression<Person, string> lastNameExpression =
             DefaultTranslationOf<Person>.Property(e => e.ClearLastName)
             .Is(e => Encryptor.Decrypt(e.LastName));
