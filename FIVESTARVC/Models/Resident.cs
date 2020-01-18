@@ -113,6 +113,35 @@ namespace FIVESTARVC.Models
             return null;
         }
 
+        public int? GetAgeAtRelease
+        {
+            get
+            {
+                if (IsCurrent())
+                {
+                    try
+                    {
+                        TimeSpan? span = GetDischargeDate() - ClearBirthdate.GetValueOrDefault().Date;
+
+                        if (span.HasValue)
+                        {
+                            DateTime age = DateTime.MinValue + span.Value;
+                            return age.Year - 1;
+                        }
+
+                        return 0;
+
+                    }
+                    catch (ArgumentOutOfRangeException /* ex */)
+                    {
+                        return 0;
+                    }
+                }
+
+                return null;
+            }
+        }
+
         public int? DaysInCenter
         {
             get

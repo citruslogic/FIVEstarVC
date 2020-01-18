@@ -43,8 +43,6 @@ namespace FIVESTARVC.Models
             }
         }
 
-        
-
         [Required]
         [Display(Name = "First Name")]
         [NotMapped]
