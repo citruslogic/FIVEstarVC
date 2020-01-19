@@ -1,8 +1,5 @@
 ﻿@model DotNet.Highcharts.Highcharts
 
-<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
-
-
 @{
     ViewBag.Title = "Historic Rates";
 }
@@ -10,12 +7,11 @@
 <div class="row">
     <div>
         <br>
-        <br>
-        <div class="col-md-12 col-md-6">
+        <div style="height: 400px">
             @(Model)
         </div>
     </div>
 </div> 
 <br> 
-<button class="btn btn-default" onclick="location.href='/Reports/Index';" style="background-color: lightsteelblue"> Return to Reports </button><br>
+<button class="btn btn-secondary" onclick="location.href='/Reports/Index';"> Return to Reports </button>
 <br>

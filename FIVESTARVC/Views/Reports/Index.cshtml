@@ -17,7 +17,7 @@
         <i class="fa fa-arrow-down fa-fw"></i> Download Data
     </button>
 
-    <button class="btn btn-sm btn-secondary" style="margin-right: 10px;" onclick="location.href = '/Reports/campaigns';"><i class="fa fa-line-chart fa-fw"></i> Campaigns Chart</button>
+    <button class="btn btn-secondary" style="margin-right: 10px;" onclick="location.href = '/Reports/campaigns';"><i class="fa fa-line-chart fa-fw"></i> Campaigns</button>
 
     <div class="dropdown">
         <button style="margin-right: 10px;" class="btn btn-secondary dropdown-toggle" type="button" data-toggle="dropdown">
@@ -51,14 +51,20 @@
             <li><button class="dropdown-item" onclick="location.href = '/Reports/vetCourtRatesCum';"><i class="fa fa-plus fa-fw"></i> Cumulative Vet-Court Rates</button></li>
         </ul>
     </div>
-
+    <div class="dropdown">
+        <button style="margin-right: 10px;" class="btn btn-secondary dropdown-toggle" type="button" data-toggle="dropdown">
+            <i class="fa fa-line-chart fa-fw"></i> Resident Reports
+            <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu">
+            <li><button class="dropdown-item" onclick="location.href = '/Reports/ResidentsByYearReport/';"><i class="fa fa-file-o fa-fw"></i> Residents By Year</button></li>
+            <li><button class="dropdown-item" onclick="location.href = '/Reports/DaysInResidenceReport';"><i class="fa fa-file-o fa-fw"></i> Residency Report</button></li>
+            <li><button class="dropdown-item" onclick="location.href = '/Reports/CurrentResidentReport';"><i class="fa fa-file-o fa-fw"></i> Current Resident Report</button></li>
+        </ul>
+    </div>
 </div>
 
 @*<button class="btn btn-secondary mt-lg-1" style="margin-right: 10px;" onclick="printReport()"><i class="fa fa-file-pdf-o fa-fw"></i> Report PDF</button>*@
-<button class="btn btn-secondary mt-lg-1" style="margin-right: 10px;" onclick="location.href = '/Reports/ResidentsByYearReport/';"><i class="fa fa-file-o fa-fw"></i> Residents By Year</button>
-<button class="btn btn-secondary mt-lg-1" style="margin-right: 10px;" onclick="location.href = '/Reports/DaysInResidenceReport';"><i class="fa fa-file-o fa-fw"></i> Residency Report</button>
-
-<button class="btn btn-secondary mt-lg-1" style="margin-right: 10px;" onclick="location.href = '/Reports/CurrentResidentReport';"><i class="fa fa-file-o fa-fw"></i> Current Resident Report</button>
 
 <input type="hidden" name="report" />
 <hr />

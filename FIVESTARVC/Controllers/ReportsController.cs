@@ -50,6 +50,7 @@ namespace FIVESTARVC.Controllers
         private readonly ResidentContext DB = new ResidentContext();
 
         // GET: Reports
+        [HttpGet]
         public ActionResult Index()
         {
 
@@ -177,12 +178,8 @@ namespace FIVESTARVC.Controllers
                                                                     group by pe.ResidentID").Count();
             ViewBag.DischargeForCause = DischargeForCause;
 
-
-            //var DischargeHigherLevelOfCare = DB.ProgramEvents.Count(i => i.ProgramTypeID == 7);
-
             ViewBag.DischargeHigherLevelOfCare = DischargeHigherLevelOfCare;
 
-            //var EmergencyDischarge = DB.ProgramEvents.Count(i => i.ProgramTypeID == 13);
             ViewBag.EmergencyDischarge = EmergencyDischarge;
 
             //Finds number admitted
@@ -208,7 +205,6 @@ namespace FIVESTARVC.Controllers
                 ViewBag.GraduatedPercent = 0;
             }
 
-
             //Finds cumulative P2I count
             ViewBag.P2I = DB.ProgramEvents.Count(x => x.ProgramTypeID == 10);
 
@@ -221,42 +217,7 @@ namespace FIVESTARVC.Controllers
             return View();
         }
 
-        /* Get the age of all residents that have been in the center. */
-        public IEnumerable<ReportingResidentViewModel> GetResidentsAge()
-        {
-            if (DB.Residents.ToList().Any())
-            {
-                IEnumerable<ReportingResidentViewModel> residentListing = DB.Residents.ToList()
-                    .Select(r => new ReportingResidentViewModel { ID = r.ResidentID, Age = r.Age.Computed() });
-
-                return residentListing;
-
-            }
-            else
-            {
-                return null;
-            }
-
-        }
-        /* Get the average age of all residents that have been in the center.
-         * If you want only the current residents, use IsCurrent() in a Where
-           LINQ method. */
-        public double GetAverageAge()
-        {
-
-            if (GetResidentsAge().Any())
-            {
-                return GetResidentsAge().Average(r => r.Age);
-
-            }
-            else
-            {
-
-                return 0.0;
-            }
-
-        }
-
+        [HttpGet]
         public ActionResult gradRates()
         {
             var events = DB.ProgramEvents.ToList();
@@ -347,6 +308,7 @@ namespace FIVESTARVC.Controllers
 
         }
 
+        [HttpGet]
         public ActionResult gradRatesCum()
         {
             var events = DB.ProgramEvents.ToList();
@@ -444,6 +406,7 @@ namespace FIVESTARVC.Controllers
             return View("DisplayChart", columnChart);
         }
 
+        [HttpGet]
         public ActionResult admittedRates()
         {
             var events = DB.ProgramEvents.ToList();
@@ -529,6 +492,7 @@ namespace FIVESTARVC.Controllers
             return View("DisplayChart", columnChart);
         }
 
+        [HttpGet]
         public ActionResult admittedRatesCum()
         {
             var events = DB.ProgramEvents.ToList();
@@ -625,6 +589,7 @@ namespace FIVESTARVC.Controllers
             return View("DisplayChart", columnChart);
         }
 
+        [HttpGet]
         public ActionResult readmittedRates()
         {
             var events = DB.ProgramEvents.ToList();
@@ -710,6 +675,7 @@ namespace FIVESTARVC.Controllers
             return View("DisplayChart", columnChart);
         }
 
+        [HttpGet]
         public ActionResult readmittedRatesCum()
         {
             var events = DB.ProgramEvents.ToList();
@@ -806,6 +772,7 @@ namespace FIVESTARVC.Controllers
             return View("DisplayChart", columnChart);
         }
 
+        [HttpGet]
         public ActionResult p2iRates()
         {
             var events = DB.ProgramEvents.ToList();
@@ -891,6 +858,7 @@ namespace FIVESTARVC.Controllers
             return View("DisplayChart", columnChart);
         }
 
+        [HttpGet]
         public ActionResult p2iRatesCum()
         {
             var events = DB.ProgramEvents.ToList();
@@ -1620,17 +1588,17 @@ namespace FIVESTARVC.Controllers
             return File(filename, "text/csv", "HistoricData.csv");
         }
 
-
+        [HttpGet]
         public ActionResult campaigns()
         {
             var BarChartData = (from mc in DB.MilitaryCampaigns
                                 select new
                                 {
                                     MilitaryCampaign = mc.CampaignName,
-                                    ResidentCount = mc.Residents.Count()
+                                    ResidentCount = mc.Residents.Count
                                 }).ToList();
 
-            var residentNonCombatCount = DB.Residents.ToList().Where(i => i.MilitaryCampaigns == null || i.MilitaryCampaigns.Count < 1).ToList().Count();
+            var residentNonCombatCount = DB.Residents.ToList().Where(i => i.MilitaryCampaigns == null || i.MilitaryCampaigns.Count < 1).ToList().Count;
             BarChartData.Add(new
             {
                 MilitaryCampaign = "Non-Combat",
@@ -1656,11 +1624,12 @@ namespace FIVESTARVC.Controllers
             columnChart.InitChart(new Chart()
             {
                 Type = DotNet.Highcharts.Enums.ChartTypes.Bar,
-                BackgroundColor = new BackColorOrGradient(System.Drawing.Color.AliceBlue),
-                Style = "fontWeight: 'bold', fontSize: '17px'",
+                BackgroundColor = new BackColorOrGradient(System.Drawing.Color.GhostWhite),
+                Style = "fontWeight: 'bold', fontSize: '17px', crop: false, overflow: 'none'",
                 BorderColor = System.Drawing.Color.LightBlue,
                 BorderRadius = 0,
-                BorderWidth = 2
+                BorderWidth = 2,
+                Height = 800
 
             });
 
