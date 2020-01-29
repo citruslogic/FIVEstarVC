@@ -46,6 +46,7 @@
 </head>
 
 <body>
+
     <img src="~/Content/fivestar_logo.jpg" style="margin-top: -50px;" />
     <nav class="navbar navbar-dark d-print-none" style="background-image: url('../../Content/flag_bg.jpg')">
         <div class="container">
@@ -62,6 +63,9 @@
             @Html.Partial("_LoginPartial")
         </div>
     </nav>
+    <div class="submit-progress d-none">
+        <label>Please wait for report generation...</label>
+    </div>
     <div class="container body-content" style="padding-bottom: 0px;">
 
 
@@ -112,6 +116,18 @@
                 $('#AddModal').modal('show');
 
             });
+        }
+
+        function DisplayProgressMessage(ctl, msg) {
+            $('form#report').submit(function(){
+                $(this).find(':input[type=submit]').prop('disabled', true);
+
+                $(ctl).text(msg);
+                setTimeout(function () {
+                    $(".submit-progress").removeClass("d-none");
+                }, 1);
+            });
+            return true;
         }
     </script>
     @RenderSection("scripts", required: false)

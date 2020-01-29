@@ -122,8 +122,40 @@ namespace FIVESTARVC.Services
             return new CurrentResidentOverviewViewModel
             {
                 CurrentResidents = residents,
-                Total = residents.Count()
+                Total = residents.Count
             };
+        }
+
+        public List<UpToYearResidentAgeViewModel> UpToYearResidentAgeReport(string year = null)
+        {
+            int yearValue = 0;
+            List<UpToYearResidentAgeViewModel> residents = new List<UpToYearResidentAgeViewModel>();
+
+            if (string.IsNullOrEmpty(year))
+            {
+                return residents;
+            }
+            else if (int.TryParse(year, out yearValue) != true)
+            {
+                yearValue = DateTime.Now.Year;
+            }
+
+            residents = context.Residents
+                        .AsNoTracking()
+                        .Include(i => i.ProgramEvents.Select(j => j.ProgramType))
+                        .ToList()
+                        .Where(i => i.ProgramEvents.Any(j => j.ClearStartDate.Year >= yearValue && j.ProgramType.EventType == EnumEventType.ADMISSION))
+                        .Select(i => new UpToYearResidentAgeViewModel
+                        {
+                            FullName = i.Fullname,
+                            Age = i.AgeAtRelease > 0 ? i.GetAgeAtRelease : i.Age,
+                            Birthdate = i.ClearBirthdate?.ToShortDateString(),
+                            DateDischarged = i.ProgramEvents.LastOrDefault(j => j.ProgramType.EventType == EnumEventType.DISCHARGE)?.GetShortStartDate(),
+                            DateAdmitted = i.ProgramEvents.LastOrDefault(j => j.ProgramType.EventType == EnumEventType.ADMISSION)?.GetShortStartDate()
+
+                        }).ToList();
+
+            return residents;
         }
 
         public void Dispose()

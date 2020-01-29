@@ -74,8 +74,7 @@ namespace FIVESTARVC.Controllers
             return PartialView("_ProgramTrack", new TempProgramEvent { ProgramTypeID = 8, StartDate = DateTime.Today });
         }
 
-
-        // GET: ProgramEvents/Create
+        [HttpGet]
         public ActionResult Manage(int? id, int? fromPage)
         {
             if (id == null)
@@ -198,6 +197,7 @@ namespace FIVESTARVC.Controllers
         }
         
         // GET: ProgramEvents/Edit/5
+        [HttpGet]
         public ActionResult Edit(int? id)
         {
             if (id == null)

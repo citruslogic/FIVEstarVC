@@ -1679,7 +1679,7 @@ namespace FIVESTARVC.Controllers
 
             return View("DisplayChart", columnChart);
         }
-
+        [HttpGet]
         public ActionResult DaysInResidenceReport()
         {
             using (ReportService residencyReport = new ReportService())
@@ -1690,6 +1690,7 @@ namespace FIVESTARVC.Controllers
             };
         }
 
+        [HttpGet]
         public ActionResult ResidentReferralsReport()
         {
             using (ReportService residentReferralsReport = new ReportService())
@@ -1699,6 +1700,7 @@ namespace FIVESTARVC.Controllers
             };
         }
 
+        [HttpGet]
         public ActionResult CurrentResidentReport()
         {
             using (ReportService currentResidentReport = new ReportService()) 
@@ -1707,6 +1709,7 @@ namespace FIVESTARVC.Controllers
             };
         }
 
+        [HttpGet]
         public ActionResult ResidentsByYearReport(string yearFilter)
         {
             ViewBag.YearFilter = yearFilter;
@@ -1716,6 +1719,15 @@ namespace FIVESTARVC.Controllers
             }
         }
 
+        [HttpGet]
+        public ActionResult UpToYearResidentAgeReport(string yearFilter)
+        {
+            ViewBag.YearFilter = yearFilter;
+            using (ReportService residentsByYear = new ReportService())
+            {
+                return View("UpToYearResidentAgeReport", residentsByYear.UpToYearResidentAgeReport(yearFilter));
+            }
+        }
         protected override void Dispose(bool disposing)
         {
             if (disposing)

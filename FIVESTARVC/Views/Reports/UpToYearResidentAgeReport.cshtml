@@ -1,0 +1,82 @@
+﻿@model List<FIVESTARVC.ViewModels.UpToYearResidentAgeViewModel>
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@{
+    /**/
+
+    ViewBag.Title = "Resident Age Listing From Year Report";
+}
+<br />
+
+@using (Html.BeginForm("UpToYearResidentAgeReport", "Reports", FormMethod.Get, htmlAttributes: new { @id = "report" }))
+{
+    <div class="form-inline" style="margin-bottom: 1em;">
+
+        Get residents up to year:&nbsp;
+
+        @Html.TextBox("yearFilter", ViewBag.YearFilter as string, htmlAttributes: new { @class = "form-control", @style = "width: 60px; margin-left: 5px;", @required = "required", @maxlength = 4, @minlength = 4 })
+        <input class="btn btn-sm btn-primary" type="submit" value="Get Report" onclick="return DisplayProgressMessage(this, 'Working...');" style="margin-left: 15px">
+    </div>
+
+}
+<div style="margin-top: 10px; margin-bottom: 10px;">
+    <button class="btn btn-default" onclick="location.href='/Reports/Index';" style="background-color: lightsteelblue"> Return to Reports </button><br>
+</div>
+
+@if (Model.Count < 1)
+{
+    @Html.Raw("There are no residents for the provided year, " + ViewBag.YearFilter + ". Providing an invalid year (or no year at all) results in " +
+    +DateTime.Now.Year + " being used instead. Try a different year.");
+}
+else
+{
+    <p> Total residents: @Html.Encode(Model.Count)</p>
+    <table class="table table-sm table-striped">
+        <tr>
+            <th>
+                Full Name
+            </th>
+            <th>
+                Age
+            </th>
+            <th>
+                Birthdate
+            </th>
+            <th>
+                Admit Date
+            </th>
+            <th>
+                Discharge Date
+            </th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@Html.DisplayFor(modelItem => item.FullName)</td>
+                <td>@Html.DisplayFor(modelItem => item.Age)</td>
+                <td>@Html.DisplayFor(modelItem => item.Birthdate)</td>
+                <td>@Html.DisplayFor(modelItem => item.DateAdmitted)</td>
+                <td>@Html.DisplayFor(modelItem => item.DateDischarged)</td>
+            </tr>
+        }
+
+    </table>
+
+    <div style="margin-bottom: 25px;">
+        <button class="btn btn-default" onclick="location.href='/Reports/Index';" style="background-color: lightsteelblue"> Return to Reports </button><br>
+    </div>
+
+}
+
+@section Scripts {
+    <script>
+    
+    </script>
+}
+
+
+
