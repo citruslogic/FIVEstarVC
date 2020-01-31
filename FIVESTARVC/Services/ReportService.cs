@@ -20,16 +20,16 @@ namespace FIVESTARVC.Services
                 .Include(i => i.ProgramEvents.Select(j => j.ProgramType))
                 .AsNoTracking().ToList()
                 .Select(i => new ResidencyReportViewModel
-            {
-                LastName = i.ClearLastName,
-                FirstName = i.ClearFirstMidName,
-                AdmitDates = i.ProgramEvents.Where(j => j.ProgramType.EventType == EnumEventType.ADMISSION).ToList().Select(k => k.ClearStartDate.ToShortDateString()).ToList(),
-                DischargeDate = i.ProgramEvents.Where(j => j.ProgramType.EventType == EnumEventType.DISCHARGE).ToList().Select(k => k.ClearStartDate.ToShortDateString()).LastOrDefault(),
-                IsCurrent = i.IsCurrent(),
-                DaysInResidence = i.ActualDaysStayed.GetValueOrDefault(0),
-                MonthsStayed = i.MonthsStayed
+                {
+                    LastName = i.ClearLastName,
+                    FirstName = i.ClearFirstMidName,
+                    AdmitDates = i.ProgramEvents.Where(j => j.ProgramType.EventType == EnumEventType.ADMISSION).ToList().Select(k => k.ClearStartDate.ToShortDateString()).ToList(),
+                    DischargeDate = i.ProgramEvents.Where(j => j.ProgramType.EventType == EnumEventType.DISCHARGE).ToList().Select(k => k.ClearStartDate.ToShortDateString()).LastOrDefault(),
+                    IsCurrent = i.IsCurrent(),
+                    DaysInResidence = i.ActualDaysStayed.GetValueOrDefault(0),
+                    MonthsStayed = i.MonthsStayed
 
-            }).ToList();
+                }).ToList();
 
         }
 
@@ -52,7 +52,7 @@ namespace FIVESTARVC.Services
             var currentResidents = context.Residents
                 .AsNoTracking()
                 .ToList()
-                .Where(i => i.IsCurrent()).Select(i => new CurrentResidentViewModel 
+                .Where(i => i.IsCurrent()).Select(i => new CurrentResidentViewModel
                 {
                     LastName = i.ClearLastName,
                     FirstName = i.ClearFirstMidName,
@@ -71,7 +71,7 @@ namespace FIVESTARVC.Services
             return new CurrentResidentOverviewViewModel
             {
                 CurrentResidents = currentResidents,
-                AverageAge = (int) currentResidents.Select(i => i.Age).Average(),
+                AverageAge = (int)currentResidents.Select(i => i.Age).Average(),
                 ArmyCount = currentResidents.Where(i => i.Service == ServiceType.ARMY.ToString()).Count(),
                 NavyCount = currentResidents.Where(i => i.Service == ServiceType.NAVY.ToString()).Count(),
                 AirForceCount = currentResidents.Where(i => i.Service == ServiceType.AIRFORCE.ToString()).Count(),
@@ -101,7 +101,8 @@ namespace FIVESTARVC.Services
                     CurrentResidents = residents,
                     Total = 0
                 };
-            } else if (int.TryParse(year, out yearValue) != true)
+            }
+            else if (int.TryParse(year, out yearValue) != true)
             {
                 yearValue = DateTime.Now.Year;
             }
@@ -126,14 +127,14 @@ namespace FIVESTARVC.Services
             };
         }
 
-        public List<UpToYearResidentAgeViewModel> UpToYearResidentAgeReport(string year = null)
+        public UpToYearResidentAgeViewModel UpToYearResidentAgeReport(string year = null)
         {
             int yearValue = 0;
-            List<UpToYearResidentAgeViewModel> residents = new List<UpToYearResidentAgeViewModel>();
+            List<SelectedResident> residents;
 
             if (string.IsNullOrEmpty(year))
             {
-                return residents;
+                return new UpToYearResidentAgeViewModel();
             }
             else if (int.TryParse(year, out yearValue) != true)
             {
@@ -144,23 +145,31 @@ namespace FIVESTARVC.Services
                         .AsNoTracking()
                         .Include(i => i.ProgramEvents.Select(j => j.ProgramType))
                         .ToList()
-                        .Where(i => i.ProgramEvents.Any(j => j.ClearStartDate.Year >= yearValue && j.ProgramType.EventType == EnumEventType.ADMISSION))
-                        .Select(i => new UpToYearResidentAgeViewModel
+                        .Where(i => i.ProgramEvents.Any(j => j.ClearStartDate.Year <= yearValue && j.ProgramType.EventType == EnumEventType.ADMISSION))
+                        .Select(i => new SelectedResident
                         {
+                            ResidentID = i.ResidentID,
                             FullName = i.Fullname,
                             Age = i.AgeAtRelease > 0 ? i.GetAgeAtRelease : i.Age,
                             Birthdate = i.ClearBirthdate?.ToShortDateString(),
-                            DateDischarged = i.ProgramEvents.LastOrDefault(j => j.ProgramType.EventType == EnumEventType.DISCHARGE)?.GetShortStartDate(),
-                            DateAdmitted = i.ProgramEvents.LastOrDefault(j => j.ProgramType.EventType == EnumEventType.ADMISSION)?.GetShortStartDate()
+                            DateDischarged = i.GetNextDischargeDate(i.ProgramEvents.LastOrDefault(j => j.ProgramType.EventType == EnumEventType.ADMISSION)?.ClearStartDate).HasValue 
+                                ? i.GetNextDischargeDate(i.ProgramEvents.LastOrDefault(j => j.ProgramType.EventType == EnumEventType.ADMISSION)?.ClearStartDate).Value.ToShortDateString()
+                                : "No next discharge date.",
+                            DateAdmitted = i.ProgramEvents.LastOrDefault(j => j.ProgramType.EventType == EnumEventType.ADMISSION && j.ClearStartDate.Year <= yearValue).ClearStartDate,
+                        })
+                        .OrderByDescending(i => i.DateAdmitted)
+                        .ToList();
 
-                        }).ToList();
-
-            return residents;
+            return new UpToYearResidentAgeViewModel
+            {
+                Residents = residents.GroupBy(i => i.DateAdmitted.Year).ToList(),
+                Total = residents.Count
+            };
         }
 
         public void Dispose()
         {
-           context.Dispose();
+            context.Dispose();
         }
     }
 }

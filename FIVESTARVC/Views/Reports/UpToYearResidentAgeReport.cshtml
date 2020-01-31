@@ -1,4 +1,4 @@
-﻿@model List<FIVESTARVC.ViewModels.UpToYearResidentAgeViewModel>
+﻿@model FIVESTARVC.ViewModels.UpToYearResidentAgeViewModel
 
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -26,16 +26,22 @@
     <button class="btn btn-default" onclick="location.href='/Reports/Index';" style="background-color: lightsteelblue"> Return to Reports </button><br>
 </div>
 
-@if (Model.Count < 1)
+@if (Model == null || Model.Residents.Count < 1)
 {
     @Html.Raw("There are no residents for the provided year, " + ViewBag.YearFilter + ". Providing an invalid year (or no year at all) results in " +
     +DateTime.Now.Year + " being used instead. Try a different year.");
 }
 else
 {
-    <p> Total residents: @Html.Encode(Model.Count)</p>
+    <p> Total residents: @Html.Encode(Model.Total)</p>
     <table class="table table-sm table-striped">
         <tr>
+            <th>
+                Admission Year
+            </th>
+            <th>
+                &nbsp;
+            </th>
             <th>
                 Full Name
             </th>
@@ -46,22 +52,35 @@ else
                 Birthdate
             </th>
             <th>
-                Admit Date
+                Date Admitted
             </th>
             <th>
-                Discharge Date
+                Last Known Discharge Date
             </th>
         </tr>
 
-        @foreach (var item in Model)
+        @foreach (var group in Model.Residents)
         {
             <tr>
+                <td>
+                    <h6>@Html.Encode(group.Key)</h6>
+                </td>
+                <td>Group total: @Html.Encode(group.Count())</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td><td></td><td></td><td></td>
+            </tr>
+            foreach (var item in group) 
+            { 
+            <tr>
+                <td>&nbsp; </td>
+                <td>@Html.ActionLink("View Details", "Details", "Residents", new { id = item.ResidentID }, null) </td>
                 <td>@Html.DisplayFor(modelItem => item.FullName)</td>
                 <td>@Html.DisplayFor(modelItem => item.Age)</td>
                 <td>@Html.DisplayFor(modelItem => item.Birthdate)</td>
-                <td>@Html.DisplayFor(modelItem => item.DateAdmitted)</td>
+                <td>@Html.DisplayFor(modelItem => item.ShortDateAdmitted)</td>
                 <td>@Html.DisplayFor(modelItem => item.DateDischarged)</td>
             </tr>
+            }
         }
 
     </table>

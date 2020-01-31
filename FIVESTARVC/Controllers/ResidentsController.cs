@@ -24,6 +24,7 @@ namespace FIVESTARVC.Controllers
         private readonly ResidentService residentService = new ResidentService();
 
         // GET: Residents
+        [HttpGet]
         public async Task<ActionResult> Index(string sortOrder, string currentFilter, string searchString, int? page)
         {
             
@@ -43,13 +44,14 @@ namespace FIVESTARVC.Controllers
 
             ViewBag.CurrentFilter = searchString;
 
-            var residents = await Task.Run(() => residentService.GetIndex(searchString, sortOrder, db, page));
+            var residents = await Task.Run(() => residentService.GetIndex(searchString, sortOrder, db, page)).ConfigureAwait(false);
 
             return View(residents);
         }
 
         // GET: Residents/Details/5
-        public ActionResult Details(int? id, int? fromPage)
+        [HttpGet]
+        public ActionResult Details(int? id, int fromPage = 1)
         {
             if (id == null)
             {
@@ -393,8 +395,6 @@ namespace FIVESTARVC.Controllers
             return View(residentToUpdate);
         }
 
-
-
         private void UpdateResidentCampaigns(string[] selectedCampaigns, Resident residentToUpdate)
         {
             if (selectedCampaigns == null)
@@ -484,6 +484,7 @@ namespace FIVESTARVC.Controllers
             return PartialView(model);
         }
 
+        [HttpGet]
         public JsonResult IsCampaignNameExist(string CampaignName, int? MilitaryCampaignID)
         {
             var validateName = db.MilitaryCampaigns.FirstOrDefault

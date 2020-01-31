@@ -12,14 +12,14 @@
 }
 <br />
 
-@using (Html.BeginForm("ResidentsByYearReport", "Reports", FormMethod.Get))
+@using (Html.BeginForm("ResidentsByYearReport", "Reports", FormMethod.Get, htmlAttributes: new { @id = "report" }))
 {
     <div class="form-inline" style="margin-bottom: 1em;">
 
         Residents listing by year:&nbsp;
 
         @Html.TextBox("yearFilter", ViewBag.YearFilter as string, htmlAttributes: new { @class = "form-control", @style = "width: 60px; margin-left: 5px;", @required="required", @maxlength=4, @minlength=4 })
-        <input class="btn btn-sm btn-outline-primary" type="submit" value="Get" style="margin-left: 15px"/>
+        <input class="btn btn-sm btn-primary" type="submit" onclick="return DisplayProgressMessage(this, 'Working...');" value="Get Report" style="margin-left: 15px"/>
     </div>
 
 }
