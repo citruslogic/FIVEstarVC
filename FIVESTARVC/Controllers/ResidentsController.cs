@@ -59,6 +59,7 @@ namespace FIVESTARVC.Controllers
             }
 
             var dateFirstAdmitted = db.ProgramEvents
+                                            .AsNoTracking()
                                             .Include(r => r.Resident).Where(r => r.ResidentID == id)
                                             .Include(t => t.ProgramType).Where(p => p.ProgramTypeID == 2 || p.ProgramTypeID == 1).ToList()
                                             .OrderBy(d => d.ClearStartDate.Computed())
@@ -73,6 +74,7 @@ namespace FIVESTARVC.Controllers
             {
                 // draw from the re-admittance date, ask for a readmission if there are no admittance dates. 
                 ViewBag.DateFirstAdmitted = db.ProgramEvents
+                                            .AsNoTracking()
                                             .Include(r => r.Resident).Where(r => r.ResidentID == id)
                                             .Include(t => t.ProgramType).Where(p => p.ProgramTypeID == 3).ToList()
                                             .OrderBy(d => d.ClearStartDate.Computed())
