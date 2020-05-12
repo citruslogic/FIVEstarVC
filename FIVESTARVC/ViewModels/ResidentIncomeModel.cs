@@ -10,14 +10,16 @@ namespace FIVESTARVC.ViewModels
     [CheckTrackDates("AdmitDate", "AdmitDate")]
     public class ResidentIncomeModel
     {
-  
+
         // RESIDENT
         public int ResidentID { get; set; }
         [Required]
         [Display(Name = "Last Name")]
         public string LastName { get; set; }
+
         [Display(Name = "First Name")]
         public string FirstMidName { get; set; }
+
         [Display(Name = "Birthdate")]
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:MM/dd/yyyy}", ApplyFormatInEditMode = true)]
@@ -33,6 +35,10 @@ namespace FIVESTARVC.ViewModels
 
         [Display(Name = "Service Branch")]
         public ServiceType ServiceBranch { get; set; }
+
+        [Display(Name = "NG / Reserve Branch")]
+        public NGReserveServiceType NGReserveBranch { get; set; }
+
         [Display(Name = "Discharge Status")]
         public MilitaryDischargeType DischargeStatus { get; set; }
 
@@ -48,6 +54,9 @@ namespace FIVESTARVC.ViewModels
         [ForeignKey("StateTerritory")]
         public int StateTerritoryID { get; set; }
         public virtual StateTerritory StateTerritory { get; set; }
+
+        [Display(Name = "Other")]
+        public string StateTerritoryOther { get; set; }
 
         [Display(Name = "In Veterans Court?")]
         public bool InVetCourt { get; set; }

@@ -58,8 +58,17 @@
 
         <div class=" col-form-label">
             @Html.Label("Home of Record", htmlAttributes: new { @class = "font-weight-bold" })
-            @Html.DisplayFor(model => model.StateTerritory.State)
-            @{<text>(</text>}@Html.DisplayFor(model => model.StateTerritory.Region)@{<text>)</text>}
+            @if (Model.StateTerritory.State == "Other")
+            {
+                @Html.DisplayFor(model => model.StateTerritoryOther)
+                <text>(</text>@Html.DisplayFor(model => model.StateTerritory.Region)<text>)</text>
+            }
+            else
+            {
+                @Html.DisplayFor(model => model.StateTerritory.State)
+                <text>(</text>@Html.DisplayFor(model => model.StateTerritory.Region)<text>)</text>
+            }
+
         </div>
         
         <div class="col-form-label">

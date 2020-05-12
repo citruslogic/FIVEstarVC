@@ -75,7 +75,8 @@ namespace FIVESTARVC.Migrations
                 new StateTerritory { StateTerritoryID=52, State = "Guam", Region = "Micronesia" },
                 new StateTerritory { StateTerritoryID=53, State = "Northern Mariana Islands", Region = "Micronesia"},
                 new StateTerritory { StateTerritoryID=54, State = "Puerto Rico", Region = "Caribbean" },
-                new StateTerritory { StateTerritoryID=55, State = "US Virgin Islands", Region = "Caribbean" }
+                new StateTerritory { StateTerritoryID=55, State = "US Virgin Islands", Region = "Caribbean" },
+                new StateTerritory { StateTerritoryID=56, State = "Other", Region = "Other" }
             };
 
             States.ForEach(s => context.States.AddOrUpdate(i => i.StateTerritoryID, s));

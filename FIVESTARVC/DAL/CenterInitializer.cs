@@ -70,7 +70,8 @@ namespace FIVESTARVC.DAL
                 new StateTerritory { State = "Guam", Region = "Micronesia" },
                 new StateTerritory { State = "Northern Mariana Islands", Region = "Micronesia"},
                 new StateTerritory { State = "Puerto Rico", Region = "Caribbean" },
-                new StateTerritory { State = "US Virgin Islands", Region = "Caribbean" }
+                new StateTerritory { State = "US Virgin Islands", Region = "Caribbean" },
+                new StateTerritory { State = "Other", Region = "Other" }
             };
 
             States.ForEach(s => context.States.AddOrUpdate(i=> i.State, s));

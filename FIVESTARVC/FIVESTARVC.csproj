@@ -367,6 +367,10 @@
     <Compile Include="Migrations\201909011040583_resident_todelete.Designer.cs">
       <DependentUpon>201909011040583_resident_todelete.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202004142125205_CascadingSelectOption_NGReserve_Territory.cs" />
+    <Compile Include="Migrations\202004142125205_CascadingSelectOption_NGReserve_Territory.designer.cs">
+      <DependentUpon>202004142125205_CascadingSelectOption_NGReserve_Territory.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Services\AdAuthenticationService.cs" />
     <Compile Include="Models\Benefit.cs" />
@@ -1151,6 +1155,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201909011040583_resident_todelete.resx">
       <DependentUpon>201909011040583_resident_todelete.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202004142125205_CascadingSelectOption_NGReserve_Territory.resx">
+      <DependentUpon>202004142125205_CascadingSelectOption_NGReserve_Territory.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

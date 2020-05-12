@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Web;
 
 namespace FIVESTARVC.Models
 {
 
-        public enum ServiceType
+    public enum ServiceType
         {
             [Description("Air Force")]
             [Display(Name = "Air Force")]
@@ -24,7 +20,32 @@ namespace FIVESTARVC.Models
             MARINES,
             [Description("Navy")]
             [Display(Name = "Navy")]
-            NAVY
+            NAVY,
+            [Description("National Guard")]
+            [Display(Name = "NG")]
+            NG,
+            [Description("Reserves")]
+            [Display(Name = "Reserves")]
+            RESERVE
         }
+
+    public enum NGReserveServiceType
+    {
+        [Description("Air Force")]
+        [Display(Name = "Air Force")]
+        AIRFORCE = 1,
+        [Description("Army")]
+        [Display(Name = "Army")]
+        ARMY = 2,
+        [Description("Coast Guard")]
+        [Display(Name = "Coast Guard")]
+        COASTGUARD = 3,
+        [Description("Marines")]
+        [Display(Name = "Marines")]
+        MARINES = 4,
+        [Description("Navy")]
+        [Display(Name = "Navy")]
+        NAVY = 5
+    }
    
 }

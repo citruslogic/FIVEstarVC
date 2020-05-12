@@ -166,6 +166,7 @@ namespace FIVESTARVC.Controllers
                 Religion = residentIncomeModel.Religion,
                 ClearBirthdate = residentIncomeModel.Birthdate,
                 ServiceBranch = residentIncomeModel.ServiceBranch,
+                NGReserve = residentIncomeModel.NGReserveBranch,
                 MilitaryDischarge = residentIncomeModel.DischargeStatus,
                 InVetCourt = residentIncomeModel.InVetCourt,
                 IsNoncombat = residentIncomeModel.IsNoncombat,
@@ -177,11 +178,15 @@ namespace FIVESTARVC.Controllers
                 Benefit = new Benefit(),
             };
 
-            if (string.IsNullOrEmpty(residentIncomeModel.ReferralOther))
+            if (!string.IsNullOrEmpty(residentIncomeModel.ReferralOther))
             {
                 resident.OptionalReferralDescription = residentIncomeModel.ReferralOther;
             }
 
+            if (!string.IsNullOrEmpty(residentIncomeModel.StateTerritoryOther))
+            {
+                resident.StateTerritoryOther = residentIncomeModel.StateTerritoryOther;
+            }
 
             Benefit benefit = new Benefit
             {
@@ -332,14 +337,14 @@ namespace FIVESTARVC.Controllers
                                         .Where(i => i.ProgramType.EventType == EnumEventType.DISCHARGE)
                                         .OrderByDescending(i => i.ProgramEventID).FirstOrDefault();
 
-            ViewBag.StateTerritoryID = new SelectList(db.States, "StateTerritoryID", "State", residentToUpdate.StateTerritoryID);
+            ViewBag.StateTerritoryID = new SelectList(db.States, "StateTerritoryID", "StateTerritoryID", residentToUpdate.StateTerritoryID);
             ViewBag.ReferralID = new SelectList(db.Referrals, "ReferralID", "ReferralName", residentToUpdate.ReferralID);
             ViewBag.Campaigns = residentService.PopulateAssignedCampaignData(residentToUpdate, db).OrderBy(i => i.MilitaryCampaign).ToList();
 
             if (TryUpdateModel(residentToUpdate, "",
                new string[] { "ClearLastName", "ClearFirstMidName", "Gender", "Religion", "Ethnicity", "StateTerritoryID", "ReferralID", "AgeAtRelease",
-                   "OptionalReferralDescription", "ClearBirthdate", "ServiceBranch", "Note", "InVetCourt", "IsNoncombat", "Benefit", "MilitaryCampaigns",
-                   "TotalBenefitAmount" }))
+                   "OptionalReferralDescription", "StateTerritoryOther", "ClearBirthdate", "ServiceBranch", "NGReserve", "Note", "InVetCourt", "IsNoncombat", 
+                   "Benefit", "MilitaryCampaigns", "TotalBenefitAmount" }))
             {
                 try
                 {

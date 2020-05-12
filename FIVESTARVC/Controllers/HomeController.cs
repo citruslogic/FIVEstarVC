@@ -33,14 +33,15 @@ namespace FIVESTARVC.Controllers
             });
 
             ViewBag.pop = residents.ToList().Where(r => r.IsCurrent()).Count();
-            ViewBag.allpop = residents.ToList().Count();
+            ViewBag.allpop = residents.ToList().Count;
                        
             /* David Thompson's (dthompson) grad count
-             * Move to a central location in code at a more convenient date. Revised by Tytus on 10/26 */
+             * Move to a central location in code at a more convenient date. Revised by Tytus on 10/26 
+              We don't know if higher level of care residents are returning or will graduate. */
             var Graduated = db.Database.SqlQuery<double>(@"select convert(float, count(distinct p.ResidentID))
                                                                             from Person p 
                                                                             join ProgramEvent pe on p.ResidentID = pe.ResidentID
-                                                                                where ProgramTypeId = '4'").Single();
+                                                                                where ProgramTypeId = '4' or ProgramTypeId = '7'").Single();
 
             ViewBag.Graduated = Graduated;
 
@@ -54,8 +55,8 @@ namespace FIVESTARVC.Controllers
             if (Admitted > 0)
             {
                 //finds grad percent
-                double gradPercent = (Graduated / Admitted) * 100;
-                ViewBag.gradPercent = gradPercent.ToString("0.##"); ; //Graduation Percentage
+                double gradPercent = Graduated / Admitted * 100;
+                ViewBag.gradPercent = gradPercent.ToString("0.##"); //Graduation Percentage
             }
             else
             {

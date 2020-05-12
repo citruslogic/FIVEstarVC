@@ -51,6 +51,9 @@
                             <td>
                                 @Html.EnumDropDownListFor(model => model.ServiceBranch, htmlAttributes: new { @class = "form-control" })
                                 @Html.ValidationMessageFor(model => model.ServiceBranch, "")
+                                <br />
+                                @Html.EnumDropDownListFor(model => model.NGReserve, htmlAttributes: new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.NGReserve, "")
                             </td>
                         </tr>
                         <tr>
@@ -133,8 +136,12 @@
                             @Html.LabelFor(model => model.StateTerritoryID, htmlAttributes: new { @class = "control-label" })
                         </td>
                         <td>
-                            @Html.DropDownList("StateTerritoryID", null, htmlAttributes: new { @class = "form-control", @name = "State" })
+                            <!-- Add Other to spawn textbox -->
+                            @Html.DropDownList("StateTerritoryID", null, htmlAttributes: new { @class = "form-control" })
                             @Html.ValidationMessageFor(model => model.StateTerritory)
+                            <br />
+                            @Html.EditorFor(model => model.StateTerritoryOther, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.StateTerritoryOther)
                         </td>
                         <td class="col-form-label">
                             @Html.Label("Region", htmlAttributes: new { @class = "text-right" })
@@ -153,8 +160,7 @@
                         <td>
                             @Html.DropDownList("ReferralID", null, htmlAttributes: new { @class = "form-control" })
                             @Html.ValidationMessageFor(model => model.Referral)
-                        </td>
-                        <td colspan="2">
+                            <br />
                             @Html.EditorFor(model => model.OptionalReferralDescription, new { htmlAttributes = new { @class = "form-control" } })
                             @Html.ValidationMessageFor(model => model.OptionalReferralDescription, "")
                         </td>
@@ -176,8 +182,6 @@
                         <td class="border-top">
                             @Html.CheckBoxFor(model => model.IsNoncombat, htmlAttributes: new { @class = "biggerCheckBox" })
                             @Html.ValidationMessageFor(model => model.IsNoncombat, "")
-
-
                         </td>
                     </tr>
                     <tr>
@@ -235,8 +239,6 @@
 
 
 }
-
-
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
@@ -326,7 +328,26 @@
                     $('#Region').text(data);
                 }
             });
+        });
 
+        $('#StateTerritoryID').on("change", function () {
+
+            if ($('#StateTerritoryID option:selected').text() === "Other") {
+                $('#StateTerritoryOther').show();
+            } else {
+                $('#StateTerritoryOther').val('');
+                $('#StateTerritoryOther').hide();
+            }
+        });
+
+        $('#ServiceBranch').on("change", function () {
+
+            if ($('#ServiceBranch option:selected').text() === "NG" || $('#ServiceBranch option:selected').text() == "Reserves") {
+                $('#NGReserveBranch').show();
+            } else {
+                $('#NGReserveBranch').val('');
+                $('#NGReserveBranch').hide();
+            }
         });
 
         $("#Benefit_DisabilityPercentage").focusout(function () {

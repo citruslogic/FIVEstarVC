@@ -150,7 +150,7 @@ namespace FIVESTARVC.Services
                         {
                             ResidentID = i.ResidentID,
                             FullName = i.Fullname,
-                            Age = i.AgeAtRelease > 0 ? i.GetAgeAtRelease : i.Age,
+                            Age = i.GetAgeAtRelease,
                             Birthdate = i.ClearBirthdate?.ToShortDateString(),
                             DateDischarged = i.GetNextDischargeDate(i.ProgramEvents.LastOrDefault(j => j.ProgramType.EventType == EnumEventType.ADMISSION)?.ClearStartDate).HasValue 
                                 ? i.GetNextDischargeDate(i.ProgramEvents.LastOrDefault(j => j.ProgramType.EventType == EnumEventType.ADMISSION)?.ClearStartDate).Value.ToShortDateString()

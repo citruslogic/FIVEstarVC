@@ -32,7 +32,12 @@ namespace FIVESTARVC.DAL
             .Map(t => t.MapLeftKey("MilitaryCampaignID")
             .MapRightKey("ResidentID")
             .ToTable("CampaignAssignment"));
-                                  
+
+            // NGReserve is not always needed.
+            modelBuilder.Entity<Resident>()
+                .Property(m => m.NGReserve).IsOptional();
+
+           
         }
     }
 }

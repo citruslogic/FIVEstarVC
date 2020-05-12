@@ -18,6 +18,9 @@ namespace FIVESTARVC.Models
         [Display(Name = "Service Branch")]
         public ServiceType ServiceBranch { get; set; }
 
+        [Display(Name = "NG/Reserves")]
+        public NGReserveServiceType? NGReserve { get; set; }
+
         [Display(Name = "Service Discharge")]
         public MilitaryDischargeType MilitaryDischarge { get; set; }
 
@@ -56,6 +59,7 @@ namespace FIVESTARVC.Models
         {
             bool current = false;
             var ev = db.ProgramEvents
+                .AsNoTracking()
                 .Include(i => i.ProgramType)
                 .Where(t => t.ResidentID == ResidentID)
                 .ToList();
@@ -85,6 +89,7 @@ namespace FIVESTARVC.Models
         public DateTime? GetAdmitDate()
         {
             var ev = db.ProgramEvents
+                .AsNoTracking()
                 .Where(r => r.ResidentID == ResidentID)
                 .OrderByDescending(s => s.ProgramEventID)
                 .FirstOrDefault(i => i.ProgramType.EventType == EnumEventType.ADMISSION);
@@ -100,6 +105,7 @@ namespace FIVESTARVC.Models
         public DateTime? GetDischargeDate()
         {
             var events = db.ProgramEvents
+                .AsNoTracking()
                 .Include(i => i.ProgramType)
                 .Where(r => r.ResidentID == ResidentID)
                 .OrderByDescending(s => s.ProgramEventID).ToList();
@@ -119,7 +125,7 @@ namespace FIVESTARVC.Models
         {
             get
             {
-                if (IsCurrent())
+                if (IsCurrent() == false)
                 {
                     try
                     {
@@ -131,16 +137,16 @@ namespace FIVESTARVC.Models
                             return age.Year - 1;
                         }
 
-                        return 0;
-
+                        return null;
                     }
                     catch (ArgumentOutOfRangeException /* ex */)
                     {
-                        return 0;
+                        return null;
                     }
+                } else
+                {
+                    return Age;
                 }
-
-                return null;
             }
         }
 
@@ -161,7 +167,7 @@ namespace FIVESTARVC.Models
         {
             if (initialDate.HasValue)
             {
-               return db.ProgramEvents.Include(i => i.ProgramType)
+               return db.ProgramEvents.AsNoTracking().Include(i => i.ProgramType)
                                 .ToList()
                                .Where(r => r.ResidentID == ResidentID
                                     && r.ProgramType.EventType == EnumEventType.ADMISSION
@@ -169,7 +175,7 @@ namespace FIVESTARVC.Models
                 
             }
 
-            return db.ProgramEvents.Include(i => i.ProgramType)
+            return db.ProgramEvents.AsNoTracking().Include(i => i.ProgramType)
                                 .ToList()
                                .Where(r => r.ResidentID == ResidentID
                                     && r.ProgramType.EventType == EnumEventType.ADMISSION)
@@ -180,7 +186,7 @@ namespace FIVESTARVC.Models
         {
             if (initialDate.HasValue)
             {
-                return db.ProgramEvents.Include(i => i.ProgramType)
+                return db.ProgramEvents.AsNoTracking().Include(i => i.ProgramType)
                                 .ToList()
                                 .Where(r => r.ResidentID == ResidentID
                                      && r.ProgramType.EventType == EnumEventType.DISCHARGE
@@ -188,7 +194,7 @@ namespace FIVESTARVC.Models
 
             }
 
-            return db.ProgramEvents.Include(i => i.ProgramType)
+            return db.ProgramEvents.AsNoTracking().Include(i => i.ProgramType)
                                .ToList()
                                .Where(r => r.ResidentID == ResidentID
                                     && r.ProgramType.EventType == EnumEventType.DISCHARGE)

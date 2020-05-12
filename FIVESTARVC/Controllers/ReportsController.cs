@@ -135,70 +135,76 @@ namespace FIVESTARVC.Controllers
             }
 
             //Counts number of residents by increasing count by 1 for every admit event, and decreasing for any discharge event
-            
+            double DischargeCount = 0.0;
             ViewBag.TotalCount = DB.Residents.AsNoTracking().ToList().Where(cur => cur.IsCurrent()).Count();
-            ViewBag.DischargeCount = DB.Residents.AsNoTracking().ToList().Where(cur => !cur.IsCurrent()).Count();
 
             //Finds graduation percent
-            var Graduated = DB.Database.SqlQuery<int>(@"select distinct
-                                                                    pe.ResidentID 
-                                                                    from ProgramEvent pe 
-                                                                    where ProgramTypeId = '4'
-                                                                    group by pe.ResidentID").Count();
+            int Graduated;
+            ViewBag.Graduated = Graduated = DB.Database.SqlQuery<int>(@"select distinct
+                                                                            pe.ResidentID 
+                                                                            from ProgramEvent pe
+                                                                            where ProgramTypeId = '4' 
+	                                                                        except select pe2.ResidentID 
+	                                                                        from ProgramEvent pe2
+	                                                                        where ProgramTypeId in ('5', '6', '7', '13')").Count();
 
             //var Graduated = DB.ProgramEvents.ToList().Count(i => i.ProgramTypeID == 4);
-            ViewBag.Graduated = Graduated;
 
+            int SelfDischarge;
+            ViewBag.SelfDischarge = SelfDischarge = DB.Database.SqlQuery<int>(@"select distinct
+                                                                                    pe.ResidentID 
+                                                                                    from ProgramEvent pe
+                                                                                    where ProgramTypeId = '5' 
+	                                                                                except select pe2.ResidentID 
+	                                                                                from ProgramEvent pe2
+	                                                                                where ProgramTypeId in ('4', '6', '7', '13')").Count();
 
-            var SelfDischarge = DB.Database.SqlQuery<int>(@"select distinct
-                                                                    pe.ResidentID 
-                                                                    from ProgramEvent pe 
-                                                                    where ProgramTypeId = '5'
-                                                                    group by pe.ResidentID").Count();
+            int DischargeForCause;
+            ViewBag.DischargeForCause = DischargeForCause = DB.Database.SqlQuery<int>(@"select distinct
+                                                                                        pe.ResidentID 
+                                                                                        from ProgramEvent pe
+                                                                                        where ProgramTypeId = '6' 
+	                                                                                    except select pe2.ResidentID 
+	                                                                                    from ProgramEvent pe2
+	                                                                                    where ProgramTypeId in ('4', '5', '7', '13')").Count();
 
-            //var SelfDischarge = DB.ProgramEvents.Count(i => i.ProgramTypeID == 5);
-            ViewBag.SelfDischarge = SelfDischarge;
+            int DischargeHigherLevelOfCare;
+            ViewBag.DischargeHigherLevelOfCare = DischargeHigherLevelOfCare = DB.Database.SqlQuery<int>(@"select distinct
+                                                                                        pe.ResidentID 
+                                                                                        from ProgramEvent pe
+                                                                                        where ProgramTypeId = '7' 
+	                                                                                    except select pe2.ResidentID 
+	                                                                                    from ProgramEvent pe2
+	                                                                                    where ProgramTypeId in ('4', '5', '6', '13')").Count();
 
-            var DischargeForCause = DB.Database.SqlQuery<int>(@"select distinct
-                                                                    pe.ResidentID 
-                                                                    from ProgramEvent pe 
-                                                                    where ProgramTypeId = '6'
-                                                                    group by pe.ResidentID").Count();
+            int EmergencyDischarge;
+            ViewBag.EmergencyDischarge = EmergencyDischarge = DB.Database.SqlQuery<int>(@"select distinct
+                                                                                        pe.ResidentID 
+                                                                                        from ProgramEvent pe
+                                                                                        where ProgramTypeId = '13' 
+	                                                                                    except select pe2.ResidentID 
+	                                                                                    from ProgramEvent pe2
+	                                                                                    where ProgramTypeId in ('4', '5', '6', '7')").Count();
 
-            var DischargeHigherLevelOfCare = DB.Database.SqlQuery<int>(@"select distinct
-                                                                    pe.ResidentID 
-                                                                    from ProgramEvent pe 
-                                                                    where ProgramTypeId = '7'
-                                                                    group by pe.ResidentID").Count();
+            ViewBag.DischargeCount = DischargeCount = Graduated + SelfDischarge + DischargeForCause + DischargeHigherLevelOfCare + EmergencyDischarge;
 
-            var EmergencyDischarge = DB.Database.SqlQuery<int>(@"select distinct
-                                                                    pe.ResidentID 
-                                                                    from ProgramEvent pe 
-                                                                    where ProgramTypeId = '13'
-                                                                    group by pe.ResidentID").Count();
-            ViewBag.DischargeForCause = DischargeForCause;
-
-            ViewBag.DischargeHigherLevelOfCare = DischargeHigherLevelOfCare;
-
-            ViewBag.EmergencyDischarge = EmergencyDischarge;
 
             //Finds number admitted
             //Counts cumulative residents
-            var cumulativeResidents = (double) DB.Residents.Count();
-            ViewBag.CumulativeCount = cumulativeResidents;
+            int cumulativeResidents;
+            ViewBag.CumulativeCount = cumulativeResidents = DB.Residents.Count();
 
-            ViewBag.Admitted = ViewBag.CumulativeCount;
+            ViewBag.Admitted = cumulativeResidents;
 
             if (ViewBag.CumulativeCount > 0)
             {
                 //finds grad percent
-                double gradPercent = (Graduated / cumulativeResidents) * 100;
+                double gradPercent = (Graduated) / DischargeCount * 100;
                 ViewBag.GraduatedPercent = gradPercent.ToString("0.##"); ; //Graduation Percentage
-                ViewBag.SelfDischargePercent = (SelfDischarge / cumulativeResidents * 100).ToString("0.##");
-                ViewBag.DischargeForCausePercent = (DischargeForCause / cumulativeResidents * 100).ToString("0.##");
-                ViewBag.DischargeHigherLevelOfCarePercent = (DischargeHigherLevelOfCare / cumulativeResidents * 100).ToString("0.##");
-                ViewBag.EmergencyDischargePercent = (EmergencyDischarge / cumulativeResidents * 100).ToString("0.##");
-
+                ViewBag.SelfDischargePercent = (SelfDischarge / DischargeCount * 100).ToString("0.##");
+                ViewBag.DischargeForCausePercent = (DischargeForCause / DischargeCount * 100).ToString("0.##");
+                ViewBag.DischargeHigherLevelOfCarePercent = (DischargeHigherLevelOfCare / DischargeCount * 100).ToString("0.##");
+                ViewBag.EmergencyDischargePercent = (EmergencyDischarge / DischargeCount * 100).ToString("0.##");
             }
             else
             {

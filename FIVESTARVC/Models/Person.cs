@@ -95,6 +95,10 @@ namespace FIVESTARVC.Models
         public int StateTerritoryID { get; set; }
         public virtual StateTerritory StateTerritory { get; set; }
 
+        [Display(Name = "Other State / Province")]
+        [MaxLength(100)]
+        public string StateTerritoryOther { get; set; }
+
         [Display(Name = "Marked to Delete?")]
         public bool ToDelete { get; set; }
 

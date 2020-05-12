@@ -99,10 +99,17 @@
                 </td>
                 <td>
                     @{
-                        var serviceDescription = FSEnumHelper.GetDescription(item.ServiceBranch);
+                        if (item.ServiceBranch == ServiceType.NG || item.ServiceBranch == ServiceType.RESERVE)
+                        {
+                            var multiBranchDescription = FSEnumHelper.GetDescription(item.ServiceBranch) + " - " + FSEnumHelper.GetDescription(item.NGReserve);
+                            @Html.DisplayFor(modelItem => multiBranchDescription);
+                        }
+                        else
+                        {
+                            var serviceDescription = FSEnumHelper.GetDescription(item.ServiceBranch);
 
-
-                        @Html.DisplayFor(modelItem => serviceDescription)
+                            @Html.DisplayFor(modelItem => serviceDescription)
+                        }
                     }
 
                 </td>

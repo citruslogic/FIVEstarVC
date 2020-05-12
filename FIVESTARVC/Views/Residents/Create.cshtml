@@ -34,10 +34,14 @@
                         <td class="col-form-label">@Html.LabelFor(model => model.DischargeStatus)</td>
                         <td>@Html.EnumDropDownListFor(model => model.DischargeStatus, htmlAttributes: new { @class = "form-control", @style = "width: 250px;" })</td>
 
+                        <!-- Cascading dropdown select for NG and Reserves. -->
                         <td class="col-form-label"> @Html.LabelFor(model => model.ServiceBranch, htmlAttributes: new { @class = "control-label" })</td>
                         <td>
                             @Html.EnumDropDownListFor(model => model.ServiceBranch, htmlAttributes: new { @class = "form-control" })
                             @Html.ValidationMessageFor(model => model.ServiceBranch, "")
+                            <br />
+                            @Html.EnumDropDownListFor(model => model.NGReserveBranch, htmlAttributes: new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.NGReserveBranch, "")
                         </td>
                     </tr>
                 <tr>
@@ -92,44 +96,45 @@
                         @Html.EnumDropDownListFor(model => model.Religion, htmlAttributes: new { @class = "form-control", @style = "width: 200px;" })
                     </td>
                 </tr>
+                
+                    <tr>
+                        <td class="col-form-label">
+                            @Html.LabelFor(model => model.StateTerritoryID, htmlAttributes: new { @class = "control-label" })
+                        </td>
+                        <td>
+                            <!-- Add Other to spawn textbox -->
+                            @Html.DropDownList("StateTerritoryID", null, htmlAttributes: new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.StateTerritory)
+                            <br />
+                            @Html.EditorFor(model => model.StateTerritoryOther, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.StateTerritoryOther)
 
-                <tr>
-                    <td class="col-form-label">
-                        @Html.LabelFor(model => model.StateTerritoryID, htmlAttributes: new { @class = "control-label" })
-                    </td>
-                    <td>
-                        @Html.DropDownList("StateTerritoryID", null, htmlAttributes: new { @class = "form-control" })
-                        @Html.ValidationMessageFor(model => model.StateTerritory)
-                    </td>
+                        </td>
+                        
+                        <td class="col-form-label">
+                            @Html.LabelFor(model => model.ReferralID, htmlAttributes: new { @class = "control-label" })
+                        </td>
+                        <td>
+                            @Html.DropDownList("ReferralID", null, htmlAttributes: new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.Referral)
+                            <br />
+                            @Html.EditorFor(model => model.ReferralOther, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.ReferralOther)
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-form-label">
+                            @Html.Label("Region", htmlAttributes: new { @class = "text-right" })
+                        </td>
+                        <td>
+                            <div class="align-text-top" id="Region">
 
-                    <td class="col-form-label">
-                        @Html.LabelFor(model => model.ReferralID, htmlAttributes: new { @class = "control-label" })
-                    </td>
-                    <td>
-                        @Html.DropDownList("ReferralID", null, htmlAttributes: new { @class = "form-control" })
-                        @Html.ValidationMessageFor(model => model.Referral)
-                    </td>
+                            </div>
+                        </td>
 
-                    <td colspan="2">
-                        @Html.EditorFor(model => model.ReferralOther, new { htmlAttributes = new { @class = "form-control" } })
-                        @Html.ValidationMessageFor(model => model.ReferralOther)
-                    </td>
-                </tr>
-                <tr>
-                    <td class="col-form-label">
-                        @Html.Label("Region", htmlAttributes: new { @class = "text-right" })
-                    </td>
-                    <td>
+                    </tr>
 
-
-                        <div class="align-text-top" id="Region">
-
-                        </div>
-                    </td>
-
-                </tr>
-
-            </tbody>
+</tbody>
         </table>
     </div>
     <hr />
@@ -180,8 +185,6 @@
                                 }
                             </div>
                         </td>
-
-
                     <tr>
                         <td>
                             &nbsp;
@@ -248,7 +251,9 @@
 
         }
 
+        $('#StateTerritoryOther').hide();
         $('#ReferralOther').hide();
+        $('#NGReserveBranch').hide();
 
         $("#IsNoncombat").click(function () {
             if ($(this).is(":checked")) {
@@ -268,9 +273,6 @@
                 $('#Region').text(data);
             }
         });
-
-
-
     });
 
         $('.income').on("keyup", function () {
@@ -307,6 +309,26 @@
             } else {
                 $('#ReferralOther').val('');
                 $('#ReferralOther').hide();
+            }
+        });
+
+        $('#StateTerritoryID').on("change", function () {
+
+            if ($('#StateTerritoryID option:selected').text() === "Other") {
+                $('#StateTerritoryOther').show();
+            } else {
+                $('#StateTerritoryOther').val('');
+                $('#StateTerritoryOther').hide();
+            }
+        });
+
+        $('#ServiceBranch').on("change", function () {
+
+            if ($('#ServiceBranch option:selected').text() === "NG" || $('#ServiceBranch option:selected').text() == "Reserves") {
+                $('#NGReserveBranch').show();
+            } else {
+                $('#NGReserveBranch').val('');
+                $('#NGReserveBranch').hide();
             }
         });
 
