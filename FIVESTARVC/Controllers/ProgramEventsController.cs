@@ -90,7 +90,15 @@ namespace FIVESTARVC.Controllers
             }
             };
 
-            ViewBag.ProgramTypeID = new SelectList(db.ProgramTypes.Where(t => t.EventType == EnumEventType.TRACK), "ProgramTypeID", "ProgramDescription");
+            var admitDischargeGroup = new SelectListGroup { Name = "Admit / Discharge " };
+            var otherTrackGroup = new SelectListGroup { Name = "Tracks to Success" };
+
+            ViewBag.ProgramTypeID = new SelectList(db.ProgramTypes.Where(t => t.EventType != EnumEventType.SYSTEM).ToList().OrderBy(i => (int) i.EventType).Select(i => new SelectListItem
+            {
+                Text = i.ProgramDescription,
+                Value = i.ProgramTypeID.ToString(),
+                Group = (i.EventType == EnumEventType.ADMISSION || i.EventType == EnumEventType.DISCHARGE) && i.EventType != EnumEventType.SYSTEM ? admitDischargeGroup : otherTrackGroup
+            }).OrderBy(i => i.Group.Name).ToList(), "Value", "Text", "Group.Name", -1);
 
             ViewBag.FromPage = fromPage.GetValueOrDefault(1);
             ViewBag.ResidentID = id;
@@ -98,7 +106,7 @@ namespace FIVESTARVC.Controllers
             model.EnrolledTracks = db.ProgramEvents
                 .Include(r => r.Resident)
                 .Include(r => r.ProgramType)
-                .Where(i => i.ResidentID == id && i.ProgramType.EventType == EnumEventType.TRACK)
+                .Where(i => i.ResidentID == id && i.ProgramType.EventType != EnumEventType.SYSTEM)
                 .ToList().Select(e => new TempProgramEvent
                 {
                     ProgramEventID = e.ProgramEventID,
@@ -108,7 +116,7 @@ namespace FIVESTARVC.Controllers
                     Completed = e.Completed,
                     ProgramType = e.ProgramType
 
-                }).ToList();
+                }).OrderBy(i => i.ProgramEventID).ToList();
 
             ViewBag.Fullname = db.Residents.Find(model.ProgramEvents.First().ResidentID).Fullname;
             model.FromPage = fromPage.GetValueOrDefault(1);
@@ -187,7 +195,15 @@ namespace FIVESTARVC.Controllers
                         TempData["UserMessage"] = db.Residents.Find(ResidentID).Fullname + " was not enrolled in any new tracks. ";
                     }
 
-                    ViewBag.ProgramTypeID = new SelectList(db.ProgramTypes.Where(t => t.EventType == EnumEventType.TRACK), "ProgramTypeID", "ProgramDescription");
+                    var admitDischargeGroup = new SelectListGroup { Name = "Admit / Discharge " };
+                    var otherTrackGroup = new SelectListGroup { Name = "Tracks to Success" };
+
+                    ViewBag.ProgramTypeID = new SelectList(db.ProgramTypes.Where(t => t.EventType != EnumEventType.SYSTEM).ToList().OrderBy(i => (int)i.EventType).Select(i => new SelectListItem
+                    {
+                        Text = i.ProgramDescription,
+                        Value = i.ProgramTypeID.ToString(),
+                        Group = (i.EventType == EnumEventType.ADMISSION || i.EventType == EnumEventType.DISCHARGE) && i.EventType != EnumEventType.SYSTEM ? admitDischargeGroup : otherTrackGroup
+                    }).OrderBy(i => i.Group.Name).ToList(), "Value", "Text", "Group.Name", -1); 
                 }
             }
 

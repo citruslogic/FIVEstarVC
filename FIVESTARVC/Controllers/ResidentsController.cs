@@ -266,7 +266,8 @@ namespace FIVESTARVC.Controllers
             if (db.Residents.AsNoTracking().ToList().Any(r => r.ClearFirstMidName.Contains(resident.FirstMidName)
                 && r.ClearLastName.Contains(resident.LastName)
                 && r.ClearBirthdate?.Date == resident.Birthdate.Date
-                && r.ServiceBranch == resident.ServiceBranch))
+                && r.ServiceBranch == resident.ServiceBranch
+                && r.ToDelete == false))
             {
 
                 // Found a match.

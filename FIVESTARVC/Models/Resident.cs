@@ -7,6 +7,9 @@ using System.Data.Entity;
 using FIVESTARVC.Helpers;
 using DelegateDecompiler;
 using FIVESTARVC.DAL;
+using Org.BouncyCastle.Asn1.IsisMtt.X509;
+using OfficeOpenXml.FormulaParsing.Excel.Functions.Information;
+using System.Web.Services.Description;
 
 namespace FIVESTARVC.Models
 {
@@ -86,35 +89,32 @@ namespace FIVESTARVC.Models
             return current;
         }
 
-        public DateTime? GetAdmitDate()
+        public DateTime? GetDischargeDate()
         {
             var ev = db.ProgramEvents
                 .AsNoTracking()
+                .Include(i => i.ProgramType)
                 .Where(r => r.ResidentID == ResidentID)
                 .OrderByDescending(s => s.ProgramEventID)
-                .FirstOrDefault(i => i.ProgramType.EventType == EnumEventType.ADMISSION);
+                .FirstOrDefault(e => e.ProgramType.EventType == EnumEventType.DISCHARGE);
 
             if (ev != null)
             {
                 return ev.ClearStartDate;
-            }
-
-            return null;
-        }
-
-        public DateTime? GetDischargeDate()
-        {
-            var events = db.ProgramEvents
-                .AsNoTracking()
-                .Include(i => i.ProgramType)
-                .Where(r => r.ResidentID == ResidentID)
-                .OrderByDescending(s => s.ProgramEventID).ToList();
-
-            foreach (ProgramEvent ev in events)
+            } else
             {
-                if (ev.ProgramType?.EventType == EnumEventType.DISCHARGE)
+                var evWithAdmitEndDate = db.ProgramEvents
+                                        .AsNoTracking()
+                                        .Include(i => i.ProgramType)
+                                        .Where(r => r.ResidentID == ResidentID)
+                                        .OrderBy(s => s.ProgramEventID)
+                                        .ToList()
+                                        .LastOrDefault(e => e.ProgramType.EventType == EnumEventType.ADMISSION 
+                                            && e.ClearEndDate != null);
+                
+                if (evWithAdmitEndDate != null)
                 {
-                    return ev.ClearStartDate;
+                    return evWithAdmitEndDate.ClearEndDate;
                 }
             }
 
@@ -143,7 +143,8 @@ namespace FIVESTARVC.Models
                     {
                         return null;
                     }
-                } else
+                }
+                else
                 {
                     return Age;
                 }
@@ -154,25 +155,78 @@ namespace FIVESTARVC.Models
         {
             get
             {
-                var admitDate = GetAdmitDate().GetValueOrDefault(DateTime.Today);
-                var dischargeDate = GetDischargeDate() ?? DateTime.Today;
-                // Resident may not be discharged yet.
-                TimeSpan span = dischargeDate.Subtract(admitDate);
+                bool hasBeenDischarged = false;
+                bool hasbeenAdmitted = false;
+
+                DateTime? dischargedDate = null;
+                DateTime admittedDate = DateTime.Now;
+
+                var events = db.ProgramEvents
+                .AsNoTracking()
+                .Include(i => i.ProgramType)
+                .Where(r => r.ResidentID == ResidentID)
+                .OrderBy(s => s.ProgramEventID)
+                .ToList();
+
+                TimeSpan span = TimeSpan.Zero;
+                foreach (var ev in events)
+                {
+
+                    // admitted for the first time, continue counting days in center:
+                    if (ev.ProgramType.EventType == EnumEventType.ADMISSION && hasBeenDischarged == false && hasbeenAdmitted == false)
+                    {
+                        hasbeenAdmitted = true;
+                        admittedDate = ev.ClearStartDate;
+                    }
+
+                    // found a discharge event: 
+                    if (ev.ProgramType.EventType == EnumEventType.DISCHARGE && ev.ClearStartDate != null && hasbeenAdmitted)
+                    {
+                        hasBeenDischarged = true;
+                        hasbeenAdmitted = false;
+                        dischargedDate = ev.ClearStartDate;
+                    }
+
+                    // if the resident has been both admitted and discharged we can start counting the difference in their days stayed.
+                    if (dischargedDate != null && admittedDate != null && hasBeenDischarged)
+                    {
+                        span = dischargedDate.Value.Subtract(admittedDate);
+                    }
+
+                    // resident was readmitted:
+                    if (ev.ProgramType.EventType == EnumEventType.ADMISSION && hasBeenDischarged && dischargedDate.HasValue)
+                    {
+                        hasBeenDischarged = false;
+                        hasbeenAdmitted = true;
+
+                        if (IsCurrent())
+                        {
+                            // still open
+                            span += DateTime.Now.Subtract(ev.ClearStartDate);
+                        }
+                    }
+
+                    // hasn't been discharged yet...
+                    if (IsCurrent() && hasBeenDischarged == false && dischargedDate == null)
+                    {
+                        span = DateTime.Now.Subtract(admittedDate);
+                    }
+                }
 
                 return (int?)Math.Abs(span.TotalDays);
             }
         }
 
-        public DateTime GetNextAdmitDate(DateTime? initialDate = null)
+        public DateTime? GetNextAdmitDate(DateTime? initialDate = null)
         {
             if (initialDate.HasValue)
             {
-               return db.ProgramEvents.AsNoTracking().Include(i => i.ProgramType)
-                                .ToList()
-                               .Where(r => r.ResidentID == ResidentID
-                                    && r.ProgramType.EventType == EnumEventType.ADMISSION
-                                    && r.ClearStartDate > initialDate).FirstOrDefault().ClearStartDate;
-                
+                return db.ProgramEvents.AsNoTracking().Include(i => i.ProgramType)
+                                 .ToList()
+                                 .Where(r => r.ResidentID == ResidentID
+                                     && r.ProgramType.EventType == EnumEventType.ADMISSION
+                                     && r.ClearStartDate > initialDate).FirstOrDefault()?.ClearStartDate;
+
             }
 
             return db.ProgramEvents.AsNoTracking().Include(i => i.ProgramType)
@@ -207,7 +261,7 @@ namespace FIVESTARVC.Models
                 double numMonthsStayed = 0.0;
                 foreach (var date in db.ProgramEvents.Include(i => i.ProgramType)
                     .ToList()
-                    .Where(i => i.ResidentID == ResidentID 
+                    .Where(i => i.ResidentID == ResidentID
                     && i.ProgramType.EventType == EnumEventType.ADMISSION)
                     .OrderByDescending(i => i.ClearStartDate)
                     .Select(i => i.ClearStartDate))
@@ -216,7 +270,8 @@ namespace FIVESTARVC.Models
                     if (nextDischargeDate == null)
                     {
                         numMonthsStayed += Calendar.GetMonths(DateTime.Today, date);
-                    } else
+                    }
+                    else
                     {
                         numMonthsStayed += Calendar.GetMonths(nextDischargeDate.GetValueOrDefault(), date);
                     }

@@ -3,6 +3,7 @@ using FIVESTARVC.DAL;
 using FIVESTARVC.Models;
 using FIVESTARVC.ViewModels;
 using OfficeOpenXml;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
@@ -20,6 +21,7 @@ namespace FIVESTARVC.Controllers
         public IEnumerable<Resident> NearestResidents { get; set; }           // Nearest birthdays.
 
         [Authorize]
+        [HttpGet]
         public ActionResult Index()
         {
             var residents = db.Residents.OrderByDescending(r => r.ResidentID).AsNoTracking();
@@ -52,10 +54,21 @@ namespace FIVESTARVC.Controllers
                                                                                 where ProgramTypeId in ('1', '2', '3')").Single();
             ViewBag.Admitted = Admitted;
 
+            var currentResidents = db.Residents.AsNoTracking().ToList().Where(cur => cur.IsCurrent()).Count();
+            var admittedResidents = db.ProgramEvents.Include(i => i.ProgramType).Where(i => i.ProgramType.ProgramDescription.Equals("Resident Admission", StringComparison.InvariantCultureIgnoreCase)).Count();
+            var emergencyShelterResidents = db.ProgramEvents.Include(i => i.ProgramType).Where(i => i.ProgramType.ProgramDescription.Equals("Emergency Shelter", StringComparison.InvariantCultureIgnoreCase)).Count();
+            var dischargeHigherLevelOfCare = db.Database.SqlQuery<int>(@"select distinct
+                                                                        pe.ResidentID 
+                                                                        from ProgramEvent pe
+                                                                        where ProgramTypeId = '7' 
+	                                                                    ").Count();
+            double eligibleDischarges = admittedResidents - dischargeHigherLevelOfCare - emergencyShelterResidents - currentResidents;
+
+
             if (Admitted > 0)
             {
                 //finds grad percent
-                double gradPercent = Graduated / Admitted * 100;
+                double gradPercent = Graduated / eligibleDischarges * 100;
                 ViewBag.gradPercent = gradPercent.ToString("0.##"); //Graduation Percentage
             }
             else
