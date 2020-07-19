@@ -4,7 +4,7 @@
     Layout = null;
 }
 
-<h5>@if (Model.IsCurrent)
+<h5>@if (!Model.IsCurrent)
 { @Html.Raw("Cumulative Resident") }
 else
 { @Html.Raw("Current Resident") } Age Composition</h5>

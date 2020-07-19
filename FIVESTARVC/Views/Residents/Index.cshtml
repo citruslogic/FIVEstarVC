@@ -115,7 +115,7 @@
                 </td>
                 <td>
                     @{
-                        if (item.IsCurrent())
+                        if (item.IsCurrent)
                         {
                             @Html.Raw("Yes")
                         }
@@ -137,7 +137,7 @@
                 <td>
                     @Html.ActionLink("Details", "Details", new { id = item.ResidentID, fromPage = Model.PageNumber }, htmlAttributes: new { @class = "btn btn-secondary btn-sm" }) &nbsp;
 
-                    @if (item.IsCurrent())
+                    @if (item.IsCurrent)
                     {
 
                         @Html.ActionLink("Release", "Discharge", new { id = item.ResidentID }, htmlAttributes: new { @class = "btn btn-danger btn-sm" })

@@ -90,7 +90,7 @@
         <div class="col-xs-1">
             <table class="table table-sm" style="width: 50%">
                 <tbody>
-                    @if (!Model.IsCurrent())
+                    @if (!Model.IsCurrent)
                     {
                         <tr>
                             <td>Last Discharge Date: @ViewBag.DischargeInfo.GetShortStartDate()</td>

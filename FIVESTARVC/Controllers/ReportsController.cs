@@ -1,4 +1,5 @@
 ﻿using DelegateDecompiler;
+using dotless.Core.Parser.Infrastructure;
 using DotNet.Highcharts;
 using DotNet.Highcharts.Enums;
 using DotNet.Highcharts.Helpers;
@@ -13,6 +14,7 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.Drawing;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 
 namespace FIVESTARVC.Controllers
@@ -76,7 +78,7 @@ namespace FIVESTARVC.Controllers
 
             foreach (Resident item in navyQuery)
             {
-                if (item.IsCurrent())
+                if (item.IsCurrent)
                 {
                     ViewBag.CurrentNavy = ++nvyCount;
                 }
@@ -89,7 +91,7 @@ namespace FIVESTARVC.Controllers
 
             foreach (Resident item in armyQuery)
             {
-                if (item.IsCurrent())
+                if (item.IsCurrent)
                 {
                     ViewBag.CurrentArmy = ++armyCount;
                 }
@@ -102,7 +104,7 @@ namespace FIVESTARVC.Controllers
 
             foreach (Resident item in marineQuery)
             {
-                if (item.IsCurrent())
+                if (item.IsCurrent)
                 {
                     ViewBag.CurrentMarine = ++marineCount;
                 }
@@ -115,7 +117,7 @@ namespace FIVESTARVC.Controllers
 
             foreach (Resident item in afQuery)
             {
-                if (item.IsCurrent())
+                if (item.IsCurrent)
                 {
                     ViewBag.CurrentAF = ++afCount;
                 }
@@ -128,7 +130,7 @@ namespace FIVESTARVC.Controllers
 
             foreach (Resident item in cgQuery)
             {
-                if (item.IsCurrent())
+                if (item.IsCurrent)
                 {
                     ViewBag.CurrentCG = ++cgCount;
                 }
@@ -138,7 +140,7 @@ namespace FIVESTARVC.Controllers
             double DischargeCount = 0.0;
 
             int TotalCount; // Current Resident Count
-            ViewBag.TotalCount = TotalCount = DB.Residents.AsNoTracking().ToList().Where(cur => cur.IsCurrent()).Count();
+            ViewBag.TotalCount = TotalCount = DB.Residents.AsNoTracking().ToList().Where(cur => cur.IsCurrent).Count();
 
             //Helps find graduation percent - see eligibleDischarge below.
             var admittedResidents = DB.ProgramEvents.Include(i => i.ProgramType).Where(i => i.ProgramType.ProgramDescription.Equals("Resident Admission", StringComparison.InvariantCultureIgnoreCase)).Count();
@@ -187,6 +189,7 @@ namespace FIVESTARVC.Controllers
             //Counts cumulative residents
             int cumulativeResidents;
             ViewBag.CumulativeCount = cumulativeResidents = DB.Residents.Count();
+            ViewBag.MinusHLCEmShelCurrent = cumulativeResidents - DischargeHigherLevelOfCare - emergencyShelterResidents - TotalCount;
 
             ViewBag.Admitted = cumulativeResidents;
 
@@ -1713,24 +1716,45 @@ namespace FIVESTARVC.Controllers
         }
 
         [HttpGet]
-        public ActionResult ResidentsByYearReport(string yearFilter)
+        public async Task<ActionResult> ResidentsByYearReport(string yearFilter)
         {
             ViewBag.YearFilter = yearFilter;
             using (ReportService residentsByYear = new ReportService())
             {
-                return View("ResidentsByYearReport", residentsByYear.ResidentsByYear(yearFilter));
+                return View("ResidentsByYearReport", await Task.Run(() => residentsByYear.ResidentsByYear(yearFilter)).ConfigureAwait(false));
             }
         }
 
         [HttpGet]
-        public ActionResult UpToYearResidentAgeReport(string yearFilter)
+        public async Task<ActionResult> UpToYearResidentAgeReport(string yearFilter)
         {
             ViewBag.YearFilter = yearFilter;
             using (ReportService residentsByYear = new ReportService())
             {
-                return View("UpToYearResidentAgeReport", residentsByYear.UpToYearResidentAgeReport(yearFilter));
+                return View("UpToYearResidentAgeReport", await Task.Run(() => residentsByYear.UpToYearResidentAgeReport(yearFilter)).ConfigureAwait(false));
             }
         }
+
+        [HttpGet]
+        public async Task<ActionResult> ResidentsByAdmittanceTypeReport(int ProgramTypeID = 1)
+        {
+            ViewBag.ProgramTypeID = new SelectList(DB.ProgramTypes.Where(i => i.EventType == EnumEventType.ADMISSION).ToList(), "ProgramTypeID", "ProgramDescription");
+            using (ReportService reportService = new ReportService())
+            {
+                return View(await Task.Run(() => reportService.ResidentsByTrackType(ProgramTypeID)).ConfigureAwait(false));
+            }
+        }
+
+        [HttpGet]
+        public async Task<ActionResult> ResidentsByDischargeTypeReport(int ProgramTypeID = 4)
+        {
+            ViewBag.ProgramTypeID = new SelectList(DB.ProgramTypes.Where(i => i.EventType == EnumEventType.DISCHARGE).ToList(), "ProgramTypeID", "ProgramDescription");
+            using (ReportService reportService = new ReportService())
+            {
+                return View(await Task.Run(() => reportService.ResidentsByTrackType(ProgramTypeID)).ConfigureAwait(false));
+            }
+        }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)

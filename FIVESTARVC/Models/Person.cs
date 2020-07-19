@@ -10,7 +10,7 @@ using System.Globalization;
 
 namespace FIVESTARVC.Models
 {
-    public abstract class Person
+    public abstract class Person : IDisposable
     {
         private static readonly CompiledExpression<Person, string> lastNameExpression =
             DefaultTranslationOf<Person>.Property(e => e.ClearLastName)
@@ -164,6 +164,19 @@ namespace FIVESTARVC.Models
                 Property(p => p.Birthdate);
             }
 
+        }
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }        
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                Dispose();
+            }
         }
     }
 }

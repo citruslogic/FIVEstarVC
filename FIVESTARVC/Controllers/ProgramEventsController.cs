@@ -22,6 +22,7 @@ namespace FIVESTARVC.Controllers
         private readonly ResidentContext db = new ResidentContext();
 
         // GET: ProgramEvents
+        [HttpGet]
         public ActionResult Index(string sortOrder, string currentFilter, string searchString, int? page)
         {
             ViewBag.CurrentSort = sortOrder;
@@ -67,6 +68,7 @@ namespace FIVESTARVC.Controllers
         /*
          * Append as many tracks as desired */
         // GET: ProgramEvents/AddMultiTrack
+        [HttpGet]
         public ActionResult AddMultiTrack()
         {
             ViewBag.ProgramTypeID = new SelectList(db.ProgramTypes.Where(t => t.EventType == EnumEventType.TRACK), "ProgramTypeID", "ProgramDescription");
@@ -297,6 +299,7 @@ namespace FIVESTARVC.Controllers
         }
 
         // GET: ProgramEvents/Delete/5
+        [HttpGet]
         public ActionResult Delete(int? id)
         {
             if (id == null)

@@ -61,7 +61,11 @@
             <li><button class="dropdown-item" onclick="location.href = '/Reports/ResidentsByYearReport/';"><i class="fa fa-file-o fa-fw"></i> Residents By Year</button></li>
             <li><button class="dropdown-item" onclick="location.href = '/Reports/DaysInResidenceReport';"><i class="fa fa-file-o fa-fw"></i> Residency Report</button></li>
             <li><button class="dropdown-item" onclick="location.href = '/Reports/CurrentResidentReport';"><i class="fa fa-file-o fa-fw"></i> Current Resident Report</button></li>
+            <li><button class="dropdown-item" onclick="location.href = '/Reports/ResidentsByAdmittanceTypeReport';"><i class="fa fa-file-o fa-fw"></i> Residents By Admittance Category</button></li>
+            <li><button class="dropdown-item" onclick="location.href = '/Reports/ResidentsByDischargeTypeReport';"><i class="fa fa-file-o fa-fw"></i> Residents By Discharge Category</button></li>
+
         </ul>
+
     </div>
 </div>
 
@@ -74,6 +78,7 @@
     <p>
         <strong>Cumulative Residents: </strong> @ViewBag.CumulativeCount,
         <strong>Current Residents: </strong> @ViewBag.TotalCount,
+        <strong>(Not HLC, Em-Shel, Current):</strong> @ViewBag.MinusHLCEmShelCurrent,
         <strong>Total Graduated: </strong> @ViewBag.Graduated
     </p>
 </div>

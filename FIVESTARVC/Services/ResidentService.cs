@@ -1,9 +1,6 @@
-﻿using DelegateDecompiler;
-using FIVESTARVC.DAL;
-using FIVESTARVC.Helpers;
+﻿using FIVESTARVC.DAL;
 using FIVESTARVC.Models;
 using FIVESTARVC.ViewModels;
-using Microsoft.Linq.Translations;
 using PagedList;
 using System.Collections.Generic;
 using System.Globalization;

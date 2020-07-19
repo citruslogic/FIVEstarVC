@@ -1,0 +1,65 @@
+﻿@model FIVESTARVC.ViewModels.CurrentResidentOverviewViewModel
+
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@{
+    /**/
+
+    ViewBag.Title = "Resident Listing by Discharge Type Report";
+}
+<br />
+
+@using (Html.BeginForm("ResidentsByDischargeTypeReport", "Reports", FormMethod.Get, htmlAttributes: new { @ProgramTypeID = "4" }))
+{
+    <div class="form-inline" style="margin-bottom: 1em;">
+
+        Residents listing by: &nbsp;
+
+        @Html.DropDownList("ProgramTypeID", null, htmlAttributes: new { @class = "form-control", @style = "margin-left: 5px;" })
+        <input class="btn btn-sm btn-primary" type="submit" onclick="return DisplayProgressMessage(this, 'Working...');" value="Get Report" style="margin-left: 15px" />
+    </div>
+
+}
+<div style="margin-top: 10px; margin-bottom: 10px;">
+    <button class="btn btn-default" onclick="location.href='/Reports/Index';" style="background-color: lightsteelblue"> Return to Reports </button><br>
+</div>
+
+<p style="font-size: 16pt"> Total residents: @Html.Encode(Model.Total)</p>
+
+<div class="row">
+    <div class="md-col-6">
+        <table class="table table-sm table-striped">
+            <tr>
+                <th>
+                    Full Name
+                </th>
+                <th>
+                    Occurrences
+                </th>
+            </tr>
+
+            @foreach (var item in Model.CurrentResidents.GroupBy(i => i.LastName + " " + i.FirstName))
+            {
+                <tr>
+                    <td>@Html.DisplayFor(modelItem => item.Key)</td>
+                    <td>@item.Count()</td>
+                </tr>
+            }
+
+        </table>
+
+        <div style="margin-bottom: 25px;">
+            <button class="btn btn-default" onclick="location.href='/Reports/Index';" style="background-color: lightsteelblue"> Return to Reports </button><br>
+        </div>
+
+        }
+
+    </div>
+</div>
+
+
+
+

@@ -1,10 +1,13 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace FIVESTARVC.ViewModels
 {
     public class CurrentResidentOverviewViewModel
     {
         public List<CurrentResidentViewModel> CurrentResidents { get; set; }
+
+        public List<IGrouping<CurrentResidentViewModel, CurrentResidentViewModel>> ResidentGroups { get; set; }
 
         public int AverageAge { get; set; }
 
@@ -33,6 +36,8 @@ namespace FIVESTARVC.ViewModels
         public int OtherCount { get; set; }
 
         public int Total { get; set; }
+
+        public string TrackType { get; set; }
 
         public List<CampaignCountViewModel> Campaigns { get; set; }
 

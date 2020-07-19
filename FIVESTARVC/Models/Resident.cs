@@ -7,9 +7,6 @@ using System.Data.Entity;
 using FIVESTARVC.Helpers;
 using DelegateDecompiler;
 using FIVESTARVC.DAL;
-using Org.BouncyCastle.Asn1.IsisMtt.X509;
-using OfficeOpenXml.FormulaParsing.Excel.Functions.Information;
-using System.Web.Services.Description;
 
 namespace FIVESTARVC.Models
 {
@@ -57,36 +54,37 @@ namespace FIVESTARVC.Models
         [Display(Name = "Other Referral")]
         public string OptionalReferralDescription { get; set; }
 
-        [Computed]
-        public bool IsCurrent()
-        {
-            bool current = false;
-            var ev = db.ProgramEvents
-                .AsNoTracking()
-                .Include(i => i.ProgramType)
-                .Where(t => t.ResidentID == ResidentID)
-                .ToList();
-
-            if (ev != null)
+        public bool IsCurrent
+        { get
             {
-                foreach (var item in ev)
-                {
-                    if (item != null && item.ProgramType != null)
-                    {
-                        if (item.ProgramType.EventType == EnumEventType.ADMISSION)
-                        {
-                            current = true;
-                        }
+                bool current = false;
+                var ev = db.ProgramEvents
+                    .AsNoTracking()
+                    .Include(i => i.ProgramType)
+                    .Where(t => t.ResidentID == ResidentID)
+                    .ToList();
 
-                        if (item.ProgramType.EventType == EnumEventType.DISCHARGE)
+                if (ev != null)
+                {
+                    foreach (var item in ev)
+                    {
+                        if (item != null && item.ProgramType != null)
                         {
-                            current = false;
+                            if (item.ProgramType.EventType == EnumEventType.ADMISSION)
+                            {
+                                current = true;
+                            }
+
+                            if (item.ProgramType.EventType == EnumEventType.DISCHARGE)
+                            {
+                                current = false;
+                            }
                         }
                     }
                 }
-            }
 
-            return current;
+                return current;
+            }
         }
 
         public DateTime? GetDischargeDate()
@@ -125,7 +123,7 @@ namespace FIVESTARVC.Models
         {
             get
             {
-                if (IsCurrent() == false)
+                if (IsCurrent == false)
                 {
                     try
                     {
@@ -199,7 +197,7 @@ namespace FIVESTARVC.Models
                         hasBeenDischarged = false;
                         hasbeenAdmitted = true;
 
-                        if (IsCurrent())
+                        if (IsCurrent)
                         {
                             // still open
                             span += DateTime.Now.Subtract(ev.ClearStartDate);
@@ -207,7 +205,7 @@ namespace FIVESTARVC.Models
                     }
 
                     // hasn't been discharged yet...
-                    if (IsCurrent() && hasBeenDischarged == false && dischargedDate == null)
+                    if (IsCurrent && hasBeenDischarged == false && dischargedDate == null)
                     {
                         span = DateTime.Now.Subtract(admittedDate);
                     }
@@ -285,6 +283,15 @@ namespace FIVESTARVC.Models
         public int? FromPage
         {
             get; set;
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                db.Dispose();
+            }
+            base.Dispose(disposing);
         }
 
     }

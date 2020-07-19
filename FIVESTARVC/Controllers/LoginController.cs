@@ -56,7 +56,7 @@ namespace FIVESTARVC.Controllers
         }
 
 
-        [ValidateAntiForgeryToken]
+        [HttpGet]
         public virtual ActionResult Logoff()
         {
             IAuthenticationManager authenticationManager = HttpContext.GetOwinContext().Authentication;

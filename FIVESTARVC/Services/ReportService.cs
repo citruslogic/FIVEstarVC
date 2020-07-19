@@ -6,13 +6,14 @@ using System.Linq;
 using FIVESTARVC.Models;
 using System.Data;
 using System.Data.Entity;
-
-
+using System.Threading.Tasks;
+using Microsoft.Ajax.Utilities;
 
 namespace FIVESTARVC.Services
 {
     public class ReportService : IDisposable
     {
+        private bool isDisposed;
         private readonly ResidentContext context = new ResidentContext();
         public List<ResidencyReportViewModel> GetResidencyData()
         {
@@ -25,7 +26,7 @@ namespace FIVESTARVC.Services
                     FirstName = i.ClearFirstMidName,
                     AdmitDates = i.ProgramEvents.Where(j => j.ProgramType.EventType == EnumEventType.ADMISSION).ToList().Select(k => k.ClearStartDate.ToShortDateString()).ToList(),
                     DischargeDate = i.ProgramEvents.Where(j => j.ProgramType.EventType == EnumEventType.DISCHARGE).ToList().Select(k => k.ClearStartDate.ToShortDateString()).LastOrDefault(),
-                    IsCurrent = i.IsCurrent(),
+                    IsCurrent = i.IsCurrent,
                     DaysInResidence = i.ActualDaysStayed.GetValueOrDefault(0),
                     MonthsStayed = i.MonthsStayed
 
@@ -41,7 +42,7 @@ namespace FIVESTARVC.Services
                 {
                     ReferralName = i.ReferralName,
                     CumulCount = i.Residents.Count,
-                    CurrentCount = i.Residents.Where(j => j.IsCurrent()).Count()
+                    CurrentCount = i.Residents.Where(j => j.IsCurrent).Count()
                 }).ToList();
 
             return referralModel;
@@ -52,7 +53,7 @@ namespace FIVESTARVC.Services
             var currentResidents = context.Residents
                 .AsNoTracking()
                 .ToList()
-                .Where(i => i.IsCurrent()).Select(i => new CurrentResidentViewModel
+                .Where(i => i.IsCurrent).Select(i => new CurrentResidentViewModel
                 {
                     LastName = i.ClearLastName,
                     FirstName = i.ClearFirstMidName,
@@ -65,7 +66,7 @@ namespace FIVESTARVC.Services
             var campaignCounts = context.MilitaryCampaigns.ToList().Select(i => new CampaignCountViewModel
             {
                 CampaignName = i.CampaignName,
-                Count = i.Residents.Where(j => j.IsCurrent()).Count() > 0 ? i.Residents.Where(j => j.IsCurrent()).Count() : 0
+                Count = i.Residents.Where(j => j.IsCurrent).Any() ? i.Residents.Where(j => j.IsCurrent).Count() : 0
             }).ToList();
 
             return new CurrentResidentOverviewViewModel
@@ -89,6 +90,34 @@ namespace FIVESTARVC.Services
             };
         }
 
+        public CurrentResidentOverviewViewModel ResidentsByTrackType(int ProgramTypeID)
+        {
+            List<CurrentResidentViewModel> residents = new List<CurrentResidentViewModel>();
+
+            var events = context.ProgramEvents
+                            .AsNoTracking()
+                            .Include(i => i.Resident)
+                            .Include(i => i.ProgramType)
+                            .Where(i => i.ProgramTypeID == ProgramTypeID)
+                            .ToList();
+                            
+            residents = events.OrderBy(i => i.Resident.ClearLastName)
+                            .Select(i => new CurrentResidentViewModel
+                            {
+                                LastName = i.Resident.ClearLastName,
+                                FirstName = i.Resident.ClearFirstMidName,
+                            })
+                            .ToList();
+
+            return new CurrentResidentOverviewViewModel
+            {
+                CurrentResidents = residents,
+                TrackType = events.FirstOrDefault().ProgramType.ProgramDescription,
+                
+                Total = residents.DistinctBy(i => i.LastName + " " + i.FirstName).Count()
+            };
+        }
+        
         public CurrentResidentOverviewViewModel ResidentsByYear(string year = null)
         {
             int yearValue = 0;
@@ -169,7 +198,20 @@ namespace FIVESTARVC.Services
 
         public void Dispose()
         {
-            context.Dispose();
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (isDisposed) return;
+
+            if (disposing)
+            {
+                context.Dispose();
+            }
+
+            isDisposed = true;
         }
     }
 }

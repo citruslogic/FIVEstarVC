@@ -1,5 +1,4 @@
-﻿using DelegateDecompiler;
-using FIVESTARVC.DAL;
+﻿using FIVESTARVC.DAL;
 using FIVESTARVC.Models;
 using FIVESTARVC.ViewModels;
 using OfficeOpenXml;
@@ -18,13 +17,16 @@ namespace FIVESTARVC.Controllers
     {
         private readonly ResidentContext db = new ResidentContext();
 
+        private const string excelFile = "C:\\webuploads\\import.xlsx";
+        private readonly ExcelPackage ep = new ExcelPackage(new FileInfo(excelFile));
+
         public IEnumerable<Resident> NearestResidents { get; set; }           // Nearest birthdays.
 
         [Authorize]
         [HttpGet]
         public ActionResult Index()
         {
-            var residents = db.Residents.OrderByDescending(r => r.ResidentID).AsNoTracking();
+            var residents = db.Residents.AsNoTracking().OrderByDescending(r => r.ResidentID);
             var topResidents = residents.Take(5).ToList().Select(data => new DashboardData
             {
                 ResidentID = data.ResidentID,
@@ -34,16 +36,16 @@ namespace FIVESTARVC.Controllers
 
             });
 
-            ViewBag.pop = residents.ToList().Where(r => r.IsCurrent()).Count();
+            ViewBag.pop = residents.ToList().Where(r => r.IsCurrent).Count();
             ViewBag.allpop = residents.ToList().Count;
-                       
+
             /* David Thompson's (dthompson) grad count
              * Move to a central location in code at a more convenient date. Revised by Tytus on 10/26 
               We don't know if higher level of care residents are returning or will graduate. */
             var Graduated = db.Database.SqlQuery<double>(@"select convert(float, count(distinct p.ResidentID))
                                                                             from Person p 
                                                                             join ProgramEvent pe on p.ResidentID = pe.ResidentID
-                                                                                where ProgramTypeId = '4' or ProgramTypeId = '7'").Single();
+                                                                                where ProgramTypeId = '4'").Single();
 
             ViewBag.Graduated = Graduated;
 
@@ -51,10 +53,10 @@ namespace FIVESTARVC.Controllers
             var Admitted = db.Database.SqlQuery<double>(@"select convert(float, count(distinct p.ResidentID))
                                                                            from Person p 
                                                                            join ProgramEvent pe on p.ResidentID = pe.ResidentID
-                                                                                where ProgramTypeId in ('1', '2', '3')").Single();
+                                                                                where ProgramTypeId in ('1')").Single();
             ViewBag.Admitted = Admitted;
 
-            var currentResidents = db.Residents.AsNoTracking().ToList().Where(cur => cur.IsCurrent()).Count();
+            var currentResidents = db.Residents.AsNoTracking().ToList().Where(cur => cur.IsCurrent).Count();
             var admittedResidents = db.ProgramEvents.Include(i => i.ProgramType).Where(i => i.ProgramType.ProgramDescription.Equals("Resident Admission", StringComparison.InvariantCultureIgnoreCase)).Count();
             var emergencyShelterResidents = db.ProgramEvents.Include(i => i.ProgramType).Where(i => i.ProgramType.ProgramDescription.Equals("Emergency Shelter", StringComparison.InvariantCultureIgnoreCase)).Count();
             var dischargeHigherLevelOfCare = db.Database.SqlQuery<int>(@"select distinct
@@ -63,6 +65,7 @@ namespace FIVESTARVC.Controllers
                                                                         where ProgramTypeId = '7' 
 	                                                                    ").Count();
             double eligibleDischarges = admittedResidents - dischargeHigherLevelOfCare - emergencyShelterResidents - currentResidents;
+            ViewBag.EligibleDischarges = eligibleDischarges;
 
 
             if (Admitted > 0)
@@ -75,7 +78,6 @@ namespace FIVESTARVC.Controllers
             {
                 ViewBag.gradPercent = 0;
             }
-
 
             /*******************************************/
 
@@ -90,7 +92,7 @@ namespace FIVESTARVC.Controllers
         /* https://www.ict.social/csharp/wpf/course-birthday-reminder-in-csharp-net-wpf-logic-layer */
         private void FindNearest()
         {
-            var sortedResidents = db.Residents.AsNoTracking().ToList().Where(i => i.IsCurrent()).OrderBy(o => o.RemainingDays);
+            var sortedResidents = db.Residents.AsNoTracking().ToList().Where(i => i.IsCurrent).OrderBy(o => o.RemainingDays);
 
             if (sortedResidents.Any())
                 NearestResidents = sortedResidents.Take(2);
@@ -98,13 +100,11 @@ namespace FIVESTARVC.Controllers
                 NearestResidents = null;
         }
 
+        [HttpGet]
         public ActionResult ImportData()
         {
             ImportedListData listData = new ImportedListData();
 
-            string excelFile = "C:\\webuploads\\import.xlsx";
-
-            var ep = new ExcelPackage(new FileInfo(excelFile));
             var ws = ep.Workbook.Worksheets["Sheet1"];
 
             var genders = new List<string>();
@@ -139,6 +139,7 @@ namespace FIVESTARVC.Controllers
         {
             if (disposing)
             {
+                ep.Dispose();
                 db.Dispose();
             }
             base.Dispose(disposing);
