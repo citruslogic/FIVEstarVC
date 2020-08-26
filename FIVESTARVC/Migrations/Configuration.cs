@@ -110,11 +110,11 @@ namespace FIVESTARVC.Migrations
                 new ProgramType { ProgramTypeID=14, EventType=EnumEventType.SYSTEM, ProgramDescription="Room change" },
 
                 // OTHER (Death-In-Center)
-                new ProgramType { ProgramTypeID=15, EventType=EnumEventType.DISCHARGE, ProgramDescription="Other Departure"}
+                new ProgramType { ProgramTypeID=2187, EventType=EnumEventType.DISCHARGE, ProgramDescription="Other Departure"}
 
             };
 
-            programs.ForEach(p => context.ProgramTypes.AddOrUpdate(i => i.ProgramTypeID, p));
+            programs.ForEach(p => context.ProgramTypes.AddOrUpdate(i => i.ProgramDescription, p));
             context.SaveChanges();
 
             var militaryCampaigns = new List<MilitaryCampaign>

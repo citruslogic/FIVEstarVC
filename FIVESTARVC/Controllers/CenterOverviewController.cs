@@ -38,11 +38,12 @@ namespace FIVESTARVC.Controllers
                 },
 
                 new GenderGroup {
-                    Gender = "LGBT",
+                    Gender = "LGBTQ",
                     Count = residents.Where(r => r.Gender == GenderType.LGBT).Count()
                 }
             };
         }
+
         // For the current residents.
         // GET: GenderGroupBreakdown
         [HttpGet]
@@ -108,7 +109,7 @@ namespace FIVESTARVC.Controllers
 
         }
 
-        public static List<AgeGroups> GenerateAgeComposition(IEnumerable<Resident> residents)
+        private async Task<List<AgeGroups>> GenerateAgeComposition(IEnumerable<Resident> residents)
         {
 
             return new List<AgeGroups> 
@@ -116,38 +117,38 @@ namespace FIVESTARVC.Controllers
                 new AgeGroups
                 {
                     AgeGroup = "19 - 29",
-                    Count = residents.Where(r => r.GetAgeAtRelease >= 19 && r.GetAgeAtRelease <= 29).Count()
+                    Count = await Task.Run(() => residents.Where(r => r.GetAgeAtRelease >= 19 && r.GetAgeAtRelease <= 29).Count()).ConfigureAwait(false)
 
                 },
 
                 new AgeGroups
                 {
                     AgeGroup = "30 - 39",
-                    Count = residents.Where(r => r.GetAgeAtRelease >= 30 && r.GetAgeAtRelease <= 39).Count()
+                    Count = await Task.Run(() => residents.Where(r => r.GetAgeAtRelease >= 30 && r.GetAgeAtRelease <= 39).Count()).ConfigureAwait(false)
                 },
 
                 new AgeGroups
                 {
                     AgeGroup = "40 - 49",
-                    Count = residents.Where(r => r.GetAgeAtRelease >= 40 && r.GetAgeAtRelease <= 49).Count()
+                    Count = await Task.Run(() => residents.Where(r => r.GetAgeAtRelease >= 40 && r.GetAgeAtRelease <= 49).Count()).ConfigureAwait(false)
                 },
 
                 new AgeGroups
                 {
                     AgeGroup = "50 - 59",
-                    Count = residents.Where(r => r.GetAgeAtRelease >= 50 && r.GetAgeAtRelease <= 59).Count()
+                    Count = await Task.Run(() => residents.Where(r => r.GetAgeAtRelease >= 50 && r.GetAgeAtRelease <= 59).Count()).ConfigureAwait(false)
                 },
 
                 new AgeGroups
                 {
                     AgeGroup = "60 - 69",
-                    Count = residents.Where(r => r.GetAgeAtRelease >= 60 && r.GetAgeAtRelease <= 69).Count()
+                    Count = await Task.Run(() => residents.Where(r => r.GetAgeAtRelease >= 60 && r.GetAgeAtRelease <= 69).Count()).ConfigureAwait(false)
                 },
 
                 new AgeGroups
                 {
                     AgeGroup = "> 70",
-                    Count = residents.Where(r => r.GetAgeAtRelease > 70).Count()
+                    Count = await Task.Run(() => residents.Where(r => r.GetAgeAtRelease > 70).Count()).ConfigureAwait(false)
                 }
             };
         }
@@ -162,7 +163,7 @@ namespace FIVESTARVC.Controllers
 
             IEnumerable<Resident> residents = await Task.Run(() => db.Residents.AsNoTracking().ToList().Where(cur => cur.IsCurrent)).ConfigureAwait(false);
   
-            ageGroups = GenerateAgeComposition(residents);
+            ageGroups = await GenerateAgeComposition(residents).ConfigureAwait(false);
 
             ViewBag.Sum = ageGroups.Sum(group => group.Count);
             ViewBag.AverageAge = GetAverageAge(residents.ToList(), true).ToString("n2", new CultureInfo("en-US"));
@@ -180,7 +181,7 @@ namespace FIVESTARVC.Controllers
 
             IEnumerable<Resident> residents = await db.Residents.AsNoTracking().ToListAsync().ConfigureAwait(false);
 
-            ageGroups = GenerateAgeComposition(residents);
+            ageGroups = await GenerateAgeComposition(residents).ConfigureAwait(false);
 
             ViewBag.Sum = ageGroups.Sum(group => group.Count);
             ViewBag.AverageAge = GetAverageAge(residents.ToList(), false).ToString("n2", new CultureInfo("en-US"));
