@@ -8,12 +8,14 @@ using FIVESTARVC.DAL;
 using FIVESTARVC.Models;
 using FIVESTARVC.Services;
 using FIVESTARVC.ViewModels;
+using iTextSharp.text.pdf.parser;
 using Jitbit.Utils;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Drawing;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 
@@ -53,135 +55,78 @@ namespace FIVESTARVC.Controllers
 
         // GET: Reports
         [HttpGet]
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
 
-
-            //Variables used in counting current residents
-            int nvyCount = 0;
-            int armyCount = 0;
-            int marineCount = 0;
-            int afCount = 0;
-            int cgCount = 0;
-
             //Variables to count cumulative branch types
-            ViewBag.NavyCount = DB.Residents.Count(x => x.ServiceBranch == ServiceType.NAVY);
-            ViewBag.MarineCount = DB.Residents.Count(x => x.ServiceBranch == ServiceType.MARINES);
-            ViewBag.ArmyCount = DB.Residents.Count(x => x.ServiceBranch == ServiceType.ARMY);
-            ViewBag.AirForceCount = DB.Residents.Count(x => x.ServiceBranch == ServiceType.AIRFORCE);
-            ViewBag.CoastGuardCount = DB.Residents.Count(x => x.ServiceBranch == ServiceType.COASTGUARD);
+            ViewBag.NavyCount = await DB.Residents.CountAsync(x => x.ServiceBranch == ServiceType.NAVY).ConfigureAwait(false);
+            ViewBag.MarineCount = await DB.Residents.CountAsync(x => x.ServiceBranch == ServiceType.MARINES).ConfigureAwait(false);
+            ViewBag.ArmyCount = await DB.Residents.CountAsync(x => x.ServiceBranch == ServiceType.ARMY).ConfigureAwait(false);
+            ViewBag.AirForceCount = await DB.Residents.CountAsync(x => x.ServiceBranch == ServiceType.AIRFORCE).ConfigureAwait(false);
+            ViewBag.CoastGuardCount = await DB.Residents.CountAsync(x => x.ServiceBranch == ServiceType.COASTGUARD).ConfigureAwait(false);
 
             //Count current Navy Residents
-            var navyQuery = (from Resident in DB.Residents
-                             where Resident.ServiceBranch == ServiceType.NAVY
-                             select Resident).ToList();
-
-            foreach (Resident item in navyQuery)
-            {
-                if (item.IsCurrent)
-                {
-                    ViewBag.CurrentNavy = ++nvyCount;
-                }
-            }
+            ViewBag.CurrentNavy = await Task.Run(() => DB.Residents.AsNoTracking().ToList().Where(i => i.IsCurrent && i.ServiceBranch == ServiceType.NAVY).Count()).ConfigureAwait(false);
 
             //Count current Army Residents
-            var armyQuery = (from Resident in DB.Residents
-                             where Resident.ServiceBranch == ServiceType.ARMY
-                             select Resident).ToList();
-
-            foreach (Resident item in armyQuery)
-            {
-                if (item.IsCurrent)
-                {
-                    ViewBag.CurrentArmy = ++armyCount;
-                }
-            }
+            ViewBag.CurrentArmy = await Task.Run(() => DB.Residents.AsNoTracking().ToList().Where(i => i.IsCurrent && i.ServiceBranch == ServiceType.ARMY).Count()).ConfigureAwait(false);
 
             //Count current Marine Residents
-            var marineQuery = (from Resident in DB.Residents
-                               where Resident.ServiceBranch == ServiceType.MARINES
-                               select Resident).ToList();
-
-            foreach (Resident item in marineQuery)
-            {
-                if (item.IsCurrent)
-                {
-                    ViewBag.CurrentMarine = ++marineCount;
-                }
-            }
+            ViewBag.CurrentMarine = await Task.Run(() => DB.Residents.AsNoTracking().ToList().Where(i => i.IsCurrent && i.ServiceBranch == ServiceType.MARINES).Count()).ConfigureAwait(false);
 
             //Count current AirForce Residents
-            var afQuery = (from Resident in DB.Residents
-                           where Resident.ServiceBranch == ServiceType.AIRFORCE
-                           select Resident).ToList();
-
-            foreach (Resident item in afQuery)
-            {
-                if (item.IsCurrent)
-                {
-                    ViewBag.CurrentAF = ++afCount;
-                }
-            }
+            ViewBag.CurrentAF = await Task.Run(() => DB.Residents.AsNoTracking().ToList().Where(i => i.IsCurrent && i.ServiceBranch == ServiceType.AIRFORCE).Count()).ConfigureAwait(false);
 
             //Count current CoastGuard Residents
-            var cgQuery = (from Resident in DB.Residents
-                           where Resident.ServiceBranch == ServiceType.COASTGUARD
-                           select Resident).ToList();
-
-            foreach (Resident item in cgQuery)
-            {
-                if (item.IsCurrent)
-                {
-                    ViewBag.CurrentCG = ++cgCount;
-                }
-            }
-
+            ViewBag.CurrentCG = await Task.Run(() => DB.Residents.AsNoTracking().ToList().Where(i => i.IsCurrent && i.ServiceBranch == ServiceType.COASTGUARD).Count()).ConfigureAwait(false);
+            
             //Counts number of residents by increasing count by 1 for every admit event, and decreasing for any discharge event
             double DischargeCount = 0.0;
 
             int TotalCount; // Current Resident Count
-            ViewBag.TotalCount = TotalCount = DB.Residents.AsNoTracking().ToList().Where(cur => cur.IsCurrent).Count();
+            ViewBag.TotalCount = TotalCount = await Task.Run(() => DB.Residents.AsNoTracking().ToList().Where(cur => cur.IsCurrent).Count()).ConfigureAwait(false);
 
             //Helps find graduation percent - see eligibleDischarge below.
-            var admittedResidents = DB.ProgramEvents.Include(i => i.ProgramType).Where(i => i.ProgramType.ProgramDescription.Equals("Resident Admission", StringComparison.InvariantCultureIgnoreCase)).Count();
-            var emergencyShelterResidents = DB.ProgramEvents.Include(i => i.ProgramType).Where(i => i.ProgramType.ProgramDescription.Equals("Emergency Shelter", StringComparison.InvariantCultureIgnoreCase)).Count();
+            var admittedResidents = await DB.ProgramEvents.Include(i => i.ProgramType).Where(i => i.ProgramType.ProgramDescription.Equals("Resident Admission", StringComparison.InvariantCultureIgnoreCase)).CountAsync().ConfigureAwait(false);
+            var emergencyShelterResidents = await DB.ProgramEvents.Include(i => i.ProgramType).Where(i => i.ProgramType.ProgramDescription.Equals("Emergency Shelter", StringComparison.InvariantCultureIgnoreCase)).CountAsync().ConfigureAwait(false);
+            var otherDepartureResidents = await DB.ProgramEvents.Include(i => i.ProgramType).Where(i => i.ProgramType.ProgramDescription.Equals("Other Departure", StringComparison.InvariantCultureIgnoreCase)).CountAsync().ConfigureAwait(false);
 
             int Graduated;
-            ViewBag.Graduated = Graduated = DB.Database.SqlQuery<int>(@"select distinct
+            ViewBag.Graduated = Graduated = await DB.Database.SqlQuery<int>(@"select distinct
                                                                             pe.ResidentID 
                                                                             from ProgramEvent pe
                                                                             where ProgramTypeId = '4' 
-	                                                                        ").Count();
+	                                                                        ").CountAsync().ConfigureAwait(false);
 
             //var Graduated = DB.ProgramEvents.ToList().Count(i => i.ProgramTypeID == 4);
 
             int SelfDischarge;
-            ViewBag.SelfDischarge = SelfDischarge = DB.Database.SqlQuery<int>(@"select distinct
+            ViewBag.SelfDischarge = SelfDischarge = await DB.Database.SqlQuery<int>(@"select distinct
                                                                                     pe.ResidentID 
                                                                                     from ProgramEvent pe
                                                                                     where ProgramTypeId = '5' 
-	                                                                                ").Count();
+	                                                                                ").CountAsync().ConfigureAwait(false);
 
             int DischargeForCause;
-            ViewBag.DischargeForCause = DischargeForCause = DB.Database.SqlQuery<int>(@"select distinct
+            ViewBag.DischargeForCause = DischargeForCause = await DB.Database.SqlQuery<int>(@"select distinct
                                                                                         pe.ResidentID 
                                                                                         from ProgramEvent pe
                                                                                         where ProgramTypeId = '6' 
-	                                                                                    ").Count();
+	                                                                                    ").CountAsync().ConfigureAwait(false);
 
             int DischargeHigherLevelOfCare;
-            ViewBag.DischargeHigherLevelOfCare = DischargeHigherLevelOfCare = DB.Database.SqlQuery<int>(@"select distinct
+            ViewBag.DischargeHigherLevelOfCare = DischargeHigherLevelOfCare = await DB.Database.SqlQuery<int>(@"select distinct
                                                                                         pe.ResidentID 
                                                                                         from ProgramEvent pe
                                                                                         where ProgramTypeId = '7' 
-	                                                                                    ").Count();
+	                                                                                    ").CountAsync().ConfigureAwait(false);
 
             int EmergencyDischarge;
-            ViewBag.EmergencyDischarge = EmergencyDischarge = DB.Database.SqlQuery<int>(@"select distinct
+            ViewBag.EmergencyDischarge = EmergencyDischarge = await DB.Database.SqlQuery<int>(@"select distinct
                                                                                         pe.ResidentID 
                                                                                         from ProgramEvent pe
                                                                                         where ProgramTypeId = '13' 
-	                                                                                    ").Count();
+	                                                                                    ").CountAsync().ConfigureAwait(false);
 
             ViewBag.DischargeCount = DischargeCount = Graduated + SelfDischarge + DischargeForCause + DischargeHigherLevelOfCare + EmergencyDischarge;
 
@@ -189,12 +134,12 @@ namespace FIVESTARVC.Controllers
             //Counts cumulative residents
             int cumulativeResidents;
             ViewBag.CumulativeCount = cumulativeResidents = DB.Residents.Count();
-            ViewBag.MinusHLCEmShelCurrent = cumulativeResidents - DischargeHigherLevelOfCare - emergencyShelterResidents - TotalCount;
+            ViewBag.MinusHLCEmShelCurrent = cumulativeResidents - DischargeHigherLevelOfCare - emergencyShelterResidents - otherDepartureResidents - TotalCount;
 
             ViewBag.Admitted = cumulativeResidents;
 
             // actual residents who are eligible discharges - refer to notes for the proper count formula Inga used. 
-            double eligibleDischarges = admittedResidents - DischargeHigherLevelOfCare - emergencyShelterResidents - TotalCount;
+            double eligibleDischarges = admittedResidents - DischargeHigherLevelOfCare - emergencyShelterResidents - otherDepartureResidents - TotalCount;
 
 
             if (ViewBag.CumulativeCount > 0)
@@ -212,13 +157,13 @@ namespace FIVESTARVC.Controllers
             }
 
             //Finds cumulative P2I count
-            ViewBag.P2I = DB.ProgramEvents.Count(x => x.ProgramTypeID == 10);
+            ViewBag.P2I = await DB.ProgramEvents.AsNoTracking().CountAsync(x => x.ProgramTypeID == 10).ConfigureAwait(false);
 
             //Finds cumulative emergency shelter counts
-            ViewBag.EmergencyShelter = DB.ProgramEvents.Count(x => x.ProgramTypeID == 1);
+            ViewBag.EmergencyShelter = await DB.ProgramEvents.AsNoTracking().CountAsync(x => x.ProgramTypeID == 1).ConfigureAwait(false);
 
             //Finds cumulative veterans court counts
-            ViewBag.VeteransCourt = DB.Residents.Count(x => x.InVetCourt == true);
+            ViewBag.VeteransCourt = await DB.Residents.AsNoTracking().CountAsync(x => x.InVetCourt == true).ConfigureAwait(false);
 
             return View();
         }
@@ -1142,6 +1087,95 @@ namespace FIVESTARVC.Controllers
             return View("DisplayChart", columnChart);
         }
 
+        [HttpGet]
+        public async Task<ActionResult> DischargeForCauseChart()
+        {
+            var events = await DB.ProgramEvents.Where(i => i.ProgramType.EventType == EnumEventType.DISCHARGE && i.ProgramTypeID == 6).ToListAsync().ConfigureAwait(false);
+            var query = from ev in events
+                        group ev by ev.ClearStartDate.Year into yearGroup
+                        orderby yearGroup.Key ascending
+                        select new ChartData
+                        {
+                            Year = yearGroup.Key,
+                            Count = yearGroup.Count()
+                        };
+
+            Highcharts lineChart = new Highcharts("linechart");
+
+            lineChart.InitChart(new Chart()
+            {
+                Type = ChartTypes.Line,
+                BackgroundColor = new BackColorOrGradient(System.Drawing.Color.AliceBlue),
+                Style = "fontWeight: 'bold', fontSize: '17px'",
+                BorderColor = System.Drawing.Color.LightBlue,
+                BorderRadius = 0,
+                BorderWidth = 2
+
+            });
+
+            lineChart.SetTitle(new Title()
+            {
+                Text = "Cumulative Discharge for Cause"
+            });
+            
+            int runningTotal = default;
+            List<int> rates = new List<int>();
+            foreach (var r in query)
+            {
+                runningTotal += r.Count;
+
+                rates.Add(runningTotal);
+            }
+            object[] metric = rates.Cast<object>().ToArray();
+
+            List<string> years = new List<string>();
+            foreach (var r in query)
+            {
+                years.Add(r.Year.ToString());
+            }
+            string[] chartYears = years.Cast<string>().ToArray();
+
+
+            lineChart.SetXAxis(new XAxis()
+            {
+                Type = AxisTypes.Category,
+                Title = new XAxisTitle() { Text = "Years", Style = "fontWeight: 'bold', fontSize: '17px'" },
+                Categories = chartYears
+            });
+
+            lineChart.SetYAxis(new YAxis()
+            {
+                Title = new YAxisTitle()
+                {
+                    Text = "Residents Discharged",
+                    Style = "fontWeight: 'bold', fontSize: '17px'"
+                },
+                ShowFirstLabel = true,
+                ShowLastLabel = true,
+                Min = 0
+            });
+
+            lineChart.SetLegend(new Legend
+            {
+                Enabled = true,
+                BorderColor = System.Drawing.Color.CornflowerBlue,
+                BorderRadius = 6,
+                BackgroundColor = new BackColorOrGradient(ColorTranslator.FromHtml("#FFADD8E6"))
+            });
+
+            lineChart.SetSeries(new Series[]
+            {
+                new Series{
+
+                    Name = "Discharge for Cause",
+                    Data = new Data(metric)
+                },
+
+            });
+
+            return View("DisplayChart", lineChart);
+        }
+
         public ActionResult dischargeRates()
         {
             var events = DB.ProgramEvents.ToList();
@@ -1218,102 +1252,6 @@ namespace FIVESTARVC.Controllers
                 new Series{
 
                     Name = "Discharge",
-                    Data = new Data(metric)
-                },
-
-            }
-            );
-
-            return View("DisplayChart", columnChart);
-        }
-
-        public ActionResult dischargeRatesCum()
-        {
-            var events = DB.ProgramEvents.ToList();
-
-            int runningTotal = 0;
-
-            var Query = (from y in events
-                         where y.ProgramType.EventType == EnumEventType.DISCHARGE
-                         group y by y.ClearStartDate.Year into typeGroup
-                         orderby typeGroup.Key ascending
-                         select new ChartData
-                         {
-                             Year = typeGroup.Key,
-                             Count = typeGroup.Count(),
-                         });
-
-            List<int> rates = new List<int>();
-
-            foreach (var t in Query)
-            {
-                runningTotal = runningTotal + t.Count;
-
-                rates.Add(runningTotal);
-            }
-
-            Highcharts columnChart = new Highcharts("columnchart");
-
-            columnChart.InitChart(new Chart()
-            {
-                Type = DotNet.Highcharts.Enums.ChartTypes.Line,
-                BackgroundColor = new BackColorOrGradient(System.Drawing.Color.AliceBlue),
-                Style = "fontWeight: 'bold', fontSize: '17px'",
-                BorderColor = System.Drawing.Color.LightBlue,
-                BorderRadius = 0,
-                BorderWidth = 2
-
-            });
-
-            columnChart.SetTitle(new Title()
-            {
-                Text = "Cumulative Discharges by Year"
-            });
-
-            //List<int> metricCounts = new List<int>();
-            List<string> years = new List<string>();
-
-            foreach (var r in Query)
-            {
-                //metricCounts.Add(r.Count);
-                years.Add(r.Year.ToString());
-            }
-
-            string[] chartYears = years.Cast<string>().ToArray();
-            object[] metric = rates.Cast<object>().ToArray();
-
-            columnChart.SetXAxis(new XAxis()
-            {
-                Type = AxisTypes.Category,
-                Title = new XAxisTitle() { Text = "Years", Style = "fontWeight: 'bold', fontSize: '17px'" },
-                Categories = chartYears
-            });
-
-            columnChart.SetYAxis(new YAxis()
-            {
-                Title = new YAxisTitle()
-                {
-                    Text = "Discharges",
-                    Style = "fontWeight: 'bold', fontSize: '17px'"
-                },
-                ShowFirstLabel = true,
-                ShowLastLabel = true,
-                Min = 0
-            });
-
-            columnChart.SetLegend(new Legend
-            {
-                Enabled = true,
-                BorderColor = System.Drawing.Color.CornflowerBlue,
-                BorderRadius = 6,
-                BackgroundColor = new BackColorOrGradient(ColorTranslator.FromHtml("#FFADD8E6"))
-            });
-
-            columnChart.SetSeries(new Series[]
-            {
-                new Series{
-
-                    Name = "Discharges",
                     Data = new Data(metric)
                 },
 
@@ -1506,17 +1444,20 @@ namespace FIVESTARVC.Controllers
             return View("DisplayChart", columnChart);
         }
 
-        public ActionResult DownloadData()
+        [HttpGet]
+        public async Task<ActionResult> DownloadData()
         {
             var residents = DB.Residents;
 
             //Big nasty looking query that selects all the data that gets spit out to the excel sheet
-            var residentProgramType = DB.Residents.Include(p => p.ProgramEvents).ToList()
+            var residentProgramType = await Task.Run(() => DB.Residents.Include(p => p.ProgramEvents.Select(i => i.ProgramType)).ToList()
                 .Select(r => new ReportingResidentViewModel
                 {
                     ID = r.ResidentID,
                     FirstName = r.ClearFirstMidName,
                     LastName = r.ClearLastName,
+                    DateFirstAdmitted = r.ProgramEvents.LastOrDefault(i => i.ProgramType.EventType == EnumEventType.ADMISSION).ClearStartDate,
+                    NumReadmissions = r.ProgramEvents.Where(i => i.ProgramTypeID == 3).Count(),
                     Birthdate = r.ClearBirthdate.GetValueOrDefault(),
                     Age = r.Age.Computed(),
                     ServiceType = r.ServiceBranch,
@@ -1527,9 +1468,7 @@ namespace FIVESTARVC.Controllers
                     Ethnicity = r.Ethnicity,
                     Note = r.Note,
                     ProgramTypeID = r.ProgramEvents.Select(t => t.ProgramTypeID.GetValueOrDefault()),
-                }).GroupBy(r => r.ID);
-
-
+                }).GroupBy(r => r.ID)).ConfigureAwait(false);
 
 
             var myExport = new CsvExport();
@@ -1541,6 +1480,8 @@ namespace FIVESTARVC.Controllers
                 myExport.AddRow();
                 myExport["Last Name"] = r.First().LastName;
                 myExport["First Name"] = r.First().FirstName;
+                myExport["Last Date Admitted"] = r.First().DateFirstAdmitted;
+                myExport["Readmit Count"] = r.First().NumReadmissions;
                 myExport["Birthdate"] = r.First().Birthdate;
                 myExport["Age"] = r.First().Age;
                 myExport["Gender"] = FSEnumHelper.GetDescription(r.First().Gender);
@@ -1552,24 +1493,20 @@ namespace FIVESTARVC.Controllers
                 myExport["Vet Court"] = r.First().InVetCourt;
                 myExport["Notes"] = r.First().Note;
 
-
-
                 var eventids = r.SelectMany(i => i.ProgramTypeID).ToList();
-
+                var tracks = await DB.ProgramTypes.AsNoTracking().ToListAsync().ConfigureAwait(false);
                 //This foreach is used to display all the events a resident is in
                 foreach (var eid in eventids)
                 {
                     int eventID = eid;
 
                     //Query to the database to grab the name of the program
-                    var prgm = (from p in DB.ProgramTypes
+                    var prgm = (from p in tracks
                                 where p.ProgramTypeID == eventID
                                 select p.ProgramDescription).ToArray();
 
-                    int testVar = 1;
-
                     //Breaks the loop if a resident is in no programs
-                    if (prgm.Length < testVar)
+                    if (prgm.Length < 1)
                     {
                         break;
                     }
@@ -1726,12 +1663,13 @@ namespace FIVESTARVC.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> UpToYearResidentAgeReport(string yearFilter)
+        public async Task<ActionResult> UpToYearResidentAgeReport(string yearFilter, bool currentOnly = true)
         {
             ViewBag.YearFilter = yearFilter;
+            ViewBag.CurrentOnly = currentOnly;
             using (ReportService residentsByYear = new ReportService())
             {
-                return View("UpToYearResidentAgeReport", await Task.Run(() => residentsByYear.UpToYearResidentAgeReport(yearFilter)).ConfigureAwait(false));
+                return View("UpToYearResidentAgeReport", await Task.Run(() => residentsByYear.UpToYearResidentAgeReport(currentOnly, yearFilter)).ConfigureAwait(false));
             }
         }
 

@@ -93,7 +93,7 @@ namespace FIVESTARVC.Migrations
                 new ProgramType { ProgramTypeID=4, EventType=EnumEventType.DISCHARGE, ProgramDescription="Resident Graduation" },
                 new ProgramType { ProgramTypeID=5, EventType=EnumEventType.DISCHARGE, ProgramDescription="Self Discharge"},
                 new ProgramType { ProgramTypeID=6, EventType=EnumEventType.DISCHARGE, ProgramDescription="Discharge for Cause"},
-                new ProgramType { ProgramTypeID=7, EventType=EnumEventType.DISCHARGE, ProgramDescription="Higher Level of Care"},                      
+                new ProgramType { ProgramTypeID=7, EventType=EnumEventType.DISCHARGE, ProgramDescription="Higher Level of Care"},
 
                 // ENROLLED PROGRAMS
                 new ProgramType { ProgramTypeID=8, EventType=EnumEventType.TRACK, ProgramDescription="Work Program" },
@@ -105,8 +105,13 @@ namespace FIVESTARVC.Migrations
                 // EMERGENCY RESIDENT DISCHARGE TYPE
                 new ProgramType { ProgramTypeID=13, EventType=EnumEventType.DISCHARGE, ProgramDescription="Emergency Discharge"},
 
+
                 // SYSTEM MAINTENANCE TYPES
-                new ProgramType { ProgramTypeID=14, EventType=EnumEventType.SYSTEM, ProgramDescription="Room change" }
+                new ProgramType { ProgramTypeID=14, EventType=EnumEventType.SYSTEM, ProgramDescription="Room change" },
+
+                // OTHER (Death-In-Center)
+                new ProgramType { ProgramTypeID=15, EventType=EnumEventType.DISCHARGE, ProgramDescription="Other Departure"}
+
             };
 
             programs.ForEach(p => context.ProgramTypes.AddOrUpdate(i => i.ProgramTypeID, p));
@@ -126,7 +131,8 @@ namespace FIVESTARVC.Migrations
 
             var referrals = new List<Referral>
             {
-                new Referral { ReferralID = 1, ReferralName = "Internet/Google" },
+                // TODO: need to add rolling Configuration.
+                new Referral { ReferralID = 1, ReferralName = "Internet Search" },
                 new Referral { ReferralID = 2, ReferralName = "VA" },
                 new Referral { ReferralID = 3, ReferralName = "Wounded Warrior" },
                 new Referral { ReferralID = 4, ReferralName = "Sulzbacher" },

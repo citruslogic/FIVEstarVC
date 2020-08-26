@@ -13,6 +13,11 @@ namespace FIVESTARVC.ViewModels
         public string LastName { get; set; }
         public string FirstName { get; set; }
         public DateTime Birthdate { get; set; }
+
+        public DateTime DateFirstAdmitted { get; set; } 
+
+        public int NumReadmissions { get; set; }
+
         public bool InVetCourt { get; set; }
         public ServiceType ServiceType { get; set; }
         public int Age { get; set; }

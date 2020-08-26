@@ -18,6 +18,7 @@
         Get residents up to year:&nbsp;
 
         @Html.TextBox("yearFilter", ViewBag.YearFilter as string, htmlAttributes: new { @class = "form-control", @style = "width: 60px; margin-left: 5px;", @required = "required", @maxlength = 4, @minlength = 4 })
+        <div class="d-block ml-3">@Html.CheckBox("currentOnly", true, new { @class = "form-control biggerCheckBox" })Current Only</div>
         <input class="btn btn-sm btn-primary" type="submit" value="Get Report" onclick="return DisplayProgressMessage(this, 'Working...');" style="margin-left: 15px">
     </div>
 
@@ -28,8 +29,15 @@
 
 @if (Model == null || Model.Residents.Count < 1)
 {
-    @Html.Raw("There are no residents for the provided year, " + ViewBag.YearFilter + ". Providing an invalid year (or no year at all) results in " +
-    +DateTime.Now.Year + " being used instead. Try a different year.");
+    if (string.IsNullOrEmpty(ViewBag.YearFilter))
+    {
+        @Html.Raw("No year has been selected for this report and the current year is being used. Select a year and click Get Report.");
+    }
+    else
+    {
+        @Html.Raw("There are no residents for the provided year " + ViewBag.YearFilter);
+    }
+
 }
 else
 {
@@ -67,19 +75,22 @@ else
                 </td>
                 <td>Group total: @Html.Encode(group.Count())</td>
                 <td>&nbsp;</td>
-                <td>&nbsp;</td><td></td><td></td><td></td>
+                <td>&nbsp;</td>
+                <td></td>
+                <td></td>
+                <td></td>
             </tr>
-            foreach (var item in group) 
-            { 
-            <tr>
-                <td>&nbsp; </td>
-                <td>@Html.ActionLink("View Details", "Details", "Residents", new { id = item.ResidentID }, null) </td>
-                <td>@Html.DisplayFor(modelItem => item.FullName)</td>
-                <td>@Html.DisplayFor(modelItem => item.Age)</td>
-                <td>@Html.DisplayFor(modelItem => item.Birthdate)</td>
-                <td>@Html.DisplayFor(modelItem => item.ShortDateAdmitted)</td>
-                <td>@Html.DisplayFor(modelItem => item.DateDischarged)</td>
-            </tr>
+            foreach (var item in group)
+            {
+                <tr>
+                    <td>&nbsp; </td>
+                    <td>@Html.ActionLink("View Details", "Details", "Residents", new { id = item.ResidentID }, null) </td>
+                    <td>@Html.DisplayFor(modelItem => item.FullName)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Age)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Birthdate)</td>
+                    <td>@Html.DisplayFor(modelItem => item.ShortDateAdmitted)</td>
+                    <td>@Html.DisplayFor(modelItem => item.DateDischarged)</td>
+                </tr>
             }
         }
 
@@ -93,7 +104,7 @@ else
 
 @section Scripts {
     <script>
-    
+
     </script>
 }
 

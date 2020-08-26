@@ -156,7 +156,7 @@ namespace FIVESTARVC.Services
             };
         }
 
-        public UpToYearResidentAgeViewModel UpToYearResidentAgeReport(string year = null)
+        public UpToYearResidentAgeViewModel UpToYearResidentAgeReport(bool currentOnly, string year = null)
         {
             int yearValue = 0;
             List<SelectedResident> residents;
@@ -170,24 +170,43 @@ namespace FIVESTARVC.Services
                 yearValue = DateTime.Now.Year;
             }
 
-            residents = context.Residents
+            var queryEnumerable = context.Residents
                         .AsNoTracking()
                         .Include(i => i.ProgramEvents.Select(j => j.ProgramType))
                         .ToList()
-                        .Where(i => i.ProgramEvents.Any(j => j.ClearStartDate.Year <= yearValue && j.ProgramType.EventType == EnumEventType.ADMISSION))
-                        .Select(i => new SelectedResident
-                        {
-                            ResidentID = i.ResidentID,
-                            FullName = i.Fullname,
-                            Age = i.GetAgeAtRelease,
-                            Birthdate = i.ClearBirthdate?.ToShortDateString(),
-                            DateDischarged = i.GetNextDischargeDate(i.ProgramEvents.LastOrDefault(j => j.ProgramType.EventType == EnumEventType.ADMISSION)?.ClearStartDate).HasValue 
+                        .Where(i => i.ProgramEvents.Any(j => j.ClearStartDate.Year <= yearValue && j.ProgramType.EventType == EnumEventType.ADMISSION));
+
+            if (currentOnly)
+            {
+                residents = queryEnumerable.Where(i => i.IsCurrent).Select(i => new SelectedResident
+                {
+                    ResidentID = i.ResidentID,
+                    LastName = i.ClearLastName,
+                    FullName = i.Fullname,
+                    Age = i.GetAgeAtRelease,
+                    Birthdate = i.ClearBirthdate?.ToShortDateString(),
+                    DateDischarged = i.GetNextDischargeDate(i.ProgramEvents.LastOrDefault(j => j.ProgramType.EventType == EnumEventType.ADMISSION)?.ClearStartDate).HasValue
                                 ? i.GetNextDischargeDate(i.ProgramEvents.LastOrDefault(j => j.ProgramType.EventType == EnumEventType.ADMISSION)?.ClearStartDate).Value.ToShortDateString()
                                 : "No next discharge date.",
-                            DateAdmitted = i.ProgramEvents.LastOrDefault(j => j.ProgramType.EventType == EnumEventType.ADMISSION && j.ClearStartDate.Year <= yearValue).ClearStartDate,
-                        })
-                        .OrderByDescending(i => i.DateAdmitted)
-                        .ToList();
+                    DateAdmitted = i.ProgramEvents.LastOrDefault(j => j.ProgramType.EventType == EnumEventType.ADMISSION && j.ClearStartDate.Year <= yearValue).ClearStartDate,
+                }).OrderBy(i => i.LastName)
+                  .ToList();
+            } else
+            {
+                residents = queryEnumerable.Select(i => new SelectedResident
+                {
+                    ResidentID = i.ResidentID,
+                    LastName = i.ClearLastName,
+                    FullName = i.Fullname,
+                    Age = i.GetAgeAtRelease,
+                    Birthdate = i.ClearBirthdate?.ToShortDateString(),
+                    DateDischarged = i.GetNextDischargeDate(i.ProgramEvents.LastOrDefault(j => j.ProgramType.EventType == EnumEventType.ADMISSION)?.ClearStartDate).HasValue
+                                ? i.GetNextDischargeDate(i.ProgramEvents.LastOrDefault(j => j.ProgramType.EventType == EnumEventType.ADMISSION)?.ClearStartDate).Value.ToShortDateString()
+                                : "No next discharge date.",
+                    DateAdmitted = i.ProgramEvents.LastOrDefault(j => j.ProgramType.EventType == EnumEventType.ADMISSION && j.ClearStartDate.Year <= yearValue).ClearStartDate
+                }).OrderBy(i => i.LastName)
+                  .ToList();
+            }
 
             return new UpToYearResidentAgeViewModel
             {
