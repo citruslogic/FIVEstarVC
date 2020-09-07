@@ -5,7 +5,6 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Data.Entity;
 using FIVESTARVC.Helpers;
-using DelegateDecompiler;
 using FIVESTARVC.DAL;
 
 namespace FIVESTARVC.Models
@@ -14,6 +13,8 @@ namespace FIVESTARVC.Models
     public class Resident : Person
     {
         readonly ResidentContext db = new ResidentContext();
+
+        public bool IsCurrent { get; set; }
 
         [Display(Name = "Service Branch")]
         public ServiceType ServiceBranch { get; set; }
@@ -53,39 +54,6 @@ namespace FIVESTARVC.Models
 
         [Display(Name = "Other Referral")]
         public string OptionalReferralDescription { get; set; }
-
-        public bool IsCurrent
-        { get
-            {
-                bool current = false;
-                var ev = db.ProgramEvents
-                    .AsNoTracking()
-                    .Include(i => i.ProgramType)
-                    .Where(t => t.ResidentID == ResidentID)
-                    .ToList();
-
-                if (ev != null)
-                {
-                    foreach (var item in ev)
-                    {
-                        if (item != null && item.ProgramType != null)
-                        {
-                            if (item.ProgramType.EventType == EnumEventType.ADMISSION)
-                            {
-                                current = true;
-                            }
-
-                            if (item.ProgramType.EventType == EnumEventType.DISCHARGE)
-                            {
-                                current = false;
-                            }
-                        }
-                    }
-                }
-
-                return current;
-            }
-        }
 
         public DateTime? GetDischargeDate()
         {

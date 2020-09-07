@@ -109,7 +109,7 @@ namespace FIVESTARVC.Controllers
 
         }
 
-        private async Task<List<AgeGroups>> GenerateAgeComposition(IEnumerable<Resident> residents)
+        private static async Task<List<AgeGroups>> GenerateAgeComposition(IEnumerable<Resident> residents)
         {
 
             return new List<AgeGroups> 

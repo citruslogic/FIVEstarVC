@@ -161,6 +161,7 @@ namespace FIVESTARVC.Controllers
             {
                 ClearFirstMidName = residentIncomeModel.FirstMidName,
                 ClearLastName = residentIncomeModel.LastName,
+                IsCurrent = true,
                 Gender = residentIncomeModel.Gender,
                 Ethnicity = residentIncomeModel.Ethnicity,
                 Religion = residentIncomeModel.Religion,
@@ -382,6 +383,7 @@ namespace FIVESTARVC.Controllers
                                 ClearStartDate = date
                             };
 
+                            residentToUpdate.IsCurrent = true;
                             residentToUpdate.ProgramEvents.Add(readmitEvent);
                         }
                     }
@@ -698,6 +700,7 @@ namespace FIVESTARVC.Controllers
                     residentToDischarge.ActualDaysStayed += residentToDischarge.DaysInCenter;
                 }
 
+                residentToDischarge.IsCurrent = false;
                 db.SaveChanges();
                 TempData["UserMessage"] = residentToDischarge.ClearLastName + " has been discharged from your center.  ";
                 return RedirectToAction("Index");
@@ -765,6 +768,7 @@ namespace FIVESTARVC.Controllers
 
                 residentToReadmit.ProgramEvents.Add(admitEvent);
                 residentToReadmit.AgeAtRelease = 0;     // resident is readmitted, reset Age At Release.
+                residentToReadmit.IsCurrent = true;
 
                 db.SaveChanges();
 

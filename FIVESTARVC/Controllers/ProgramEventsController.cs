@@ -183,14 +183,17 @@ namespace FIVESTARVC.Controllers
                         });
                     }
 
-                    db.SaveChanges();
                     if (newPrograms.Count() > 1)
                     {
                         TempData["UserMessage"] = db.Residents.Find(ResidentID).Fullname + " has new tracks.  ";
+                        db.SaveChanges();
+
                     }
                     else if (newPrograms.Count() == 1)
                     {
                         TempData["UserMessage"] = db.Residents.Find(ResidentID).Fullname + " has a new track.  ";
+                        db.SaveChanges();
+
                     }
                     else
                     {
@@ -207,6 +210,26 @@ namespace FIVESTARVC.Controllers
                         Group = (i.EventType == EnumEventType.ADMISSION || i.EventType == EnumEventType.DISCHARGE) && i.EventType != EnumEventType.SYSTEM ? admitDischargeGroup : otherTrackGroup
                     }).OrderBy(i => i.Group.Name).ToList(), "Value", "Text", "Group.Name", -1); 
                 }
+
+                // We need to know the last track if the resident has been readmitted / discharged. As of now, position of admits/discharge tracks in list is not enforced.
+                var resident = db.Residents.Find(ResidentID);
+                foreach (var item in newPrograms)
+                {
+                    if (item != null)
+                    {
+                        if (item.ProgramTypeID == 1 || item.ProgramTypeID == 2 || item.ProgramTypeID == 3)
+                        {
+                            resident.IsCurrent = true;
+                        }
+
+                        if (item.ProgramTypeID == 4 || item.ProgramTypeID == 5 || item.ProgramTypeID == 6 || item.ProgramTypeID == 7 || item.ProgramTypeID == 13 || item.ProgramTypeID == 2187)
+                        {
+                            resident.IsCurrent = false;
+                        }
+                    }
+                }
+                db.SaveChanges();
+
             }
 
             TempData["UserMessage"] = "Track information updated. ";
@@ -319,9 +342,35 @@ namespace FIVESTARVC.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
+
             ProgramEvent programEvent = db.ProgramEvents.Find(id);
-            db.ProgramEvents.Remove(programEvent);
-            db.SaveChanges();
+            if (programEvent != null && programEvent.ResidentID > 0)
+            {
+
+                db.ProgramEvents.Remove(programEvent);
+
+                db.SaveChanges();
+
+                var events = db.Residents.FirstOrDefault(i => i.ResidentID == programEvent.ResidentID).ProgramEvents;
+
+                foreach (var item in events)
+                {
+                    if (item != null && item.ProgramType != null)
+                    {
+                        if (item.ProgramType.EventType == EnumEventType.ADMISSION)
+                        {
+                            item.Resident.IsCurrent = true;
+                        }
+
+                        if (item.ProgramType.EventType == EnumEventType.DISCHARGE)
+                        {
+                            item.Resident.IsCurrent = false;
+                        }
+                    }
+                }
+                db.SaveChanges();
+            }
+
             return RedirectToAction("Index");
         }
 
