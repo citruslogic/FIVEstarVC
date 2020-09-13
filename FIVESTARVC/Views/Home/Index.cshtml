@@ -1,61 +1,64 @@
-﻿@model IEnumerable<FIVESTARVC.ViewModels.DashboardData>
+﻿@model FIVESTARVC.ViewModels.MainDashboardData
 @{
     ViewBag.Title = "Dashboard";
 }
 
 
-<h2> Dashboard </h2>
-<div class="container">
+<h3> Your Dashboard </h3>
+<div class="container-fluid">
 
-    <div class="row col-md-10">
-        <div class="col-md-3 align-items-md-end">
-            <p>
-                <em>Current</em> residents: @Html.Raw(ViewBag.pop)
-            </p>
-            <p>
-                Cumulative residents: @Html.Raw(ViewBag.allpop)
+    <div class="row mb-n4 mt-1">
+        <div class="col-md-2">
+            <p class="text-right">
+                <em>Current</em> residents:
             </p>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-1 ml-n4">
+            @Html.Raw(Model.CurrentPopulation)
+        </div>
+        <div class="col-md-2">
             Graduation rate
             <div class="progress" style="height: 20px; width: 100px; margin-left: 4px;">
-                <div class="progress-bar" role="progressbar" style="width: @ViewBag.gradPercent%";" aria-valuenow=@ViewBag.Graduated
-                     aria-valuemax=@ViewBag.Admitted>@ViewBag.Graduated/@ViewBag.EligibleDischarges</div>
+                <div class="progress-bar" role="progressbar" style="width: @Model.GradPercent%" ;" aria-valuenow=@Model.Graduated
+                     aria-valuemax=@Model.Admitted>@Model.Graduated/@Model.EligibleDischarges</div>
                 </div>
             </div>
-        </div>
-        <hr />
-
-        <div class="row col-md-10">
-            <div class="col-md-3">
-                <p> Birthdays coming up:</p>
-            </div>
-            @if (ViewBag.NearestResidents != null)
+            @if (Model.NearestResidents != null)
             {
-                foreach (var resident in ViewBag.NearestResidents)
+                <text>Birthdays coming up:</text>
+                foreach (var resident in Model.NearestResidents)
                 {
-                    <div class="col-md-2" style="margin-top: 0.5em;">
-                        @resident.Fullname<br />
-                        @resident.BDateMonthName @resident.ClearBirthdate.Day
+                    <div class="col-md-2">
+                        @resident.FullName<br />
+                        @resident.BDateMonthName @resident.Day
                     </div>
                 }
             }
+        </div>
+        <div class="row mb-0">
+            <div class="col-md-2">
+                <p class="text-right">
+                    Cumulative residents:
+                </p>
 
+            </div>
+            <div class="col-md-1 ml-n4">
+                @Html.Raw(Model.TotalPopulation)
+            </div>
         </div>
-        <hr />
-        <div class="row" style="margin-top: 0.9em">
-            <h4>Residents recently admitted into your center.</h4>
-        </div>
+
         <div class="row">
+            <h5>Recently admitted into your center:</h5>
+        </div>
+        <div class="row mt-n2">
 
-            @foreach (var item in Model)
+            @foreach (var item in Model.TopResidents)
             {
-                <div class="col-md-3" style="margin-top: 0.9em;">
+                <div class="col-md-2" style="margin-top: 0.9em;">
                     <div class="card">
                         <div class="card-body">
-                            <h5 class="card-title">@item.FirstMidName @item.LastName</h5>
-                            <br />
-                            <label>Days in center: </label><br />
+                            <h6 class="card-title">@item.FirstMidName @item.LastName</h6>
+                            <label>Days in center: </label> @Html.Raw(' ')
                             @if (item.NumDaysInCenter != null)
                             {
                                 @item.NumDaysInCenter
@@ -64,9 +67,42 @@
                             {
                                 <text>NA</text>
                             }
-                            <p>
-                                <br />
-                                @Html.ActionLink("See more", "Details", "Residents", new { id = @item.ResidentID }, htmlAttributes: new { @class = "btn btn-sm btn-outline-secondary btn-light" })
+                            <label class="mb-n2">Last admitted:</label>
+                            @item.LastAdmitDate
+                            <p class="mb-n2 mt-0 float-right">
+                                @Html.ActionLink("Details", "Details", "Residents", new { id = @item.ResidentID }, htmlAttributes: new { @class = "btn btn-sm btn-outline-secondary btn-light" })
+                            </p>
+
+                        </div>
+                    </div>
+                </div>
+            }
+
+        </div>
+        <div class="row" style="margin-top: 0.9em">
+            <h5>Recently released from your center:</h5>
+        </div>
+        <div class="row mt-n2">
+
+            @foreach (var item in Model.TopReleasedResidents)
+            {
+                <div class="col-md-2" style="margin-top: 0.9em;">
+                    <div class="card">
+                        <div class="card-body">
+                            <h6 class="card-title">@item.FirstMidName @item.LastName</h6>
+                            <label>Days in center: </label> @Html.Raw(' ')
+                            @if (item.NumDaysInCenter != null)
+                            {
+                                @item.NumDaysInCenter
+                            }
+                            else
+                            {
+                                <text>NA</text>
+                            }
+                            <label class="mb-n2">Last release:</label>
+                            @item.LastDischargeDate
+                            <p class="mb-n2 mt-0 float-right">
+                                @Html.ActionLink("Details", "Details", "Residents", new { id = @item.ResidentID }, htmlAttributes: new { @class = "btn btn-sm btn-outline-secondary btn-light" })
                             </p>
 
                         </div>

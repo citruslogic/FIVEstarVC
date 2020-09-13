@@ -1,4 +1,4 @@
-﻿@model PagedList.IPagedList<FIVESTARVC.Models.Resident>
+﻿@model PagedList.IPagedList<IGrouping<FIVESTARVC.Models.Resident, FIVESTARVC.Models.ProgramEvent>>
 @using PagedList.Mvc;
 @using FIVESTARVC.Models;
 
@@ -26,9 +26,9 @@
 <br />
 
 
-@foreach (var group in Model.GroupBy(item => item.Fullname))
+@foreach (var group in Model)
 {
-    <h4>@Html.Encode(group.Key)</h4>
+    <h4>@Html.ActionLink(group.Key.Fullname, "Details", new { controller = "Residents", id = group.Key.ResidentID })</h4>
     <table class="table table-sm table-bordered table-striped">
         <tr>
             <th style="width: 17.7em">
@@ -50,34 +50,30 @@
             <th></th>
         </tr>
 
-        @foreach (var item in group.Where(i => i.ProgramEvents.Count > 0))
+        @foreach (var item in group.Key.ProgramEvents.OrderBy(i => i.ProgramType.EventType).ThenBy(i => i.ClearStartDate))
         {
-            foreach (var track in item.ProgramEvents.OrderBy(i => i.ClearStartDate))
-            {
-                <tr>
-                    @if (track.ProgramType != null && track.ProgramType.EventType != EnumEventType.SYSTEM)
-                    {
-                        <td>
+            <tr>
+                @if (item.ProgramType != null && item.ProgramType.EventType != EnumEventType.SYSTEM)
+                {
+                    <td>
 
-                            @(track.ProgramType.ProgramDescription)
-                        </td>
-                        <td>
-                            @(track.GetShortStartDate())
-                        </td>
-                        <td>
-                            @(track.GetShortEndDate())
-                        </td>
-                        <td>
-                            @(track.Completed ? "Yes" : "No")
-                        </td>
-                        <td>
-                            @Html.ActionLink("Edit", "Edit", new { id = track.ProgramEventID }, htmlAttributes: new { @class = "btn btn-sm btn-outline-secondary btn-light" }) &nbsp;
-                            @Html.ActionLink("Delete", "Delete", new { id = track.ProgramEventID }, htmlAttributes: new { @class = "btn btn-sm btn-danger" })
-                        </td>
-                    }
-                </tr>
-
-            }
+                        @(item.ProgramType.ProgramDescription)
+                    </td>
+                    <td>
+                        @(item.GetShortStartDate())
+                    </td>
+                    <td>
+                        @(item.GetShortEndDate())
+                    </td>
+                    <td>
+                        @(item.Completed ? "Yes" : "No")
+                    </td>
+                    <td>
+                        @Html.ActionLink("Edit", "Edit", new { id = item.ProgramEventID }, htmlAttributes: new { @class = "btn btn-sm btn-outline-secondary btn-light" }) &nbsp;
+                        @Html.ActionLink("Delete", "Delete", new { id = item.ProgramEventID }, htmlAttributes: new { @class = "btn btn-sm btn-danger" })
+                    </td>
+                }
+            </tr>
 
 
         }

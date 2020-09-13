@@ -9,9 +9,10 @@ using PagedList;
 using FIVESTARVC.DAL;
 using FIVESTARVC.Models;
 using FIVESTARVC.ViewModels;
-using DelegateDecompiler;
 using System.Globalization;
 using System.Web.Routing;
+using System.Threading.Tasks;
+using FIVESTARVC.Helpers;
 
 namespace FIVESTARVC.Controllers
 {
@@ -23,13 +24,15 @@ namespace FIVESTARVC.Controllers
 
         // GET: ProgramEvents
         [HttpGet]
-        public ActionResult Index(string sortOrder, string currentFilter, string searchString, int? page)
+        public async Task<ActionResult> Index(string sortOrder, string currentFilter, string searchString, int? page)
         {
             ViewBag.CurrentSort = sortOrder;
             ViewBag.NameSortParm = string.IsNullOrEmpty(sortOrder) ? "lname_desc" : "";
             ViewBag.ProgramTypeID = new SelectList(db.ProgramTypes, "ProgramTypeID", "ProgramDescription");
 
-            var programEvents = db.Residents.AsNoTracking().Include(p => p.ProgramEvents).Where(i => i.ProgramEvents.Count > 0).ToList().OrderBy(i => i.ClearLastName).ToList();
+            var programEvents = await db.ProgramEvents.AsNoTracking().Include(p => p.Resident)
+                .GroupBy(j => j.Resident)
+                .ToListAsync().ConfigureAwait(false);
             if (searchString != null)
             {
                 page = 1;
@@ -44,18 +47,19 @@ namespace FIVESTARVC.Controllers
             if (!string.IsNullOrEmpty(searchString))
             {
                 programEvents = programEvents.Where(r => CultureInfo.CurrentCulture.CompareInfo.IndexOf
-                                   (r.ClearLastName, searchString, CompareOptions.IgnoreCase) >= 0
+                                   (r.Key.ClearLastName, searchString, CompareOptions.IgnoreCase) >= 0
                                    || CultureInfo.CurrentCulture.CompareInfo.IndexOf
-                                   (r.ClearFirstMidName, searchString, CompareOptions.IgnoreCase) >= 0).ToList();
+                                   (r.Key.ClearFirstMidName, searchString, CompareOptions.IgnoreCase) >= 0).ToList();
             }
 
             switch (sortOrder)
             {
                 case "name_desc":
-                    programEvents = programEvents.OrderByDescending(p => p.ClearLastName.Computed()).ToList();
+                    programEvents = programEvents.OrderByDescending(p => p.Key.ClearLastName).ToList();
                     break;
 
-                default: programEvents = programEvents.OrderBy(p => p.ResidentID).ToList();
+                default:
+                    programEvents = programEvents.SelectMany(p => p.Key.ProgramEvents).OrderBy(i => i.ProgramType.EventType).ThenBy(i => i.ClearStartDate).GroupBy(i => i.Resident).ToList();
                     break;
             }
 

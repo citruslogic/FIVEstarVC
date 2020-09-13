@@ -221,7 +221,7 @@
                                     { <text>0</text> }
                                 else
                                 {
-                                    @Html.Raw(ViewBag.DischargeHigherLevelOfCare)<text> (</text> @Html.Raw(ViewBag.DischargeHigherLevelOfCarePercent) <text>%)</text>
+                                    @Html.Raw(ViewBag.DischargeHigherLevelOfCare)<text> (</text>@Html.Raw(ViewBag.DischargeHigherLevelOfCarePercent) <text>%)</text>
                                 }
 
                                 }
@@ -232,9 +232,19 @@
                                     { <text>0</text> }
                                 else
                                 {
-                                    @Html.Raw(ViewBag.EmergencyDischarge)<text> (</text> @Html.Raw(ViewBag.EmergencyDischargePercent) <text>%)</text>
+                                    @Html.Raw(ViewBag.EmergencyDischarge)<text> (</text>@Html.Raw(ViewBag.EmergencyDischargePercent) <text>%)</text>
                                 }
 
+                                }
+                            </p>
+                            <p>
+                                <em>Other Discharge</em><br />
+                                @{ if (ViewBag.OtherDischarge == null)
+                                    { <text>0</text>}
+                                    else
+                                    {
+                                        @Html.Raw(ViewBag.OtherDischarge)<text> (</text>@Html.Raw(ViewBag.OtherDischargePercent) <text>%)</text>
+                                    }
                                 }
                             </p>
                         </td>

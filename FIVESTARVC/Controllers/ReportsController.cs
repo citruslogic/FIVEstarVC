@@ -14,6 +14,7 @@ using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Drawing;
+using System.Globalization;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
@@ -128,6 +129,9 @@ namespace FIVESTARVC.Controllers
                                                                                         where ProgramTypeId = '13' 
 	                                                                                    ").CountAsync().ConfigureAwait(false);
 
+            int OtherDischarge;
+            ViewBag.OtherDischarge = OtherDischarge = await DB.ProgramEvents.Include(i => i.ProgramType).Where(i => i.ProgramTypeID == 2187 /* Other Departure */).CountAsync().ConfigureAwait(false);
+
             ViewBag.DischargeCount = DischargeCount = Graduated + SelfDischarge + DischargeForCause + DischargeHigherLevelOfCare + EmergencyDischarge;
 
             //Finds number admitted
@@ -145,11 +149,12 @@ namespace FIVESTARVC.Controllers
             if (ViewBag.CumulativeCount > 0)
             {
                 //finds grad percent
-                ViewBag.GraduatedPercent = (Graduated / eligibleDischarges * 100).ToString("0.##"); ; //Graduation Percentage
-                ViewBag.SelfDischargePercent = (SelfDischarge / DischargeCount * 100).ToString("0.##");
-                ViewBag.DischargeForCausePercent = (DischargeForCause / DischargeCount * 100).ToString("0.##");
-                ViewBag.DischargeHigherLevelOfCarePercent = (DischargeHigherLevelOfCare / DischargeCount * 100).ToString("0.##");
-                ViewBag.EmergencyDischargePercent = (EmergencyDischarge / DischargeCount * 100).ToString("0.##");
+                ViewBag.GraduatedPercent = (Graduated / eligibleDischarges * 100).ToString("0.##", CultureInfo.CurrentCulture);  //Graduation Percentage
+                ViewBag.SelfDischargePercent = (SelfDischarge / DischargeCount * 100).ToString("0.##", CultureInfo.CurrentCulture);
+                ViewBag.DischargeForCausePercent = (DischargeForCause / DischargeCount * 100).ToString("0.##", CultureInfo.CurrentCulture);
+                ViewBag.DischargeHigherLevelOfCarePercent = (DischargeHigherLevelOfCare / DischargeCount * 100).ToString("0.##", CultureInfo.CurrentCulture);
+                ViewBag.EmergencyDischargePercent = (EmergencyDischarge / DischargeCount * 100).ToString("0.##", CultureInfo.CurrentCulture);
+                ViewBag.OtherDischargePercent = (OtherDischarge / DischargeCount * 100).ToString("0.##", CultureInfo.CurrentCulture);
             }
             else
             {

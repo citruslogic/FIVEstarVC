@@ -319,6 +319,7 @@
     <Compile Include="Helpers\ComputationExtension.cs" />
     <Compile Include="Helpers\Encryptor.cs" />
     <Compile Include="Helpers\PersonComputation.cs" />
+    <Compile Include="Helpers\ProgramEventDateComparer.cs" />
     <Compile Include="Migrations\201805142017563_InitialCreate.cs" />
     <Compile Include="Migrations\201805142017563_InitialCreate.Designer.cs">
       <DependentUpon>201805142017563_InitialCreate.cs</DependentUpon>
@@ -411,12 +412,14 @@
     <Compile Include="ViewModels\DischargeViewModel.cs" />
     <Compile Include="ViewModels\GenderGroup.cs" />
     <Compile Include="ViewModels\ImportedListData.cs" />
+    <Compile Include="ViewModels\MainDashboardData.cs" />
     <Compile Include="ViewModels\ResidencyReportViewModel.cs" />
+    <Compile Include="ViewModels\ResidentDash\ResidentBirthdayViewModel.cs" />
     <Compile Include="ViewModels\ResidentReferralViewModel.cs" />
     <Compile Include="ViewModels\SelectedResidentModel.cs" />
     <Compile Include="ViewModels\TempProgramEvent.cs" />
     <Compile Include="ViewModels\ReportingResidentViewModel.cs" />
-    <Compile Include="ViewModels\DashboardData.cs" />
+    <Compile Include="ViewModels\ResidentDash\ResidentDashData.cs" />
     <Compile Include="ViewModels\HistoricData.cs" />
     <Compile Include="ViewModels\ResidentIncomeModel.cs" />
     <Compile Include="ViewModels\UpToYearResidentAgeViewModel.cs" />
