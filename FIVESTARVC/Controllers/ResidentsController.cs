@@ -3,16 +3,18 @@ using FIVESTARVC.DAL;
 using FIVESTARVC.Models;
 using FIVESTARVC.Services;
 using FIVESTARVC.ViewModels;
-using PagedList;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
+using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
+using System.Windows.Input;
 
 namespace FIVESTARVC.Controllers
 {
@@ -135,6 +137,11 @@ namespace FIVESTARVC.Controllers
         public ActionResult Create(ResidentIncomeModel residentIncomeModel, string[] selectedCampaigns,
             int AdmissionType)
         {
+            if (residentIncomeModel == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
             ViewBag.AdmissionType = new SelectList(db.ProgramTypes
                 .Where(t => t.EventType == EnumEventType.ADMISSION), "ProgramTypeID", "ProgramDescription", AdmissionType);
 
@@ -161,13 +168,13 @@ namespace FIVESTARVC.Controllers
             {
                 ClearFirstMidName = residentIncomeModel.FirstMidName,
                 ClearLastName = residentIncomeModel.LastName,
-                IsCurrent = true,
+                IsCurrent = AdmissionType != 1,
                 Gender = residentIncomeModel.Gender,
                 Ethnicity = residentIncomeModel.Ethnicity,
                 Religion = residentIncomeModel.Religion,
                 ClearBirthdate = residentIncomeModel.Birthdate,
                 ServiceBranch = residentIncomeModel.ServiceBranch,
-                NGReserve = residentIncomeModel.NGReserveBranch,
+                NGReserve = residentIncomeModel.NGReserve,
                 MilitaryDischarge = residentIncomeModel.DischargeStatus,
                 InVetCourt = residentIncomeModel.InVetCourt,
                 IsNoncombat = residentIncomeModel.IsNoncombat,
@@ -234,10 +241,13 @@ namespace FIVESTARVC.Controllers
             {
                 //Log the error (uncomment dex variable name and add a line here to write a log.
                 ModelState.AddModelError(dex.Message, "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
+            } finally
+            {
+                resident.Dispose();
             }
 
             if (TryUpdateModel(residentIncomeModel, "",
-                 new string[] { "LastName", "FirstMidName", "Ethnicity", "StateTerritoryID", "ReferralID", "Gender", "Religion", "ClearBirthdate", "ServiceBranch", "Note", "IsNoncombat", "InVetCourt",
+                 new string[] { "LastName", "FirstMidName", "Ethnicity", "StateTerritoryID", "ReferralID", "Gender", "Religion", "ClearBirthdate", "ServiceBranch", "NGReserve", "Note", "IsNoncombat", "InVetCourt",
                      "Benefit", "MilitaryCampaigns", "TotalBenefitAmount" }))
             {
                 try
@@ -255,8 +265,13 @@ namespace FIVESTARVC.Controllers
                     //Log the error (uncomment dex variable name and add a line here to write a log.
                     ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
                 }
+                finally
+                {
+                    resident.Dispose();
+                }
             }
 
+            resident.Dispose();
             return View(residentIncomeModel);
         }
 
@@ -298,6 +313,10 @@ namespace FIVESTARVC.Controllers
                 .Where(c => c.ResidentID == id)
                 .Single();
 
+            var lastEmergencyShelter = resident.ProgramEvents.LastOrDefault(i => i.ProgramType.EventType == EnumEventType.ADMISSION && i.ProgramTypeID == 1);
+            var lastAdmission = resident.ProgramEvents.Any(i => i.ProgramType.EventType == EnumEventType.ADMISSION && i.ProgramTypeID == 2);
+
+            ViewBag.EmergencyShelterTrack = lastEmergencyShelter != null && !lastAdmission;
 
             ViewBag.Campaigns = residentService.PopulateAssignedCampaignData(resident, db).OrderBy(i => i.MilitaryCampaign).ToList();
             ViewBag.DischargeInfo = resident.ProgramEvents
@@ -321,7 +340,7 @@ namespace FIVESTARVC.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost, ActionName("Edit")]
         [ValidateAntiForgeryToken]
-        public ActionResult EditPost(int? id, int? fromPage, string[] selectedCampaigns, bool? Readmit, string readmitDate)
+        public ActionResult EditPost(int? id, int? fromPage, string[] selectedCampaigns, bool? Readmit, string readmitDate, bool? AdmitEmergencyShelter, string updatedAdmitDate)
         {
             if (id == null)
             {
@@ -339,6 +358,11 @@ namespace FIVESTARVC.Controllers
                                         .Where(i => i.ProgramType.EventType == EnumEventType.DISCHARGE)
                                         .OrderByDescending(i => i.ProgramEventID).FirstOrDefault();
 
+            var lastEmergencyShelter = residentToUpdate.ProgramEvents.LastOrDefault(i => i.ProgramType.EventType == EnumEventType.ADMISSION && i.ProgramTypeID == 1);
+            var lastAdmission = residentToUpdate.ProgramEvents.Any(i => i.ProgramType.EventType == EnumEventType.ADMISSION && i.ProgramTypeID == 2);
+
+            ViewBag.EmergencyShelterTrack = lastEmergencyShelter != null && !lastAdmission;
+
             ViewBag.StateTerritoryID = new SelectList(db.States, "StateTerritoryID", "StateTerritoryID", residentToUpdate.StateTerritoryID);
             ViewBag.ReferralID = new SelectList(db.Referrals, "ReferralID", "ReferralName", residentToUpdate.ReferralID);
             ViewBag.Campaigns = residentService.PopulateAssignedCampaignData(residentToUpdate, db).OrderBy(i => i.MilitaryCampaign).ToList();
@@ -351,6 +375,23 @@ namespace FIVESTARVC.Controllers
                 try
                 {
                     UpdateResidentCampaigns(selectedCampaigns, residentToUpdate);
+                    
+                    /** for admitting a resident that had been previously an emergency shelter admittance */
+                    if (lastEmergencyShelter != null && AdmitEmergencyShelter == true) {
+                        if (!string.IsNullOrEmpty(updatedAdmitDate))
+                        {
+                            var newAdmitDate = DateTime.Parse(updatedAdmitDate, CultureInfo.InvariantCulture);
+
+                            lastEmergencyShelter.ClearEndDate = newAdmitDate;
+                            residentToUpdate.ProgramEvents.Add(new ProgramEvent
+                            {
+                                ProgramTypeID = 2,
+                                ClearStartDate = newAdmitDate
+                            });
+
+                            residentToUpdate.IsCurrent = true;
+                        }
+                    }
 
                     if (Readmit.HasValue)
                     {
@@ -361,7 +402,7 @@ namespace FIVESTARVC.Controllers
                                 ModelState.AddModelError("", "Readmission Date is required if you are readmitting this resident.");
                                 return View(residentToUpdate);
                             }
-                            var date = DateTime.Parse(readmitDate);
+                            var date = DateTime.Parse(readmitDate, CultureInfo.InvariantCulture);
                            
                             var ev = residentToUpdate.ProgramEvents
                                 .LastOrDefault(i => i.ProgramType.EventType == EnumEventType.DISCHARGE);    // Emergency Discharge to be readmited.
@@ -538,21 +579,29 @@ namespace FIVESTARVC.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult ConfirmDelete(List<DeleteResidentModel> residents)
         {
-            foreach (var resident in residents)
+            if (residents != null)
             {
-                var residentToDelete = db.Residents.Find(resident.ResidentID);
+                foreach (var resident in residents)
+                {
+                    var residentToDelete = db.Residents.Find(resident.ResidentID);
 
-                if (residentToDelete != null && resident.ToDelete == true)
-                {
-                    db.Entry(residentToDelete).State = EntityState.Deleted;
-                } else if (residentToDelete != null && resident.ToRestore == true)
-                {
-                    residentToDelete.ToDelete = false;
-                } 
+                    if (residentToDelete != null && resident.ToDelete == true)
+                    {
+                        db.Entry(residentToDelete).State = EntityState.Deleted;
+                    }
+                    else if (residentToDelete != null && resident.ToRestore == true)
+                    {
+                        residentToDelete.ToDelete = false;
+                    }
+                }
+
+                db.SaveChanges();
+                return RedirectToAction("Index");
+            } else
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            db.SaveChanges();
-            return RedirectToAction("Index");
         }
 
         // GET: Residents/Undelete
@@ -577,31 +626,40 @@ namespace FIVESTARVC.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Delete(Resident model)
         {
-            try
+            if (model != null)
             {
-                var residentToDelete = db.Residents.Find(model.ResidentID);
+                try
+                {
+                    var residentToDelete = db.Residents.Find(model.ResidentID);
 
-                if (residentToDelete != null)
+                    if (residentToDelete != null)
+                    {
+                        residentToDelete.ToDelete = true;
+                        db.SaveChanges();
+                        TempData["UserMessage"] = model.Fullname + " has been marked for deletion from your center.  ";
+                    }
+                    else
+                    {
+                        TempData["UserMessage"] = "Could not find the resident, " + model.Fullname + ", in the system.";
+                        return RedirectToAction("Index");
+                    }
+
+
+                }
+                catch (DataException/* dex */)
                 {
-                    residentToDelete.ToDelete = true;
-                    db.SaveChanges();
-                    TempData["UserMessage"] = model.Fullname + " has been marked for deletion from your center.  ";
-                } else
-                {
-                    TempData["UserMessage"] = "Could not find the resident, " + model.Fullname + ", in the system.";
-                    return RedirectToAction("Index");
+                    TempData["UserMessage"] = "Failed to mark the resident for deletion from the center.";
+
+                    return RedirectToAction("Delete", new { id = model.ResidentID, saveChangesError = true });
                 }
 
-                
-            }
-            catch (DataException/* dex */)
+                return RedirectToAction("Index");
+            } else
             {
-                TempData["UserMessage"] = "Failed to mark the resident for deletion from the center.";
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
 
-                return RedirectToAction("Delete", new { id = model.ResidentID, saveChangesError = true });
             }
 
-            return RedirectToAction("Index");
         }
 
         [HttpPost]
@@ -720,7 +778,7 @@ namespace FIVESTARVC.Controllers
 
             if (saveChangesError.GetValueOrDefault())
             {
-                ViewBag.ErrorMessage = "Discharge failed. Try again, and if the problem persists see your system administrator.";
+                ViewBag.ErrorMessage = "Readmit failed. Try again, and if the problem persists see your system administrator.";
             }
 
             var residentToReadmit = db.Residents
@@ -741,7 +799,7 @@ namespace FIVESTARVC.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Readmit(int id, string ReadmitDate)
         {
-            var date = DateTime.Parse(ReadmitDate);
+            var date = DateTime.Parse(ReadmitDate, CultureInfo.InvariantCulture);
 
             try
             {
@@ -756,7 +814,7 @@ namespace FIVESTARVC.Controllers
                     .LastOrDefault();
                 if (ev != null)
                 {
-                    ev.ClearEndDate = DateTime.Parse(ReadmitDate);
+                    ev.ClearEndDate = DateTime.Parse(ReadmitDate, CultureInfo.InvariantCulture);
                     db.Entry(ev).State = EntityState.Modified;
                 }
 

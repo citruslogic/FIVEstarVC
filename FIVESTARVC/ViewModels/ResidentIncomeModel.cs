@@ -36,8 +36,8 @@ namespace FIVESTARVC.ViewModels
         [Display(Name = "Service Branch")]
         public ServiceType ServiceBranch { get; set; }
 
-        [Display(Name = "NG / Reserve Branch")]
-        public NGReserveServiceType NGReserveBranch { get; set; }
+        [Display(Name = "NG/Reserve Branch")]
+        public NGReserveServiceType NGReserve { get; set; }
 
         [Display(Name = "Discharge Status")]
         public MilitaryDischargeType DischargeStatus { get; set; }

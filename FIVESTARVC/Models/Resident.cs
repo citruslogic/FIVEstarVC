@@ -19,7 +19,7 @@ namespace FIVESTARVC.Models
         [Display(Name = "Service Branch")]
         public ServiceType ServiceBranch { get; set; }
 
-        [Display(Name = "NG/Reserves")]
+        [Display(Name = "NG/Reserve Branch")]
         public NGReserveServiceType? NGReserve { get; set; }
 
         [Display(Name = "Service Discharge")]

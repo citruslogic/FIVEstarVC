@@ -7,84 +7,91 @@
 }
 <link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
 
-<h2>Resident Track Log</h2>
-<br />
-@*<div class="btn-group" style="margin-bottom: 0.5em;">
-        <input type="button" class="btn btn-success" value="Enroll Program" onclick="location.href='/ProgramEvents/Create';" />
-    </div>*@
-<br />
-@using (Html.BeginForm("Index", "ProgramEvents", FormMethod.Get))
-{
-    <div class="form-inline">
-
-        Find by name:&nbsp;
-
-        @Html.TextBox("searchString", ViewBag.CurrentFilter as string, htmlAttributes: new { @class = "form-control" })
-        &nbsp;<input class="btn btn-sm btn-outline-secondary" type="submit" value="Search" />
+<div class="row">
+    <div class="col-md-3">
+        <h2>Resident Track Log</h2>
     </div>
-}
-<br />
+</div>
+<div class="row">
+    <div class="col-md-5 mb-2">
+        @using (Html.BeginForm("Index", "ProgramEvents", FormMethod.Get))
+        {
+            <div class="form-inline">
 
+                Find by name:&nbsp;
+
+                @Html.TextBox("searchString", ViewBag.CurrentFilter as string, htmlAttributes: new { @class = "form-control" })
+                &nbsp;<input class="btn btn-sm btn-outline-secondary" type="submit" value="Search" />
+            </div>
+        }
+    </div>
+</div>
 
 @foreach (var group in Model)
 {
-    <h4>@Html.ActionLink(group.Key.Fullname, "Details", new { controller = "Residents", id = group.Key.ResidentID })</h4>
-    <table class="table table-sm table-bordered table-striped">
-        <tr>
-            <th style="width: 17.7em">
-                Description
-            </th>
-            @*<th>
-                    @Html.ActionLink("Last Name", "Index", new { sortOrder = ViewBag.NameSortParm, currentFilter = ViewBag.CurrentFilter })
-                </th>*@
-            <th>
-                Start Date
-            </th>
-            <th>
-                End Date
-            </th>
 
-            <th>
-                Completed?
-            </th>
-            <th></th>
-        </tr>
+    <div class="row">
+        <div class="col-md-8">
+            <h4>@Html.ActionLink(group.Key.Fullname, "Details", new { controller = "Residents", id = group.Key.ResidentID })</h4>
+            <table class="table table-sm table-bordered table-striped">
+                <tr>
+                    <th style="width: 17.7em">
+                        Description
+                    </th>
+                    @*<th>
+                            @Html.ActionLink("Last Name", "Index", new { sortOrder = ViewBag.NameSortParm, currentFilter = ViewBag.CurrentFilter })
+                        </th>*@
+                    <th>
+                        Start Date
+                    </th>
+                    <th>
+                        End Date
+                    </th>
 
-        @foreach (var item in group.Key.ProgramEvents.OrderBy(i => i.ProgramType.EventType).ThenBy(i => i.ClearStartDate))
-        {
-            <tr>
-                @if (item.ProgramType != null && item.ProgramType.EventType != EnumEventType.SYSTEM)
+                    <th>
+                        Completed?
+                    </th>
+                    <th></th>
+                </tr>
+
+                @foreach (var item in group.Key.ProgramEvents.OrderBy(i => i.ProgramTypeID).ThenBy(i => i.ClearStartDate))
                 {
-                    <td>
+                    <tr>
+                        @if (item.ProgramType != null && item.ProgramType.EventType != EnumEventType.SYSTEM)
+                        {
+                            <td>
 
-                        @(item.ProgramType.ProgramDescription)
-                    </td>
-                    <td>
-                        @(item.GetShortStartDate())
-                    </td>
-                    <td>
-                        @(item.GetShortEndDate())
-                    </td>
-                    <td>
-                        @(item.Completed ? "Yes" : "No")
-                    </td>
-                    <td>
-                        @Html.ActionLink("Edit", "Edit", new { id = item.ProgramEventID }, htmlAttributes: new { @class = "btn btn-sm btn-outline-secondary btn-light" }) &nbsp;
-                        @Html.ActionLink("Delete", "Delete", new { id = item.ProgramEventID }, htmlAttributes: new { @class = "btn btn-sm btn-danger" })
-                    </td>
+                                @(item.ProgramType.ProgramDescription)
+                            </td>
+                            <td>
+                                @(item.GetShortStartDate())
+                            </td>
+                            <td>
+                                @(item.GetShortEndDate())
+                            </td>
+                            <td>
+                                @(item.Completed ? "Yes" : "No")
+                            </td>
+                            <td>
+                                @Html.ActionLink("Edit", "Edit", new { id = item.ProgramEventID }, htmlAttributes: new { @class = "btn btn-sm btn-outline-secondary btn-light" }) &nbsp;
+                                @Html.ActionLink("Delete", "Delete", new { id = item.ProgramEventID }, htmlAttributes: new { @class = "btn btn-sm btn-danger" })
+                            </td>
+                        }
+                    </tr>
                 }
-            </tr>
+            </table>
+        </div>
+    </div>
 
-
-        }
-    </table>
 }
 
-<br />
-<div style="position: relative; bottom: 1em;">
-    <p>
-        Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+<div class="row">
+    <div class="col-md-8">
+        <p>
+            Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
 
-        @Html.PagedListPager(Model, page => Url.Action("Index", new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
-    </p>
+            @Html.PagedListPager(Model, page => Url.Action("Index", new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
+        </p>
+    </div>
+
 </div>

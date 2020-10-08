@@ -12,7 +12,6 @@ using FIVESTARVC.ViewModels;
 using System.Globalization;
 using System.Web.Routing;
 using System.Threading.Tasks;
-using FIVESTARVC.Helpers;
 
 namespace FIVESTARVC.Controllers
 {
@@ -59,7 +58,7 @@ namespace FIVESTARVC.Controllers
                     break;
 
                 default:
-                    programEvents = programEvents.SelectMany(p => p.Key.ProgramEvents).OrderBy(i => i.ProgramType.EventType).ThenBy(i => i.ClearStartDate).GroupBy(i => i.Resident).ToList();
+                    programEvents = programEvents.SelectMany(p => p.Key.ProgramEvents).OrderBy(i => i.ProgramTypeID).ThenBy(i => i.ClearStartDate).GroupBy(i => i.Resident).ToList();
                     break;
             }
 
@@ -210,7 +209,7 @@ namespace FIVESTARVC.Controllers
                     ViewBag.ProgramTypeID = new SelectList(db.ProgramTypes.Where(t => t.EventType != EnumEventType.SYSTEM).ToList().OrderBy(i => (int)i.EventType).Select(i => new SelectListItem
                     {
                         Text = i.ProgramDescription,
-                        Value = i.ProgramTypeID.ToString(),
+                        Value = i.ProgramTypeID.ToString(CultureInfo.InvariantCulture),
                         Group = (i.EventType == EnumEventType.ADMISSION || i.EventType == EnumEventType.DISCHARGE) && i.EventType != EnumEventType.SYSTEM ? admitDischargeGroup : otherTrackGroup
                     }).OrderBy(i => i.Group.Name).ToList(), "Value", "Text", "Group.Name", -1); 
                 }
@@ -221,12 +220,18 @@ namespace FIVESTARVC.Controllers
                 {
                     if (item != null)
                     {
-                        if (item.ProgramTypeID == 1 || item.ProgramTypeID == 2 || item.ProgramTypeID == 3)
+                        if (item.ProgramTypeID == 2 || item.ProgramTypeID == 3)
                         {
                             resident.IsCurrent = true;
                         }
 
-                        if (item.ProgramTypeID == 4 || item.ProgramTypeID == 5 || item.ProgramTypeID == 6 || item.ProgramTypeID == 7 || item.ProgramTypeID == 13 || item.ProgramTypeID == 2187)
+                        if (item.ProgramTypeID == 1 
+                            || item.ProgramTypeID == 4 
+                            || item.ProgramTypeID == 5 
+                            || item.ProgramTypeID == 6 
+                            || item.ProgramTypeID == 7 
+                            || item.ProgramTypeID == 13 
+                            || item.ProgramTypeID == 2187) /* discharge types in db also includes ID == 1 which is an emergency shelter that is the exception */
                         {
                             resident.IsCurrent = false;
                         }
@@ -280,8 +285,12 @@ namespace FIVESTARVC.Controllers
             if (ModelState.IsValid)
             {
                 if (TryUpdateModel(eventToUpdate, "",
-               new string[] { "ProgramEventID", "ProgramTypeID", "ResidentID", "ClearStartDate", "ClearEndDate", "Completed" }))
+                    new string[] { "ProgramEventID", "ProgramTypeID", "ResidentID", "ClearStartDate", "ClearEndDate", "Completed" }))
                 {
+                    if (eventToUpdate.ProgramTypeID == 1)
+                    {
+                        eventToUpdate.Resident.IsCurrent = false;
+                    }
 
                     db.SaveChanges();
                     return RedirectToAction("Index");
@@ -307,6 +316,11 @@ namespace FIVESTARVC.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult ViewQuickEvent(ProgramType model)
         {
+            if (model == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
             ProgramType type = new ProgramType
             {
                 EventType = EnumEventType.TRACK,

@@ -19,5 +19,7 @@ namespace FIVESTARVC.ViewModels
         public EthnicityType Ethnicity { get; set; }
 
         public List<string> Campaigns { get; set; }
+
+        public bool IsEmergencyShelter { get; set; }
     }
 }

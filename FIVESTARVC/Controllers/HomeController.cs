@@ -12,7 +12,6 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
-using static FIVESTARVC.Models.ProgramEvent;
 
 namespace FIVESTARVC.Controllers
 {
@@ -24,7 +23,7 @@ namespace FIVESTARVC.Controllers
         private const string excelFile = "C:\\webuploads\\import.xlsx";
         private readonly ExcelPackage ep = new ExcelPackage(new FileInfo(excelFile));
 
-        public List<ResidentBirthdayViewModel> nearestResidents { get; set; }           // Nearest birthdays.
+        private List<ResidentBirthdayViewModel> NearestResidents { get; set; }           // Nearest birthdays.
 
         [Authorize]
         [HttpGet]
@@ -81,6 +80,12 @@ namespace FIVESTARVC.Controllers
                 .Where(i => i.ProgramType.ProgramDescription.Equals("Emergency Shelter", StringComparison.InvariantCultureIgnoreCase))
                 .CountAsync().ConfigureAwait(false);
 
+            var currentESResidents = await residents
+                .Where(i => i.IsCurrent)
+                .Include(i => i.ProgramEvents.Select(j => j.ProgramType))
+                .CountAsync(i => i.ProgramEvents.Select(j => j.ProgramType).Any(j => j.ProgramTypeID == 1))
+                .ConfigureAwait(false);
+
             var dischargeHigherLevelOfCare = db.Database.SqlQuery<int>(@"select distinct
                                                                         pe.ResidentID 
                                                                         from ProgramEvent pe
@@ -94,7 +99,6 @@ namespace FIVESTARVC.Controllers
             // Finds grad percent
             var gradPercent = admitted > 0 ? (graduated / eligibleDischarges * 100).ToString("0.##", CultureInfo.CurrentCulture) : "0";
             
-
             /*******************************************/
 
             /* Get the resident with the nearest birthday */
@@ -104,11 +108,12 @@ namespace FIVESTARVC.Controllers
             {
                 TotalPopulation = await residents.CountAsync().ConfigureAwait(false),
                 CurrentPopulation = currentResidents,
+                EmergencyShelterCount = currentESResidents,
                 Graduated = graduated,
                 Admitted = admitted,
                 EligibleDischarges = eligibleDischarges,
                 GradPercent = gradPercent,
-                NearestResidents = nearestResidents,
+                NearestResidents = NearestResidents,
                 TopResidents = topRecentlyAdmittedList,
                 TopReleasedResidents = topRecentlyReleasedList
             };
@@ -131,9 +136,9 @@ namespace FIVESTARVC.Controllers
             }).OrderBy(o => o.RemainingDays);
 
             if (sortedResidents.Any())
-                nearestResidents = sortedResidents.Take(2).ToList();
+                NearestResidents = sortedResidents.Take(2).ToList();
             else
-                nearestResidents = null;
+                NearestResidents = null;
         }
 
         [HttpGet]

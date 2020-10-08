@@ -52,6 +52,7 @@ namespace FIVESTARVC.Services
         {
             var currentResidents = context.Residents
                 .AsNoTracking()
+                .Include(i => i.ProgramEvents.Select(j => j.ProgramType))
                 .ToList()
                 .Where(i => i.IsCurrent).Select(i => new CurrentResidentViewModel
                 {
@@ -60,7 +61,8 @@ namespace FIVESTARVC.Services
                     Age = i.AgeAtRelease > 0 ? i.AgeAtRelease : i.Age,
                     Campaigns = i.MilitaryCampaigns?.Select(j => j.CampaignName).ToList(),
                     Service = i.ServiceBranch.ToString(),
-                    Ethnicity = i.Ethnicity
+                    Ethnicity = i.Ethnicity,
+                    IsEmergencyShelter = i.ProgramEvents.Select(j => j.ProgramType).Any(j => j.ProgramTypeID == 1)
                 }).ToList();
 
             var campaignCounts = context.MilitaryCampaigns.ToList().Select(i => new CampaignCountViewModel
@@ -86,7 +88,9 @@ namespace FIVESTARVC.Services
                 HispCount = currentResidents.Where(i => i.Ethnicity == EthnicityType.HISPLATIN).Count(),
                 AsianCount = currentResidents.Where(i => i.Ethnicity == EthnicityType.ASIAN_PACIFIC).Count(),
                 NativeCount = currentResidents.Where(i => i.Ethnicity == EthnicityType.NATIVE).Count(),
-                OtherCount = currentResidents.Where(i => i.Ethnicity == EthnicityType.OTHER).Count()
+                OtherCount = currentResidents.Where(i => i.Ethnicity == EthnicityType.OTHER).Count(),
+
+                Total = currentResidents.Count,
             };
         }
 

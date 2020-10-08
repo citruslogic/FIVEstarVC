@@ -14,114 +14,163 @@
 <div style="margin-top: 10px; margin-bottom: 10px;">
     <button class="btn btn-default" onclick="location.href='/Reports/Index';" style="background-color: lightsteelblue"> Return to Reports </button><br>
 </div>
+<div class="row">
+    <div class="col-md-2">
+        <p class="text-right">
+            Current residents:
+        </p>
+    </div>
+    <div class="col-md-1 ml-n4">
+        @Html.Raw(Model.Total)
+    </div>
+    <div class="col-md-6">
+        <p>@Model.ArmyCount Army, @Model.NavyCount Navy, @Model.AirForceCount Air Force, @Model.MarineCount Marines, @Model.CoastGuardCount Coast Guard</p>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-2">
+        <p class="text-right">
+            <em>Emergency shelter</em> residents:
+        </p>
+    </div>
+    <div class="col-md-1 ml-n4">
+        @Html.Raw(Model.CurrentResidents.Where(i => i.IsEmergencyShelter).Count())
+    </div>
+    <div class="col-md-2">
+        <b>Average Age</b>: @Model.AverageAge
+    </div>
+    
+</div>
+<div class="row">
+    <div class="col-md-7">
+        <table class="table table-sm table-striped">
+            <tr>
+                <th>
+                    #
+                </th>
+                <th>
+                    Last Name
+                </th>
+                <th>
+                    First Name
+                </th>
+                <th>
+                    Age
+                </th>
+                <th>
+                    Service
+                </th>
+                <th>
+                    Emergency Shelter?
+                </th>
+                <th>
+                    Campaigns
+                </th>
+            </tr>
 
+            @foreach (var item in Model.CurrentResidents.Select((i, index) => new { index, i }))
+            {
+                var value = item.i;
+                var index = item.index;
+                <tr>
+                    <td>@Html.Raw(index + 1)</td>
+                    <td>@Html.DisplayFor(modelItem => value.LastName)</td>
+                    <td>@Html.DisplayFor(modelItem => value.FirstName)</td>
+                    <td>@Html.DisplayFor(modelItem => value.Age)</td>
+                    <td>@Html.DisplayFor(modelItem => value.Service)</td>
+                    <td>@Html.Raw(value.IsEmergencyShelter ? "Yes" : "No") </td>
+                    <td>
+                        @Html.Raw(string.Join(", ", value.Campaigns))
+                    </td>
+            </tr>
+        }
 
-<table class="table table-sm table-striped">
-    <tr>
-        <th>
-            Last Name
-        </th>
-        <th>
-            First Name
-        </th>
-        <th>
-            Age
-        </th>
-        <th>
-            Service
-        </th>
-        <th>
-            Campaigns
-        </th>
-    </tr>
+        </table>
+    </div>
+    <div class="col-md-4">
 
-    @foreach (var item in Model.CurrentResidents)
-    {
-        <tr>
-            <td>@Html.DisplayFor(modelItem  => item.LastName)</td>
-            <td>@Html.DisplayFor(modelItem  => item.FirstName)</td>
-            <td>@Html.DisplayFor(modelItem  => item.Age)</td>
-            <td>@Html.DisplayFor(modelItem  => item.Service)</td>
-            <td>@foreach (var campaign in item.Campaigns) { @Html.Encode(campaign)<br /> } </td>
-        </tr>
-    }
+        <table class="table table-sm table-striped">
+            <tr>
+                <th>Campaign</th>
+                <th>Current Count</th>
+            </tr>
+            @foreach (var campaign in Model.Campaigns)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(modelItem => campaign.CampaignName)</td>
+                    <td>@Html.DisplayFor(modelItem => campaign.Count)</td>
+                </tr>
+            }
+        </table>
+        <br />
+        <table class="table table-sm table-striped">
+            <tr>
+                <th>Ethnicity</th>
+                <th>Current Count</th>
+            </tr>
+            <tr>
+                <td>
+                    @Model.BlackCount
+                </td>
+                <td>
+                    Black / African American
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Model.CaucCount
+                </td>
+                <td>
+                    Caucasian
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Model.HispCount
+                </td>
+                <td>
+                    Hispanic / Latin American
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Model.AsianCount
+                </td>
+                <td>
+                    Asian
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Model.NativeCount
+                </td>
+                <td>
+                    Native American
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Model.OtherCount
+                </td>
+                <td>
+                    Other
+                </td>
+            </tr>
+        </table>
 
-</table>
+    </div>
+</div>
 
-<dt>
-    Average Age
-</dt>
-<dd>@Model.AverageAge</dd>
-<p>@Model.ArmyCount Army, @Model.NavyCount Navy, @Model.AirForceCount Air Force, @Model.MarineCount Marines, @Model.CoastGuardCount Coast Guard</p>
+        
 
-<table class="table table-sm table-striped">
-    <tr>
-        <th>Campaign</th>
-        <th>Current Count</th>
-    </tr>
-    @foreach (var campaign in Model.Campaigns)
-    {
-        <tr>
-            <td>@Html.DisplayFor(modelItem => campaign.CampaignName)</td>
-            <td>@Html.DisplayFor(modelItem => campaign.Count)</td>
-        </tr>
-    }
-</table>
+<div class="row">
+    
 
-<table class="table table-sm table-striped">
-    <tr>
-        <th>Ethnicity</th>
-        <th>Current Count</th>
-    </tr>
-    <tr>
-        <td>
-            @Model.BlackCount
-        </td>
-        <td>
-            Black / African American
-        </td>
-    </tr>
-    <tr>
-        <td>
-            @Model.CaucCount
-        </td>
-        <td>
-            Caucasian
-        </td>
-        </tr>
-    <tr>
-        <td>
-            @Model.HispCount
-        </td>
-        <td>
-            Hispanic / Latin American
-        </td>
-    </tr>
-    <tr>
-        <td>
-            @Model.AsianCount
-        </td>
-        <td>
-            Asian 
-        </td>
-    </tr>
-    <tr>
-        <td>
-            @Model.NativeCount
-        </td>
-        <td>
-            Native American
-        </td>
-    </tr>
-    <tr>
-        <td>
-            @Model.OtherCount
-        </td>
-        <td>
-            Other
-        </td>
-    </tr>
-</table>
+    <div class="col-md-4">
+        
+    </div>
+</div>
+
 <div style="margin-bottom: 25px;">
     <button class="btn btn-default" onclick="location.href='/Reports/Index';" style="background-color: lightsteelblue"> Return to Reports </button><br>
 </div>

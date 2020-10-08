@@ -9,6 +9,8 @@ namespace FIVESTARVC.ViewModels
 
         public int CurrentPopulation { get; set; }
 
+        public int EmergencyShelterCount { get; set; }
+
         public double Graduated { get; set; }
 
         public double Admitted { get; set; }
