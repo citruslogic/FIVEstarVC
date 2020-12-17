@@ -3,6 +3,13 @@
     ViewBag.Title = "Dashboard";
 }
 
+@*Required for the Bootstrap dropdown and popover.*@
+<script type="text/javascript" src="~/Scripts/umd/popper.js"></script>
+<style>
+    .popover {
+        white-space: pre-line;
+    }
+</style>
 
 <h3> Your Dashboard </h3>
 <div class="container-fluid">
@@ -53,7 +60,10 @@
                 </p>
             </div>
             <div class="col-md-1 ml-n4">
-                @Html.Raw(Model.EmergencyShelterCount)
+                <button type="button" class="btn btn-sm btn-info" data-trigger="focus" data-toggle="popoverCurrentESCount" title="Current ES Residents"
+                        data-content="@Html.Raw(string.Join(Environment.NewLine, Model.EmergencyShelterResidents.ToArray()))">
+                    @Html.Raw(Model.EmergencyShelterCount)
+                </button>
             </div>
         </div>
 
@@ -91,7 +101,7 @@
 
         </div>
         <div class="row mt-1">
-           <h5>Recently released from your center:</h5>
+            <h5>Recently released from your center:</h5>
         </div>
         <div class="row">
 
@@ -124,3 +134,11 @@
 
         </div>
     </div>
+    @section Scripts {
+
+        <script type="text/javascript">
+            $(function () {
+                $('[data-toggle="popoverCurrentESCount"]').popover()
+            })
+        </script>
+    }

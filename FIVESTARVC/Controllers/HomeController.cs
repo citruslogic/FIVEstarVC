@@ -83,8 +83,12 @@ namespace FIVESTARVC.Controllers
             var currentESResidents = await residents
                 .Where(i => i.IsCurrent)
                 .Include(i => i.ProgramEvents.Select(j => j.ProgramType))
-                .CountAsync(i => i.ProgramEvents.Select(j => j.ProgramType).Any(j => j.ProgramTypeID == 1))
+                .Where(i => i.ProgramEvents.Select(j => j.ProgramType).Any(j => j.ProgramTypeID == 1))
+                .ToListAsync()
                 .ConfigureAwait(false);
+
+            var currentESResidentNames = currentESResidents.Select(i => i.ClearLastName + ", " + i.ClearFirstMidName).ToList();
+
 
             var dischargeHigherLevelOfCare = db.Database.SqlQuery<int>(@"select distinct
                                                                         pe.ResidentID 
@@ -108,7 +112,8 @@ namespace FIVESTARVC.Controllers
             {
                 TotalPopulation = await residents.CountAsync().ConfigureAwait(false),
                 CurrentPopulation = currentResidents,
-                EmergencyShelterCount = currentESResidents,
+                EmergencyShelterCount = currentESResidents.Count,
+                EmergencyShelterResidents = currentESResidentNames,
                 Graduated = graduated,
                 Admitted = admitted,
                 EligibleDischarges = eligibleDischarges,

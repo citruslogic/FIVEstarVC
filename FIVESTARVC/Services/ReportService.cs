@@ -8,6 +8,8 @@ using System.Data;
 using System.Data.Entity;
 using System.Threading.Tasks;
 using Microsoft.Ajax.Utilities;
+using FIVESTARVC.Helpers;
+using System.Globalization;
 
 namespace FIVESTARVC.Services
 {
@@ -217,6 +219,71 @@ namespace FIVESTARVC.Services
                 Residents = residents.GroupBy(i => i.DateAdmitted.Year).ToList(),
                 Total = residents.Count
             };
+        }
+
+        public async Task<ResidentWPPReportViewModel> GetResidentWPPReportAsync()
+        {
+            var restrictedTracks = new int[]
+            {
+                2163,
+                2189,
+                2190,
+                2191,
+                2192,
+                2193,
+                2194,
+                2195,
+                2196,
+                2197,
+                2198,
+                2199
+            };
+
+            var tracks = await context.ProgramEvents
+                .AsNoTracking()
+                .Where(i => restrictedTracks.Any(j => j == i.ProgramTypeID))
+                .Include(i => i.ProgramType)
+                .ToListAsync().ConfigureAwait(false);
+
+            var totalWPPTracks = tracks.Count;
+
+            var wppTrackPercentages = tracks.Select(i => new ResidentWPPTrack
+            {
+                Track = i
+            })
+            .GroupBy(i => i.Track.ProgramType.ProgramDescription)
+            .Select(i => new ResidentWPPTrackAggregate
+            {
+                TrackName = i.Key,
+                Count = decimal.Round(i.Count(), 2),
+                Percentage = decimal.Round(i.Count() / totalWPPTracks, 2)
+            })
+            .GroupBy(i => i.StartDate.ToString("MMMM", new CultureInfo("en-US")))
+            .ToList();            
+
+            var wppTrackData = new ResidentWPPReportViewModel
+            {
+                ResidentWPPTrackPercentages = wppTrackPercentages,
+                WPPTotalCountByType = new Dictionary<string, decimal>
+                {
+                    { "Therapy",  tracks.Count(j => j.ProgramTypeID == 2189 || j.ProgramTypeID == 2190 || j.ProgramTypeID == 2191) / totalWPPTracks
+                    },
+                    {
+                        "Counseling", tracks.Count(j => j.ProgramTypeID == 2194 || j.ProgramTypeID == 2193) / totalWPPTracks
+                    },
+                    {
+                        "Housing", tracks.Count(j => j.ProgramTypeID == 2197 || j.ProgramTypeID == 2198 || j.ProgramTypeID == 2199) / totalWPPTracks
+                    },
+                    {   "Education", 0 // TODO: Need to find out what else required in addition to financial education
+                    },
+                    {
+                        "Employment Services", tracks.Count(j => j.ProgramTypeID == 2192) / totalWPPTracks
+                    }
+                
+                }
+            };
+
+            return wppTrackData;
         }
 
         public void Dispose()

@@ -24,5 +24,6 @@ namespace FIVESTARVC.ViewModels
         public List<ResidentDashData> TopResidents { get; set; }
 
         public List<ResidentDashData> TopReleasedResidents { get; set; }
+        public List<string> EmergencyShelterResidents { get; set; }
     }
 }
